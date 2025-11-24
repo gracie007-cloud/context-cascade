@@ -14,7 +14,7 @@ const BUDGET_STORE = path.join(__dirname, '.budget-store.json');
 // BLOCKER-2: Import Memory MCP tagging protocol
 let taggedMemoryStore, memoryMcpAvailable;
 try {
-  const taggingProtocol = require('../../terminal-manager/hooks/12fa/memory-mcp-tagging-protocol.js');
+  const taggingProtocol = require('./memory-mcp-tagging-protocol.js');
   taggedMemoryStore = taggingProtocol.taggedMemoryStore;
   memoryMcpAvailable = true;
   // Use stderr to avoid contaminating JSON stdout
