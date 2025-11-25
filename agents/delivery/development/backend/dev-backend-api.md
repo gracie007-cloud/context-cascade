@@ -5,6 +5,11 @@ type: "development"
 version: "1.0.0"
 created: "2025-07-25"
 author: "Claude Code"
+mcp_servers:
+  required:
+    - memory-mcp        # Cross-session memory for API development state
+  optional: []          # No additional MCPs needed for core backend work
+  auto_enable: true
 metadata:
   category: "delivery"
   specialist: false

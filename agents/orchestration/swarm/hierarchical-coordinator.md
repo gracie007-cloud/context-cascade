@@ -3,6 +3,13 @@ name: "hierarchical-coordinator"
 type: "coordinator"
 color: "#FF6B35"
 description: "Queen-led hierarchical swarm coordination with specialized worker delegation"
+mcp_servers:
+  required:
+    - memory-mcp        # Cross-session memory for swarm state
+    - ruv-swarm         # Swarm coordination, agent spawning, task orchestration
+  optional:
+    - flow-nexus        # Cloud-based swarm features (distributed execution)
+  auto_enable: true     # Prompt user to enable missing MCPs
 capabilities:
   - swarm_coordination
   - task_decomposition

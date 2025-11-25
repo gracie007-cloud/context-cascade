@@ -1,8 +1,8 @@
-# Claude Code Configuration v2.2 - Universal 5-Phase Workflow System
+# Claude Code Configuration v2.3 - MCP Auto-Initialization System
 
-**Version**: 2.2.0
-**Last Updated**: 2025-11-15
-**Previous Version**: v2.1.0 (2025-11-15)
+**Version**: 2.3.0
+**Last Updated**: 2025-11-25
+**Previous Version**: v2.2.0 (2025-11-15)
 
 ---
 
@@ -641,36 +641,48 @@ npx claude-flow playbooks info "deep-research-sop"
 
 **Full Documentation**: `C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\docs\ENHANCED-PLAYBOOK-SYSTEM.md`
 
-### 4.3 MCP Tools
+### 4.3 MCP Tools (Auto-Initialization System)
 
-**Categories**:
-- **Coordination**: swarm_init, agent_spawn, task_orchestrate
-- **Monitoring**: swarm_status, agent_metrics, task_status
-- **Memory**: memory_store, vector_search (Memory MCP Triple System)
-- **GitHub**: repo_analyze, pr_enhance, code_review
-- **Neural**: neural_train, neural_patterns
+**MCP Tiers**:
 
-**When to Use**:
-- Coordination: Setup before spawning agents with Task tool (optional for complex tasks)
-- Monitoring: Track progress during multi-agent workflows
-- Memory: Cross-session persistence, semantic search (always use tagging protocol)
-- GitHub: Repository operations, PR automation
-- Neural: Agent learning, pattern optimization
+| Tier | MCPs | Tokens | Load When |
+|------|------|--------|-----------|
+| **Core (Always On)** | memory-mcp, sequential-thinking | ~2.7k | Always - essential for all workflows |
+| **Swarm** | ruv-swarm | ~15.5k | Agent uses swarm coordination |
+| **Browser** | playwright | ~14.5k | Agent needs E2E/visual testing |
+| **ML/Cloud** | flow-nexus | ~58k | Agent needs neural/cloud features |
+| **Payments** | agentic-payments | ~6.6k | Agent needs payment processing |
+| **Code Quality** | focused-changes, toc | ~2.4k | Agent needs change tracking |
 
-**Setup**:
-```bash
-# Required: Claude Flow
-claude mcp add claude-flow npx claude-flow@alpha mcp start
+**REMOVED MCPs** (use Claude Code built-ins instead):
+- `filesystem` - Use Read, Write, Edit, Glob, Grep tools
+- `fetch` - Use WebFetch tool
 
-# Optional: Enhanced coordination
-claude mcp add ruv-swarm npx ruv-swarm mcp start
-claude mcp add flow-nexus npx flow-nexus@latest mcp start
-
-# Verify
-claude mcp list
+**Auto-Initialization**:
+Agents declare their MCP requirements in YAML frontmatter:
+```yaml
+mcp_servers:
+  required: [memory-mcp, playwright]  # MUST be enabled
+  optional: [ruv-swarm]               # Enhances but not required
+  auto_enable: true                   # Prompt to enable if missing
 ```
 
-**KEY**: MCP coordinates strategy. Claude Code's Task tool executes actual work.
+**When loading an agent**, check its `mcp_servers.required` field and ensure those MCPs are enabled before proceeding.
+
+**Quick Enable Commands**:
+```bash
+# Core (should already be on)
+claude mcp add sequential-thinking npx -y @modelcontextprotocol/server-sequential-thinking
+
+# Situational (enable when agents need them)
+claude mcp add playwright npx -y @anthropic/mcp-playwright
+claude mcp add ruv-swarm npx ruv-swarm mcp start
+claude mcp add flow-nexus npx flow-nexus@latest mcp start
+```
+
+**Full Documentation**: See `docs/MCP-AUTO-INITIALIZATION.md`
+
+**KEY**: MCPs auto-initialize based on agent requirements. No manual management needed.
 
 ### 4.4 Memory Tagging Protocol (REQUIRED)
 
@@ -890,6 +902,20 @@ npx claude-flow hooks session-end --export-metrics true
 ---
 
 ## 8. CHANGELOG
+
+### v2.3.0 (2025-11-25)
+- Added MCP Auto-Initialization System for agents and skills
+- Agents now declare MCP requirements in YAML frontmatter (mcp_servers.required/optional)
+- MCPs auto-enable when agents are loaded (no manual management needed)
+- Removed redundant MCPs: filesystem (use Read/Write/Edit), fetch (use WebFetch)
+- Added MCP tier system: Core (~2.7k tokens) vs Situational (load on demand)
+- Updated agent schema documentation in agents/README.md
+- Created docs/MCP-AUTO-INITIALIZATION.md with full implementation guide
+- Updated key agents with mcp_servers requirements: hierarchical-coordinator, e2e-testing-specialist, automl-optimizer, backend-dev
+- Reduced default MCP token usage from 111k to ~2.7k (97% reduction)
+
+### v2.2.0 (2025-11-15)
+- Added Phase 4 routing for 5-phase workflow
 
 ### v2.0.0 (2025-11-14)
 - ✅ Migrated to playbook-first workflow system

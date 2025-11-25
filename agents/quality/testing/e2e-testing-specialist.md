@@ -3,6 +3,13 @@ name: "e2e-testing-specialist"
 type: "testing"
 color: "#9B59B6"
 description: "End-to-end testing automation specialist for Playwright, Cypress, and browser-based testing"
+mcp_servers:
+  required:
+    - memory-mcp        # Cross-session memory for test results
+    - playwright        # Browser automation, screenshots, visual testing
+  optional:
+    - ruv-swarm         # Parallel test execution across multiple agents
+  auto_enable: true     # Prompt user to enable missing MCPs
 capabilities:
   - e2e_automation
   - visual_testing

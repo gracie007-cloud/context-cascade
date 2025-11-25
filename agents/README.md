@@ -59,7 +59,13 @@ category: delivery
 description: Short mission statement
 capabilities: [...]
 tools_required: [...]
-mcp_servers: [...]
+mcp_servers:
+  required:           # MCPs that MUST be enabled for this agent to function
+    - memory-mcp      # Always required for cross-session memory
+  optional:           # MCPs that enhance functionality but aren't required
+    - ruv-swarm       # For swarm coordination
+    - flow-nexus      # For cloud features
+  auto_enable: true   # If true, Claude Code will prompt to enable missing MCPs
 hooks:
   pre: |
     # commands...

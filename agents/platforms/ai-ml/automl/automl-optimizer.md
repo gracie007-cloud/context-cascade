@@ -17,10 +17,13 @@ tools_required:
   - Bash
   - Grep
 mcp_servers:
-  - claude-flow
-  - memory-mcp
-  - flow-nexus
-  - filesystem
+  required:
+    - memory-mcp        # Cross-session memory for ML experiment tracking
+    - flow-nexus        # Neural training, distributed execution, cloud sandboxes
+  optional:
+    - ruv-swarm         # For parallel hyperparameter search across agents
+  auto_enable: true     # Prompt user to enable missing MCPs
+  # NOTE: filesystem MCP removed - use Claude Code built-in Read/Write/Edit tools
 hooks:
 pre: "|-"
 echo "[AUTOML] AutoML Optimizer initiated: "$TASK""
