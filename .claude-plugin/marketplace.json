@@ -1,22 +1,23 @@
 {
-  "name": "12-Factor Agents Marketplace",
-  "description": "Production-grade AI development system with 100% 12-Factor compliance, 271 visual workflows, and proven 2.5-4x speedup",
+  "name": "Context Cascade Marketplace",
+  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks -> Skills -> Agents -> Commands. Load only what you need - 90%+ context savings with 203 agents, 122 skills, 29 playbooks.",
   "version": "3.0.0",
   "author": "DNYoussef",
-  "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "license": "MIT",
+  "repository": "https://github.com/DNYoussef/context-cascade",
+  "homepage": "https://github.com/DNYoussef/context-cascade",
+  "license": "Apache-2.0",
   "keywords": [
-    "12-factor",
+    "context-cascade",
+    "lazy-loading",
+    "nested-context",
+    "playbooks",
+    "skills",
     "agents",
+    "commands",
     "sparc",
     "three-loop",
-    "swarm",
-    "graphviz",
-    "security",
-    "production-ready",
     "claude-code",
-    "ai-development"
+    "plugin"
   ],
   "plugins": [
     {
@@ -83,10 +84,10 @@
       },
       "installation": {
         "type": "git",
-        "url": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+        "url": "https://github.com/DNYoussef/context-cascade",
         "path": "plugins/12fa-core"
       },
-      "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/plugins/12fa-core/README.md",
+      "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/plugins/12fa-core/README.md",
       "metrics": {
         "speed_improvement": "2.5-4x",
         "failure_rate": "<3%",
@@ -135,10 +136,10 @@
       },
       "installation": {
         "type": "git",
-        "url": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+        "url": "https://github.com/DNYoussef/context-cascade",
         "path": "plugins/12fa-three-loop"
       },
-      "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/plugins/12fa-three-loop/README.md",
+      "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/plugins/12fa-three-loop/README.md",
       "metrics": {
         "planning_accuracy": ">97%",
         "parallel_speedup": "6.75x",
@@ -184,10 +185,10 @@
       },
       "installation": {
         "type": "git",
-        "url": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+        "url": "https://github.com/DNYoussef/context-cascade",
         "path": "plugins/12fa-security"
       },
-      "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/plugins/12fa-security/README.md",
+      "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/plugins/12fa-security/README.md",
       "metrics": {
         "security_score": "100%",
         "vulnerabilities": "0",
@@ -228,10 +229,10 @@
       },
       "installation": {
         "type": "git",
-        "url": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+        "url": "https://github.com/DNYoussef/context-cascade",
         "path": "plugins/12fa-visual-docs"
       },
-      "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/plugins/12fa-visual-docs/README.md",
+      "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/plugins/12fa-visual-docs/README.md",
       "metrics": {
         "coverage": "101%",
         "diagram_count": 271,
@@ -292,10 +293,10 @@
       },
       "installation": {
         "type": "git",
-        "url": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+        "url": "https://github.com/DNYoussef/context-cascade",
         "path": "plugins/12fa-swarm"
       },
-      "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/plugins/12fa-swarm/README.md",
+      "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/plugins/12fa-swarm/README.md",
       "metrics": {
         "topologies": 4,
         "consensus_protocols": 3,
@@ -312,9 +313,9 @@
     "12fa-swarm"
   ],
   "quick_start": {
-    "install_marketplace": "/plugin marketplace add DNYoussef/ruv-sparc-three-loop-system",
-    "install_core": "/plugin install 12fa-core",
-    "install_all": "/plugin install 12fa-core 12fa-three-loop 12fa-security 12fa-visual-docs 12fa-swarm"
+    "install_marketplace": "/plugin marketplace add DNYoussef/context-cascade",
+    "install_core": "/plugin install context-cascade-core",
+    "install_all": "/plugin install context-cascade-core context-cascade-three-loop context-cascade-security context-cascade-visual-docs context-cascade-swarm"
   },
   "mcp_servers": {
     "required": {
@@ -340,8 +341,8 @@
     "npm_version": ">=9.0.0"
   },
   "support": {
-    "issues": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/issues",
-    "discussions": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/discussions",
-    "documentation": "https://github.com/DNYoussef/ruv-sparc-three-loop-system/blob/main/README.md"
+    "issues": "https://github.com/DNYoussef/context-cascade/issues",
+    "discussions": "https://github.com/DNYoussef/context-cascade/discussions",
+    "documentation": "https://github.com/DNYoussef/context-cascade/blob/main/README.md"
   }
 }

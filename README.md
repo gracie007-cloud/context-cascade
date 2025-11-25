@@ -1,10 +1,30 @@
-# 12-Factor Agents - Production AI Development System
+# Context Cascade - Nested Plugin Architecture for Claude Code
 
-**Official Claude Code Plugin Marketplace** | Version 3.0.0 | November 1, 2025
+**Official Claude Code Plugin** | Version 3.0.0 | November 2025
 
-Production-grade AI development system achieving **100% 12-Factor compliance**, **271 visual Graphviz workflows**, and proven **2.5-4x speedup** with **0 vulnerabilities**.
+**Context-saving nested architecture**: Playbooks -> Skills -> Agents -> Commands. Load only what you need, saving **90%+ context space**.
 
-**Built on [Claude Flow](https://github.com/ruvnet/claude-flow)** - Enterprise-grade agent orchestration platform with memory, hooks, and swarm intelligence. See [CLAUDE-FLOW-INTEGRATION.md](CLAUDE-FLOW-INTEGRATION.md) for details on our enhancements.
+## The Context Cascade Architecture
+
+```
+PLAYBOOKS (29)     <-- Only these are loaded initially (~2k tokens)
+    |
+    v
+SKILLS (122)       <-- Loaded when playbook invokes them
+    |
+    v
+AGENTS (203)       <-- Loaded when skill needs them
+    |
+    v
+COMMANDS (130+)    <-- Embedded in agents, loaded last
+```
+
+**Why Context Cascade?**
+- Traditional approach: Load everything upfront = 100k+ tokens consumed
+- Context Cascade: Load on demand = ~2k tokens initially, expand as needed
+- Result: **90%+ context savings** while maintaining full capability
+
+**Built on [Claude Flow](https://github.com/ruvnet/claude-flow)** - Enterprise-grade agent orchestration with memory, hooks, and swarm intelligence.
 
 ---
 
@@ -110,23 +130,23 @@ flowchart TD
 
 ---
 
-## 🚀 Quick Start (3 Steps)
+## Quick Start (3 Steps)
 
 ### 1. Add Marketplace
 ```bash
-/plugin marketplace add DNYoussef/ruv-sparc-three-loop-system
+/plugin marketplace add DNYoussef/context-cascade
 ```
 
 ### 2. Install Plugin(s)
 
 **Option A - Core Only** (Recommended for beginners):
 ```bash
-/plugin install 12fa-core
+/plugin install context-cascade-core
 ```
 
 **Option B - Full Stack** (Everything):
 ```bash
-/plugin install 12fa-core 12fa-three-loop 12fa-security 12fa-visual-docs 12fa-swarm
+/plugin install context-cascade-core context-cascade-three-loop context-cascade-security context-cascade-visual-docs context-cascade-swarm
 ```
 
 ### 3. Setup MCP Servers

@@ -111,7 +111,7 @@ function sendEventToBackend(event) {
     const options = {
       hostname: BACKEND_HOST,
       port: BACKEND_PORT,
-      path: '/api/v1/events/ingest',
+      path: '/api/v1/events/visibility/ingest',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

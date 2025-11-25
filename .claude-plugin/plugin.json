@@ -1,86 +1,117 @@
 {
-  "name": "ruv-sparc-three-loop-system",
-  "version": "2.0.0",
-  "description": "Complete SPARC + Three-Loop Integrated Development System with 86+ AI agents, evidence-based prompting, Byzantine consensus, and META-SKILL orchestration. Includes research-driven planning, parallel swarm implementation, CI/CD intelligent recovery, and comprehensive agent registry.",
+  "name": "context-cascade",
+  "version": "3.0.0",
+  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks contain skills, skills contain agents, agents contain commands. Only load what you need - context cascades down through layers on demand, saving 90%+ context space. Includes 203 agents, 122 skills, 29 playbooks, SPARC methodology, Three-Loop system, and Byzantine consensus.",
   "author": {
-    "name": "ruv",
+    "name": "DNYoussef",
     "email": "youssef@example.com",
     "url": "https://github.com/DNYoussef"
   },
-  "license": "MIT",
-  "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system#readme",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/DNYoussef/context-cascade",
+  "homepage": "https://github.com/DNYoussef/context-cascade#readme",
   "keywords": [
+    "context-cascade",
+    "lazy-loading",
+    "nested-context",
+    "playbooks",
+    "skills",
+    "agents",
+    "commands",
     "sparc",
     "three-loop",
-    "ai-agents",
-    "swarm-intelligence",
-    "evidence-based-prompting",
-    "byzantine-consensus",
     "claude-code",
-    "development-workflow",
-    "meta-skill",
-    "tdd",
-    "ci-cd-automation"
+    "plugin",
+    "ai-agents",
+    "swarm-intelligence"
   ],
   "claudeCode": {
     "minVersion": "1.0.0",
     "compatibility": "2024.01+"
   },
   "contents": {
-    "skills": {
-      "count": 122,
+    "playbooks": {
+      "count": 29,
+      "note": "Top-level entry points - only playbooks loaded initially",
       "categories": [
-        "three-loop-system",
-        "sparc-methodology",
-        "agent-coordination",
-        "quality-assurance",
-        "development-automation",
-        "meta-skills"
+        "delivery",
+        "operations",
+        "research",
+        "security",
+        "quality",
+        "platform",
+        "github",
+        "specialist"
       ]
     },
-    "commands": {
-      "count": 30,
-      "prefixes": [
-        "/sparc",
-        "/claude-flow"
+    "skills": {
+      "count": 122,
+      "note": "Loaded by playbooks on demand",
+      "categories": [
+        "delivery",
+        "foundry",
+        "operations",
+        "orchestration",
+        "platforms",
+        "quality",
+        "research",
+        "security"
       ]
     },
     "agents": {
-      "count": 86,
-      "types": [
-        "core-development",
-        "swarm-coordination",
-        "consensus-distributed",
-        "performance-monitoring",
-        "github-integration",
-        "sparc-methodology",
-        "testing-quality",
-        "specialized-development"
+      "count": 203,
+      "note": "Loaded by skills on demand",
+      "categories": [
+        "delivery",
+        "foundry",
+        "operations",
+        "orchestration",
+        "platforms",
+        "quality",
+        "research",
+        "security",
+        "specialists",
+        "tooling"
+      ]
+    },
+    "commands": {
+      "count": 130,
+      "note": "Embedded in agents, loaded last",
+      "prefixes": [
+        "/sparc",
+        "/claude-flow",
+        "/research",
+        "/workflows",
+        "/github",
+        "/agents"
       ]
     },
     "mcpServers": {
-      "count": 3,
-      "required": [
-        "claude-flow"
+      "count": 5,
+      "note": "Auto-initialized based on agent requirements",
+      "core": [
+        "memory-mcp",
+        "sequential-thinking"
       ],
-      "optional": [
+      "situational": [
         "ruv-swarm",
-        "flow-nexus"
+        "flow-nexus",
+        "playwright"
       ]
     }
   },
   "features": [
-    "Three-Loop Integrated Development System (v2.0.0)",
-    "SPARC Methodology (Specification → Pseudocode → Architecture → Refinement → Completion)",
-    "86+ AI Agent Registry with explicit SOPs",
-    "Evidence-Based Prompting (Self-consistency, Byzantine consensus, Raft consensus, Program-of-thought)",
-    "META-SKILL Architecture (Dynamic agent+skill compilation)",
+    "Context Cascade Architecture - Load only what you need (90%+ context savings)",
+    "Nested Hierarchy: Playbooks -> Skills -> Agents -> Commands",
+    "203 AI Agents organized in 10 categories",
+    "122 Skills with SKILL.md format",
+    "29 Playbooks for common workflows",
+    "MCP Auto-Initialization - Agents declare their MCP requirements",
+    "Three-Loop Integrated Development System",
+    "SPARC Methodology (Specification, Pseudocode, Architecture, Refinement, Completion)",
+    "Evidence-Based Prompting (Self-consistency, Byzantine consensus)",
     "Theater Detection & Reality Validation",
-    "Gemini Large-Context Integration (2M token)",
-    "Multi-Agent Consensus Mechanisms",
-    "Cross-Loop Learning & Continuous Improvement",
-    "GitHub Integration & CI/CD Automation"
+    "Multi-Agent Swarm Coordination (2.5-8x speedup)"
   ],
   "installation": {
     "steps": [
