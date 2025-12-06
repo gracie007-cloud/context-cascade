@@ -21,6 +21,36 @@ export default function ToolsPage() {
 
         {/* Tool Cards */}
         <div className="grid gap-6 md:grid-cols-2 mb-12">
+          {/* NEW: Simulations Card */}
+          <Link href="/tools/simulations" className="card hover:border-green-500 transition-colors group md:col-span-2 bg-gradient-to-r from-green-900/20 to-purple-900/20">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 rounded-lg bg-green-900/50 flex items-center justify-center mr-4">
+                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold group-hover:text-green-400 transition-colors">
+                  Scheme-Invariance Simulations
+                  <span className="ml-2 text-xs bg-green-500/30 text-green-400 px-2 py-0.5 rounded-full">NEW</span>
+                </h2>
+                <p className="text-sm text-gray-500">6 physics domains, 5000+ MOO evaluations</p>
+              </div>
+            </div>
+            <p className="text-gray-400 text-sm mb-4">
+              Interactive visualizations of scheme-invariance across QFT renormalization, Kramers-Wannier duality,
+              Wheeler-DeWitt ordering, chiral anomalies, PDE schemes, and quantum state geometry.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <span className="text-xs bg-purple-900/50 text-purple-400 px-2 py-1 rounded">Renormalization</span>
+              <span className="text-xs bg-blue-900/50 text-blue-400 px-2 py-1 rounded">Kramers-Wannier</span>
+              <span className="text-xs bg-green-900/50 text-green-400 px-2 py-1 rounded">Wheeler-DeWitt</span>
+              <span className="text-xs bg-red-900/50 text-red-400 px-2 py-1 rounded">Chiral Anomaly</span>
+              <span className="text-xs bg-yellow-900/50 text-yellow-400 px-2 py-1 rounded">PDE Schemes</span>
+              <span className="text-xs bg-cyan-900/50 text-cyan-400 px-2 py-1 rounded">State Geometry</span>
+            </div>
+          </Link>
+
           <Link href="/tools/simulator" className="card hover:border-primary-500 transition-colors group">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 rounded-lg bg-primary-900/50 flex items-center justify-center mr-4">
