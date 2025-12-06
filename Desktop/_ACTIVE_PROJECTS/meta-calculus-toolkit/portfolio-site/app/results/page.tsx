@@ -53,28 +53,33 @@ export default function ResultsPage() {
               <tbody>
                 <tr className="border-b border-gray-800">
                   <td className="p-3 text-gray-300">Pareto Solutions</td>
-                  <td className="p-3 text-center">23</td>
-                  <td className="p-3 text-center">50</td>
+                  <td className="p-3 text-center">26</td>
+                  <td className="p-3 text-center">--</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="p-3 text-gray-300">Best chi2</td>
-                  <td className="p-3 text-center text-green-400">0.000</td>
-                  <td className="p-3 text-center">0.012</td>
+                  <td className="p-3 text-center text-green-400">1.73e-18</td>
+                  <td className="p-3 text-center">--</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="p-3 text-gray-300">Best Invariance</td>
                   <td className="p-3 text-center text-green-400">1.000</td>
-                  <td className="p-3 text-center text-green-400">1.000</td>
+                  <td className="p-3 text-center">--</td>
+                </tr>
+                <tr className="border-b border-gray-800">
+                  <td className="p-3 text-gray-300">Best Spectral Gap</td>
+                  <td className="p-3 text-center text-green-400">0.99999997</td>
+                  <td className="p-3 text-center">--</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="p-3 text-gray-300">k Range</td>
-                  <td className="p-3 text-center">[-0.001, 0.001]</td>
-                  <td className="p-3 text-center">[-0.03, 0.03]</td>
+                  <td className="p-3 text-center">[-0.023, 0.0001]</td>
+                  <td className="p-3 text-center">--</td>
                 </tr>
                 <tr className="border-b border-gray-800">
-                  <td className="p-3 text-gray-300">Runtime</td>
-                  <td className="p-3 text-center">12.3s</td>
-                  <td className="p-3 text-center">45.2s</td>
+                  <td className="p-3 text-gray-300">Generations</td>
+                  <td className="p-3 text-center">100</td>
+                  <td className="p-3 text-center">--</td>
                 </tr>
               </tbody>
             </table>
@@ -94,43 +99,57 @@ export default function ResultsPage() {
             <div className="bg-dark-bg rounded-lg p-4 border-l-2 border-green-500">
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-semibold text-green-400">Best Observational Fit</h3>
-                <span className="text-xs text-gray-500 font-mono">pymoo #1</span>
+                <span className="text-xs text-gray-500 font-mono">pymoo #24</span>
               </div>
               <div className="grid grid-cols-4 gap-2 text-sm">
-                <div><span className="text-gray-500">n:</span> 0.667</div>
-                <div><span className="text-gray-500">s:</span> 0.000</div>
-                <div><span className="text-gray-500">k:</span> 0.000</div>
-                <div><span className="text-gray-500">w:</span> -0.333</div>
+                <div><span className="text-gray-500">n:</span> 1.4905</div>
+                <div><span className="text-gray-500">s:</span> 0.0383</div>
+                <div><span className="text-gray-500">k:</span> 7.88e-13</div>
+                <div><span className="text-gray-500">w:</span> -0.382</div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">chi2=0.000, invariance=1.000 (classical limit)</p>
+              <p className="text-xs text-gray-500 mt-2">chi2=1.73e-18, invariance=1.000, gap=0.9999980 (effectively classical)</p>
             </div>
 
             <div className="bg-dark-bg rounded-lg p-4 border-l-2 border-yellow-500">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-yellow-400">Balanced Trade-off</h3>
-                <span className="text-xs text-gray-500 font-mono">Global MOO #12</span>
+                <h3 className="font-semibold text-yellow-400">Best Spectral Gap</h3>
+                <span className="text-xs text-gray-500 font-mono">pymoo #1</span>
               </div>
               <div className="grid grid-cols-4 gap-2 text-sm">
-                <div><span className="text-gray-500">n:</span> 0.651</div>
-                <div><span className="text-gray-500">s:</span> 0.023</div>
-                <div><span className="text-gray-500">k:</span> 0.015</div>
-                <div><span className="text-gray-500">w:</span> -0.412</div>
+                <div><span className="text-gray-500">n:</span> 0.4725</div>
+                <div><span className="text-gray-500">s:</span> -0.0279</div>
+                <div><span className="text-gray-500">k:</span> -0.0230</div>
+                <div><span className="text-gray-500">w:</span> -0.434</div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">chi2=0.089, invariance=0.987 (small deviation)</p>
+              <p className="text-xs text-gray-500 mt-2">chi2=1470.67, invariance=1.000, gap=0.99999997 (max structure clarity)</p>
+            </div>
+
+            <div className="bg-dark-bg rounded-lg p-4 border-l-2 border-blue-500">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-blue-400">Sweet Spot (Balanced)</h3>
+                <span className="text-xs text-gray-500 font-mono">pymoo #8</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2 text-sm">
+                <div><span className="text-gray-500">n:</span> 0.5381</div>
+                <div><span className="text-gray-500">s:</span> -0.0171</div>
+                <div><span className="text-gray-500">k:</span> ~0</div>
+                <div><span className="text-gray-500">w:</span> -0.279</div>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">chi2=7.17e-14, invariance=1.000, gap=0.99999996 (optimal balance)</p>
             </div>
 
             <div className="bg-dark-bg rounded-lg p-4 border-l-2 border-orange-500">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-orange-400">Edge of Constraints</h3>
-                <span className="text-xs text-gray-500 font-mono">Global MOO #47</span>
+                <h3 className="font-semibold text-orange-400">High-n Configuration</h3>
+                <span className="text-xs text-gray-500 font-mono">pymoo #3</span>
               </div>
               <div className="grid grid-cols-4 gap-2 text-sm">
-                <div><span className="text-gray-500">n:</span> 0.583</div>
-                <div><span className="text-gray-500">s:</span> 0.049</div>
-                <div><span className="text-gray-500">k:</span> 0.028</div>
-                <div><span className="text-gray-500">w:</span> -0.521</div>
+                <div><span className="text-gray-500">n:</span> 1.4976</div>
+                <div><span className="text-gray-500">s:</span> -0.0135</div>
+                <div><span className="text-gray-500">k:</span> 5.05e-05</div>
+                <div><span className="text-gray-500">w:</span> -0.298</div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">chi2=0.342, invariance=0.912 (maximum allowed deviation)</p>
+              <p className="text-xs text-gray-500 mt-2">chi2=0.0071, invariance=1.000, gap=0.9999996 (accelerated expansion)</p>
             </div>
           </div>
         </div>
@@ -268,11 +287,11 @@ export default function ResultsPage() {
 
         {/* Navigation */}
         <div className="flex justify-between items-center mt-12">
-          <Link href="/validation" className="text-gray-400 hover:text-white transition-colors">
-            &larr; Back to Validation
+          <Link href="/simulator" className="text-gray-400 hover:text-white transition-colors">
+            &larr; Back to Simulator
           </Link>
-          <Link href="/code" className="btn-primary">
-            View Source Code &rarr;
+          <Link href="/quantum" className="btn-primary">
+            Next: Meta-Quantum &rarr;
           </Link>
         </div>
       </div>

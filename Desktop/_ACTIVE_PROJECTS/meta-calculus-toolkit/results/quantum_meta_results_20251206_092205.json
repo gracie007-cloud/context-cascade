@@ -1,0 +1,408 @@
+{
+  "n_solutions": 25,
+  "pareto_front": [
+    {
+      "id": 0,
+      "params": {
+        "a_u": -0.8383759330029765,
+        "w_u": 0.0060454567862585715,
+        "k_global": 1.2327986303475797,
+        "p_power": 1.5731768217461655
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.3489209749195652e-13,
+        "distance_global_norm": 1.5356493581445754,
+        "norm_drift_power": 0.22332966875007454,
+        "distance_power": 1.9408680705916475,
+        "complexity_penalty": 3.2257679642738593
+      }
+    },
+    {
+      "id": 1,
+      "params": {
+        "a_u": 0.009744624706683913,
+        "w_u": 0.03228719028745169,
+        "k_global": 0.022866855627142024,
+        "p_power": 0.0002143141215807742
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.7948120767385944e-10,
+        "distance_global_norm": 0.16493735014056068,
+        "norm_drift_power": 3.348644017608926e-05,
+        "distance_power": 0.0073191622171922075,
+        "complexity_penalty": 0.031182201130809925
+      }
+    },
+    {
+      "id": 2,
+      "params": {
+        "a_u": -0.8102843667204455,
+        "w_u": 0.005910647488719894,
+        "k_global": 1.2327986303475797,
+        "p_power": 0.00012176474681333677
+      },
+      "objectives": {
+        "norm_drift_global_norm": 2.0794477251229182e-13,
+        "distance_global_norm": 1.5356482867579215,
+        "norm_drift_power": 1.9028371731066862e-05,
+        "distance_power": 0.09088560160730806,
+        "complexity_penalty": 1.6386536432034877
+      }
+    },
+    {
+      "id": 3,
+      "params": {
+        "a_u": -0.27964566745779107,
+        "w_u": 0.012159997448861688,
+        "k_global": 1.5477411466340358,
+        "p_power": 0.002935208566087137
+      },
+      "objectives": {
+        "norm_drift_global_norm": 7.671641100159832e-14,
+        "distance_global_norm": 1.5581033890589486,
+        "norm_drift_power": 0.0004566475666042402,
+        "distance_power": 0.04762097398358639,
+        "complexity_penalty": 1.6917151886739048
+      }
+    },
+    {
+      "id": 4,
+      "params": {
+        "a_u": -0.2690332043651541,
+        "w_u": 0.008942902403584571,
+        "k_global": -0.005072569301134255,
+        "p_power": 0.15138954756416534
+      },
+      "objectives": {
+        "norm_drift_global_norm": 2.0355883645351014e-10,
+        "distance_global_norm": 0.008230746118422597,
+        "norm_drift_power": 0.01855357218746645,
+        "distance_power": 0.8364343601557042,
+        "complexity_penalty": 0.2918730092882351
+      }
+    },
+    {
+      "id": 5,
+      "params": {
+        "a_u": -0.1310621943515789,
+        "w_u": 0.008942902403584571,
+        "k_global": 0.6599868060558606,
+        "p_power": 0.0033212865130618913
+      },
+      "objectives": {
+        "norm_drift_global_norm": 8.410827589955261e-12,
+        "distance_global_norm": 1.535650494472937,
+        "norm_drift_power": 0.0005164932357771823,
+        "distance_power": 0.00537211415857252,
+        "complexity_penalty": 0.7297334799850703
+      }
+    },
+    {
+      "id": 6,
+      "params": {
+        "a_u": -0.2690332043651541,
+        "w_u": 0.012026931496472996,
+        "k_global": -0.014376029151687134,
+        "p_power": 0.07662224006803553
+      },
+      "objectives": {
+        "norm_drift_global_norm": 2.1311363784803916e-10,
+        "distance_global_norm": 0.0496217389286143,
+        "norm_drift_power": 0.010614194645354624,
+        "distance_power": 0.41841804669841676,
+        "complexity_penalty": 0.226717564551947
+      }
+    },
+    {
+      "id": 7,
+      "params": {
+        "a_u": -0.7933771465052875,
+        "w_u": 0.007097888871434418,
+        "k_global": 1.2312274449014955,
+        "p_power": 0.03791331933320721
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.2545520178264269e-14,
+        "distance_global_norm": 1.535649709571722,
+        "norm_drift_power": 0.005585677294536073,
+        "distance_power": 0.13457581466871826,
+        "complexity_penalty": 1.66653912637449
+      }
+    },
+    {
+      "id": 8,
+      "params": {
+        "a_u": -0.1485051114729008,
+        "w_u": 0.012082032180797952,
+        "k_global": 0.04505469806193424,
+        "p_power": 1.5867956716286882
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.5202883396625566e-10,
+        "distance_global_norm": 0.3591542122074054,
+        "norm_drift_power": 33.153801711131166,
+        "distance_power": 34.06561679047087,
+        "complexity_penalty": 1.7073111286451526
+      }
+    },
+    {
+      "id": 9,
+      "params": {
+        "a_u": -0.8904139513276201,
+        "w_u": 0.012082032180797952,
+        "k_global": 0.06863036345170849,
+        "p_power": 1.385181505928121
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.1132406108060877e-10,
+        "distance_global_norm": 0.6592242093887508,
+        "norm_drift_power": 11.978541634196601,
+        "distance_power": 13.514911561246372,
+        "complexity_penalty": 1.9002270482617192
+      }
+    },
+    {
+      "id": 10,
+      "params": {
+        "a_u": -0.8014040068483951,
+        "w_u": 0.027822600623737936,
+        "k_global": 0.06570745702041307,
+        "p_power": 1.921220034938652
+      },
+      "objectives": {
+        "norm_drift_global_norm": 9.034728520873614e-11,
+        "distance_global_norm": 0.8205004162084732,
+        "norm_drift_power": 22.374343577874257,
+        "distance_power": 23.388337797123782,
+        "complexity_penalty": 2.390411755445636
+      }
+    },
+    {
+      "id": 11,
+      "params": {
+        "a_u": -0.19401471843742096,
+        "w_u": 0.012682791570805164,
+        "k_global": 0.04477664924369221,
+        "p_power": 1.688219510460112
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.504971702814828e-10,
+        "distance_global_norm": 0.3690869579499779,
+        "norm_drift_power": 22.710403896604387,
+        "distance_power": 22.944182266210255,
+        "complexity_penalty": 1.8312717980795954
+      }
+    },
+    {
+      "id": 12,
+      "params": {
+        "a_u": -0.6917359377018909,
+        "w_u": 0.027822600623737936,
+        "k_global": 0.3689348685783451,
+        "p_power": 1.9708970112372235
+      },
+      "objectives": {
+        "norm_drift_global_norm": 8.280043317654417e-12,
+        "distance_global_norm": 1.519305462306671,
+        "norm_drift_power": 21.863847700070085,
+        "distance_power": 23.10770389775348,
+        "complexity_penalty": 2.6884821087288877
+      }
+    },
+    {
+      "id": 13,
+      "params": {
+        "a_u": -0.8196194817444484,
+        "w_u": 0.027822600623737936,
+        "k_global": 0.21377594849300835,
+        "p_power": 1.921220034938652
+      },
+      "objectives": {
+        "norm_drift_global_norm": 2.7571722682750988e-11,
+        "distance_global_norm": 1.3533014457825518,
+        "norm_drift_power": 6.979131592856663,
+        "distance_power": 8.478789919685024,
+        "complexity_penalty": 2.547587984366258
+      }
+    },
+    {
+      "id": 14,
+      "params": {
+        "a_u": -0.8102279606322083,
+        "w_u": 0.027822600623737936,
+        "k_global": 0.20314626342805608,
+        "p_power": 1.921220034938652
+      },
+      "objectives": {
+        "norm_drift_global_norm": 3.0540903139808506e-11,
+        "distance_global_norm": 1.32823930249222,
+        "norm_drift_power": 2.318561663352704,
+        "distance_power": 3.232322955817069,
+        "complexity_penalty": 2.532262538745186
+      }
+    },
+    {
+      "id": 15,
+      "params": {
+        "a_u": -0.8287598272475841,
+        "w_u": 0.012101245129740645,
+        "k_global": 0.048468622072550094,
+        "p_power": 1.699236462201394
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.284969908255107e-10,
+        "distance_global_norm": 0.5247620148960002,
+        "norm_drift_power": 6.071081654639794,
+        "distance_power": 7.285576063996297,
+        "complexity_penalty": 2.16329512241071
+      }
+    },
+    {
+      "id": 16,
+      "params": {
+        "a_u": -0.09716567610266652,
+        "w_u": 0.007340007781168953,
+        "k_global": 0.17651634745805656,
+        "p_power": 1.660253449607655
+      },
+      "objectives": {
+        "norm_drift_global_norm": 7.510481125905244e-11,
+        "distance_global_norm": 1.0419337129698716,
+        "norm_drift_power": 0.13298496926342596,
+        "distance_power": 1.9890523718893045,
+        "complexity_penalty": 1.8860866358951618
+      }
+    },
+    {
+      "id": 17,
+      "params": {
+        "a_u": -0.19401471843742096,
+        "w_u": 0.043602457271706085,
+        "k_global": 0.04505469806193424,
+        "p_power": 1.6891934432091071
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.3516177066463797e-10,
+        "distance_global_norm": 0.4754341105688489,
+        "norm_drift_power": 9.178761707094289,
+        "distance_power": 11.087128580743629,
+        "complexity_penalty": 1.8356157462169223
+      }
+    },
+    {
+      "id": 18,
+      "params": {
+        "a_u": -0.7847098800318877,
+        "w_u": 0.4878352097538324,
+        "k_global": 0.06476908686103311,
+        "p_power": 0.00012176474681333677
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.555888751170187e-11,
+        "distance_global_norm": 1.535646173002836,
+        "norm_drift_power": 1.9028956079303327e-05,
+        "distance_power": 1.535647808635094,
+        "complexity_penalty": 0.5060293125991735
+      }
+    },
+    {
+      "id": 19,
+      "params": {
+        "a_u": -0.7848938986390405,
+        "w_u": 0.08314137701711553,
+        "k_global": 0.05777208192310297,
+        "p_power": 1.5413927973637653
+      },
+      "objectives": {
+        "norm_drift_global_norm": 4.088740457319773e-11,
+        "distance_global_norm": 1.2956019544824366,
+        "norm_drift_power": 0.13592596480960495,
+        "distance_power": 1.9656640053231764,
+        "complexity_penalty": 1.9999259663081
+      }
+    },
+    {
+      "id": 20,
+      "params": {
+        "a_u": -0.2690332043651541,
+        "w_u": 0.01834993568013403,
+        "k_global": -0.005072569301134255,
+        "p_power": 0.15138954756416534
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.961816264994809e-10,
+        "distance_global_norm": 0.05586286561060236,
+        "norm_drift_power": 0.018552935444158147,
+        "distance_power": 0.7955540036574058,
+        "complexity_penalty": 0.29281371261589006
+      }
+    },
+    {
+      "id": 21,
+      "params": {
+        "a_u": -0.017675187120622937,
+        "w_u": 0.03484684282740517,
+        "k_global": 0.022866855627142024,
+        "p_power": 1.581508409907335
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.7678425390244001e-10,
+        "distance_global_norm": 0.18218388537353578,
+        "norm_drift_power": 4.868549094568224,
+        "distance_power": 5.950593532625092,
+        "complexity_penalty": 1.6166975433775292
+      }
+    },
+    {
+      "id": 22,
+      "params": {
+        "a_u": -0.21873403726819407,
+        "w_u": 0.012190147037432937,
+        "k_global": 0.03598750666572774,
+        "p_power": 1.6454474380739108
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.5801027153372615e-10,
+        "distance_global_norm": 0.31273517120022,
+        "norm_drift_power": 0.12587151706034305,
+        "distance_power": 1.9986327983240202,
+        "complexity_penalty": 1.7920209780774787
+      }
+    },
+    {
+      "id": 23,
+      "params": {
+        "a_u": -0.15216474811178177,
+        "w_u": 0.17100247697554563,
+        "k_global": 0.036099505844679594,
+        "p_power": 1.3467081441006983
+      },
+      "objectives": {
+        "norm_drift_global_norm": 1.0866529898123645e-10,
+        "distance_global_norm": 0.689813706144335,
+        "norm_drift_power": 0.10500009796822307,
+        "distance_power": 2.0283222237937677,
+        "complexity_penalty": 1.4759902716988234
+      }
+    },
+    {
+      "id": 24,
+      "params": {
+        "a_u": -0.820280845272706,
+        "w_u": 0.007340007781168953,
+        "k_global": 0.17651634745805656,
+        "p_power": 1.670261215243495
+      },
+      "objectives": {
+        "norm_drift_global_norm": 6.48193720920176e-11,
+        "distance_global_norm": 1.1010390898321443,
+        "norm_drift_power": 0.31999444249619713,
+        "distance_power": 2.1788536747739755,
+        "complexity_penalty": 2.257651986116021
+      }
+    }
+  ],
+  "algorithm": "NSGA-II",
+  "n_generations": 50,
+  "problem": "MetaQuantumCompatibility"
+}
