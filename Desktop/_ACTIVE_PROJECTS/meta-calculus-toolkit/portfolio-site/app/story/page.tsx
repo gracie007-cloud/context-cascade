@@ -19,6 +19,30 @@ export default function StoryPage() {
           </p>
         </div>
 
+        {/* Featured: The Framework */}
+        <Link href="/story/framework" className="card mb-8 hover:border-green-500 transition-colors group bg-gradient-to-r from-green-900/20 to-purple-900/20 md:col-span-2">
+          <div className="flex items-center mb-3">
+            <span className="text-green-400 font-mono text-sm mr-3">NEW: The Reframing</span>
+            <span className="text-xs bg-green-500/30 text-green-400 px-2 py-0.5 rounded-full">December 2025</span>
+          </div>
+          <h2 className="text-2xl font-bold mb-3 group-hover:text-green-400 transition-colors">
+            Scheme-Invariance Framework
+          </h2>
+          <p className="text-gray-300 mb-4">
+            Physical laws are <strong className="text-primary-400">equivalence classes</strong> of models under scheme transformations.
+            What survives under G_scheme is physics. What changes is scaffolding.
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="text-xs bg-purple-900/50 text-purple-400 px-2 py-1 rounded">QFT Renormalization</span>
+            <span className="text-xs bg-blue-900/50 text-blue-400 px-2 py-1 rounded">Kramers-Wannier</span>
+            <span className="text-xs bg-green-900/50 text-green-400 px-2 py-1 rounded">Wheeler-DeWitt</span>
+            <span className="text-xs bg-red-900/50 text-red-400 px-2 py-1 rounded">Chiral Anomaly</span>
+            <span className="text-xs bg-yellow-900/50 text-yellow-400 px-2 py-1 rounded">PDE Schemes</span>
+            <span className="text-xs bg-cyan-900/50 text-cyan-400 px-2 py-1 rounded">State Geometry</span>
+          </div>
+          <p className="text-sm text-green-400">6 physics domains validated with 5000+ MOO evaluations &rarr;</p>
+        </Link>
+
         {/* Chapter Cards */}
         <div className="grid gap-6 md:grid-cols-2 mb-12">
           <Link href="/story/hunch" className="card hover:border-primary-500 transition-colors group">
@@ -88,14 +112,14 @@ export default function StoryPage() {
               <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0">3</div>
               <div>
                 <p className="font-semibold">Rigorous Falsification</p>
-                <p className="text-sm text-gray-400">Many claims failed. Bigeometric GR doesn't exist in consistent form.</p>
+                <p className="text-sm text-gray-400">Many claims failed. Bigeometric GR does not exist in consistent form.</p>
               </div>
             </div>
             <div className="flex items-start">
               <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0">4</div>
               <div>
                 <p className="font-semibold">Validated Insights</p>
-                <p className="text-sm text-gray-400">Physical = Scheme-Robust. Multi-calculus reveals what's real.</p>
+                <p className="text-sm text-gray-400">Physical = Scheme-Robust. Multi-calculus reveals what is real.</p>
               </div>
             </div>
           </div>

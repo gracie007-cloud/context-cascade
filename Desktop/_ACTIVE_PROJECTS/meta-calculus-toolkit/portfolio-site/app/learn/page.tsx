@@ -78,7 +78,7 @@ export default function LearnPage() {
                   <h2 className="text-xl font-bold group-hover:text-red-400 transition-colors">Lessons from Failures</h2>
                 </div>
                 <p className="text-gray-400 text-sm mb-3">
-                  Documented failures and pivots. What we tried that didn't work, and why. Essential reading for avoiding the same mistakes.
+                  Documented failures and pivots. What we tried that did not work, and why. Essential reading for avoiding the same mistakes.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="text-xs bg-red-900/50 text-red-400 px-2 py-1 rounded">Bigeometric GR failure</span>

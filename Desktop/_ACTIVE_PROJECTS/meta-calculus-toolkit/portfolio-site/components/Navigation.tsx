@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
     label: 'Story',
     children: [
       { href: '/story', label: 'Overview' },
+      { href: '/story/framework', label: 'The Framework' },
       { href: '/story/hunch', label: 'The Hunch' },
       { href: '/story/audits', label: 'AI & Audits' },
       { href: '/story/quantum', label: 'Quantum Tests' },

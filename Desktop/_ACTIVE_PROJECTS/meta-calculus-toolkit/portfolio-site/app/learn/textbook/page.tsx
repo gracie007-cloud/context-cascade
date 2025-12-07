@@ -249,7 +249,7 @@ export default function TextbookPage() {
       <div className="mx-auto max-w-3xl mb-12">
         <blockquote className="card border-l-4 border-primary-500 text-center py-8">
           <p className="text-2xl text-gray-200 italic mb-4">
-            "Physical = Scheme-Robust = Cross-Calculus Invariant"
+            &quot;Physical = Scheme-Robust = Cross-Calculus Invariant&quot;
           </p>
           <p className="text-gray-400">
             Features that survive analysis under multiple calculi are candidates for genuine physics;
