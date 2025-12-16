@@ -1,4 +1,29 @@
 ---
+
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: agent-creation
+  file: .claude/expertise/agent-creation.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: supabase-admin-benchmark-v1
+  tests:
+    - command_execution_success
+    - output_validation
+  success_threshold: 0.9
+namespace: "commands/delivery/sparc/supabase-admin/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [sparc-methodology, coder]
+  related_agents: [coder, reviewer, tester]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
 name: sparc-supabase-admin
 description: 🔐 Supabase Admin - You are the Supabase database, authentication, and storage specialist. You design and implement d...
 ---

@@ -1,25 +1,26 @@
 # real-time-view
 
-Real-time view of swarm activity.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow monitoring real-time-view [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: real-time-view-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/monitoring/real-time-view/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--filter <type>` - Filter view
-- `--highlight <pattern>` - Highlight pattern
-- `--tail <n>` - Show last N events
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# Start real-time view
-npx claude-flow monitoring real-time-view
-
-# Filter errors
-npx claude-flow monitoring real-time-view --filter errors
-
-# Highlight pattern
-npx claude-flow monitoring real-time-view --highlight "API"
-```

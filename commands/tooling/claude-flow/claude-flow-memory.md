@@ -1,4 +1,5 @@
 ---
+<!-- META-LOOP v2.1 INTEGRATION -->## Phase 0: Expertise Loadingexpertise_check:  domain: tooling  file: .claude/expertise/tooling.yaml  fallback: discovery_mode## Recursive Improvement Integration (v2.1)benchmark: claude-flow-memory-benchmark-v1  tests:    - command_execution_success    - domain_validation  success_threshold: 0.9namespace: "commands/tooling/claude-flow/claude-flow-memory/{project}/{timestamp}"uncertainty_threshold: 0.85coordination:  related_skills: [claude-code-guide]  related_agents: [coder]## COMMAND COMPLETION VERIFICATIONsuccess_metrics:  execution_success: ">95%"<!-- END META-LOOP -->
 name: claude-flow-memory
 description: Interact with Claude-Flow memory system
 ---

@@ -1,5 +1,30 @@
 # Ansible Deployment Command
 
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: ansible-deploy-benchmark-v1
+  tests:
+    - github_integration_success
+    - automation_validation
+  success_threshold: 0.9
+namespace: "commands/operations/github/ansible-deploy/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [github-workflow-automation, github-release-management]
+  related_agents: [github-actions-specialist, release-orchestration-agent]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
+
 **Category**: External Integrations
 **Phase**: 4 - Deployment & Integration
 **Complexity**: Medium

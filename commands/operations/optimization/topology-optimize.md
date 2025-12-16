@@ -1,25 +1,26 @@
 # topology-optimize
 
-Optimize swarm topology for current workload.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow optimization topology-optimize [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: topology-optimize-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/optimization/topology-optimize/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--analyze-first` - Analyze before optimizing
-- `--target <metric>` - Optimization target
-- `--apply` - Apply optimizations
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# Analyze and suggest
-npx claude-flow optimization topology-optimize --analyze-first
-
-# Optimize for speed
-npx claude-flow optimization topology-optimize --target speed
-
-# Apply changes
-npx claude-flow optimization topology-optimize --target efficiency --apply
-```

@@ -1,4 +1,29 @@
 ---
+
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: deployment-benchmark-v1
+  tests:
+    - command_execution_success
+    - workflow_validation
+  success_threshold: 0.9
+namespace: "commands/delivery/workflows/deployment/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [deployment-readiness, cicd-intelligent-recovery]
+  related_agents: [cicd-engineer, tester]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
 name: workflow:deployment
 description: Enhanced production deployment workflow with blue-green deployment, canary releases, and automated rollback
 category: workflows

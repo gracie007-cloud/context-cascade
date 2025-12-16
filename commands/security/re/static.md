@@ -1,4 +1,29 @@
 ---
+
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: security
+  file: .claude/expertise/security.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: FILENAME-benchmark-v1
+  tests:
+    - audit_validation
+    - quality_gate_pass
+  success_threshold: 0.9
+namespace: "commands/security/SUBDIR/FILENAME/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [reverse-engineering-quick-triage]
+  related_agents: [soc-compliance-auditor, penetration-testing-agent]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
 name: re:static
 binding: agent:RE-Disassembly-Expert
 category: reverse-engineering

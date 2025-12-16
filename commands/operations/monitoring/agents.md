@@ -1,44 +1,26 @@
 # List Active Patterns
 
-## 🎯 Key Principle
-**This tool coordinates Claude Code's actions. It does NOT write code or create content.**
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## MCP Tool Usage in Claude Code
+## Recursive Improvement Integration (v2.1)
+benchmark: agents-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/monitoring/agents/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-**Tool:** `mcp__claude-flow__agent_list`
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Parameters
-```json
-{
-  "swarmId": "current"
-}
-```
-
-## Description
-View all active cognitive patterns and their current focus areas
-
-## Details
-Filters:
-- **all**: Show all defined patterns
-- **active**: Currently engaged patterns
-- **idle**: Available but unused patterns
-- **busy**: Patterns actively coordinating tasks
-
-## Example Usage
-
-**In Claude Code:**
-1. List all agents: Use tool `mcp__claude-flow__agent_list`
-2. Get specific agent metrics: Use tool `mcp__claude-flow__agent_metrics` with parameters `{"agentId": "coder-123"}`
-3. Monitor agent performance: Use tool `mcp__claude-flow__swarm_monitor` with parameters `{"interval": 2000}`
-
-## Important Reminders
-- ✅ This tool provides coordination and structure
-- ✅ Claude Code performs all actual implementation
-- ❌ The tool does NOT write code
-- ❌ The tool does NOT access files directly
-- ❌ The tool does NOT execute commands
-
-## See Also
-- Main documentation: /CLAUDE.md
-- Other commands in this category
-- Workflow examples in /workflows/

@@ -1,25 +1,26 @@
 # memory-persist
 
-Persist memory across sessions.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow memory persist [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: memory-persist-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/memory/memory-persist/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--export <file>` - Export to file
-- `--import <file>` - Import from file
-- `--compress` - Compress memory data
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# Export memory
-npx claude-flow memory persist --export memory-backup.json
-
-# Import memory
-npx claude-flow memory persist --import memory-backup.json
-
-# Compressed export
-npx claude-flow memory persist --export memory.gz --compress
-```

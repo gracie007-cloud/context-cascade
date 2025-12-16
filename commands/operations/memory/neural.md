@@ -1,47 +1,26 @@
 # Neural Pattern Training
 
-## 🎯 Key Principle
-**This tool coordinates Claude Code's actions. It does NOT write code or create content.**
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## MCP Tool Usage in Claude Code
+## Recursive Improvement Integration (v2.1)
+benchmark: neural-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/memory/neural/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-**Tool:** `mcp__claude-flow__neural_train`
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Parameters
-```json
-{
-  "pattern_type": "coordination",
-  "training_data": "task decomposition patterns",
-  "epochs": 50
-}
-```
-
-## Description
-Improve coordination patterns through neural network training
-
-## Details
-Training improves:
-- Task breakdown effectiveness
-- Coordination pattern selection
-- Resource allocation strategies
-- Overall coordination efficiency
-
-## Example Usage
-
-**In Claude Code:**
-1. Train coordination patterns: Use tool `mcp__claude-flow__neural_train` with parameters `{"pattern_type": "coordination", "training_data": "successful task patterns", "epochs": 50}`
-2. Train optimization patterns: Use tool `mcp__claude-flow__neural_train` with parameters `{"pattern_type": "optimization", "training_data": "performance metrics", "epochs": 30}`
-3. Check training status: Use tool `mcp__claude-flow__neural_status`
-4. Analyze patterns: Use tool `mcp__claude-flow__neural_patterns` with parameters `{"action": "analyze"}`
-
-## Important Reminders
-- ✅ This tool provides coordination and structure
-- ✅ Claude Code performs all actual implementation
-- ❌ The tool does NOT write code
-- ❌ The tool does NOT access files directly
-- ❌ The tool does NOT execute commands
-
-## See Also
-- Main documentation: /CLAUDE.md
-- Other commands in this category
-- Workflow examples in /workflows/

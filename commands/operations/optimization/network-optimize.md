@@ -1,18 +1,26 @@
 ---
-name: network-optimize
-description: Network latency optimization with HTTP/2, compression, and CDN
-category: optimization
-version: 2.0.0
----
 
-# 🌐 Network Optimization
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-Optimize network latency with HTTP/2, compression, and CDN.
+## Recursive Improvement Integration (v2.1)
+benchmark: network-optimize-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/optimization/network-optimize/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-```bash
-# Enable HTTP/2, gzip, brotli compression
-# Configure CDN caching
-# Implement request coalescing
-```
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-**Version**: 2.0.0

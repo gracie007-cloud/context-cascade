@@ -1,5 +1,30 @@
 # Phase 4 Commands - Quick Reference Card
 
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: quality
+  file: .claude/expertise/quality.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: FILENAME-benchmark-v1
+  tests:
+    - audit_validation
+    - quality_gate_pass
+  success_threshold: 0.9
+namespace: "commands/quality/SUBDIR/FILENAME/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [clarity-linter, functionality-audit]
+  related_agents: [code-analyzer, reviewer]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
+
 ## 📚 Research Workflows (5 Commands)
 
 ### Literature Review

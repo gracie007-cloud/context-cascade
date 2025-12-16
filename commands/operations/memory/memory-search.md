@@ -1,25 +1,26 @@
 # memory-search
 
-Search through stored memory.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow memory search [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: memory-search-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/memory/memory-search/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--query <text>` - Search query
-- `--pattern <regex>` - Pattern matching
-- `--limit <n>` - Result limit
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# Search memory
-npx claude-flow memory search --query "authentication"
-
-# Pattern search
-npx claude-flow memory search --pattern "api-.*"
-
-# Limited results
-npx claude-flow memory search --query "config" --limit 10
-```

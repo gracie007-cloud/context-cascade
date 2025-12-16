@@ -1,25 +1,26 @@
 # cache-manage
 
-Manage operation cache for performance.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow optimization cache-manage [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: cache-manage-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/optimization/cache-manage/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--action <type>` - Action (view, clear, optimize)
-- `--max-size <mb>` - Maximum cache size
-- `--ttl <seconds>` - Time to live
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# View cache stats
-npx claude-flow optimization cache-manage --action view
-
-# Clear cache
-npx claude-flow optimization cache-manage --action clear
-
-# Set limits
-npx claude-flow optimization cache-manage --max-size 100 --ttl 3600
-```

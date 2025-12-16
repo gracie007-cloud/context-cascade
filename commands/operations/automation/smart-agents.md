@@ -1,5 +1,30 @@
 # Smart Agent Auto-Spawning
 
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: smart-agents-benchmark-v1
+  tests:
+    - github_integration_success
+    - automation_validation
+  success_threshold: 0.9
+namespace: "commands/operations/automation/smart-agents/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [github-workflow-automation, github-release-management]
+  related_agents: [github-actions-specialist, release-orchestration-agent]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
+
 ## Purpose
 Automatically spawn the right agents at the right time without manual intervention.
 

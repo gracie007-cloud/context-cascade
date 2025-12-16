@@ -1,4 +1,29 @@
 ---
+
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
+
+## Recursive Improvement Integration (v2.1)
+benchmark: deploy-check-benchmark-v1
+  tests:
+    - command_execution_success
+    - workflow_validation
+  success_threshold: 0.9
+namespace: "commands/delivery/essential-commands/deploy-check/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [deployment-readiness, cicd-intelligent-recovery]
+  related_agents: [cicd-engineer, tester]
+
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
+
 name: deploy-check
 binding: skill:production-readiness
 category: essential

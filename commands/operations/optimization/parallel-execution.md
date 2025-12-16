@@ -1,50 +1,26 @@
 # Parallel Task Execution
 
-## Purpose
-Execute independent subtasks in parallel for maximum efficiency.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Coordination Strategy
+## Recursive Improvement Integration (v2.1)
+benchmark: parallel-execution-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/optimization/parallel-execution/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-### 1. Task Decomposition
-```
-Tool: mcp__claude-flow__task_orchestrate
-Parameters: {
-  "task": "Build complete REST API with auth, CRUD operations, and tests",
-  "strategy": "parallel",
-  "maxAgents": 8
-}
-```
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-### 2. Parallel Workflows
-The system automatically:
-- Identifies independent components
-- Assigns specialized agents
-- Executes in parallel where possible
-- Synchronizes at dependency points
-
-### 3. Example Breakdown
-For the REST API task:
-- **Agent 1 (Architect)**: Design API structure
-- **Agent 2-3 (Coders)**: Implement auth & CRUD in parallel
-- **Agent 4 (Tester)**: Write tests as features complete
-- **Agent 5 (Documenter)**: Update docs continuously
-
-## CLI Usage
-```bash
-# Execute parallel tasks via CLI
-npx claude-flow parallel "Build REST API" --max-agents 8
-```
-
-## Performance Gains
-- 🚀 2.8-4.4x faster execution
-- 💪 Optimal CPU utilization
-- 🔄 Automatic load balancing
-- 📈 Linear scalability with agents
-
-## Monitoring
-```
-Tool: mcp__claude-flow__swarm_monitor
-Parameters: {"interval": 1000, "swarmId": "current"}
-```
-
-Watch real-time parallel execution progress!

@@ -1,19 +1,26 @@
 ---
-name: query-optimize
-description: Database query optimization with indexing and query analysis
-category: optimization
-version: 2.0.0
----
 
-# 🗄️ Query Optimization
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-Optimize database queries with proper indexing and query analysis.
+## Recursive Improvement Integration (v2.1)
+benchmark: query-optimize-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/optimization/query-optimize/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-```sql
-EXPLAIN ANALYZE
-SELECT * FROM users WHERE status = 'active';
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-CREATE INDEX idx_users_status ON users(status);
-```
-
-**Version**: 2.0.0

@@ -1,25 +1,26 @@
 # memory-usage
 
-Manage persistent memory storage.
+<!-- META-LOOP v2.1 INTEGRATION -->
+## Phase 0: Expertise Loading
+expertise_check:
+  domain: deployment
+  file: .claude/expertise/deployment.yaml
+  fallback: discovery_mode
 
-## Usage
-```bash
-npx claude-flow memory usage [options]
-```
+## Recursive Improvement Integration (v2.1)
+benchmark: memory-usage-benchmark-v1
+  tests:
+    - memory_operations_success
+    - monitoring_validation
+  success_threshold: 0.9
+namespace: "commands/operations/memory/memory-usage/{project}/{timestamp}"
+uncertainty_threshold: 0.85
+coordination:
+  related_skills: [agentdb-memory-patterns, performance-analysis]
+  related_agents: [prometheus-monitoring-specialist, grafana-visualization-agent]
 
-## Options
-- `--action <type>` - Action (store, retrieve, list, clear)
-- `--key <key>` - Memory key
-- `--value <data>` - Data to store (JSON)
+## COMMAND COMPLETION VERIFICATION
+success_metrics:
+  execution_success: ">95%"
+<!-- END META-LOOP -->
 
-## Examples
-```bash
-# Store memory
-npx claude-flow memory usage --action store --key "project-config" --value '{"api": "v2"}'
-
-# Retrieve memory
-npx claude-flow memory usage --action retrieve --key "project-config"
-
-# List all keys
-npx claude-flow memory usage --action list
-```
