@@ -1,14 +1,7 @@
-# Landing Page Generator
-
-A comprehensive 6-phase SOP for AI-driven landing page creation, from research to deployment. Converts product/service briefs into high-converting, deployable landing pages using evidence-based design patterns.
-
 ---
-
-## Metadata
-
-```yaml
 name: landing-page-generator
-version: 1.0.0
+version: 2.0.0
+description: Comprehensive 6-phase SOP for AI-driven landing page creation (Research -> Copy -> Inspiration -> Build -> Iterate -> Deploy). Use when building marketing pages, sales pages, or product landing pages. Combines web research for current best practices, structured copywriting from product briefs, design system extraction via Firecrawl, and multi-model code generation to produce high-converting, deployable landing pages. Integrates with expertise system for marketing/frontend/deployment domains.
 category: delivery
 complexity: medium
 estimated_time: 2-4 hours
@@ -20,15 +13,99 @@ triggers:
   - "conversion page"
   - "product page"
   - "sales page"
-```
-
+  - "launch page"
+  - "signup page"
 ---
+
+# Landing Page Generator
+
+A comprehensive 6-phase SOP for AI-driven landing page creation, from research to deployment. Converts product/service briefs into high-converting, deployable landing pages using evidence-based design patterns and conversion psychology.
 
 ## Overview
 
-Landing Page Generator implements a battle-tested 6-phase workflow that leverages AI's strengths for research, copywriting, design inspiration, and code generation while maintaining human oversight for brand alignment and iteration.
+Landing Page Generator represents a systematic approach to creating landing pages that actually convert. Rather than generating generic templates, it employs a research-driven methodology that ensures every page is optimized for its specific audience, product, and conversion goal.
 
-**Key Innovation**: This skill combines web research for current best practices, structured copywriting, design system extraction via Firecrawl, and multi-model code generation to produce landing pages that convert.
+This skill draws inspiration from direct response marketing principles--understanding that a landing page is not just a website, but a carefully crafted argument that guides visitors toward a single action. The 6-phase workflow mirrors how professional conversion rate optimization (CRO) teams work: research the market, craft compelling copy, gather design inspiration, build with purpose, iterate based on feedback, and deploy with confidence.
+
+**Key Innovation**: This skill combines:
+- **Web research** for current best practices and conversion tactics
+- **Structured copywriting** using proven frameworks (AIDA, PAS, FAB)
+- **Design system extraction** via Firecrawl for brand consistency
+- **Multi-model code generation** using highest-capability models
+- **Context-aware iteration** to prevent quality degradation
+- **Automated deployment** via Netlify CLI
+
+The result is landing pages that don't just look good--they convert visitors into customers.
+
+## Core Principles
+
+Landing Page Generator operates on five fundamental principles that ensure every page achieves its conversion goal:
+
+### Principle 1: Copy Before Design
+
+The words on the page matter more than how it looks. A well-written page with mediocre design will outperform a beautiful page with weak copy. This is why Phase 2 (Copy) comes before Phase 3 (Inspiration) and Phase 4 (Build).
+
+In practice:
+- Always complete copy review before moving to design
+- Never let design decisions compromise copy clarity
+- Test copy with the "squint test"--if you squint, can you still understand the hierarchy?
+- Headlines should stand alone as complete value propositions
+
+### Principle 2: One Page, One Goal
+
+Every landing page should have exactly one conversion goal. Multiple CTAs, competing messages, or confusing navigation kill conversions. The page exists to drive one specific action.
+
+In practice:
+- Define the single desired action before starting
+- Remove anything that doesn't support that action
+- Use the "newspaper test"--could someone scanning for 5 seconds understand what to do?
+- Secondary CTAs (like "Learn More") should be visually subordinate
+
+### Principle 3: Research-Driven, Not Assumption-Driven
+
+What worked last year may not work today. Landing page best practices evolve constantly. Phase 1 (Research) ensures every page is built on current, evidence-based tactics rather than outdated assumptions.
+
+In practice:
+- Always emphasize "as of today's date" in research prompts
+- Look for specific conversion rate data, not just design trends
+- Research competitor landing pages for inspiration and differentiation
+- Update the playbook regularly as tactics evolve
+
+### Principle 4: Inspiration, Not Imitation
+
+Extracting branding from inspiration sites creates consistency, not copycats. The goal is to capture design systems (colors, fonts, spacing) while maintaining unique value propositions and messaging.
+
+In practice:
+- Use Firecrawl for objective branding data, not subjective "feel"
+- Screenshots capture layout patterns, not copy to replicate
+- Adapt inspiration to your brand, don't adopt it wholesale
+- Multiple inspiration sources prevent single-source bias
+
+### Principle 5: Iterate in the Right Environment
+
+AI context windows have limits. After 2-3 iterations, quality degrades as the context fills. Moving to dedicated coding environments (like Cursor) preserves quality during extensive refinement.
+
+In practice:
+- Track iteration count explicitly
+- Export to Cursor after iteration 2-3
+- Use element selection for surgical changes
+- Each Cursor iteration = fresh, focused context
+
+## MCP Requirements
+
+```yaml
+mcp_servers:
+  required:
+    - memory-mcp  # Store research, copy, learnings
+  optional:
+    - playwright  # For screenshot capture
+    - flow-nexus  # For advanced scraping
+```
+
+**Why These MCPs**:
+- **memory-mcp**: Stores research playbooks for reuse, tracks successful patterns, enables learning across projects
+- **playwright**: Enables programmatic full-page screenshots when manual capture isn't practical
+- **flow-nexus**: Advanced scraping capabilities for complex inspiration sites
 
 ---
 
@@ -67,6 +144,108 @@ else:
 - Building complex multi-page applications (use `feature-dev-complete`)
 - Need custom CMS integration (use `backend-api-development`)
 - Require e-commerce checkout flows (use specialized e-commerce skills)
+
+---
+
+## Landing Page Type Recognition
+
+Different landing page types require different approaches. Identify the type early to optimize the entire workflow:
+
+### SaaS Product Pages
+**Patterns**: "software", "app", "platform", "tool", "subscription"
+**Common characteristics**:
+- Feature-benefit focus
+- Free trial or freemium CTA
+- Pricing tier comparison
+- Integration logos and API mentions
+- Screenshots or product demos
+
+**Key research focus**:
+- Competitor positioning
+- Feature comparison tables
+- Trial-to-paid conversion tactics
+
+**Copy framework**: Problem-Agitation-Solution (PAS)
+
+### Local Service Business Pages
+**Patterns**: "plumber", "lawyer", "dentist", "contractor", "local"
+**Common characteristics**:
+- Trust signals (licenses, insurance, reviews)
+- Service area maps
+- Emergency/24-7 availability
+- Phone number prominence
+- Google reviews integration
+
+**Key research focus**:
+- Local SEO requirements
+- Trust badge placement
+- Click-to-call optimization
+
+**Copy framework**: Trust-Authority-Action
+
+### E-commerce Product Pages
+**Patterns**: "buy", "shop", "product", "order", "purchase"
+**Common characteristics**:
+- Product images/gallery
+- Price and shipping info
+- Add to cart CTA
+- Reviews and ratings
+- Scarcity/urgency elements
+
+**Key research focus**:
+- Product photography best practices
+- Cart abandonment reduction
+- Upsell/cross-sell placement
+
+**Copy framework**: Features-Advantages-Benefits (FAB)
+
+### Lead Generation Pages
+**Patterns**: "contact", "quote", "consultation", "demo", "signup"
+**Common characteristics**:
+- Form above the fold
+- Minimal navigation
+- Social proof near form
+- Privacy assurance
+- Clear value proposition for submitting
+
+**Key research focus**:
+- Form field optimization
+- Multi-step vs single-step forms
+- Lead magnet effectiveness
+
+**Copy framework**: AIDA (Attention-Interest-Desire-Action)
+
+### Event/Webinar Registration Pages
+**Patterns**: "register", "event", "webinar", "conference", "workshop"
+**Common characteristics**:
+- Date/time prominence
+- Speaker credentials
+- Agenda/what you'll learn
+- Countdown timer
+- Calendar integration
+
+**Key research focus**:
+- Registration form optimization
+- Reminder email sequences
+- No-show reduction tactics
+
+**Copy framework**: Value-Urgency-Action
+
+### App Download Pages
+**Patterns**: "download", "mobile app", "iOS", "Android", "install"
+**Common characteristics**:
+- App store badges
+- Device mockups
+- Feature highlights
+- User testimonials
+- QR code for direct download
+
+**Key research focus**:
+- App store optimization (ASO)
+- Screenshot best practices
+- Rating/review prominence
+
+**Copy framework**: Benefit-Social Proof-Download
 
 ---
 
@@ -653,6 +832,295 @@ digraph LandingPageGenerator {
     {content: "Deploy and test", status: "pending", activeForm: "Deploying"}
   ]})
 ```
+
+---
+
+## Advanced Techniques
+
+### Audience-Specific Optimization
+
+Different audiences respond to different approaches:
+
+**B2B Audiences**:
+- Emphasize ROI and business outcomes
+- Include case studies with metrics
+- Use professional, authoritative tone
+- Feature company logos and enterprise credentials
+- Longer-form content acceptable
+
+**B2C Audiences**:
+- Emphasize emotional benefits
+- Use social proof from individuals
+- Conversational, relatable tone
+- Shorter, punchier copy
+- Strong visual storytelling
+
+**Technical Audiences**:
+- Include specifications and technical details
+- API documentation links
+- GitHub stars/community metrics
+- Performance benchmarks
+- Integration capabilities
+
+**Non-Technical Audiences**:
+- Avoid jargon entirely
+- Use analogies and simple explanations
+- Focus on outcomes, not features
+- Visual demonstrations over text
+- Clear, simple CTAs
+
+### Multi-Model Strategy
+
+Different AI models excel at different phases:
+
+| Phase | Recommended Model | Why |
+|-------|------------------|-----|
+| Research | Claude (web search) | Best at synthesis and current info |
+| Copy | Claude Opus / GPT-4 | Strong creative writing |
+| Build | Claude Opus 4.5 + Extended Thinking | Best design/code generation |
+| Iterate | Cursor (any model) | Specialized for code iteration |
+
+**Model-Specific Prompting**:
+- **Claude**: Use artifacts, leverage extended thinking for complex design
+- **GPT**: Use canvas feature, system message for role-playing
+- **Gemini**: Leverage large context for full-page generation
+
+### A/B Testing Preparation
+
+Build landing pages with testing in mind:
+
+**Version Control**:
+- Save copy variants in separate files
+- Document headline alternatives tested
+- Track which design patterns were considered
+
+**Testing Elements**:
+```yaml
+high_impact_tests:
+  - Headlines (40-50% conversion impact)
+  - CTA button text and color
+  - Hero image/video
+  - Social proof placement
+
+medium_impact_tests:
+  - Subheadline copy
+  - Feature order
+  - Form field count
+  - Testimonial selection
+
+low_impact_tests:
+  - Font choices
+  - Button shape
+  - Background patterns
+  - Icon style
+```
+
+### Performance Optimization
+
+Ensure landing pages load fast:
+
+**Image Optimization**:
+- Use WebP format with fallbacks
+- Lazy load below-fold images
+- Compress to <100KB per image
+- Use srcset for responsive images
+
+**Code Optimization**:
+- Inline critical CSS
+- Defer non-critical JavaScript
+- Minimize third-party scripts
+- Use system fonts or font-display: swap
+
+**Target Metrics**:
+- First Contentful Paint: <1.8s
+- Largest Contentful Paint: <2.5s
+- Cumulative Layout Shift: <0.1
+- Lighthouse Performance: >90
+
+---
+
+## Common Anti-Patterns
+
+Avoid these common mistakes that kill conversions:
+
+### Copy Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Feature dumping** | Lists features without benefits | Transform every feature into "so you can..." |
+| **Vague headlines** | "Welcome to Our Site" | Specific value prop: "Cut Your Tax Bill in Half" |
+| **Jargon overload** | Industry terms confuse visitors | Write for a smart 12-year-old |
+| **Weak CTAs** | "Submit" or "Click Here" | Action + benefit: "Get My Free Quote" |
+| **Wall of text** | No visual breaks | Short paragraphs, bullets, whitespace |
+| **Missing urgency** | No reason to act now | Scarcity, deadlines, limited availability |
+
+### Design Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Navigation overload** | Too many exit points | Minimal or no navigation on landing pages |
+| **Competing CTAs** | Multiple equal buttons | One primary CTA, others visually subordinate |
+| **Stock photo faces** | Feels generic, untrustworthy | Real team photos or authentic imagery |
+| **Tiny mobile text** | Unreadable on phones | Minimum 16px body text |
+| **Auto-playing video** | Annoys users, slows load | Click-to-play with compelling thumbnail |
+| **Below-fold CTA** | Users don't scroll | CTA visible above fold AND repeated below |
+
+### Technical Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Slow load time** | Every second costs conversions | Optimize to <3s load time |
+| **No HTTPS** | Trust issues, SEO penalty | Always use SSL |
+| **Broken mobile** | 60%+ traffic is mobile | Mobile-first responsive design |
+| **No analytics** | Can't measure or improve | GA4 + conversion tracking from day 1 |
+| **Hard-coded content** | Can't A/B test | Parameterize key elements |
+
+### Process Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Skipping research** | Building on assumptions | Always run Phase 1 research |
+| **Ignoring copy review** | AI-generated copy has issues | Human review at Phase 2 checkpoint |
+| **Generic inspiration** | Looks like everyone else | Use YOUR brand or unique inspiration |
+| **Too many iterations** | Context degradation | Export to Cursor after 2-3 rounds |
+| **No deployment testing** | Live site has issues | Always verify deployed URL |
+
+---
+
+## Practical Guidelines
+
+### When to Use Full Workflow vs. Quick Mode
+
+**Full 6-Phase Workflow** (2-4 hours):
+- New product launches
+- High-stakes campaigns
+- Brand-new businesses
+- Significant budget behind traffic
+- Complex value propositions
+
+**Quick Mode** (1-2 hours, skip Phase 1):
+- Refreshing existing pages with known best practices
+- Similar pages to recently completed projects
+- Time-critical launches with existing playbooks
+- Low-traffic testing pages
+
+### Quality Checkpoints
+
+**Phase 2 Checkpoint** (CRITICAL):
+Before moving to design, verify:
+- [ ] Headline passes the "would I click?" test
+- [ ] Value proposition is clear in 5 seconds
+- [ ] CTA is compelling and specific
+- [ ] Copy addresses main objection
+- [ ] Tone matches target audience
+
+**Phase 4 Checkpoint**:
+Before iterating, verify:
+- [ ] All copy from Phase 2 is present
+- [ ] Branding matches inspiration (colors, fonts)
+- [ ] Mobile layout works
+- [ ] CTA is visually prominent
+- [ ] No placeholder content remains
+
+**Phase 6 Checkpoint**:
+Before considering complete:
+- [ ] Live URL is accessible
+- [ ] Forms submit correctly
+- [ ] Analytics tracking fires
+- [ ] Page loads in <3 seconds
+- [ ] SSL certificate is valid
+
+### Balancing Speed and Quality
+
+| Priority | Approach |
+|----------|----------|
+| **Speed over quality** | Use templates, skip Phase 3 inspiration, minimal iterations |
+| **Quality over speed** | Full research, multiple inspiration sources, 5+ iterations |
+| **Balanced** | Standard 6-phase workflow with 2-3 iterations |
+
+### Handling Client Feedback
+
+When iterating based on feedback:
+
+**Scope feedback clearly**:
+- "Make it pop" -> Ask: "Should we increase contrast, add animation, or change colors?"
+- "It doesn't feel right" -> Ask: "Is it the copy, the design, or both?"
+- "More professional" -> Ask: "Should we use darker colors, more whitespace, or different imagery?"
+
+**Batch iterations**:
+- Collect all feedback before iterating
+- Group related changes together
+- Address structural issues before cosmetic ones
+- Track iteration count to know when to export
+
+---
+
+## Cross-Skill Coordination
+
+Landing Page Generator works with other skills in the ecosystem:
+
+### Upstream Skills (provide input)
+
+| Skill | When to Use First | What It Provides |
+|-------|------------------|------------------|
+| `intent-analyzer` | Unclear requirements | Clarified landing page goals |
+| `prompt-architect` | Complex product briefs | Optimized product description |
+| `research-driven-planning` | Large campaign planning | Strategic context for the page |
+
+### Downstream Skills (use output)
+
+| Skill | When to Use After | What It Does |
+|-------|------------------|--------------|
+| `testing-quality` | Pre-launch validation | E2E tests for forms, links |
+| `performance-optimization` | Post-build tuning | Lighthouse score improvement |
+| `seo-specialist` | After deployment | On-page SEO optimization |
+
+### Parallel Skills (run alongside)
+
+| Skill | When to Run Together | How They Coordinate |
+|-------|---------------------|---------------------|
+| `feature-dev-complete` | Building app + landing page | Shared branding, linked navigation |
+| `backend-api-development` | Forms need backend | API endpoints for form submission |
+| `github-workflow-automation` | CI/CD setup | Automated deployment pipeline |
+
+### Skill Chaining Example
+
+```javascript
+// Full marketing launch workflow
+[Sequential]:
+  // Step 1: Analyze marketing goals
+  Skill("intent-analyzer")
+
+  // Step 2: Build landing page
+  Skill("landing-page-generator")
+
+  // Step 3: Validate before launch
+  Skill("testing-quality")
+
+  // Step 4: Optimize performance
+  Skill("performance-optimization")
+
+  // Step 5: Set up automation
+  Skill("github-workflow-automation")
+```
+
+---
+
+## Conclusion
+
+Landing Page Generator transforms the complex, multi-disciplinary task of creating high-converting landing pages into a systematic, AI-assisted workflow. By combining research-driven best practices, structured copywriting, design system extraction, and iterative refinement, it produces pages that don't just look professional--they convert visitors into customers.
+
+The 6-phase workflow mirrors how professional CRO teams operate:
+1. **Research** grounds every decision in current best practices
+2. **Copy** ensures the message resonates with the target audience
+3. **Inspiration** maintains brand consistency without imitation
+4. **Build** leverages AI's design capabilities
+5. **Iterate** refines while preserving context
+6. **Deploy** gets the page live with confidence
+
+Use Landing Page Generator thoughtfully--not every landing page needs the full workflow, but high-stakes campaigns benefit enormously from this systematic approach. The investment in proper research and copy review pays dividends through higher conversion rates and better ROI on marketing spend.
+
+Remember: Copy before design, one page one goal, and always verify at checkpoints. The best landing page is the one that converts.
 
 ---
 

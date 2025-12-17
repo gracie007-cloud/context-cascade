@@ -5,7 +5,66 @@ All notable changes to the Landing Page Generator skill will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-01-XX
+## [2.0.0] - 2025-12-17
+
+### Added - Major Documentation Enhancement
+
+This release brings the skill to parity with meta-skills like `intent-analyzer` and `prompt-architect`.
+
+**New Sections**:
+
+- **YAML Frontmatter**: Full description in frontmatter for better discoverability
+- **Core Principles**: 5 fundamental principles for landing page creation
+  - Copy Before Design
+  - One Page, One Goal
+  - Research-Driven, Not Assumption-Driven
+  - Inspiration, Not Imitation
+  - Iterate in the Right Environment
+- **Landing Page Type Recognition**: Pattern-based type detection
+  - SaaS Product Pages
+  - Local Service Business Pages
+  - E-commerce Product Pages
+  - Lead Generation Pages
+  - Event/Webinar Registration Pages
+  - App Download Pages
+- **Advanced Techniques**:
+  - Audience-Specific Optimization (B2B, B2C, Technical, Non-Technical)
+  - Multi-Model Strategy (which AI for which phase)
+  - A/B Testing Preparation
+  - Performance Optimization (Web Vitals targets)
+- **Common Anti-Patterns**: Comprehensive tables covering:
+  - Copy Anti-Patterns (feature dumping, vague headlines, etc.)
+  - Design Anti-Patterns (navigation overload, competing CTAs, etc.)
+  - Technical Anti-Patterns (slow load, no HTTPS, etc.)
+  - Process Anti-Patterns (skipping research, too many iterations, etc.)
+- **Practical Guidelines**:
+  - Full Workflow vs. Quick Mode decision guide
+  - Quality Checkpoints for Phase 2, 4, and 6
+  - Speed vs. Quality balancing
+  - Handling Client Feedback
+- **Cross-Skill Coordination**:
+  - Upstream skills (intent-analyzer, prompt-architect)
+  - Downstream skills (testing-quality, performance-optimization)
+  - Parallel skills (feature-dev-complete, backend-api-development)
+  - Skill chaining example
+- **Conclusion**: Summary of the skill's value and key principles
+
+### Changed
+
+- Version bumped to 2.0.0 (major documentation enhancement)
+- Overview section expanded with philosophy and methodology
+- MCP Requirements section now explains WHY each MCP is needed
+
+### Improved from v1.0.0
+
+- Memory MCP usage examples with WHO/WHEN/PROJECT/WHY tagging
+- Agent registry paths for validation
+- Expanded troubleshooting with context preservation protocol
+- Post-deployment learning and expertise auto-update
+
+---
+
+## [1.0.0] - 2025-12-17
 
 ### Added
 
@@ -67,4 +126,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 1.0.0 | 2025-01 | Initial release |
+| 2.0.0 | 2025-12-17 | Major documentation enhancement (parity with meta-skills) |
+| 1.0.0 | 2025-12-17 | Initial release |

@@ -6,7 +6,7 @@ description: Advanced skill creation system for Claude Code that combines deep i
   follow best practices, and incorporate sophisticated prompt engineering techniques.
   This skill transforms skill creation from template filling into a strategic design
   process.
-version: 1.0.0
+version: 2.3.0
 category: foundry
 tags:
 - foundry
