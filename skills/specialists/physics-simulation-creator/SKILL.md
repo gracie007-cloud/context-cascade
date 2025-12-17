@@ -438,4 +438,205 @@ namespaces:
   - physics-simulation-creator/problems/{id}: Analyzed problems
   - physics-simulation-creator/simulations/{id}: Generated simulations
   - physics-simulation-creator/comparisons/{id}: k=optimal vs k=0 results
+  - improvement/audits/physics-simulation-creator: Skill audits
 ```
+
+---
+
+## Recursive Improvement Integration (v2.0)
+
+### Role in the Loop
+
+Physics-simulation-creator is part of the recursive self-improvement loop:
+
+```
+physics-simulation-creator (SPECIALIST SKILL)
+    |
+    +--> Creates optimized physics simulations with NNC
+    +--> Can be improved BY prompt-forge
+    +--> Audited BY skill-auditor
+```
+
+### Phase 0: Expertise Loading
+
+Before generating simulations, check for domain expertise:
+
+```yaml
+expertise_check:
+  domain: physics-simulation
+  path: .claude/expertise/physics-simulation.yaml
+
+  if_exists:
+    - Load: Known singularity patterns
+    - Load: Proven k-value mappings
+    - Load: Common simulation pitfalls
+    - Apply: Use expertise to guide k-selection
+
+  if_missing:
+    - Flag: Discovery mode
+    - Plan: Generate expertise learnings after successful simulations
+    - Capture: New problem types, k-values, improvement metrics
+```
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - problem_description: string  # Physics problem to simulate
+  optional:
+    - length_scale: float  # Characteristic scale in meters
+    - singularity_type: string  # "1/r", "1/r^2", "1/sqrt(r)", "none"
+    - accuracy_target: float  # Desired accuracy (e.g., 1e-6)
+    - performance_target: string  # "real-time", "batch", "consumer-hardware"
+    - target_language: string  # "python" or "typescript"
+
+output_contract:
+  required:
+    - optimal_k: float  # Selected k value
+    - k_source: string  # "length_scale" or "singularity_type"
+    - has_singularity: boolean  # Whether singularity detected
+    - simulation_code: string  # Generated code
+  optional:
+    - accuracy_comparison: object  # vs k=0 baseline
+    - step_reduction: object  # vs k=0 baseline
+    - validation_report: object  # Verification results
+    - expertise_delta: object  # New learnings for expertise update
+```
+
+### Quality Scoring System
+
+```yaml
+scoring_dimensions:
+  k_selection_accuracy:
+    score: 0.0-1.0
+    weight: 0.30
+    checks:
+      - "k matches singularity type (if present)"
+      - "k from CLI script (not hardcoded)"
+      - "k validated against expected range [-6, 1]"
+
+  transform_correctness:
+    score: 0.0-1.0
+    weight: 0.25
+    checks:
+      - "Forward transform implemented"
+      - "Inverse transform implemented"
+      - "Roundtrip error < 1e-10"
+      - "k=1 special case handled"
+
+  physics_accuracy:
+    score: 0.0-1.0
+    weight: 0.25
+    checks:
+      - "Solution bounded at singularity"
+      - "Matches analytical solution (if available)"
+      - "Energy conservation (for dynamics)"
+      - "Improvement over k=0 documented"
+
+  documentation_quality:
+    score: 0.0-1.0
+    weight: 0.20
+    checks:
+      - "k value and source documented"
+      - "Comparison vs k=0 included"
+      - "Expected improvement stated"
+      - "Assumptions explicit"
+
+  overall_score: weighted_average
+  minimum_passing: 0.7
+```
+
+### Eval Harness Integration
+
+Physics-simulation-creator improvements are tested against:
+
+```yaml
+benchmark: physics-simulation-benchmark-v1
+  tests:
+    - ps-001: Molecular dynamics with Lennard-Jones
+    - ps-002: Crack tip stress field
+    - ps-003: Vortex core velocity
+    - ps-004: Radiation intensity
+    - ps-005: Smooth quantum harmonic oscillator
+    - ps-006: N-body computational efficiency
+  minimum_scores:
+    k_selection_accuracy: 0.8
+    transform_correctness: 0.9
+    physics_accuracy: 0.7
+
+regression: physics-simulation-regression-v1
+  tests:
+    - psr-001: k sign correct for singularities (must_pass)
+    - psr-002: Transform roundtrip preserves values (must_pass)
+    - psr-003: NNC improves over k=0 for singularities (must_pass)
+    - psr-004: CLI script produces valid k (must_pass)
+  failure_threshold: 0
+```
+
+### Uncertainty Handling
+
+When problem type is unclear:
+
+```yaml
+confidence_check:
+  if confidence >= 0.8:
+    - Proceed with k-selection
+    - Document assumptions about singularity type
+    - Generate simulation code
+
+  if confidence 0.5-0.8:
+    - Present 2-3 k-value options
+    - Ask user: "Does this problem have a singularity?"
+    - Ask user: "What is the characteristic length scale?"
+    - Document uncertainty areas
+
+  if confidence < 0.5:
+    - DO NOT proceed with simulation
+    - List what is unclear about the physics
+    - Ask specific clarifying questions
+    - Request physics equations or reference materials
+    - NEVER guess at singularity type
+```
+
+### Cross-Skill Coordination
+
+Physics-simulation-creator works with:
+
+| Skill | Coordination |
+|-------|--------------|
+| **prompt-forge** | Can improve this skill's documentation |
+| **skill-auditor** | Audits this skill for improvement opportunities |
+| **functionality-audit** | Validates simulation correctness |
+| **model-evaluation-agent** | Compares k=optimal vs k=0 accuracy |
+| **experiment-tracking-agent** | Tracks simulation experiments |
+
+### Guardrails
+
+**NEVER**:
+- Generate k values outside the physics-valid range
+- Skip validation against k=0 baseline
+- Assume smooth when singularity might exist
+- Create simulations without documenting k-source
+- Modify frozen eval harness benchmarks
+
+**ALWAYS**:
+- Run CLI script for k-selection
+- Include comparison vs k=0
+- Document assumptions explicitly
+- Support auditing with clear metrics
+- Capture learnings for expertise update
+
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+After invoking this skill, verify:
+
+- [ ] **CLI Script Used**: Did you run ai_simulation_helper.py?
+- [ ] **k Value Justified**: Is the k value from CLI output (not hardcoded)?
+- [ ] **Comparison Documented**: Did you compare vs k=0 baseline?
+- [ ] **Transforms Correct**: Forward AND inverse transforms present?
+- [ ] **Physics Verified**: Does solution behave correctly at singularity?
+
+**Remember**: Skill() -> Task() -> TodoWrite() - ALWAYS
