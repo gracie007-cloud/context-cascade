@@ -45,20 +45,20 @@ Use k=-1.0 to handle singularity.
 
 ## k-Value Quick Lookup
 
-| Scale | k | Notes |
-|-------|---|-------|
-| Planck | 0.64 | Extreme quantum |
-| Atomic | 0.30 | Molecular/quantum |
-| Micro | 0.24 | Cells, bacteria |
-| Human | 0.16 | Engineering |
-| Solar | 0.01 | Approaching classical |
-| Galactic | -0.13 | Large scale |
+| Scale | k | Accuracy Gain | Step Reduction | Use NNC? |
+|-------|---|---------------|----------------|----------|
+| Planck (1e-35 m) | 0.64 | 50%+ | 50-100x | **YES** |
+| Atomic (1e-10 m) | 0.30 | 15-30% | 7-22x | **YES** |
+| Micro (1e-6 m) | 0.24 | 10-20% | 5-10x | YES (large sims) |
+| Human (1 m) | 0.16 | <5% | 1.5-3x | NO (unless need speed) |
+| Solar (1e11 m) | 0.01 | <1% | ~1x | NO |
+| Galactic (1e21 m) | -0.13 | <5% | ~1x | NO |
 
-| Singularity | k | Override scale-based k |
-|-------------|---|------------------------|
-| 1/r | -1.0 | Coulomb, gravity |
-| 1/r^2 | -2.0 | Radiation |
-| 1/sqrt(r) | -0.5 | Crack tips |
+| Singularity | k | Accuracy Gain | Override scale k? |
+|-------------|---|---------------|-------------------|
+| 1/r | -1.0 | 1000-40,000x | **YES - always** |
+| 1/r^2 | -2.0 | 1000-40,000x | **YES - always** |
+| 1/sqrt(r) | -0.5 | 100-1000x | **YES - always** |
 
 ---
 

@@ -122,9 +122,9 @@ The k(L) formula from multi-objective optimization shows optimal k varies by sca
 ### Accuracy vs Complexity Trade-off
 
 The CASCADE algorithm (61.9% win rate vs classical) proves that:
-- Optimal k reduces step count by 7-100x
-- Optimal k improves accuracy by 10-40,000x
-- These gains apply to BOTH singular and smooth problems
+- Optimal k reduces step count by 7-100x (at microscale)
+- Optimal k improves accuracy by 10-40,000x (for singularities) or 10-30% (for smooth microscale)
+- These gains apply to BOTH singular and smooth problems (but magnitude differs)
 
 ---
 

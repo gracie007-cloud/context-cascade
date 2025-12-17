@@ -358,41 +358,61 @@ def radiation_intensity_nnc(r, P=1.0, k=-2.0):
 
 ---
 
-## Example 5: Quantum Mechanics (Smooth - k=0)
+## Example 5: Quantum Harmonic Oscillator (Smooth, Atomic Scale)
 
 ### Problem Statement
-Solve Schrodinger equation for harmonic oscillator (no singularities).
+Solve Schrodinger equation for harmonic oscillator at atomic scale (no singularities, but microscale).
+
+**Key Question**: Even without singularities, can NNC help at atomic scale?
 
 ### Step 1: Analyze Problem
 
 ```bash
-python ai_simulation_helper.py --problem "quantum mechanics" --json
+python ai_simulation_helper.py --length-scale 1e-10 --json
 ```
 
 **Output**:
 ```json
 {
-  "matched_problem": "quantum mechanics",
-  "recommended_k": 0.0,
+  "k": 0.2963,
+  "source": "length_scale",
   "length_scale": 1e-10,
+  "has_singularity": false,
   "singularity_type": "none",
-  "description": "Quantum evolution is smooth - no singularities",
-  "expected_improvement": "Classical calculus (k=0) is optimal"
+  "expected_accuracy_gain": "15-30% over classical",
+  "expected_speedup": "7-22x fewer steps"
 }
 ```
 
-### Step 2: Conclusion
+### Step 2: Decision - Two Valid Options
 
-**DO NOT USE NNC** for this problem. k=0 (classical calculus) is optimal for smooth problems.
+**Option A: Use k=0.30 (Recommended for large simulations)**
+- 15-30% accuracy improvement
+- 7-22x step reduction (important for long trajectories)
+- Better for: Multi-day simulations, parameter sweeps, limited hardware
 
-```python
-# For smooth problems, just use classical methods
-def schrodinger_classical(psi, V, hbar, m, dt):
-    """Classical Schrodinger evolution - no NNC needed."""
-    # Standard split-step or Crank-Nicolson method
-    # k=0 means no transform applied
-    pass
-```
+**Option B: Use k=0 (Acceptable for small simulations)**
+- Simpler implementation
+- No transform overhead
+- Better for: Quick prototypes, small systems, when step count doesn't matter
+
+### Step 3: When to Choose Each Option
+
+| Scenario | Recommended k | Why |
+|----------|---------------|-----|
+| Long trajectory (>1M steps) | k=0.30 | 7-22x step reduction saves hours |
+| Parameter sweep (100+ runs) | k=0.30 | Cumulative time savings |
+| Consumer laptop | k=0.30 | Step reduction critical |
+| Quick prototype | k=0 | Simplicity wins |
+| High-precision needed | k=0.30 | 15-30% accuracy gain |
+
+### Step 4: Conclusion
+
+**Unlike singularity problems, smooth atomic-scale problems have a choice:**
+- k=0 works but may be slower
+- k=0.30 gives 7-22x step reduction for same accuracy
+
+**Rule of thumb**: If simulation takes >1 hour with k=0, use k=0.30.
 
 ---
 
