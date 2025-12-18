@@ -58,6 +58,29 @@ plan_and_solve: "Plan: [SKILL-SPECIFIC planning phase] -> Execute: [SKILL-SPECIF
 <!-- END SKILL SOP IMPROVEMENT -->
 
 # Skill Creator with Agent Specialization
+n## Trigger Keywords
+
+**USE WHEN user mentions:**
+- "create skill", "build skill", "new skill", "design skill"
+- "skill that spawns agent", "agent-based skill"
+- "reusable skill", "skill for [domain]", "professional skill"
+- "skill with specialist agent", "complex skill"
+- "skill for team", "skill library", "skill template"
+- "skill using Claude Agent SDK"
+
+**DO NOT USE when:**
+- User wants just an AGENT (not skill wrapper) - use agent-creator
+- User wants simple atomic skill without agent - use micro-skill-creator
+- User wants to improve existing skill - use skill-forge
+- User wants prompt optimization - use prompt-architect
+- Task is one-off without reuse value - direct implementation better
+
+**Instead use:**
+- agent-creator when building agents directly (no skill layer needed)
+- micro-skill-creator when creating simple, atomic skills
+- skill-forge when improving existing skills
+- cascade-orchestrator when composing existing skills into workflows
+
 
 This skill extends the standard skill creation process by tying each skill to a specialist agent that is invoked when the skill is triggered. Rather than having Claude Code directly execute skill instructions, this approach spawns a specialized agent configured with optimal prompting patterns, domain expertise, and communication protocols. The result is more consistent, higher-quality outputs and better separation of concerns.
 

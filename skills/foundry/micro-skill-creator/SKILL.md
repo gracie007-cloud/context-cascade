@@ -67,6 +67,31 @@ plan_and_solve: "Plan: Identify atomic operation + specialist expertise -> Execu
 
 # Micro-Skill Creator (Enhanced)
 
+## Trigger Keywords
+
+**USE WHEN user mentions:**
+- "create micro-skill", "atomic skill", "small skill", "focused skill"
+- "single-purpose skill", "one task skill"
+- "building block", "composable skill", "cascade component"
+- "reusable [domain] skill", "skill for [specific task]"
+- "Unix philosophy skill", "do one thing well"
+- "skill using [evidence technique]" (self-consistency, program-of-thought, plan-and-solve)
+
+**DO NOT USE when:**
+- User wants COMPLEX multi-step skill - use skill-creator-agent
+- User wants to create AGENT (not skill) - use agent-creator
+- User wants to IMPROVE existing skill - use recursive-improvement or skill-forge
+- User wants to optimize PROMPTS - use prompt-architect
+- Task is one-off without reuse value - direct implementation faster
+- Task already handled by external tools - integration better than recreation
+
+**Instead use:**
+- skill-creator-agent when skill needs multiple coordinated agents or complex workflow
+- agent-creator when goal is standalone agent (no skill wrapper needed)
+- cascade-orchestrator when composing existing skills into workflows
+- prompt-architect when optimizing prompts (not creating skills)
+
+
 ## Overview
 Creates small, focused skills that each spawn a specialist agent optimized for a specific task using evidence-based prompting techniques. This enhanced version integrates agent-creator principles, prompt-architect patterns, and systematic testing from functionality-audit.
 

@@ -16,6 +16,31 @@ mcp_servers:
   optional: [connascence-analyzer]
 ---
 
+## Trigger Keywords
+
+**USE WHEN user mentions:**
+- "improve skill", "audit skill", "enhance skill", "optimize skill"
+- "run improvement cycle", "meta-loop", "self-improve"
+- "skill quality check", "documentation audit"
+- "recursive improvement", "systematic improvement"
+- "batch improve skills", "improve all skills"
+- "skill missing [section]", "incomplete documentation"
+
+**DO NOT USE when:**
+- User wants to CREATE a new skill - use skill-creator-agent or micro-skill-creator
+- User wants to CREATE an agent - use agent-creator
+- User wants to improve a PROMPT (not skill) - use prompt-architect
+- User wants one-off manual fix - direct editing faster
+- Eval-harness benchmarks failing - fix root cause first, not improve on broken baseline
+- During active feature development - finish feature, then improve
+
+**Instead use:**
+- skill-creator-agent when creating new skills from scratch
+- agent-creator when creating new agents
+- prompt-architect when optimizing prompts
+- skill-forge when applying specific improvements (recursive-improvement coordinates it)
+
+
 ## Overview
 
 The Recursive Improvement skill orchestrates the meta-loop that enables the system to improve itself. It coordinates four specialized auditors (skill-auditor, prompt-auditor, expertise-auditor, output-auditor) to detect issues, generate improvement proposals, apply changes via skill-forge, and validate results through the frozen eval-harness.

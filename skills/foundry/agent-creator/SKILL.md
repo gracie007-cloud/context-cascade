@@ -8,6 +8,28 @@ description: Creates specialized AI agents with optimized system prompts using t
 
 This skill provides the **official comprehensive framework** for creating specialized AI agents, integrating the proven 5-phase methodology (v2.0 adds Phase 0 for expertise loading) from Desktop .claude-flow with Claude Agent SDK implementation and evidence-based prompting techniques.
 
+n## Trigger Keywords
+
+**USE WHEN user mentions:**
+- "create agent", "build agent", "new agent", "design agent"
+- "agent for [domain]", "specialist agent", "domain expert agent"
+- "rewrite agent", "optimize agent", "improve agent"
+- "agent with [capability]", "agent that does [task]"
+- "multi-agent workflow", "coordinating agents"
+- "production-ready agent", "agent system prompt"
+
+**DO NOT USE when:**
+- User wants a simple SKILL (not agent) - use skill-creator-agent or micro-skill-creator
+- User wants to improve a PROMPT (not system prompt) - use prompt-architect
+- User wants to improve THIS skill itself - use skill-forge
+- User wants quick automation without agent architecture - use micro-skill-creator
+
+**Instead use:**
+- skill-creator-agent when creating skills that spawn agents (higher-level)
+- micro-skill-creator when creating atomic, focused skills
+- prompt-architect when optimizing user prompts (not system prompts)
+- skill-forge when improving agent-creator itself
+
 ## When to Use This Skill
 
 Use agent-creator for:

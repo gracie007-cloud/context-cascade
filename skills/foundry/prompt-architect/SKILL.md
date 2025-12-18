@@ -8,6 +8,29 @@ description: Comprehensive framework for analyzing, creating, and refining promp
 
 A comprehensive framework for creating, analyzing, and refining prompts for AI language models using evidence-based techniques, structural optimization principles, and systematic anti-pattern detection.
 
+## Trigger Keywords
+
+**USE WHEN user mentions:**
+- "improve prompt", "optimize prompt", "refine prompt", "enhance prompt"
+- "create prompt for", "design prompt", "build prompt"
+- "prompt isn't working", "prompt quality", "better prompt"
+- "prompt engineering", "evidence-based prompting"
+- "self-consistency", "program-of-thought", "plan-and-solve"
+- "prompt library", "prompt template", "reusable prompt"
+
+**DO NOT USE when:**
+- User wants to create/improve AGENT SYSTEM PROMPTS - use agent-creator or prompt-forge
+- User wants to create SKILLS (not prompts) - use skill-creator-agent or micro-skill-creator
+- User wants to improve THIS skill itself - use skill-forge
+- Prompt is one-time use without optimization value - direct crafting faster
+
+**Instead use:**
+- agent-creator when designing agent system prompts (Phase 3: Architecture Design)
+- prompt-forge when improving system prompts for existing agents
+- skill-creator-agent when the goal is a skill (which may contain prompts)
+- interactive-planner when user needs help clarifying intent before prompt design
+
+
 ## Overview
 
 Prompt Architect provides a systematic approach to prompt engineering that combines research-backed techniques with practical experience. Whether crafting prompts for Claude, ChatGPT, Gemini, or other systems, this skill applies proven patterns that consistently produce high-quality responses.

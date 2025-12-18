@@ -1285,4 +1285,62 @@ Since true enforcement is impossible, use these workarounds:
 
 ---
 
+## 11. SKILL TRIGGER INDEX (Auto-Selection Reference)
+
+### By User Intent Keywords
+
+| When User Mentions | Use Skill | Why |
+|-------------------|-----------|-----|
+| bug, broken, crash, error, not working | `smart-bug-fix` | Root cause analysis with Codex auto-fix |
+| feature, implement, build from scratch | `feature-dev-complete` | Full 12-stage lifecycle |
+| review, PR, pull request, code quality | `code-review-assistant` | Multi-agent comprehensive review |
+| test, testing, coverage, unit test | `testing-quality` | Comprehensive test generation |
+| debug, trace, investigate issue | `debugging-assistant` | Systematic hypothesis testing |
+| performance, slow, bottleneck, optimize | `performance-profiler` | Deep CPU/memory/I/O profiling |
+| security, vulnerability, exploit | `security-analyzer` | OWASP/SANS/CWE scanning |
+| document, documentation, API docs | `doc-generator` | Auto-generate JSDoc, Markdown |
+| deploy, production, release | `production-readiness` | Pre-deployment validation |
+| plan, requirements, roadmap | `research-driven-planning` | Research + pre-mortem |
+| pair programming, collaborate | `pair-programming` | AI driver/navigator modes |
+| fake code, placeholder, theater | `theater-detection-audit` | Identify non-functional code |
+| GitHub workflow, CI/CD, Actions | `github-workflow-automation` | Advanced automation |
+| swarm, multi-agent, coordination | `swarm-orchestration` | Complex workflow orchestration |
+| cascade, pipeline, workflow chain | `cascade-orchestrator` | Multi-skill pipelines |
+| hive mind, collective, consensus | `hive-mind-advanced` | Queen-led coordination |
+| create agent, build agent | `agent-creator` | Evidence-based agent creation |
+| create skill, new skill | `micro-skill-creator` | Atomic focused skills |
+| prompt engineering, better prompt | `prompt-architect` | Evidence-based prompting |
+| ML, machine learning, neural | `ml-expert` | ML model development |
+| vector search, semantic search | `agentdb-vector-search` | RAG systems |
+| reverse engineer, decompile | `reverse-engineering-deep` | Deep binary analysis |
+| CI/CD failure, test failure | `cicd-intelligent-recovery` | 100% test success |
+
+### Quick Decision Tree
+
+```
+Bug/Error? -> smart-bug-fix
+New Feature? -> feature-dev-complete
+Full Project? -> research-driven-planning -> parallel-swarm-implementation -> cicd-intelligent-recovery
+GitHub Op? -> github-workflow-automation, github-code-review, github-release-management
+Quality? -> code-review-assistant, quick-quality-check
+Performance? -> performance-profiler
+Testing? -> testing-quality
+Documentation? -> doc-generator
+Multi-Agent? -> swarm-orchestration, cascade-orchestrator, hive-mind-advanced
+Agent/Skill Creation? -> agent-creator, micro-skill-creator
+Quick Check? -> quick-quality-check, theater-detection-audit
+```
+
+### Three-Loop Integrated System
+
+| Loop | Skill | When | Outcome |
+|------|-------|------|---------|
+| Loop 1: Planning | `research-driven-planning` | New projects | <3% failure rate |
+| Loop 2: Implementation | `parallel-swarm-implementation` | Validated plans | 8.3x faster |
+| Loop 3: CI/CD | `cicd-intelligent-recovery` | Test failures | 100% success |
+
+**Complete System**: 2.5-4x faster than traditional development
+
+---
+
 **Remember**: **Intent-first, playbook-second, skills execute**. Let the system route you to the right workflow!
