@@ -10,16 +10,16 @@
 ## Table of Contents
 
 1. [Universal Workflow](#universal-workflow)
-2. [Delivery Playbooks](#delivery-playbooks) (5 playbooks)
-3. [Operations Playbooks](#operations-playbooks) (4 playbooks)
-4. [Research Playbooks](#research-playbooks) (4 playbooks)
-5. [Security Playbooks](#security-playbooks) (3 playbooks)
-6. [Quality Playbooks](#quality-playbooks) (3 playbooks)
-7. [Platform Playbooks](#platform-playbooks) (3 playbooks)
-8. [GitHub Playbooks](#github-playbooks) (3 playbooks)
+2. [Delivery Playbooks](#delivery-playbooks) (0 playbooks)
+3. [Operations Playbooks](#operations-playbooks) (0 playbooks)
+4. [Research Playbooks](#research-playbooks) (0 playbooks)
+5. [Security Playbooks](#security-playbooks) (0 playbooks)
+6. [Quality Playbooks](#quality-playbooks) (0 playbooks)
+7. [Platform Playbooks](#platform-playbooks) (0 playbooks)
+8. [GitHub Playbooks](#github-playbooks) (0 playbooks)
 9. [Three-Loop Playbook](#three-loop-playbook) (FLAGSHIP)
 10. [Deep Research Playbook](#deep-research-playbook) (FLAGSHIP)
-11. [Specialist Playbooks](#specialist-playbooks) (4 playbooks)
+11. [Specialist Playbooks](#specialist-playbooks) (0 playbooks)
 
 ---
 
@@ -1005,7 +1005,7 @@ User Request
 
 ## Key Insights
 
-1. **180 skills organized into 10 categories** (Delivery, Operations, Research, Security, Quality, Platform, GitHub, Foundry, Workflow, Utilities)
+1. **183 skills organized into 10 categories** (Delivery, Operations, Research, Security, Quality, Platform, GitHub, Foundry, Workflow, Utilities)
 
 2. **25+ comprehensive playbooks** covering entire software development lifecycle
 

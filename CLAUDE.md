@@ -627,7 +627,7 @@ Hooks are configured in `.claude/settings.json` and fire at key moments:
 ### What Gets Enforced
 
 1. **5-Phase Workflow**: Non-trivial requests MUST execute all 5 phases
-2. **Agent Registry**: Task() agents MUST be from registry (206 agents)
+2. **Agent Registry**: Task() agents MUST be from registry (211 agents)
 3. **SOP Pattern**: Skill() MUST be followed by Task() and TodoWrite()
 4. **Parallel Execution**: 1 MESSAGE = ALL parallel Task() calls
 5. **Expertise Loading**: Domain work MUST check for expertise first
@@ -785,7 +785,19 @@ Match user request keywords to playbook:
 
 ## 4. RESOURCE REFERENCE (COMPRESSED)
 
-### 4.1 Skills (181 Total)
+### Component Counts (Auto-Synced)
+
+| Component | Count | Source |
+|-----------|-------|--------|
+| Skills | 183 | `skills/**/SKILL.md` |
+| Agents | 211 | `agents/**/*.md` |
+| Commands | 223 | `commands/**/*.md` |
+| Playbooks | 30 | `playbooks/docs/ENHANCED-PLAYBOOK-SYSTEM.md` |
+
+**Auto-Sync**: Run `node scripts/sync-doc-counts.js update` to update all docs.
+**Manifest**: `docs/COMPONENT-COUNTS.json`
+
+### 4.1 Skills (183 Total)
 
 **Categories**:
 - Development Lifecycle (15): Planning, architecture, implementation, testing, deployment
@@ -808,7 +820,7 @@ npx claude-flow skills info "api-development"
 
 **Auto-Trigger**: Skills activate based on keywords in user request (see Section 3)
 
-### 4.2 Playbooks (29 Total)
+### 4.2 Playbooks (30 Total)
 
 **Categories**:
 - Delivery (5): Simple feature, Three-Loop, E2E shipping, bug fix, prototyping
@@ -1116,7 +1128,7 @@ npx claude-flow hooks session-end --export-metrics true
 - ✅ Added intent-analyzer bootstrap (auto-triggers on first message)
 - ✅ Implemented reference system (queries instead of lists)
 - ✅ Reduced from 2000+ lines to ~300 lines (85% reduction)
-- ✅ Added 29 playbook router with keyword matching
+- ✅ Added 29-playbook router with keyword matching
 - ✅ Compressed resource reference (categories + discovery commands)
 - ✅ Added Quick Examples section
 
@@ -1149,6 +1161,127 @@ npx claude-flow hooks session-end --export-metrics true
 
 **Flow-Nexus Platform** (cloud features, requires authentication):
 - https://flow-nexus.ruv.io
+
+---
+
+## 10. SOP ENFORCEMENT SYSTEM
+
+### Overview
+
+The SOP Enforcement System is a **guardrail system** that guides Claude toward following the 5-phase workflow and spawning agents from the registry. Due to Claude Code hook limitations, it **cannot force** compliance but **detects violations** and **provides feedback**.
+
+### What It Tracks
+
+| Metric | Description |
+|--------|-------------|
+| Skill invocations | Which skills were called and when |
+| Agent spawns | Which agents were spawned via Task() |
+| Registry compliance | Whether agents come from the 206-agent registry |
+| TodoWrite calls | Whether TodoWrite was called after Task() |
+| Workflow phases | Progress through 5-phase workflow |
+| Violations | Skipped phases, generic agents, missing patterns |
+
+### Usage Commands
+
+```bash
+# View current session state
+bash .claude/hooks/enforcement/state-tracker.sh get_state
+
+# Check compliance (returns violation count)
+bash .claude/hooks/enforcement/state-tracker.sh check_compliance
+
+# Archive current state (called automatically on session end)
+bash .claude/hooks/enforcement/state-tracker.sh archive_state
+
+# Generate compliance report for current session
+bash .claude/hooks/enforcement/generate-report.sh
+
+# Analyze historical compliance across all sessions
+bash .claude/hooks/enforcement/analyze-compliance.sh
+
+# Find all violations across sessions
+bash .claude/hooks/enforcement/find-violations.sh
+
+# Check agent usage patterns
+bash .claude/hooks/enforcement/agent-usage-report.sh
+
+# Validate an agent type against registry
+node scripts/agent-registry-validator.js validate <agent-type>
+
+# Get suggestions for misspelled agent types
+node scripts/agent-registry-validator.js suggest <invalid-type>
+
+# List agents in a category
+node scripts/agent-registry-validator.js list <category>
+
+# Search agents by capability
+node scripts/agent-registry-validator.js search <capability>
+```
+
+### How Enforcement Works
+
+**Hooks fire at key moments:**
+
+| Hook | When | Action |
+|------|------|--------|
+| `UserPromptSubmit` | New message | Initialize state, inject 5-phase reminder |
+| `PreToolUse:Skill` | Before Skill() | Display SOP reminder |
+| `PreToolUse:Task` | Before Task() | Display registry reminder |
+| `PostToolUse:Skill` | After Skill() | Log skill, verify SOP compliance |
+| `PostToolUse:Task` | After Task() | Log agent spawn, remind about TodoWrite |
+| `PostToolUse:TodoWrite` | After TodoWrite() | Mark pattern complete |
+| `PreCompact` | Context compaction | Inject pattern retention |
+| `Stop` | Session end | Check compliance, archive state |
+
+### Critical Limitations
+
+**Hooks CANNOT:**
+- Inspect Task() parameters (cannot see agent type in PreToolUse)
+- Modify tool inputs or outputs
+- Force tool invocations
+- Block based on parameter validation
+
+**Hooks CAN:**
+- Display reminders and warnings
+- Log tool invocations to state file
+- Detect violations post-execution
+- Archive state for analysis
+- Block execution with exit code 2 (but cannot validate first)
+
+### Enforcement Strategy
+
+Since true enforcement is impossible, use these workarounds:
+
+1. **Use safe-task-spawn skill**: Validated wrapper that checks registry before spawning
+   ```
+   Skill("safe-task-spawn") with { agent_type: "backend-dev", ... }
+   ```
+
+2. **Review compliance reports**: After sessions, analyze violations
+   ```bash
+   bash .claude/hooks/enforcement/analyze-compliance.sh
+   ```
+
+3. **Validate agents manually**: Before spawning, validate agent exists
+   ```bash
+   node scripts/agent-registry-validator.js validate backend-dev
+   ```
+
+4. **Pattern retention**: PreCompact hooks ensure patterns survive context loss
+
+### State File Location
+
+- **Active state**: `~/.claude/runtime/enforcement-state.json`
+- **Archives**: `~/.claude/runtime/enforcement/archive/`
+
+### Violation Types
+
+| Violation | Detected When |
+|-----------|---------------|
+| `generic_agent` | Agent type not in registry |
+| `missing_agents` | Skill invoked but no Task() calls |
+| `missing_todowrite` | Agents spawned but no TodoWrite() |
+| `skipped_phase` | Workflow phases out of order |
 
 ---
 

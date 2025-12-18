@@ -10,13 +10,13 @@
 PLAYBOOKS (30)     <-- Only these are loaded initially (~2k tokens)
     |
     v
-SKILLS (126)       <-- Loaded when playbook invokes them
+SKILLS (183)       <-- Loaded when playbook invokes them
     |
     v
-AGENTS (203)       <-- Loaded when skill needs them
+AGENTS (211)       <-- Loaded when skill needs them
     |
     v
-COMMANDS (130+)    <-- Embedded in agents, loaded last
+COMMANDS (223)    <-- Embedded in agents, loaded last
 ```
 
 **Why Context Cascade?**
@@ -219,7 +219,7 @@ claude mcp add memory-mcp /path/to/memory-mcp/venv/Scripts/python.exe -u -m src.
 
 ## 📋 Complete Command Taxonomy
 
-**Total Commands**: 224 (149 original + 75 new)
+**Total Commands**: 223 (149 original + 75 new)
 **MECE Coverage**: 100% across 10 domains
 **GraphViz Diagrams**: 25 workflow visualizations
 
@@ -463,7 +463,7 @@ claude mcp add memory-mcp /path/to/memory-mcp/venv/Scripts/python.exe -u -m src.
 **271 AI-comprehensible Graphviz workflow diagrams**
 
 **What you get**:
-- ✅ **271 Graphviz Diagrams** - 101% coverage (73 skills, 104 agents, 94 commands)
+- ✅ **271 Graphviz Diagrams** - 101% coverage (73 skills, 211 agents, 94 commands)
 - ✅ **Validation Tools** - Cross-platform validation scripts (Bash + PowerShell)
 - ✅ **Interactive HTML Viewer** - Search, filter, and browse all diagrams
 - ✅ **Master Catalog** - Complete metadata and integration guidelines
