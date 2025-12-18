@@ -16,7 +16,7 @@ Think of it as a complete map of what Claude Code can do, organized logically so
 
 - **96 Total Skills** - Everything documented
 - **10 Categories** - Logically organized
-- **130 Agents** - Specialized helpers
+- **211 agents** - Specialized helpers
 - **40+ Commands** - CLI access
 - **40+ MCP Tools** - Integrations
 - **236 KB** - 7 comprehensive documents
@@ -206,7 +206,7 @@ Not sure where to start? These 5 skills solve 80% of problems:
 ## 📊 By The Numbers
 
 - **96 Skills** organized in 10 categories
-- **130 Agents** supporting skill execution
+- **211 agents** supporting skill execution
 - **40+ Commands** for CLI access
 - **40+ MCP Tools** for integrations
 - **25+ Skill pairs** commonly used together

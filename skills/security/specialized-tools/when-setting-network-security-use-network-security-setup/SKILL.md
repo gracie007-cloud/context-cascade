@@ -351,6 +351,17 @@ Network policies degrade as environments change. Continuous testing ensures cont
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Wildcard domain patterns without justification** (*.com, *.cloudfront.net) | Massively expands attack surface. *.com allows millions of domains. CDN wildcards trust all customers of that CDN. | Use specific domain lists. Wildcard only subdomains you control (*.mycompany.com). Document justification for every wildcard. |
+| **Storing proxy credentials in config files** (http_proxy=http://user:password@proxy) | Credentials in plaintext expose proxy authentication to anyone reading config files or environment variables. | Use credential helpers, Kerberos/NTLM authentication, or secret management systems. Never plaintext passwords. |
+| **Skipping negative testing** (only testing that npm install works) | Confirms allowlist but not blocklist. Attackers exploit what you did not test - blocked domains might be accessible. | Always test that untrusted domains are blocked. Attempt connections to random domains, verify they fail. |
+
+---
+
 ## Conclusion
 
 Network security for sandbox environments requires balancing isolation with functionality. The challenge is creating boundaries restrictive enough to prevent data exfiltration and malicious communications while permissive enough to allow legitimate development workflows. The whitelist approach outlined in this skill provides a systematic method for defining trusted domains, implementing access controls, and validating policies through comprehensive testing.

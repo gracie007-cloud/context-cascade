@@ -19,7 +19,7 @@ This document provides comprehensive capability mapping showing:
 
 ## Part 1: Agent-to-Skill Mapping
 
-### By Agent Type (130 agents total)
+### By Agent Type (211 agents total)
 
 #### Development Agents (15 agents)
 
@@ -919,7 +919,7 @@ Total Time: 2-4 hours
 
 - **Total Skills**: 96
 - **Total Agents**: 130
-- **Total Commands**: 40+
+- **Total Commands**: 223+
 - **MCP Tools Used**: 40+
 - **Avg Agents per Skill**: 4-6
 - **Avg Tools per Skill**: 1-3

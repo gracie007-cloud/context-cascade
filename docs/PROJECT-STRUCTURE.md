@@ -1,6 +1,6 @@
 # ruv-sparc-three-loop-system - Project Structure Guide
 
-**Plugin Status**: Production-ready with 131 agents + 111 skills
+**Plugin Status**: Production-ready with 211 agents + 111 skills
 **Last Updated**: 2025-11-02
 **Organization Status**: Fully organized (Phases 1-4 complete)
 
@@ -20,7 +20,7 @@ This Claude Code plugin implements the SPARC methodology with Three-Loop develop
 
 ```
 ruv-sparc-three-loop-system/
-├── agents/                           # 131 agents organized by domain (24 directories)
+├── agents/                           # 211 agents organized by domain (24 directories)
 │   ├── analysis/                     # Analytical & audit agents
 │   ├── architecture/                 # System architecture & design
 │   ├── business/                     # Business logic & domain
@@ -42,7 +42,7 @@ ruv-sparc-three-loop-system/
 │   ├── research/                     # Research & analysis (Deep Research SOP)
 │   ├── sparc/                        # SPARC methodology agents
 │   ├── registry/                     # Agent registry management
-│   │   ├── registry.json             # 131 agent definitions
+│   │   ├── registry.json             # 211 agents definitions
 │   │   ├── add-mcp-to-registry.js    # Registry management scripts
 │   │   ├── update-mcp-free-only.js
 │   │   ├── update-to-installed-only.js
@@ -97,7 +97,7 @@ ruv-sparc-three-loop-system/
 ### agents/registry/registry.json - Agent Registry
 **Location**: `agents/registry/registry.json`
 **Size**: 194KB
-**Content**: Metadata for all 131 agents
+**Content**: Metadata for all 211 agents
 
 **Structure**:
 ```json
@@ -400,7 +400,7 @@ taggedMemoryStore('coder', 'Implemented authentication feature', {
 ---
 
 **Plugin Status**: ✅ PRODUCTION READY
-- 131 agents (24 domains)
+- 211 agents (24 domains)
 - 111 skills (100% Silver+ tier)
 - Full MECE compliance
 - Specialist agent types enforced

@@ -944,6 +944,16 @@ Without semantic versioning discipline, dependency updates become risky manual p
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Manual Cross-Repo Synchronization** | Manually copying code, config, or docs across repositories. Leads to version skew, inconsistent updates, missed synchronizations. Human error causes divergence over time. No audit trail of sync operations. | Automate synchronization with github-multi-repo swarm orchestration. Changes to shared templates, CLAUDE.md, or common config trigger automated PRs in dependent repos with conflict detection. Maintain sync audit log in Memory MCP. |
+| **Tightly Coupled Repository Dependencies** | Creating circular dependencies or tight coupling between repos (frontend directly imports backend code). Breaks independent deployability. Creates cascading failures during updates. Makes refactoring impossible without coordinated changes. | Dependency Inversion with Contracts: Define API contracts (OpenAPI schemas, TypeScript types) in shared package. Repos depend on contracts, not implementations. Changes to implementations don't break consumers as long as contracts stable. Use consumer-driven contract testing. |
+| **Monolithic Change Propagation** | Attempting to update all repositories simultaneously in single transaction. Creates coordination overhead, increases cascading failure risk, blocks parallel development. All-or-nothing deployment strategy. | Incremental Propagation with Canary Pattern: Roll out changes incrementally - update shared package, deploy to canary repos (10% consumers), monitor for breakage, propagate to remaining repos. Use feature flags to decouple deployment from activation. |
+
+---
+
 ## Conclusion
 
 Multi-repository coordination is a distributed systems problem requiring systematic approaches to state management, consistency models, and dependency tracking. The github-multi-repo skill provides production-ready patterns for coordinating changes across repositories through swarm orchestration, automated synchronization, and shared memory architecture.

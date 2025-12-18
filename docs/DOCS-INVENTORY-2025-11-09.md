@@ -167,7 +167,7 @@ Total: 15 README files
 - STRATEGIC-AGENT-ENHANCEMENT-PLAN.md (2025-10-29)
 - AGENT-ENHANCEMENT-TEMPLATE.md (2025-10-29, 39KB)
 
-**Status**: ✅ **Extensive** - 131 agents documented with skills, commands, and integration
+**Status**: ✅ **Extensive** - 211 agents documented with skills, commands, and integration
 
 ---
 
@@ -542,7 +542,7 @@ MUST KEEP:
 - All *-INDEX.md, *-REFERENCE.md files (navigation)
 - All *-GUIDE.md files (operational guides)
 - ARCHITECTURE-*.md (system design)
-- AGENT-REGISTRY.md (131 agents)
+- AGENT-REGISTRY.md (211 agents)
 - MCP integration guides
 - Native Windows validation docs (most recent, 2025-11-09)
 
@@ -632,7 +632,7 @@ cat > docs/NAVIGATION-INDEX.md << EOF
 
 ## Developer Documentation
 - [Architecture](ARCHITECTURE-DOCUMENTATION-INDEX.md) - System design
-- [Agent Registry](AGENT-REGISTRY.md) - 131 agents
+- [Agent Registry](AGENT-REGISTRY.md) - 211 agents
 
 ## Workflows & Diagrams
 - [Workflows](workflows/graphviz/README.md) - Graphviz diagrams
@@ -666,7 +666,7 @@ cat > docs/QUICK-REFERENCE.md << EOF
 
 ## 🏗️ Architecture & Design
 - [ARCHITECTURE-VISUAL-REFERENCE](ARCHITECTURE-VISUAL-REFERENCE.md) - Diagrams
-- [AGENT-REGISTRY](AGENT-REGISTRY.md) - 131 agents
+- [AGENT-REGISTRY](AGENT-REGISTRY.md) - 211 agents
 
 ## 🔧 Operational Guides
 - [P6_T6_DOCKER_DEPLOYMENT_GUIDE](P6_T6_DOCKER_DEPLOYMENT_GUIDE.md) - Docker deployment

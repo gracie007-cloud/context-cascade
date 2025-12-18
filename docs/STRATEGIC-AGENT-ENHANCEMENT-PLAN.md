@@ -109,7 +109,7 @@ A **systematic enhancement framework** that:
 - /agent-delegate - Spawn sub-agent
 ...
 
-### Specialist Commands by Domain - 155 commands
+### Specialist Commands by Domain - 223 commands
 
 #### Development Commands (35)
 - /api-design - Design REST API

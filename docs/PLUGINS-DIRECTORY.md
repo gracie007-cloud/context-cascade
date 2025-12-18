@@ -176,7 +176,7 @@ The `plugins/` directory is **non-standard** per official Claude Code documentat
 
 However, this plugin uses `plugins/` for **meta-plugin architecture** because:
 
-1. **Scale**: 180 skills across 8 domains is too large for a single flat structure
+1. **Scale**: 183 skills across 8 domains is too large for a single flat structure
 2. **Modularity**: Users should be able to install just what they need
 3. **Maintenance**: Easier to update and version independent modules
 4. **Organization**: Clear separation of concerns by domain

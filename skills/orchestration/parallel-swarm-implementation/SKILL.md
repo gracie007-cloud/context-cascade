@@ -902,6 +902,14 @@ Use this skill when Loop 1 planning complete, implementation requires 4-8 hours,
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Hardcoded Agent Assignments** | Agent+skill assignments baked into skill code. Every project uses same 6 agents regardless of task requirements. Novel tasks force-fit into existing agents, resulting in suboptimal execution. | Queen dynamically selects agents from 86+ registry based on Loop 1 task breakdown. Backend tasks -> backend-dev, ML tasks -> ml-developer, security tasks -> security-specialist. Assignments stored in matrix, not hardcoded in skill. |
+| **Skill-Only or Custom-Only Execution** | Force all agents to use existing skills (fails on novel tasks without skills). OR force all agents to use custom instructions (ignores proven skill SOPs). Both extremes are suboptimal. | Queen's decision tree: If specialized skill exists for task type, assign skill with context parameters. If no skill exists, assign custom instructions with Loop 1 guidance. Hybrid approach leverages skills when available, adapts when necessary. |
+| **Accepting Theater as "Good Enough"** | Single theater detector reports 5% theater. Team ships anyway because "it's not that bad" or "we'll fix it later." Theater compounds - mocked functions never get real implementations, TODOs never get resolved, test theater spreads to new code. | Zero tolerance enforced through Byzantine consensus. 6 agents validate independently, 4/5 agreement required for theater confirmation. ANY confirmed theater blocks merge. Theater debt is never acceptable - it only grows. |
+
 ## Conclusion
 
 Parallel Swarm Implementation (Loop 2) provides adaptive meta-skill orchestration that dynamically compiles Loop 1 plans into agent+skill execution graphs with theater-free parallel implementation and 100% integration validation.

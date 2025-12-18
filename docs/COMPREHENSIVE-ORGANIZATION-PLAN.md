@@ -9,7 +9,7 @@
 ## Executive Summary
 
 Complete reorganization of the ruv-sparc-three-loop-system plugin to address:
-1. **Agents folder disorganization**: 131 agents without clear taxonomy or categorization
+1. **Agents folder disorganization**: 211 agents without clear taxonomy or categorization
 2. **Skills folder loose files**: Audit JSONs scattered in root, inconsistent structures
 3. **CLAUDE.md outdated**: No specialist agent mapping (currently spawns generic "general-purpose" agents)
 4. **90 incomplete skills**: Only skill.md file, missing README.md, examples/, references/
@@ -86,7 +86,7 @@ agents/
 │   ├── infrastructure/    # cicd-engineer, system-architect, perf-analyzer
 │   └── specialized/       # sparc-coord, swarm-coordinators, consensus-validators
 ├── registry/
-│   └── AGENTS-INDEX.md    # Consolidated list of all 131 agents
+│   └── AGENTS-INDEX.md    # Consolidated list of all 211 agents
 ├── templates/
 │   └── agent-template.md  # Template for creating new agents
 └── README.md              # Agent taxonomy guide and selection flowchart
@@ -348,7 +348,7 @@ Select 2-3 skills from Batch 2, run full enhancement workflow:
 
 ### Organization Health (Post-Phase 5)
 - ✅ **0 loose files** in agents/ and skills/ root folders
-- ✅ **131 agents categorized** across 5 domains
+- ✅ **211 agents categorized** across 5 domains
 - ✅ **agents/foundry/registry/** with consolidated index
 - ✅ **All scripts functional** with new folder structure
 - ✅ **100% documentation coverage** (all folders have READMEs)

@@ -347,6 +347,16 @@ Never skip phases: Specification defines purpose clearly, Prompt Engineering app
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Zero-Shot Agents Without Examples** | Creating agents with no few-shot examples in system prompt. Reduces performance by 30-50% compared to agents with 2-5 concrete examples demonstrating desired input-output patterns and reasoning steps. | Include 2-5 few-shot examples covering common cases, edge cases, and desired reasoning patterns. Each example must show input, step-by-step reasoning, and expected output. Validate examples during Phase 3 testing. |
+| **Generic Agent Prompts** | Using template prompts without domain-specific research. Results in agents lacking specialized knowledge who apply generic patterns to domain-specific problems. Performance degradation of 50%+ compared to expert agents. | Complete Phase 1 Specification with deep domain research. Study codebases, documentation, best practices. Embed expertise through concrete examples, domain constraints, and specialized reasoning steps. Agent should demonstrate domain mastery, not general capability. |
+| **Skipping Validation Testing** | Deploying agents without Phase 3 testing against diverse inputs and edge cases. Agents appear functional in demos but fail 40% of the time in production due to untested scenarios. | Run comprehensive Phase 3 validation: test typical inputs, edge cases, error conditions, adversarial inputs. Measure success rate against quality criteria (>95% functional correctness). Iterate prompt until thresholds met before production deployment. |
+
+---
+
 ## Conclusion
 
 Agent creation is not prompt writing, it is systematic engineering. The difference between a casual prompt and a production-ready agent is the application of evidence-based techniques, deep domain research, and rigorous validation. Agents built through the 4-phase SOP consistently achieve 90%+ success rates because they embed expertise rather than rely on the model to figure it out on the fly.

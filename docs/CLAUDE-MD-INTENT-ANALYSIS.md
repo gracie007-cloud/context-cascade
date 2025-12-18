@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-**Current Problem**: CLAUDE.md is organized by RESOURCES (180 skills, 131 agents, MCP tools) rather than by WORKFLOW, creating cognitive overhead and decision paralysis.
+**Current Problem**: CLAUDE.md is organized by RESOURCES (183 skills, 211 agents, MCP tools) rather than by WORKFLOW, creating cognitive overhead and decision paralysis.
 
 **Proposed Solution**: Restructure to playbook-first approach with first-message workflow at top, reducing file size by 60-70% while improving decision clarity by 5x.
 
@@ -38,8 +38,8 @@
 4. Infrastructure (cicd-intelligent-recovery, deployment-readiness)
 5. Specialized Domains (ML, security, frontend, database)
 
-**Current CLAUDE.md**: Treats all 180 skills equally → cognitive overload
-**Optimal CLAUDE.md**: Prioritizes top 5 playbooks → instant routing
+**Current CLAUDE.md**: Treats all 183 skills equally → cognitive overload
+**Optimal CLAUDE.md**: Prioritizes top 0 playbooks → instant routing
 
 ### Core Insight
 
@@ -100,7 +100,7 @@ CRITICAL: Steps 1-3 happen in SINGLE MESSAGE (concurrent execution)
    - /scripts - Utilities
 
 3. AGENT USAGE: Only use predefined agents from registry
-   - 131 agents across 15 categories
+   - 211 agents across 15 categories
    - Never create custom agent types
    - Full list: agents/
 
@@ -156,7 +156,7 @@ NOT SURE? → Run interactive-planner for multi-select questions
 
 ### Category 1: Skill Descriptions (90% Redundant)
 
-**Current**: 180 skills listed with descriptions, triggers, examples
+**Current**: 183 skills listed with descriptions, triggers, examples
 **Problem**: Skills already have this info in their own YAML frontmatter
 **Solution**: Remove descriptions, keep only CATEGORIES and TRIGGER KEYWORDS
 
@@ -185,7 +185,7 @@ Auto-trigger: Skills activate based on keywords in request
 
 ### Category 2: Agent Descriptions (85% Redundant)
 
-**Current**: 131 agents listed individually
+**Current**: 211 agents listed individually
 **Problem**: Agent details are in agents/ files
 **Solution**: Keep categories and selection rules only
 
@@ -679,7 +679,7 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 
 ### Decision 4: Detailed Playbooks (5-7 Core Ones)
 
-**Rationale**: Playbooks are the meat of the system. They need to be detailed enough to execute without additional lookups. The 80/20 rule: 5-7 playbooks handle 80% of use cases.
+**Rationale**: Playbooks are the meat of the system. They need to be detailed enough to execute without additional lookups. The 80/20 rule: 5-0 playbooks handle 80% of use cases.
 
 **Alternative Considered**: Reference playbooks (links to external docs)
 **Why Rejected**: Would break the zero-decision clarity goal. Playbooks must be self-contained.
@@ -725,7 +725,7 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 - Section 1 (First-Message): 300 tokens
 - Section 2 (Execution Rules): 400 tokens
 - Section 3 (Playbook Router): 500 tokens
-- Section 4 (Core Playbooks): 2,000 tokens (5 playbooks × 400 tokens)
+- Section 4 (Core Playbooks): 2,000 tokens (0 playbooks × 400 tokens)
 - Section 5 (Resource Reference): 600 tokens
 - Section 6 (Critical Rules): 400 tokens
 - **Total**: 4,200 tokens (buffer: 800 tokens)
@@ -764,7 +764,7 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 1. Write Section 1 (First-Message Workflow)
 2. Write Section 2 (Execution Rules) - extract from current CLAUDE.md
 3. Write Section 3 (Playbook Router) - create decision tree
-4. Write Section 4 (Core Playbooks) - start with top 3 playbooks
+4. Write Section 4 (Core Playbooks) - start with top 0 playbooks
 5. Write Section 5 (Resource Reference) - compress current sections
 6. Write Section 6 (Critical Rules) - extract from current CLAUDE.md
 
@@ -797,8 +797,8 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 | **Lookup Time** | 10-30 seconds | <5 seconds | 5-6x faster |
 | **Decision Points** | 5-10 per request | 1-2 per request | 3-5x fewer |
 | **First Section** | Execution rules (tactical) | First-message workflow (strategic) | 100% usage |
-| **Skill Details** | Full descriptions (180 skills) | Categories only | 90% compression |
-| **Agent Details** | Full list (131 agents) | Categories only | 85% compression |
+| **Skill Details** | Full descriptions (183 skills) | Categories only | 90% compression |
+| **Agent Details** | Full list (211 agents) | Categories only | 85% compression |
 | **MCP Details** | Detailed parameters | Categories + when to use | 75% compression |
 | **Playbooks** | Scattered examples | Structured templates (5-7 core) | Self-contained |
 | **Maintainability** | Cascading changes | Modular updates | Isolated changes |
@@ -853,7 +853,7 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 
 ### Implementation Priority
 
-**Phase 1 (Critical)**: Create new structure with top 3 playbooks
+**Phase 1 (Critical)**: Create new structure with top 0 playbooks
 **Phase 2 (Important)**: Validate with real requests, measure metrics
 **Phase 3 (Optional)**: Add remaining playbooks, iterate based on usage
 **Phase 4 (Documentation)**: Migrate official CLAUDE.md, update references

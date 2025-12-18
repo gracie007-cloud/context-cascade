@@ -39,7 +39,7 @@ Your Request (natural language)
 
 ## What You Get
 
-This plugin provides **207 AI agents**, **115 skills**, and **233 commands** for comprehensive development automation:
+This plugin provides **207 AI agents**, **115 skills**, and **223 commands** for comprehensive development automation:
 
 ### 🔄 Three-Loop System (Auto-Triggered)
 1. **Loop 1**: Research-driven planning with 5x pre-mortem analysis
@@ -93,9 +93,9 @@ claude mcp list
 
 1. Clone or download this plugin repository
 2. Claude Code will auto-discover:
-   - 207 agents from `agents/*.md`
-   - 180 skills from `skills/**/SKILL.md`
-   - 233 commands from `commands/**/*.md`
+   - 211 agents from `agents/*.md`
+   - 183 skills from `skills/**/SKILL.md`
+   - 223 commands from `commands/**/*.md`
 
 ---
 

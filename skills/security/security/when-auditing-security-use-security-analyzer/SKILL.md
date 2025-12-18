@@ -866,6 +866,17 @@ Security degrades over time as code changes, dependencies update, and new vulner
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|-------------|---------|----------|
+| **Skipping negative testing** (only testing that allowed domains work) | Confirms allowlist but does not validate blocklist. Attackers exploit what you did not test. | Always test that untrusted domains are blocked. Negative testing validates security controls actually prevent attacks. |
+| **Treating findings as bugs, not security issues** (low priority, backlog, ship first fix later) | Security vulnerabilities are not normal bugs. Exploits are public, attackers are active, time-to-exploit is hours not weeks. | Critical security findings block deployment. High severity findings require patching before release. Security is not negotiable. |
+| **Running scans without remediation** (generating reports but not fixing issues) | Security theater. Reports provide false sense of security while vulnerabilities remain exploitable. | Every finding requires disposition: fix, mitigate, accept risk, or prove false positive. No findings without action. |
+
+---
+
 ## Conclusion
 
 Security auditing is not a single activity but a systematic process combining multiple detection techniques, validation gates, and continuous monitoring. The five-phase approach outlined in this skill provides comprehensive coverage across static code analysis, runtime behavior, dependency vulnerabilities, credential exposure, and compliance standards. Each phase addresses blind spots in other phases, creating defense in depth through detection.

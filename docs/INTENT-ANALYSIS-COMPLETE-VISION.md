@@ -358,7 +358,7 @@ All 86 agents get these MCP tools:
 
 1. Create COMMAND-TO-AGENT-ASSIGNMENTS.md
    - Use MECE-AGENT-INVENTORY.md as starting point
-   - Map all 195 commands to appropriate agents
+   - Map all 223 commands to appropriate agents
    - Define universal (45) vs specialist (150+) split
 
 2. Create MCP-TOOL-TO-AGENT-ASSIGNMENTS.md

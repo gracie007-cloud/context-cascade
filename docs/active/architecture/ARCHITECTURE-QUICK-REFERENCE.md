@@ -11,11 +11,11 @@
 A **three-layer plugin system** for AI-assisted software development:
 
 ```
-COMMANDS (224)           User interface (slash commands)
+COMMANDS (223)           User interface (slash commands)
     ↓ bind to
-SKILLS (93)              Methodology layer (how to solve problems)
+SKILLS (183)              Methodology layer (how to solve problems)
     ↓ delegate to
-AGENTS (131)             Expertise layer (who solves them)
+AGENTS (211)             Expertise layer (who solves them)
     ↓ coordinated by
 MEMORY MCP + HOOKS       Persistence & automation
 ```
@@ -308,7 +308,7 @@ RIGHT: "researcher", "coder", "analyst", "optimizer", "coordinator"
 ### Access Control Rules
 
 ```
-CODE QUALITY AGENTS (14):
+CODE QUALITY AGENTS (211):
 ├─ coder, reviewer, tester, analyst, code-analyzer
 ├─ functionality-audit, theater-detection-audit
 ├─ production-validator, sparc-coder, backend-dev
@@ -316,7 +316,7 @@ CODE QUALITY AGENTS (14):
 └─ code-review-swarm
 Can Access: memory-mcp, connascence-analyzer, claude-flow
 
-PLANNING AGENTS (23):
+PLANNING AGENTS (211):
 ├─ planner, researcher, system-architect, specification
 ├─ pseudocode, architecture, refinement
 ├─ hierarchical-coordinator, mesh-coordinator, adaptive-coordinator
@@ -358,7 +358,7 @@ C:\Users\17175\
 │   ├── agent-creation/
 │   └── utilities/
 │
-├── agents/                    # All 131 agents
+├── agents/                    # All 211 agents
 │   ├── registry.json             # Central registry
 │   ├── core/                     # 8 core agents
 │   ├── frontend/                 # 6 frontend agents
@@ -367,7 +367,7 @@ C:\Users\17175\
 │   ├── swarm/                    # 15 coordination agents
 │   └── [15+ more categories]
 │
-├── commands/                  # All 224 commands
+├── commands/                  # All 223 commands
 │   ├── README.md                 # Registry
 │   ├── essential-commands/       # 10 core commands
 │   ├── sparc/                    # 31 SPARC commands
@@ -485,8 +485,8 @@ CONFIGURATION:
 
 REGISTRIES:
 ├─ skills/MASTER-SKILLS-INDEX.md       # All 93 skills
-├─ commands/README.md                   # All 224 commands
-└─ agents/registry.json                 # All 131 agents
+├─ commands/README.md                   # All 223 commands
+└─ agents/registry.json                 # All 211 agents
 
 ARCHITECTURE DOCS:
 ├─ docs/SKILL-AGENT-COMMAND-ARCHITECTURE.md      # Full reference
@@ -697,7 +697,7 @@ MEMORY + HOOKS (persistence & automation)
 - ✅ Clear separation of concerns
 - ✅ 131 specialized agents with distinct expertise
 - ✅ 93 reusable skills covering all domains
-- ✅ 224 commands for granular control
+- ✅ 223 commands for granular control
 - ✅ Persistent memory with semantic search
 - ✅ Theater detection via Byzantine consensus
 - ✅ Three-loop feedback for continuous improvement

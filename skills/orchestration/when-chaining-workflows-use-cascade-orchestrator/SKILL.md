@@ -530,6 +530,14 @@ mcp__flow-nexus__workflow_create({
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Monolithic Workflows** | Single massive workflow with no decomposition leads to poor maintainability, difficult debugging, and inability to parallelize independent tasks. | Break workflows into smaller, composable units. Use hierarchical cascades where high-level workflows orchestrate sub-workflows. Each workflow should have single responsibility. |
+| **Implicit Dependencies** | Workflows depend on undocumented side effects or shared global state, causing unexpected failures when execution order changes. | Explicitly declare all dependencies in cascade definition. Use data flow configuration to pass outputs as inputs. Avoid shared mutable state - use message passing instead. |
+| **Ignoring Workflow Failures** | Cascade continues executing dependent workflows even when prerequisites fail, wasting resources and producing invalid results. | Implement strict dependency checking. Use fail-fast strategy where failure of prerequisite immediately halts dependent workflows. Provide rollback or compensation logic for partial failures. |
+
 ## Conclusion
 
 The Cascade Orchestrator enables sophisticated workflow automation by combining sequential pipelines, parallel execution, and conditional branching into a unified coordination framework. Its power lies in three key capabilities: intelligent dependency management that maximizes parallelization while respecting execution constraints, robust failure handling that recovers gracefully from transient errors, and comprehensive observability that provides full visibility into complex multi-stage workflows.

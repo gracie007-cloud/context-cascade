@@ -759,6 +759,14 @@ Individual agent failures should not compromise swarm integrity or result qualit
 | **Blocking topology switches** | Topology changes cause errors or lost work, connection failures during reconfiguration, partial state corruption | Drain tasks before topology switch, validate agent states after reconfiguration, implement rollback on switch failure, test switches in non-production |
 | **Single coordinator without failover** | Coordinator failure brings down entire swarm, single point of failure, no high availability | Implement coordinator redundancy with leader election (Raft, Paxos), enable automatic failover, health check coordinators independently |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Fixed Topology Regardless of Workload** | Suboptimal performance with coordinator bottlenecks in hierarchical topology, excessive communication overhead in mesh topology for wrong workload types. | Analyze workload characteristics before topology selection. Match topology to coordination pattern (hierarchical for delegation, mesh for peer collaboration). Enable adaptive switching. Measure performance impact of topology changes. |
+| **No Performance Monitoring** | Cannot detect bottlenecks, resource allocation decisions made blindly, gradual performance degradation goes unnoticed until critical failures occur. | Track agent-level and swarm-level metrics continuously (throughput, latency, utilization). Expose Prometheus metrics endpoint. Generate performance reports. Alert on anomalies (>90% utilization, high error rates). |
+| **Underutilizing Available Agents** | Many agents idle while few are overloaded, resulting in poor resource efficiency, long task completion times, wasted compute capacity. | Monitor agent utilization in real-time with dashboards. Rebalance task assignments when imbalance detected (>30% difference). Implement work stealing for idle agents. Scale agent count based on average utilization. |
+
 ## Conclusion
 
 Advanced swarm coordination represents the cutting edge of multi-agent orchestration, going beyond basic task assignment to implement sophisticated patterns like dynamic topology switching, self-organizing behaviors, and neural pattern learning. These advanced capabilities enable swarms to adapt to changing workloads, optimize resource allocation automatically, and maintain high performance even as conditions evolve. The complexity of these systems demands careful design around topology selection, continuous optimization, and fault tolerance.

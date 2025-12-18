@@ -1053,6 +1053,14 @@ When 3+ independent tasks exist with domain-specific requirements, swarms delive
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Swarm for Sequential Work** | 8 agents waiting on each other in strict sequence. Coordination overhead (agent spawning, state sync, health monitoring) exceeds work parallelization benefits. | Use swarms only when 3+ tasks can execute concurrently. For sequential workflows, use stream-chain skill instead. Swarms optimize parallelism, chains optimize dependencies. |
+| **Mesh Topology for Large Swarms** | 12-agent mesh creates 66 communication channels. Agents spend >50% time coordinating, <50% working. Byzantine consensus with 12 agents requires 30+ minutes. | Mesh topology limited to 3-8 agents. For larger swarms, use hierarchical (coordinator delegates to sub-teams) or star (hub-and-spoke). Reduce coordination surface area as swarm size grows. |
+| **Ignoring Agent Health** | Agent 3 crashes silently, swarm waits indefinitely for output that never arrives. No timeout, no detection, no recovery. Entire swarm deadlocks on single agent failure. | Implement mandatory health checks (heartbeat every 5-10s), failure detection (3 missed heartbeats = dead), and recovery strategy (spawn replacement or redistribute work). Treat agent failure as expected, not exceptional. |
+
 ## Conclusion
 
 Advanced swarm orchestration provides comprehensive patterns for distributed research, development, testing, and analysis workflows through specialized agent topologies, consensus mechanisms, and parallel execution strategies.

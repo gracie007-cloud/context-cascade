@@ -18,7 +18,7 @@ Intelligent agent selection from 203-agent registry using semantic matching and 
 | specialists | 30+ | Domain experts |
 | tooling | 25+ | Tool & utility agents |
 
-**Total: 203 agents**
+**Total: 211 agents**
 
 ## Selection Process
 

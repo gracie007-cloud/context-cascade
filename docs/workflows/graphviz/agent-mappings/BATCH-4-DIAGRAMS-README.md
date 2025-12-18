@@ -145,8 +145,8 @@
 - **Purpose**: Visualize agent ecosystem expansion from Batch 1-3 to Batch 4
 - **Layout**: Left-to-right comparison (Before | After)
 - **Growth Statistics**:
-  - **Before**: 103 agents (Batches 1-3)
-  - **After**: 118 agents (+15 in Batch 4)
+  - **Before**: 211 agents (Batches 1-3)
+  - **After**: 211 agents (+15 in Batch 4)
   - **Growth**: +14.6%
 
 - **New Domains** (2):

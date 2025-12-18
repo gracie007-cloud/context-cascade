@@ -1126,6 +1126,14 @@ npx claude-flow@alpha memory store \
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Fixed Agent Count** | Provisioning static number of agents leads to either over-provisioning (wasted cost) or under-provisioning (poor performance during spikes). | Implement auto-scaling based on workload metrics. Define minimum and maximum agent bounds. Use predictive scaling for known traffic patterns (e.g., business hours). |
+| **Synchronous Workflow Blocking** | Workflows use synchronous API calls between agents causing cascading delays when any agent is slow or unavailable. | Convert to event-driven architecture with message queues. Agents emit completion events asynchronously. Dependent steps poll queue rather than blocking on direct calls. |
+| **No Workflow Isolation** | All workflows share single swarm causing resource contention and failures in one workflow impacting others. | Deploy separate swarms per workflow category (development, testing, production). Use E2B sandboxes for agent isolation. Implement resource quotas per workflow to prevent noisy neighbors. |
+
 ## Conclusion
 
 Flow Nexus Swarm deployment represents the convergence of cloud-native infrastructure, event-driven architecture, and multi-agent orchestration into a scalable workflow execution platform. By distributing agents across E2B sandboxes and coordinating through asynchronous events, swarms achieve both horizontal scalability and fault isolation that traditional monolithic systems cannot match. The platform's auto-scaling capabilities ensure cost efficiency by dynamically adjusting agent count to workload demands while maintaining performance targets.

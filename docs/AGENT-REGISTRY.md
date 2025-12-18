@@ -11,7 +11,7 @@
 
 ## Executive Summary
 
-This registry documents all 200 agent definitions across 29 MECE domains, providing comprehensive command-to-agent mapping and domain coverage analysis.
+This registry documents all 211 agents definitions across 29 MECE domains, providing comprehensive command-to-agent mapping and domain coverage analysis.
 
 ### Key Statistics
 
@@ -507,7 +507,7 @@ Need database work?
 
 ## Conclusion
 
-Batch 4 successfully adds **27 critical foundation agents** (104-130), bringing total agent count to **130 agents** across **17 domains**. This expansion:
+Batch 4 successfully adds **27 critical foundation agents** (104-130), bringing total agent count to **211 agents** across **17 domains**. This expansion:
 
 ✅ Achieves **100% command coverage** (58/58 commands)
 ✅ Adds **3 NEW domains** (Frontend, Database, Documentation)

@@ -324,13 +324,13 @@ Convergence when F^k ≥ N
 k = log_F(N) = log(N) / log(F)
 ```
 
-**Example (150 agents, fanout=3)**:
+**Example (211 agents, fanout=3)**:
 ```
 Round 1: 1 → 3 agents (3¹ = 3)
 Round 2: 3 → 9 agents (3² = 9)
 Round 3: 9 → 27 agents (3³ = 27)
 Round 4: 27 → 81 agents (3⁴ = 81)
-Round 5: 81 → 150 agents (3⁵ = 243, capped at 150)
+Round 5: 81 → 211 agents (3⁵ = 243, capped at 150)
 
 Total: 5 rounds = log₃(150) ≈ 4.6
 ```
@@ -341,12 +341,12 @@ Total: 5 rounds = log₃(150) ≈ 4.6
 Fully distributed:
   - No coordinator bottleneck
   - Aggregate throughput: N × local_throughput
-  - Example: 150 agents × 100 ops/sec = 15,000 ops/sec
+  - Example: 211 agents × 100 ops/sec = 15,000 ops/sec
 
 Gossip overhead:
   - Fanout × round_frequency × state_size
   - Example: 3 peers × 10 rounds/sec × 1 KB = 30 KB/sec per agent
-  - Total network: 150 agents × 30 KB/sec = 4.5 MB/sec
+  - Total network: 211 agents × 30 KB/sec = 4.5 MB/sec
 ```
 
 #### Partition Tolerance

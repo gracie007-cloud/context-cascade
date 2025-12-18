@@ -628,6 +628,16 @@ Right-to-left language support cannot be retrofitted effectively; it must be des
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **String Concatenation in Translations** | Building sentences by concatenating translated fragments like `t('hello') + ' ' + t('name')`. Breaks grammar in languages with different word order (Japanese, Arabic). Results in unnatural or nonsensical translations. | Use complete sentence templates with interpolation: `t('greeting', {name})` where translators control full sentence structure. Provide translators context about variable placement. |
+| **Assuming One Translation Per String** | Using same translation key for semantically different contexts. English "Post" (verb) vs "Post" (noun) uses same word but requires different translations in most languages (French: "Publier" vs "Article"). | Create context-specific keys: `t('actions.post')` vs `t('content.post')`. Add translator comments explaining context. Use namespacing to separate domains (UI actions vs content types). |
+| **Late-Stage Internationalization** | Adding i18n after application is built with hardcoded English strings throughout codebase. Requires expensive refactoring, breaks existing components, delays international launches by months. | Architect for i18n from day one. Use translation functions even for English-only MVP. Set up translation infrastructure early (next-intl, locale files, language switcher placeholder). Adding languages becomes configuration change, not refactoring project. |
+
+---
+
 ## Conclusion
 
 Internationalization automation addresses the tension between product velocity and global reach. Manual i18n workflows create bottlenecks that delay launches, while ad-hoc approaches accumulate technical debt that makes adding languages prohibitively expensive. This skill bridges the gap by systematizing the complete workflow from string extraction through translation generation to locale configuration.

@@ -9,7 +9,7 @@
 
 ## Overview
 
-This is the complete documentation of the **Skill→Agent→Command plugin architecture** that powers Claude Code's SPARC development environment. The investigation discovered a sophisticated three-layer system with 131 specialized agents, 93 reusable skills, 224 commands, and innovative patterns like Byzantine consensus-based theater detection.
+This is the complete documentation of the **Skill→Agent→Command plugin architecture** that powers Claude Code's SPARC development environment. The investigation discovered a sophisticated three-layer system with 131 specialized agents, 93 reusable skills, 223 commands, and innovative patterns like Byzantine consensus-based theater detection.
 
 ---
 
@@ -24,8 +24,8 @@ This is the complete documentation of the **Skill→Agent→Command plugin archi
 **Sections**:
 1. Executive Summary
 2. Layer 1: Skills Architecture (93 skills)
-3. Layer 2: Agent Architecture (131 agents)
-4. Layer 3: Command Architecture (224 commands)
+3. Layer 2: Agent Architecture (211 agents)
+4. Layer 3: Command Architecture (223 commands)
 5. Integration Architecture (hooks, memory, coordination)
 6. Three-Loop Integration System (Planning → Impl → CI/CD)
 7. Configuration & Coordination
@@ -145,7 +145,7 @@ This is the complete documentation of the **Skill→Agent→Command plugin archi
 - WHO/WHEN/PROJECT/WHY tagging (⭐⭐ novelty)
 - Hook-based quality automation (⭐⭐ novelty)
 - Fine-grained MCP access control (⭐⭐ novelty)
-- Statistics: 131 agents, 93 skills, 224 commands
+- Statistics: 211 agents, 93 skills, 223 commands
 - 7 major design patterns discovered
 - Limitations and recommendations
 
@@ -262,13 +262,13 @@ This is the complete documentation of the **Skill→Agent→Command plugin archi
 - Document 3, Appendix: Skills statistics
 - Document 4: File references
 
-**Agent Layer** (131 agents):
+**Agent Layer** (211 agents):
 - Document 1: Section 3 (complete reference)
 - Document 2: Section 5 (specialization matrix)
 - Document 2: Section 6 (MCP access control)
 - Document 3: Appendix (access control rules)
 
-**Command Layer** (224 commands):
+**Command Layer** (223 commands):
 - Document 1: Section 3 (complete reference)
 - Document 2: Section 1 (system architecture)
 - Document 3: Section 7 (directory navigation)
@@ -309,8 +309,8 @@ This is the complete documentation of the **Skill→Agent→Command plugin archi
 |---------|------------|---------|
 | 1. Executive Summary | Overview of entire system | Initial orientation |
 | 2. Skills Architecture | All 93 skills taxonomy | Understanding skill layer |
-| 3. Agent Architecture | All 131 agents + registry | Understanding agent layer |
-| 4. Command Architecture | All 224 commands + taxonomy | Understanding command layer |
+| 3. Agent Architecture | All 211 agents + registry | Understanding agent layer |
+| 4. Command Architecture | All 223 commands + taxonomy | Understanding command layer |
 | 5. Integration Architecture | Hooks, memory, coordination | Understanding integration |
 | 6. Three-Loop Integration | Complete loop design | Understanding feedback system |
 | 7. Configuration | All config files explained | Setting up system |

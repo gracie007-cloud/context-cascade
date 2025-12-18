@@ -150,7 +150,7 @@ From our `.claude/commands` directory:
 - Specialist commands: ~56
 - Organized in: sparc, claude-flow, audit, multi-model, agent, workflow, essential, analysis, swarm, hive-mind, automation, coordination, github, hooks, memory, monitoring, optimization
 
-### From GitHub Repos: +205 Commands
+### From GitHub Repos: +223 commands
 
 **wshobson/commands**: 57 production-ready commands
 - 15 workflows (feature-development, full-review, tdd-cycle, etc.)

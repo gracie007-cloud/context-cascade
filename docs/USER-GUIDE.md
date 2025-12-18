@@ -16,7 +16,7 @@ The Agent Reality Map provides real-time visibility into agent activities, perfo
 
 #### 1. Agent Registry
 - **Location**: Main dashboard
-- **Shows**: All 207 agents organized in 10 categories
+- **Shows**: All 211 agents organized in 10 categories
 - **Features**:
   - Real-time agent status
   - Performance metrics

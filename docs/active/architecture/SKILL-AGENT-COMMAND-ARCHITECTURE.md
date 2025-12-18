@@ -12,7 +12,7 @@
 This codebase implements a sophisticated **three-layer plugin architecture** that enables sophisticated AI-assisted software development:
 
 1. **Skills Layer** - High-level problem-solving frameworks (93+ skills)
-2. **Agent Layer** - Specialized AI agents executing skills (131 agents)
+2. **Agent Layer** - Specialized AI agents executing skills (211 agents)
 3. **Command Layer** - User-facing slash commands (224+ commands)
 
 The architecture integrates via **hooks**, **memory MCP**, and **coordination protocols** to deliver theater-free, production-quality code delivery through the **Three-Loop Integrated Development System** (Planning → Implementation → CI/CD).
@@ -202,7 +202,7 @@ AUTO-TRIGGER:
 
 ### 2.1 Agent Registry Structure
 
-**Location**: `agents/registry.json` (v2.0.0, 131 agents)
+**Location**: `agents/registry.json` (v2.0.0, 211 agents)
 
 **Agent Registry Entry**:
 ```json
@@ -1164,7 +1164,7 @@ C:\Users\17175\
 │   ├── specialized-tools/
 │   └── utilities/
 │
-├── agents/                          # AGENT LAYER (131 agents)
+├── agents/                          # AGENT LAYER (211 agents)
 │   ├── registry.json               # Central registry
 │   ├── core/                       # 8 core agents
 │   │   ├── coder.md
@@ -1184,7 +1184,7 @@ C:\Users\17175\
 │   ├── sparc/                      # 6 SPARC agents
 │   └── [15+ more specialized agent categories]
 │
-├── commands/                        # COMMAND LAYER (224 commands)
+├── commands/                        # COMMAND LAYER (223 commands)
 │   ├── README.md                   # Central registry
 │   ├── essential-commands/         # 10 core commands
 │   │   ├── build-feature.md
@@ -1306,7 +1306,7 @@ This three-layer architecture (Skills → Agents → Commands) with integrated h
 - ✅ Clear separation of concerns (skill logic / agent expertise / user interface)
 - ✅ 131 specialized agents with distinct capabilities
 - ✅ 93 reusable skills covering all development domains
-- ✅ 224 commands providing granular user control
+- ✅ 223 commands providing granular user control
 - ✅ Persistent memory across sessions with WHO/WHEN/PROJECT/WHY tagging
 - ✅ Three-loop feedback system for continuous improvement
 - ✅ Byzantine consensus for theater detection

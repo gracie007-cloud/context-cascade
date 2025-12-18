@@ -42,7 +42,7 @@ npm run connascence:analyze -- src/
 ### Claude Code Integration
 - [x] Task tool available for agent spawning
 - [x] CLAUDE.md updated with dogfooding instructions
-- [x] 131 agents documented with access patterns
+- [x] 211 agents documented with access patterns
 - [x] Hooks integration configured
 - [x] Concurrent execution patterns documented
 

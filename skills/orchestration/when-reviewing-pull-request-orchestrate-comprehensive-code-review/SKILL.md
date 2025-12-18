@@ -1286,6 +1286,14 @@ Skill("<skill-name>")
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Skipping Automated Checks** | Proceeding directly to human review without automated validation wastes specialist time reviewing code with linting violations, failing tests, or broken builds. | Implement mandatory Phase 1 automated gate. No specialist reviews begin until all automated checks pass. Author must fix issues before review proceeds. Enforce with CI/CD pipeline checks. |
+| **Single Reviewer Bottleneck** | One generalist reviewer attempts to evaluate all quality dimensions (code, security, performance, architecture) resulting in shallow review missing domain-specific issues. | Deploy star topology with 10 specialist reviewers operating in parallel. Each reviewer focuses deeply on their domain expertise. Aggregate findings into comprehensive assessment covering all dimensions. |
+| **Merge Without Risk Assessment** | Approving PRs based solely on code quality without analyzing deployment impact, integration risk, or rollback complexity leads to production incidents. | Add Phase 3 integration analysis evaluating deployment impact, database migrations, backward compatibility, and rollback procedures. Risk assessment informs merge decision and deployment strategy (feature flags, gradual rollout). |
+
 ## Conclusion
 
 Comprehensive code review orchestration transforms manual, inconsistent review processes into systematic workflows that evaluate PRs across security, performance, architecture, documentation, and integration dimensions within 4 hours. The star topology coordination pattern enables 10+ specialists to review concurrently while maintaining coherence through centralized PR manager aggregation. Automated gates prevent wasted human effort by fast-failing obvious defects before expensive specialist reviews begin.

@@ -433,6 +433,16 @@ The specialized sub-skills (Docker containerization, Terraform IaC) provide deep
 | **Skipping Multi-Environment Testing** - Deploying directly to production without staging validation | Production incidents from untested changes, no safe rollback path, user impact | Implement dev -> staging -> production pipeline, validate infrastructure changes in staging first |
 | **Ignoring State Management** - Not locking or backing up Terraform/IaC state files | State conflicts between team members, lost infrastructure state, inability to manage resources | Use remote state backends (S3 + DynamoDB, Terraform Cloud), enable state locking, automated backups |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Manual Infrastructure Changes** | Making infrastructure changes through web consoles, SSH, or manual configuration. Creates undocumented state, prevents reproducibility, breaks disaster recovery, violates compliance. Configuration drift accumulates over time. | Enforce Infrastructure as Code (IaC) exclusively. All changes through Terraform/CloudFormation/Ansible with code review and version control. Block manual access to production infrastructure. Use automated compliance scanning (checkov, tfsec) in CI pipeline. |
+| **Single Point of Failure Architectures** | Deploying critical components without redundancy (single database, single region, single load balancer). Creates catastrophic failure risk. Minor outages become major incidents. Violates availability SLAs. | Defense in Depth: Multi-AZ database deployments, cross-region replication, multiple load balancer instances, redundant networking. Design for N+1 redundancy minimum. Test failover procedures quarterly. Document RTO/RPO requirements and validate with chaos engineering. |
+| **Mutable Infrastructure** | Modifying running servers through configuration management, patches, or manual changes. Creates configuration drift where prod servers diverge from defined state. Rollback becomes impossible. Debugging failures requires forensics. | Immutable Infrastructure: Deploy new instances for every change, never modify running servers. Use golden images (AMI, container images) built in CI. Blue-green deployments for zero-downtime updates. Terminate old instances after validation. Configuration becomes code artifact, not runtime state. |
+
+---
+
 ## Conclusion
 
 The infrastructure orchestration skill enables teams to build robust, scalable, and secure cloud infrastructure through systematic automation and best practices. By treating infrastructure as code, implementing proper monitoring and observability, and following defense-in-depth principles, organizations can achieve high availability, rapid deployment, and operational excellence. The skill coordinates specialized sub-skills for Docker containerization and Terraform IaC while providing comprehensive workflows for provisioning, deployment, monitoring, and configuration management.

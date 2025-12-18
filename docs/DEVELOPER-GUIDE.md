@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Agent Reality Map currently manages 207 agents across 10 categories. This guide covers adding new agents to the system.
+The Agent Reality Map currently manages 211 agents across 10 categories. This guide covers adding new agents to the system.
 
 ## Agent Registry Structure
 

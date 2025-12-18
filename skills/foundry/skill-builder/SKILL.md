@@ -1033,6 +1033,16 @@ Claude Code's skill parser expects exactly two YAML fields: name (max 64 chars) 
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Vague Descriptions Without Triggers** | Writing generic descriptions like "Helps with API development" without clear WHEN clauses. Claude cannot autonomously match skills without explicit trigger conditions. Skill rarely triggers on relevant queries. | Include explicit trigger conditions in description: "Generate OpenAPI 3.0 docs from Express routes. Use when creating API docs, documenting endpoints, building specs." Front-load keywords Claude searches for. Test description by searching for relevant queries. |
+| **Nested Skill Directories** | Creating skills at paths like ~/.claude/skills/category/subcategory/my-skill/. Claude Code requires top-level structure - nested skills are silently ignored and never loaded. | Always create skills directly under ~/.claude/skills/[skill-name]/SKILL.md. No subdirectories or namespaces. If organization needed, use naming conventions (api-docs-generator, api-testing-framework) not folder hierarchies. Flat structure is non-negotiable. |
+| **Bloated SKILL.md Files** | Embedding 50KB of examples, schemas, references directly in SKILL.md. Entire content loads into context when skill triggers, consuming 10-50KB per skill vs 2-5KB for lean skills. Multiplied across active skills, bloats context 5-10x. | Keep SKILL.md lean (2-5KB): overview, quick start, step-by-step guide. Move advanced content to docs/ (linked markdown), resources to resources/ (referenced by path), schemas to resources/schemas/ (loaded on-demand). Claude navigates files only when needed. |
+
+---
+
 ## Conclusion
 
 Skill Builder transforms the process of creating Claude Code skills from guesswork into systematic engineering. By codifying the official specification (YAML frontmatter, progressive disclosure, directory structure) and best practices (keyword-rich descriptions, lean SKILL.md, on-demand file loading), this skill ensures every created skill meets production standards for discovery, context efficiency, and usability.

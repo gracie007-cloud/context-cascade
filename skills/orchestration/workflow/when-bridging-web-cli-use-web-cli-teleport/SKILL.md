@@ -588,6 +588,14 @@ Bridge failures are inherently complex - make them easy to diagnose.
 | **Blocking CLI operations without timeout** | Single long-running command can freeze entire bridge, resource exhaustion, poor error handling | Implement per-command timeout (default 30s, configurable), use asynchronous execution with progress callbacks, provide cancellation mechanism |
 | **No authentication between web and bridge** | Anyone with network access can execute commands, potential for malicious automation, data breaches | Require JWT tokens for all API calls, implement OAuth2 for user authentication, use mTLS for bridge-to-CLI communication |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Executing Arbitrary Commands** | Allows command injection attacks, system compromise, and data exfiltration by passing unvalidated user input directly to shell execution. | Implement strict command whitelisting with approved commands list. Validate all arguments against schemas before execution. Use parameterized execution instead of shell string concatenation. Never trust user input. |
+| **Long-Polling Instead of WebSocket** | Creates high latency, wastes server resources with constant HTTP overhead, poor user experience for streaming command output in real-time. | Use WebSocket for bidirectional streaming communication. Implement heartbeat mechanism to detect disconnections. Fall back to SSE (Server-Sent Events) if WebSocket unavailable in client environment. |
+| **No Authentication Between Web/Bridge** | Anyone with network access can execute commands remotely, potential for malicious automation attacks, complete system compromise through unauthorized access. | Require JWT tokens for all API calls with expiration and rotation. Implement OAuth2 for user authentication flows. Use mTLS (mutual TLS) for bridge-to-CLI communication security. Rate limit unauthenticated requests aggressively. |
+
 ## Conclusion
 
 The Web-CLI Teleport pattern represents a powerful integration strategy for bridging user interfaces with command-line workflows, but its power comes with significant responsibility. The bidirectional nature of this bridge creates a critical attack surface that must be secured through layered defense mechanisms - from command whitelisting and input validation to authentication, authorization, and rate limiting. When implemented correctly, this pattern enables seamless workflow automation, allowing web applications to leverage the full power of CLI tools while providing real-time feedback through WebSocket connections.

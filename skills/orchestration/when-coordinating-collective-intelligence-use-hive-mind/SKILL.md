@@ -608,6 +608,14 @@ mcp__memory-mcp__vector_search({ query: "collective decision patterns", limit: 1
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Queen Bottleneck** | Queen becomes single point of failure when making all decisions, overwhelming coordination capacity and slowing collective progress. | Delegate routine decisions to collective consensus. Queen focuses only on strategic direction, conflict resolution, and exceptional cases. Implement decision delegation rules based on impact and urgency. |
+| **Memory Sync Lag** | Agents operate with stale state due to infrequent or slow memory synchronization, causing inconsistent behavior and duplicate work. | Increase sync frequency for critical data paths. Use event-driven sync triggers for high-priority updates. Implement version vectors to detect and resolve conflicts. Monitor sync latency metrics. |
+| **Consensus Deadlock** | Agents cannot reach agreement due to equally weighted conflicting opinions, blocking progress indefinitely without resolution mechanism. | Set consensus timeout (e.g., 2 minutes) after which queen intervenes. Implement tie-breaking rules based on agent seniority or domain expertise. Allow queen override for time-sensitive decisions. |
+
 ## Conclusion
 
 The Hive Mind collective intelligence system transforms isolated agents into a coordinated organism capable of solving complex problems through distributed cognition and emergent consensus. By combining queen-led strategic direction with worker autonomy and collective decision-making, the system achieves both decisive leadership and diverse perspectives. The shared memory layer serves as the hive's nervous system, propagating learnings across all members and enabling pattern recognition that no single agent could achieve alone.

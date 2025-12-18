@@ -6,7 +6,7 @@ Apply the full meta-loop improvement system (agent-creator + skill-forge + promp
 
 ## Current State
 
-- **Total Agents**: 216 agent markdown files
+- **Total Agents**: 211 agents markdown files
 - **Categories**: 10 functional categories
 - **Current Structure**: YAML frontmatter + markdown documentation
 
@@ -339,7 +339,7 @@ Create these domain expertise files in `.claude/expertise/`:
 
 ## Success Criteria
 
-All 216 agents have:
+All 211 agents have:
 - [ ] Phase 0: Expertise Loading section
 - [ ] Recursive Improvement Integration (v2.1) section
 - [ ] AGENT COMPLETION VERIFICATION section

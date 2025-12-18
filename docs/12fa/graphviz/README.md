@@ -32,7 +32,7 @@ graphviz/
 │   ├── parallel-swarm-implementation-process.dot
 │   └── ... (70 more)
 │
-├── agents/                    # 104 agent workflow diagrams
+├── agents/                    # 211 agents workflow diagrams
 │   ├── coder-process.dot
 │   ├── reviewer-process.dot
 │   ├── tester-process.dot

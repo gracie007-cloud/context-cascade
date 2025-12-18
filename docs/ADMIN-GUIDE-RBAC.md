@@ -2,7 +2,7 @@
 
 ## Overview
 
-The RBAC (Role-Based Access Control) system enforces security policies across all 207 agents using 6 security hooks with Byzantine consensus validation.
+The RBAC (Role-Based Access Control) system enforces security policies across all 211 agents using 6 security hooks with Byzantine consensus validation.
 
 ## Architecture
 

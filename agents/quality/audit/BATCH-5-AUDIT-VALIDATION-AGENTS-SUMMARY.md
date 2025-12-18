@@ -321,7 +321,7 @@ agents/quality/audit/
 4. **Automated Remediation**: Bot-generated PRs for low-risk debt (TODO cleanup)
 
 ### Documentation Updates
-1. Update CLAUDE.md with 5 new agents (total: 136 agents)
+1. Update CLAUDE.md with 5 new agents (total: 211 agents)
 2. Create agent mapping diagrams (Graphviz)
 3. Document cross-agent workflows
 4. Update skill auto-trigger patterns

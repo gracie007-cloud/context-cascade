@@ -269,6 +269,17 @@ Configuration correctness requires two-sided validation: positive tests verify a
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Allowing symlink traversal outside workspace** (following ../../../etc/passwd symlinks) | Symlinks bypass file path restrictions. Attacker creates symlink in workspace pointing to sensitive system files. | Set `symlink_resolution: deny` or validate symlink targets stay within allowed boundaries. Resolve symlinks and check canonicalized paths. |
+| **Overly permissive temp directory** (/tmp shared with host, no size limits) | Shared temp directories leak information between sandbox and host. No size limits enable DoS via disk exhaustion. | Use isolated temp directory (/tmp/sandbox) with size quotas. Auto-cleanup old files. Prevent cross-user access. |
+| **Storing secrets in sandbox configuration** (API keys, passwords in JSON files) | Configuration files are readable by sandbox processes. Secrets in config files expose credentials to untrusted code. | Use environment variable references (${SECRET_NAME}), fetch from secret management systems, never hardcode secrets in config. |
+
+---
+
 ## Conclusion
 
 Sandbox Configurator establishes security boundaries for Claude Code execution through defense-in-depth layering: file system isolation, network domain whitelisting, and command exclusion. This is critical protection against prompt injection attacks where malicious actors embed instructions in code comments, README files, or dependencies that attempt to manipulate Claude into executing harmful operations or exfiltrating sensitive data. Network isolation ensures even if malicious code runs, it cannot communicate with attacker-controlled infrastructure.

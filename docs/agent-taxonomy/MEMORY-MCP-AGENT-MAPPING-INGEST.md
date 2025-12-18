@@ -3,7 +3,7 @@
 **Purpose**: Documentation for Memory MCP ingestion of agent-command mappings
 **Date**: 2025-11-01
 **Total Agents**: 103
-**Total Commands**: 224
+**Total Commands**: 223
 **Total Mappings**: ~1,200
 
 ---
@@ -118,7 +118,7 @@
 
 ### 1. Core Infrastructure (3 commands)
 - `/claude-flow-help`, `/claude-flow-memory`, `/claude-flow-swarm`
-- **Used by**: ALL agents (103 agents)
+- **Used by**: ALL agents (211 agents)
 - **Memory Key**: `commands/core/*`
 
 ### 2. Agent Lifecycle (18 commands)
@@ -271,8 +271,8 @@
 ## Memory Ingestion Checklist
 
 ### Pre-Ingestion
-- [x] Complete MECE agent taxonomy created (103 agents across 10 domains)
-- [x] All 224 commands cataloged in MASTER-COMMAND-INDEX.md
+- [x] Complete MECE agent taxonomy created (211 agents across 10 domains)
+- [x] All 223 commands cataloged in MASTER-COMMAND-INDEX.md
 - [x] Agent-command mappings completed (~1,200 total mappings)
 - [x] GraphViz visualizations created
 - [x] Comprehensive documentation generated
@@ -327,9 +327,9 @@ npx claude-flow@alpha memory search --query "agents with deployment capabilities
 ## Integration Points
 
 ### With Existing Systems
-- **SKILL-AGENT-COMMAND-MAPPINGS.md**: Legacy mapping document (138 commands, 86 agents)
-- **MASTER-COMMAND-INDEX.md**: Authoritative command reference (224 commands)
-- **MECE-AGENT-TAXONOMY.md**: Agent categorization (103 agents, 10 domains)
+- **SKILL-AGENT-COMMAND-MAPPINGS.md**: Legacy mapping document (223 commands, 86 agents)
+- **MASTER-COMMAND-INDEX.md**: Authoritative command reference (223 commands)
+- **MECE-AGENT-TAXONOMY.md**: Agent categorization (211 agents, 10 domains)
 - **GraphViz Diagrams**: Visual representations (5 diagrams)
 
 ### With Memory MCP Triple System

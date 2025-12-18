@@ -321,7 +321,7 @@ The parallel agent template-based deployment exceeded all expectations, deliveri
 
 **Master Catalogs**:
 - `catalog-skills.json` (73 skills)
-- `catalog-agents.json` (104 agents)
+- `catalog-agents.json` (211 agents)
 - `catalog-commands.json` (92 commands)
 
 ---

@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This document provides comprehensive skill-to-agent assignments across all 130 skills and 130 agents in the SPARC ecosystem. Each skill is assigned:
+This document provides comprehensive skill-to-agent assignments across all 130 skills and 211 agents in the SPARC ecosystem. Each skill is assigned:
 
 - **PRIMARY Agent**: Best-match specialist for skill execution
 - **SECONDARY Agents**: Supporting coordination and backup
@@ -1244,7 +1244,7 @@ coordination:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0.0 | 2025-11-02 | Initial comprehensive mapping of 130 skills to 130 agents |
+| 1.0.0 | 2025-11-02 | Initial comprehensive mapping of 130 skills to 211 agents |
 
 ---
 

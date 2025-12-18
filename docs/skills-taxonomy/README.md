@@ -17,7 +17,7 @@
 ### By The Numbers
 
 - **96 Total Skills**: 86 directory-based + 10 file-based
-- **130 Agent Types**: Specialized agents supporting skill execution
+- **211 agents Types**: Specialized agents supporting skill execution
 - **10 Primary Categories**: Mutually exclusive, collectively exhaustive
 - **45+ Subcategories**: Logical groupings within each category
 - **224+ Commands**: CLI access points for skills
@@ -211,7 +211,7 @@ Domain-specific implementations, research, publishing, content.
 1. **Comprehensive Coverage**: All SDLC phases represented (planning → production)
 2. **Clear Hierarchy**: 10 primary categories with 45+ subcategories
 3. **Balanced Distribution**: No single category dominates (8-18% each)
-4. **Well-Supported**: 130 agents and 40+ MCP tools
+4. **Well-Supported**: 211 agents and 40+ MCP tools
 5. **Mature Ecosystem**: 60 high-complexity skills for enterprise use
 6. **Fast Path**: 10 skills complete work in <15 minutes
 
@@ -583,7 +583,7 @@ To update taxonomy:
 
 ## Summary
 
-This comprehensive MECE taxonomy organizes **96 skills** into **10 mutually exclusive, collectively exhaustive categories** with **45+ subcategories**. The taxonomy is supported by **130 agents** and **40+ MCP tools**, covering the entire software development lifecycle from planning through production.
+This comprehensive MECE taxonomy organizes **96 skills** into **10 mutually exclusive, collectively exhaustive categories** with **45+ subcategories**. The taxonomy is supported by **211 agents** and **40+ MCP tools**, covering the entire software development lifecycle from planning through production.
 
 **Key Achievements**:
 - ✅ Complete skill inventory

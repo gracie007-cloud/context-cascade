@@ -917,6 +917,17 @@ Security audits must verify security controls exist and function correctly, not 
 | **Sharing Findings Publicly** | Disclosing vulnerabilities before patches are available puts users at risk and violates responsible disclosure | Follow 90-day disclosure timeline, notify vendor privately first, give time for patches before public disclosure |
 | **Ignoring False Positives** | Dismissing scanner findings without investigation misses real vulnerabilities that scanners incorrectly flag as safe | Investigate every finding manually - false positives may reveal real issues in unexpected ways |
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|-------------|---------|----------|
+| **Automated Scanner Only** | Relying solely on tools like Nessus or Burp without manual validation leads to false positives and missed business logic flaws | Use scanners for discovery, then manually validate each finding with proof-of-concept and code review |
+| **Vulnerability Exploitation** | Going beyond proof-of-concept to fully exploit vulnerabilities causes damage and legal liability | Stop at minimal viable proof - demonstrate the vulnerability exists without extracting real data or causing disruption |
+| **Testing Production Without Authorization** | Scanning production systems without written approval violates laws and can cause outages | Always obtain signed authorization before testing, document scope, and use non-production environments when possible |
+
+---
+
 ## Conclusion
 
 Comprehensive security auditing requires a systematic, multi-phase approach that combines automated tooling with manual expertise. The five-phase workflow (static analysis, dynamic testing, dependency audit, secrets detection, OWASP compliance) ensures no vulnerability category is overlooked while maintaining efficiency through automation.

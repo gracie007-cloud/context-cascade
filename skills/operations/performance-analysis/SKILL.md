@@ -635,6 +635,16 @@ In practice:
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Optimizing Without Profiling** | Developer intuition about bottlenecks is wrong 70%+ of time. Optimizing based on guesses wastes effort on non-critical code while ignoring actual issues. Results in complex code with no measurable improvement. | Profile first with production-like data and traffic. Use flamegraphs and performance monitors to identify actual bottlenecks. Focus on top 3 bottlenecks by measured impact. Quantify improvement with before/after benchmarks. |
+| **Micro-Optimizations Everywhere** | Optimizing rarely-executed code (startup, config loading, error paths) provides negligible user benefit while sacrificing code clarity. Days spent optimizing code that executes once per server restart. | Optimize critical path only - code executed thousands/millions times per day (request handlers, data transforms, rendering). Use profiling to identify hot paths. Preserve clarity in non-critical paths - maintainability matters more than 2ms saved in startup. |
+| **Ignoring p95/p99 Latency** | Reporting average response time while ignoring tail latency. API averages 100ms but p95=2000ms, p99=8000ms means 5% requests take 20x longer. Terrible experience for 1 in 20 users hidden by averages. | ALWAYS measure and optimize for p95/p99 latency, not averages. Run load tests with percentile reporting. Set performance budgets on tail latency (p95 <500ms, p99 <1000ms). Profile slow requests specifically to find root causes (cache misses, lock contention, GC pauses). |
+
+---
+
 ## Conclusion
 
 Performance analysis transforms subjective "feels slow" complaints into data-driven optimization through systematic bottleneck detection, profiling, and impact quantification. This skill provides comprehensive tooling for identifying performance issues across communication, processing, memory, and network dimensions, then prioritizing optimizations by measurable impact.

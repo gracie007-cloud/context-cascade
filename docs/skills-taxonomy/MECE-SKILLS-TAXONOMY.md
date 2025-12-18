@@ -12,8 +12,8 @@ This document presents a comprehensive **Mutually Exclusive, Collectively Exhaus
 - **96 Total Skills**: 86 directory-based + 10 standalone file-based
 - **10 Primary Categories**: Each mutually exclusive by function
 - **45+ Subcategories**: Organized by use case and workflow
-- **130 Agent Types**: Specialized agents supporting skills
-- **224 Commands**: CLI commands for skill access
+- **211 agents Types**: Specialized agents supporting skills
+- **223 commands**: CLI commands for skill access
 - **Coverage**: Entire SDLC from planning to production
 
 ---

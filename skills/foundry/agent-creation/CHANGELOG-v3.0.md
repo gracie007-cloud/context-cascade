@@ -222,7 +222,7 @@ None currently. Report issues to: claude-code-plugins/ruv-sparc-three-loop-syste
 
 - Phase 1 (Identity System): system-architect, security-manager, backend-dev
 - Phase 1.8 (agent-creator v3.0): agent-creator, coder
-- Migration (207 agents): migrate-agent-identities.js script
+- Migration (211 agents): migrate-agent-identities.js script
 
 ---
 
@@ -231,7 +231,7 @@ None currently. Report issues to: claude-code-plugins/ruv-sparc-three-loop-syste
 1. **Phase 2 (RBAC Engine)**: Runtime identity verification, permission enforcement
 2. **Phase 3 (Backend API)**: Agent registry, metrics aggregation, audit trail
 3. **Phase 4 (Dashboard)**: Real-time agent monitoring with identity integration
-4. **Phase 5 (Testing)**: Validate identity system with 207 agents
+4. **Phase 5 (Testing)**: Validate identity system with 211 agents
 5. **Phase 6 (Production)**: Full Agent Reality Map deployment
 
 ---

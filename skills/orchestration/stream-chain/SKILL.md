@@ -601,6 +601,14 @@ claude-flow stream-chain run \
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Circular Dependencies** | Step 3 depends on Step 5's output, creating deadlock. Chain execution requires strict DAG (directed acyclic graph). | Design chains as unidirectional flows. If bidirectional refinement needed, use multiple chains or explicit iteration loops with termination conditions. |
+| **Context Explosion** | Each step adds 50KB+ of output, causing later steps to hit token limits and lose early context. | Use summarization steps between major phases. Compress verbose outputs into key findings before passing to next step. Consider splitting into multiple chains with cross-chain memory storage. |
+| **Premature Parallelization** | Converting sequential chain into parallel execution loses the context flow that makes chains valuable. | If tasks are truly independent, use swarm coordination instead. Chains are for dependent tasks where output N feeds input N+1. Parallelization destroys this dependency graph. |
+
 ## Conclusion
 
 Stream-Chain enables sophisticated multi-step workflows by:

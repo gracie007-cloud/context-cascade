@@ -1,6 +1,6 @@
 # Agents Directory
 
-**Status:** 206 agents organised into ten functional categories
+**Status:** 211 agents organised into ten functional categories
 **Last reorganised:** 2025-11-26
 **Common format:** Every agent uses Markdown with YAML front matter (name, type, phase, category, capabilities, tools, MCP servers, hooks, quality gates, artifact contracts).
 

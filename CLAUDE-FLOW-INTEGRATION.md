@@ -190,7 +190,7 @@ ReasoningBank: 46% faster → 88% success rate maintained
 **What We Add**:
 - **271 Graphviz Diagrams** - AI-comprehensible process flows
   - 73 skill diagrams
-  - 104 agent diagrams
+  - 211 agents diagrams
   - 94 command diagrams
 - **Interactive HTML Viewer** - Search, filter, browse all diagrams
 - **Validation Tools** - Cross-platform scripts (Bash + PowerShell)
@@ -203,7 +203,7 @@ Based on the [fsck.com article](https://fsck.com/claude), "Claude seems better a
 ```
 docs/12fa/graphviz/
 ├── skills/                    # 73 skill process diagrams
-├── agents/                    # 104 agent decision diagrams
+├── agents/                    # 211 agents decision diagrams
 ├── commands/                  # 94 command workflow diagrams
 ├── templates/                 # Reusable templates
 ├── validate-all-diagrams.sh   # Bash validation

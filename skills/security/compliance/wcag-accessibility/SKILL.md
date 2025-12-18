@@ -578,6 +578,17 @@ Content must be perceivable to users regardless of sensory abilities. Visual inf
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Relying on color alone to convey meaning** (green=success, red=error) | Color-blind users cannot distinguish states. Information is lost for 8% of men, 0.5% of women with color blindness. | Always combine color with text labels, icons, or patterns. Example: Use both red color AND "Error" text; use checkmark icon AND green color. |
+| **Tab order does not match visual layout** (tabindex=1,2,3 scattered randomly) | Keyboard users become confused when Tab jumps between elements in non-visual order. Creates frustrating navigation that differs from sighted experience. | Never use positive tabindex values. Keep DOM order matching visual order. Test with Tab-only navigation to verify flow matches layout. |
+| **Hiding focus indicators with CSS** (outline:none, *:focus{outline:0}) | Keyboard users have no visual feedback where focus is. Navigation becomes impossible. Common practice from old IE6 compatibility workarounds. | Always provide visible focus indicators (minimum 3px, 3:1 contrast). Use :focus-visible for keyboard-only indicators. Never remove outlines without replacement. |
+
+---
+
 ## Conclusion
 
 Web accessibility is not a checklist or compliance exercise - it is a continuous commitment to inclusive design that expands your audience and improves experiences for all users. The principles outlined in this skill create a foundation for building interfaces usable by people with diverse abilities, assistive technologies, and interaction preferences.

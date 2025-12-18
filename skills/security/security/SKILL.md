@@ -183,6 +183,17 @@ Security controls integrated during design are more effective and less costly th
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Trusting user input** (using unsanitized data in queries, commands, or eval) | Enables injection attacks (SQL, XSS, command injection). User input is adversarial by default. | Validate all inputs against allowlists, parameterize queries, encode outputs, never use eval or dynamic code execution with user data. |
+| **Hardcoded secrets** (API keys, passwords in source code) | Secrets in version control are public. Anyone with repo access gains credentials. | Use environment variables, secret management systems (HashiCorp Vault, AWS Secrets Manager), never commit secrets. |
+| **Weak cryptography** (MD5, SHA1, DES, custom algorithms) | Broken algorithms provide false sense of security. Data appears protected but is trivially compromised. | Use modern algorithms: bcrypt/argon2 for passwords, AES-256-GCM for encryption, SHA-256+ for hashing. |
+
+---
+
 ## Conclusion
 
 Application security is a continuous practice, not a one-time implementation. The security landscape evolves constantly as new vulnerabilities emerge, attack techniques advance, and systems grow in complexity. The principles of defense in depth, least privilege, and security by design provide a foundation that remains effective regardless of specific threats.

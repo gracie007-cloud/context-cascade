@@ -21,7 +21,7 @@ A comprehensive exploration of the **Skill→Agent→Command plugin architecture
 
 1. ✅ **Skills Layer** (`.skills/` directory) - Complete mapping
 2. ✅ **Agent Layer** (`agents/` directory) - Full registry analysis
-3. ✅ **Command Layer** (`commands/` directory) - All 224 commands
+3. ✅ **Command Layer** (`commands/` directory) - All 223 commands
 4. ✅ **Integration Architecture** (hooks, memory, coordination)
 5. ✅ **Three-Loop System** (Planning → Implementation → CI/CD)
 6. ✅ **Configuration Files** (.mcp.json, settings.json, registry.json)
@@ -36,8 +36,8 @@ C:\Users\17175\docs\
 │       • Complete directory structure
 │       • File format specifications
 │       • Taxonomy of all 93 skills
-│       • Registry of all 131 agents
-│       • Catalog of all 224 commands
+│       • Registry of all 211 agents
+│       • Catalog of all 223 commands
 │       • Integration mechanisms
 │       • Three-loop detailed design
 │       • Configuration & coordination
@@ -328,7 +328,7 @@ Enables:
 
 **Structure**:
 - Version: 2.0.0
-- 131 agents with full definitions
+- 211 agents with full definitions
 - MCP server assignment per agent
 - Prompting techniques specified
 - Capabilities explicitly declared
@@ -498,7 +498,7 @@ Enables:
 The Skill→Agent→Command architecture is a **sophisticated orchestration platform** that goes far beyond simple command execution. Key characteristics:
 
 ✅ **Well-Designed**: Clear layer separation, loose coupling, strong cohesion  
-✅ **Comprehensive**: 131 agents + 93 skills + 224 commands = complete coverage  
+✅ **Comprehensive**: 211 agents + 93 skills + 223 commands = complete coverage  
 ✅ **Innovative**: Theater detection, three-loop feedback, Byzantine consensus  
 ✅ **Extensible**: Clear patterns for adding skills/agents/commands  
 ✅ **Production-Ready**: Hooks, memory, access control, metrics  
@@ -527,8 +527,8 @@ The system successfully addresses the problem of **theater-free software develop
 
 - `C:\Users\17175\CLAUDE.md` - Project instructions & rules
 - `C:\Users\17175\skills\MASTER-SKILLS-INDEX.md` - All 93 skills
-- `C:\Users\17175\agents\registry.json` - All 131 agents
-- `C:\Users\17175\commands\README.md` - All 224 commands
+- `C:\Users\17175\agents\registry.json` - All 211 agents
+- `C:\Users\17175\commands\README.md` - All 223 commands
 - `C:\Users\17175\.claude\settings.json` - Hook configuration
 - `C:\Users\17175\.mcp.json` - MCP server configuration
 

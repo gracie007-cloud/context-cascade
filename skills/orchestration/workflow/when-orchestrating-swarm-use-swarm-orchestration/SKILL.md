@@ -787,6 +787,14 @@ Orchestration must respond to changing conditions rather than rigidly following 
 | **Circular dependencies in task graph** | Tasks block waiting for each other, deadlock scenarios, orchestration hangs, no progress possible | Validate dependency graph for cycles before execution, use topological sort to determine valid execution order, fail fast with clear error message |
 | **No workload balancing** | Some agents overloaded while others idle, poor resource utilization, long tail of slow tasks, uneven completion times | Monitor agent workloads in real-time, dynamically reassign tasks from overloaded agents, spawn additional agents when all highly utilized, implement work stealing |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Monolithic Task Decomposition** | Large tasks assigned to single agents with no parallelism benefits, resulting in long execution times and difficult failure recovery from monolithic work units. | Break tasks into atomic units (30min-2hr each). Identify independent subtasks that can run concurrently. Spawn multiple agents in parallel. Design for parallel execution with minimal dependencies. |
+| **Lost Orchestration State** | Cannot recover from failures, unclear what work completed, duplicated effort after restart, inconsistent final state across distributed agents. | Persist orchestration state to memory after every phase transition. Implement checkpoint/resume capability. Track task completion status explicitly. Log all state transitions with timestamps. |
+| **Ignoring Agent Failures** | Failed agents silently disappear, tasks hang indefinitely waiting for output, partial results with no indication of failure, cascading failures spread. | Monitor agent health with heartbeat checks (every 10s). Detect timeouts (5min without progress). Respawn failed agents automatically. Implement circuit breakers for systematic failures. Track failure patterns for analysis. |
+
 ## Conclusion
 
 Swarm orchestration represents the pinnacle of multi-agent coordination, enabling complex workflows to be executed with unprecedented speed and reliability through intelligent task decomposition, parallel execution, and adaptive coordination. The power of this approach lies in its ability to transform large, monolithic tasks into atomic units that can be processed concurrently by specialized agents, often achieving 8-10x speedup over sequential execution. However, this power comes with significant complexity in managing dependencies, coordinating state, and handling failures across distributed agents.

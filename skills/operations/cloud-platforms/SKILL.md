@@ -286,6 +286,16 @@ Monitor cloud spending continuously. A single misconfigured instance can cost th
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Manual Console Provisioning** | Creating cloud resources through web console GUI instead of Infrastructure as Code. Results in undocumented infrastructure that cannot be reproduced. Violates compliance requirements. No version control or code review. Breaks disaster recovery. | Always use Infrastructure as Code (Terraform/CloudFormation). All infrastructure changes must be code-reviewed, version-controlled, and reproducible. Enable CloudTrail auditing for compliance. Never manual changes - codify everything. |
+| **Single-Region Deployment** | Deploying critical services in single AWS/GCP/Azure region. Creates catastrophic failure risk. AWS region outages have lasted 7+ hours (us-east-1 Dec 2021). Single point of failure for entire application. | Deploy critical services across multiple regions with active-active or active-passive failover. Use global load balancers (Route 53, Traffic Manager) for automatic failover. Test disaster recovery procedures quarterly. Multi-region is non-negotiable for production systems. |
+| **Vendor Lock-In Without Justification** | Using cloud-specific services (AWS Lambda, GCP Cloud Functions) without architectural justification. Makes multi-cloud migration impossible. Creates vendor dependency with no escape path. | Use portable abstractions when multi-cloud required (Kubernetes vs ECS, PostgreSQL vs DynamoDB). Accept vendor-specific services ONLY when performance/cost benefits outweigh portability loss. Document trade-offs explicitly in architecture decision records. |
+
+---
+
 ## Conclusion
 
 Cloud platform mastery requires balancing three competing forces: **speed of delivery**, **cost efficiency**, and **operational reliability**. The skills in this module provide production-ready automation for AWS, GCP, and Azure deployments, but success depends on applying three core principles consistently.

@@ -924,6 +924,17 @@ Single security controls fail. Multiple independent layers ensure that compromis
 
 ---
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Disabling sandbox entirely for convenience** | Removes all security boundaries. Malicious code from prompt injection or compromised dependencies gains direct system access, enabling data exfiltration, credential theft, and system compromise. Convenience over security creates unacceptable risk. | Use Level 2 (Balanced Security) with explicit exclusions for required operations. Enable allowLocalBinding for dev servers, exclude git/docker if needed, but maintain network isolation. Security boundaries prevent worst-case outcomes even when malicious code executes. |
+| **Wildcard domain patterns without justification** (e.g., *.com, *) | Defeats network isolation by allowing any domain. Malicious code can exfiltrate to attacker-controlled *.com domains. Wildcards should be narrowly scoped to specific services (*.npmjs.org for npm registry CDN). | Use specific domain whitelist: "registry.npmjs.org", "api.github.com", "*.mycompany.com". Each wildcard requires documented justification. Prefer full domains over wildcards. Reject overly broad patterns like *.com or * entirely. |
+| **Storing secrets (API keys, passwords) in configuration files** | Configuration files are often committed to version control or shared, exposing secrets. Hardcoded credentials in sandbox config create security vulnerability and violate secret management best practices. | Use environment variable references in sandbox config: NPM_TOKEN=${NPM_TOKEN}. Actual secrets stored in secure credential management (CI/CD secrets, local env files in .gitignore). Configuration references secrets, never contains them. |
+
+---
+
 ## Conclusion
 
 Sandbox security is the foundation of safe AI code execution environments. The isolation boundaries, access controls, and resource limits defined in this skill create a containment layer that allows untrusted code to execute while protecting the host system from compromise. Effective sandbox configuration balances security with usability - overly restrictive policies break legitimate workflows, while permissive policies enable attacks.

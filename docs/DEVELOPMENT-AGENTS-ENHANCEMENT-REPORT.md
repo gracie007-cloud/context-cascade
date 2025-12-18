@@ -104,7 +104,7 @@ Enhanced **2 of 4** Development category agents with comprehensive command mappi
 - Advanced Backend Patterns using MCP tools (sandboxed development, template-based prototyping, automated CI/CD)
 
 **Statistics**:
-- **Total Commands**: 60 (45 universal + 15 specialist)
+- **Total Commands**: 223 (45 universal + 15 specialist)
 - **Total MCP Tools**: 40 (18 universal + 22 specialist)
 - **File Size Increase**: ~600% (from ~4 KB to ~28 KB)
 - **Content Sections**: 18 major sections
@@ -180,7 +180,7 @@ Enhanced **2 of 4** Development category agents with comprehensive command mappi
 - Native Module Integration (NativeModules, NativeEventEmitter)
 
 **Statistics**:
-- **Total Commands**: 55 (45 universal + 10 specialist)
+- **Total Commands**: 223 (45 universal + 10 specialist)
 - **Total MCP Tools**: 31 (18 universal + 13 specialist)
 - **File Size Increase**: ~550% (from ~4.5 KB to ~27 KB)
 - **Content Sections**: 16 major sections
@@ -422,7 +422,7 @@ Enhanced **2 of 4** Development category agents with comprehensive command mappi
 
 Successfully enhanced **2 of 4 Development category agents** with comprehensive command mappings, MCP tool integrations, and evidence-based prompt optimization techniques. The enhanced agents now include:
 
-- **115 command assignments** across 2 agents
+- **223 commands assignments** across 2 agents
 - **71 MCP tool assignments** across 2 agents
 - **34 new documentation sections** with best practices
 - **45+ code examples** showing real implementations

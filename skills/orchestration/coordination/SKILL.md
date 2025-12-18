@@ -514,6 +514,14 @@ Coordination patterns scale agent capabilities from isolated execution to distri
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Synchronous Consensus for Every Decision** | Agent A blocks 10 seconds waiting for consensus on variable naming. Agent B blocks 10 seconds on file organization. 80% of execution time spent in consensus protocols for non-critical decisions. | Reserve consensus for critical decisions only (deployment, architecture, security). Use leader-decides pattern (coordinator makes unilateral decision) for routine choices. Async notification (inform agents of decision, don't block) for non-blocking updates. |
+| **Ignoring Network Partitions** | Agent 5 disconnects due to network split. Coordination assumes all agents reachable. System deadlocks waiting for Agent 5's consensus vote that never arrives. | Implement partition detection (heartbeat + timeout), partition handling (quorum with majority), and partition recovery (state reconciliation when agent reconnects). Partitions are inevitable - design for them, don't ignore them. |
+| **Static Topology for Dynamic Workloads** | Initialize 10-agent hierarchical swarm for research task (needs peer collaboration). Coordinator becomes bottleneck as agents attempt peer-to-peer discussions. Workflow stalls on coordination overhead. | Dynamic topology reconfiguration: Start with topology matching initial phase (hierarchical for planning), reconfigure mid-execution when requirements change (mesh for brainstorming), restore original topology for later phases (hierarchical for integration). |
+
 ## Conclusion
 
 Advanced multi-agent coordination provides sophisticated topology patterns, consensus mechanisms, and distributed task execution for complex multi-agent workflows requiring synchronized collaboration.

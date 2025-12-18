@@ -1026,6 +1026,17 @@ Waiting until after training to think about deployment creates integration issue
 | **Hardcoded Hyperparameters** | Embedding learning rates and batch sizes in code prevents experimentation and reproducibility | Externalize all hyperparameters to configuration files, version control with training runs, enable easy experimentation |
 | **No Production Testing** | Deploying model without testing inference latency and throughput causes production issues | Benchmark inference performance during validation phase, test deployment configuration before production rollout |
 
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|-------------|---------|----------|
+| **Training on Single Node** | Using a single machine for training limits model size and wastes time when distributed training can achieve 5-10x speedup | Use Flow Nexus distributed training with mesh topology to parallelize computation across multiple nodes |
+| **No Checkpoint Strategy** | Training for hours without checkpoints risks losing all progress if training crashes or diverges | Save checkpoints every 5-10 epochs, keep best 3 models based on validation metric, enable automatic backup |
+| **Ignoring Validation Metrics** | Focusing only on training accuracy misses overfitting until training completes | Monitor train-validation gap continuously, alert if gap exceeds 5%, stop early if overfitting detected |
+
+---
+
 ## Conclusion
 
 Neural network training with Flow Nexus platform provides a systematic approach to distributed machine learning, from architecture design through production deployment. The five-phase workflow ensures each critical aspect is addressed: platform setup, architecture configuration, distributed training, validation, and deployment.

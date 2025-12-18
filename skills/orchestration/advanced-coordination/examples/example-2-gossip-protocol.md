@@ -6,7 +6,7 @@ This example demonstrates how to implement Gossip-based coordination for a large
 
 ## Use Case: Distributed Configuration Management with Eventual Consistency
 
-**Scenario**: Propagate configuration updates across 150 agents in 3 data centers with sub-second convergence time and resilience to network partitions.
+**Scenario**: Propagate configuration updates across 211 agents in 3 data centers with sub-second convergence time and resilience to network partitions.
 
 **Requirements**:
 - High scalability (100+ agents without coordinator bottleneck)
@@ -36,7 +36,7 @@ This example demonstrates how to implement Gossip-based coordination for a large
           └──────────────┘
 
 Epidemic Spread: Each agent gossips to N random peers per round
-Convergence: O(log N) rounds = ~7 rounds for 150 agents
+Convergence: O(log N) rounds = ~7 rounds for 211 agents
 ```
 
 ## Step-by-Step Implementation
@@ -126,7 +126,7 @@ for i in {1..50}; do
 done
 wait
 
-# Verify all 150 agents registered
+# Verify all 211 agents registered
 npx claude-flow@alpha agent list --filter active | wc -l
 ```
 
@@ -158,7 +158,7 @@ npx claude-flow@alpha gossip convergence --watch
 # Track convergence progress (expect O(log N) rounds)
 npx claude-flow@alpha gossip metrics --metric convergence-rate
 
-# Expected: ~7 rounds for 150 agents
+# Expected: ~7 rounds for 211 agents
 ```
 
 **Expected Output (Per Round)**:
@@ -371,7 +371,7 @@ module.exports = {
 
 - **Convergence time**: 700ms (7 rounds × 100ms)
 - **Throughput**: 8,333 updates/sec (fully distributed)
-- **Message complexity**: O(N log N) = ~1,050 messages (150 agents × 7 rounds)
+- **Message complexity**: O(N log N) = ~1,050 messages (211 agents × 7 rounds)
 - **Network bandwidth**: ~5 MB/sec (assuming 500-byte state)
 
 ### Partition Scenario (30-second split)
@@ -397,7 +397,7 @@ module.exports = {
 
 ### Problem: Slow Convergence
 
-**Symptom**: Taking >2 seconds for 150 agents to converge
+**Symptom**: Taking >2 seconds for 211 agents to converge
 
 **Root Cause**: Low fanout or high interval
 

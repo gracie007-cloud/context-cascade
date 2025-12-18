@@ -6,7 +6,7 @@ Last Updated: 2025-01-17
 
 ## Overview
 
-The RBAC Engine Core provides comprehensive identity verification and permission enforcement for 207 agents across the Agent Reality Map Integration. It enforces Role-Based Access Control (RBAC) across 3 dimensions: tool whitelist, path scopes, and API access.
+The RBAC Engine Core provides comprehensive identity verification and permission enforcement for 211 agents across the Agent Reality Map Integration. It enforces Role-Based Access Control (RBAC) across 3 dimensions: tool whitelist, path scopes, and API access.
 
 ## Architecture
 
@@ -169,13 +169,13 @@ node validate-rbac-setup.js
 
 This validates:
 1. RBAC rules JSON structure (10 roles, all required fields)
-2. All 207 agent identities (UUID format, role validity, frontmatter)
+2. All 211 agents identities (UUID format, role validity, frontmatter)
 3. Performance benchmarks (<50ms per check)
 4. Integration test (full workflow)
 
 ## Success Criteria
 
-- [x] Identity verification works with all 207 agent frontmatter formats
+- [x] Identity verification works with all 211 agents frontmatter formats
 - [x] Permission checker enforces all 3 dimensions (tools, paths, APIs)
 - [x] Zero false positives (valid agents never blocked)
 - [x] Zero false negatives (invalid operations always blocked)

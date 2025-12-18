@@ -3,7 +3,7 @@
 > **Reorganisation Note (2025-11-02):** Slash commands are now organised into ten functional categories under `commands/`. For the current category-sorted listing see [`docs/command-taxonomy/INDEX.md`](./INDEX.md). The analysis below captures the pre-reorganisation taxonomy for historical reference.
 
 **Date**: 2025-11-01
-**Total Commands**: 149
+**Total Commands**: 223
 **Categories**: 23
 
 ---
@@ -476,7 +476,7 @@ ruv-SPARC Three-Loop System Commands (149 total)
 ## 📊 Statistics
 
 ### Current State
-- **Total Commands**: 149
+- **Total Commands**: 223
 - **Total Gaps Identified**: 75
 - **Critical Gaps**: 42 (must have)
 - **Nice to Have Gaps**: 33
@@ -489,7 +489,7 @@ ruv-SPARC Three-Loop System Commands (149 total)
 5. Agent Management: 5 gaps (12% of critical)
 
 ### Target State
-- **Projected Total**: 224 commands (149 + 75)
+- **Projected Total**: 223 commands (149 + 75)
 - **Completeness**: 66.5% → 100%
 
 ---

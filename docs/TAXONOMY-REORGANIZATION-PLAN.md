@@ -530,7 +530,7 @@ node scripts/test-archival-automation.js
 ## Reference Library
 
 ### Agent Library
-- [Agent Registry](reference/agent-library/AGENT-REGISTRY.md) - 131 agents
+- [Agent Registry](reference/agent-library/AGENT-REGISTRY.md) - 211 agents
 - [Core Agents](reference/agent-library/core-agents/)
 - [Specialized Agents](reference/agent-library/specialized-agents/)
 

@@ -61,7 +61,7 @@
 │  ├─ byzantine      ├─ issue-tracker   ├─ refinement      └─ evaluator    │
 │  └─ [more...]      └─ [more...]       └─ [more...]                       │
 │                                                                             │
-│  [All 131 agents with distinct expertise, capabilities, decision frameworks]
+│  [All 211 agents with distinct expertise, capabilities, decision frameworks]
 └───────────────────────────────┬─────────────────────────────────────────────┘
                                 │
                     ┌───────────┼───────────┐
@@ -796,7 +796,7 @@ Loop 1: research-driven-planning
 │                   MCP SERVER ACCESS CONTROL                       │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  CODE QUALITY AGENTS (14)                                       │
+│  CODE QUALITY AGENTS (211)                                       │
 │  Can Access: ✅ memory-mcp                                      │
 │              ✅ connascence-analyzer                            │
 │              ✅ claude-flow                                     │
@@ -809,7 +809,7 @@ Loop 1: research-driven-planning
 │                                                                 │
 │  ─────────────────────────────────────────────────────────────│
 │                                                                 │
-│  PLANNING AGENTS (23)                                          │
+│  PLANNING AGENTS (211)                                          │
 │  Can Access: ✅ memory-mcp                                     │
 │              ✅ claude-flow                                    │
 │  Cannot Access: ❌ connascence-analyzer                        │
@@ -854,7 +854,7 @@ Loop 1: research-driven-planning
 └─ flow-nexus (optional)
 
 agents/registry.json
-├─ 131 agents defined
+├─ 211 agents defined
 ├─ Each with: type, capabilities, MCP access
 └─ Prompting techniques specified
 
@@ -864,7 +864,7 @@ skills/MASTER-SKILLS-INDEX.md
 └─ Skill-agent bindings listed
 
 commands/README.md
-├─ 224 commands organized
+├─ 223 commands organized
 ├─ MECE taxonomy documented
 └─ Command-skill bindings listed
 ```

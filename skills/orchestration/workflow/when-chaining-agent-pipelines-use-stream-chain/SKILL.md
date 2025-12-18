@@ -406,6 +406,14 @@ One failing stage should not bring down the entire pipeline.
 | **Stateful stages without checkpointing** | Pipeline cannot recover from failures without full restart, lost computation work, difficult to scale stages independently | Make stages stateless where possible, persist state to external store (Redis, database) with checkpoint IDs, enable resume from last checkpoint |
 | **Ignoring pipeline metrics** | No visibility into bottlenecks, cannot identify slow stages, resource allocation decisions made blindly | Track stage-level metrics (throughput, latency, error rate), expose metrics endpoint (Prometheus format), generate performance reports highlighting bottleneck stages |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Unbounded Queues Between Stages** | Memory exhaustion when fast producers overwhelm slow consumers with no backpressure signal, eventual OOM crashes bring down entire pipeline. | Use bounded queues with explicit size limits (100-1000 items based on data size). Implement backpressure signaling when queue 80% full. Monitor queue depth with alerts at high watermark. |
+| **Sequential When Parallelism Possible** | Wastes resources by underutilizing available CPU/memory, creates long end-to-end latency, achieves poor throughput for independent tasks that could run concurrently. | Analyze dependency graph to identify truly independent stages. Spawn concurrent agents for parallel tasks. Use fan-out/fan-in patterns where appropriate. Measure actual speedup from parallelization. |
+| **No Data Validation at Boundaries** | Silent data corruption propagates through pipeline, type errors discovered late causing cascading failures, difficult debugging due to error propagation across stages. | Validate data against JSON schemas at every stage input/output boundary. Fail fast with clear error messages identifying validation failure. Log validation failures with input examples for debugging. |
+
 ## Conclusion
 
 Agent pipeline chaining represents a sophisticated orchestration pattern that enables complex data processing workflows by composing specialized agents into sequential or parallel execution flows. The power of this approach lies in its ability to break down large tasks into manageable stages, each with clear responsibilities and explicit input/output contracts. However, this power comes with complexity - managing data flow, handling backpressure, and ensuring failure isolation require careful design and continuous monitoring.

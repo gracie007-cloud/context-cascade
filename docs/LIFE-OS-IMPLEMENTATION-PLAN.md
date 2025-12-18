@@ -15,7 +15,7 @@
 
 **Deep Analysis** (extrapolated volition):
 
-**Layer 1 - Tactical**: Convert 8 Life-OS commands into skills that orchestrate your existing 131 agents through phases, with each agent executing domain-specific commands coordinated via Memory MCP.
+**Layer 1 - Tactical**: Convert 8 Life-OS commands into skills that orchestrate your existing 211 agents through phases, with each agent executing domain-specific commands coordinated via Memory MCP.
 
 **Layer 2 - Strategic**: Build a survival system that:
 - Generates revenue immediately (career opportunities, hackathons, grants)
@@ -340,7 +340,7 @@ You're creating intellectual property in the form of **systematized operations**
 
 1. `LIFE-OS-IMPLEMENTATION-PLAN.md` (this file) - Strategic overview
 2. `LIFE-OS-WEEK1-SKILLS.md` - Paste-ready critical path skills
-3. `LIFE-OS-AGENT-MAPPING.md` - Which of your 131 agents each skill uses
+3. `LIFE-OS-AGENT-MAPPING.md` - Which of your 211 agents each skill uses
 4. `LIFE-OS-FOLDER-SCAFFOLD.sh` - One-command directory setup
 5. `LIFE-OS-DATA-TEMPLATES/` - YAML configs, CSV schemas, markdown templates
 6. `LIFE-OS-COMPLETE-SKILLS/` - All 12 skill specifications

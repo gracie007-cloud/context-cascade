@@ -614,7 +614,7 @@ Proceeding with PostgreSQL implementation.
 ### Problem: CLAUDE.md Currently Lists Everything
 
 **Current State** (WRONG):
-- 131 agents listed in full
+- 211 agents listed in full
 - 73 skills listed in full
 - 55 commands listed in full
 - 200+ MCP tools listed in full
@@ -809,7 +809,7 @@ npx claude-flow playbooks info "deep-research-sop" --show-agents
 | Scripts | `/scripts` | `scripts/deploy.sh`, `scripts/setup/` |
 | Configuration | `/config` | `config/database.yml` |
 
-### Agent Registry (131 Agents)
+### Agent Registry (211 agents)
 
 **CRITICAL**: ONLY use predefined agents from registry.
 

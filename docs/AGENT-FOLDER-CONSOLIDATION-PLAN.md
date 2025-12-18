@@ -25,7 +25,7 @@
 **File Count**: 299 files
 **Structure**: NESTED (10 category folders)
 **Categories**: delivery, foundry, operations, orchestration, platforms, quality, research, security, specialists, tooling
-**README**: Claims 203 agents, well-organized
+**README**: Claims 211 agents, well-organized
 
 ---
 

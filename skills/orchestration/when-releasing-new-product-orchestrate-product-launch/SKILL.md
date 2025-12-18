@@ -951,6 +951,14 @@ Skill("<skill-name>")
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Launch Without Market Validation** | Skipping Phase 1 research to accelerate timeline results in building product nobody wants, wasting months of effort on unvalidated assumptions. | Never skip market validation phase. Spend 2 weeks upfront researching target market, competitors, and customer pain points. Use findings to validate product-market fit before committing to development. |
+| **Siloed Development Without Marketing** | Engineering builds product in isolation while marketing scrambles to prepare campaigns days before launch, resulting in rushed messaging and weak go-to-market. | Run Phase 3 marketing preparation in parallel with Phase 2 development. Share product specs and demos early. Marketing needs 4-6 weeks lead time for campaign creation and sales enablement. |
+| **No Production Readiness Validation** | Deploying to production without comprehensive validation (Phase 4) risks critical failures on launch day when maximum traffic and visibility occurs. | Implement mandatory production validator review in Phase 4. Check all tests passing, security audit complete, performance benchmarks met, monitoring active, rollback plan tested. Go/no-go decision must be evidence-based. |
+
 ## Conclusion
 
 Orchestrated product launches transform chaotic, ad-hoc release processes into systematic workflows coordinating 15+ specialists across 10 weeks and 5 distinct phases. The workflow's power comes from balancing sequential dependencies (research before development) with parallel execution (development and marketing concurrently) to optimize both speed and quality. Memory coordination ensures each phase builds upon prior work without information loss, creating continuity across the multi-week timeline even as team members join and leave.

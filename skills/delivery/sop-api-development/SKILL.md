@@ -652,6 +652,16 @@ Direct deployment to 100% of traffic converts minor bugs into major incidents. C
 
 ---
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Code-First API Development** | Writing implementation before defining API specification. Results in inconsistent endpoints, undocumented breaking changes, and frontend-backend coordination failures. Changing API after implementation is 10x more expensive. | **Contract-First with OpenAPI**: Define OpenAPI 3.0 specification BEFORE implementation. Use spec to generate mock servers for parallel frontend dev, validate requests/responses in middleware, and auto-generate documentation. Implementation becomes spec fulfillment, not exploration. |
+| **Testing After Implementation** | Writing tests after code is complete. Creates biased tests that document existing behavior rather than validate requirements. Misses edge cases discovered during implementation. Encourages untestable code architecture. | **Test-Driven Development**: Write failing test first (red), implement minimal code to pass (green), refactor (refactor). Tests drive API design decisions and catch regressions. Aim 90%+ branch coverage, not just line coverage. |
+| **Direct Production Deployment** | Deploying API changes directly to 100% production traffic. Minor bugs become major incidents affecting all users. Rollback requires full redeployment under pressure. No validation against real traffic patterns. | **Canary Deployment with Progressive Rollout**: Deploy to 1-5% traffic canary first. Monitor error rates and latency for 1 hour. If metrics within thresholds, roll out to 25%, 50%, 100% with automated rollback on violations. Use feature flags to decouple deployment from activation. |
+
+---
+
 ## Conclusion
 
 REST API development requires systematic adherence to three core principles: Test-Driven Development for quality assurance, Contract-First Design for interface clarity, and Progressive Deployment for risk mitigation. This SOP coordinates 8-12 agents across a 2-week timeline to deliver production-ready APIs with comprehensive testing, documentation, and monitoring.

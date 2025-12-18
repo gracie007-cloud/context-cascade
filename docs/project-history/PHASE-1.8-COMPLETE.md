@@ -231,7 +231,7 @@ capabilities:
 
 **Migration Path**:
 ```bash
-# Option 1: Automatic (for all 207 agents)
+# Option 1: Automatic (for all 211 agents)
 node scripts/migrate-agent-identities.js
 
 # Option 2: Manual (for new agents)
@@ -292,7 +292,7 @@ Skill("agent-creator")  # Uses v3.0 with identity
 
 ### Phase 1 Progress
 
-**Phase 1.0 - 1.7**: Agent identity system (207 agents migrated) ✅
+**Phase 1.0 - 1.7**: Agent identity system (211 agents migrated) ✅
 **Phase 1.8**: agent-creator v3.0 ✅ **<-- YOU ARE HERE**
 **Phase 1.9**: Restore dashboard (pending)
 

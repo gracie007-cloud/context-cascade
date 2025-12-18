@@ -68,7 +68,7 @@ claude mcp add claude-flow npx claude-flow@alpha mcp start
 
 ```
 context-cascade/
-|-- agents/           # 203 agent definitions (by category)
+|-- agents/           # 211 agents definitions (by category)
 |-- skills/           # 122 skill definitions (by category)
 |-- commands/         # 130+ command definitions
 |-- plugins/          # 5 installable plugin packages

@@ -245,7 +245,7 @@ Phase: testing
 
 **Caching Strategy:**
 
-1. **First Invocation**: Run `node scripts/cache-agents-memory-mcp.js` to populate Memory MCP with all 203 agents
+1. **First Invocation**: Run `node scripts/cache-agents-memory-mcp.js` to populate Memory MCP with all 211 agents
 2. **Subsequent Invocations**: Memory MCP provides <100ms semantic search
 3. **Session Cache**: Keep top 20 most-used agents in session memory
 
@@ -270,7 +270,7 @@ description: |
 
 capabilities:
   - Semantic task analysis
-  - Agent registry search (203 agents)
+  - Agent registry search (211 agents)
   - Capability matching and scoring
   - Domain expertise matching
   - Tool and MCP requirement analysis
@@ -469,6 +469,16 @@ Never proceed with agent selection below 0.75 confidence. Low confidence selecti
 | **Generic Agent Default** | Using "coder" or "tester" without searching registry. Misses 203 specialists with domain expertise, resulting in 40-60% performance degradation and increased error rates. | Always run Memory MCP semantic search first. Only fall back to generics after exhaustive search and explicit confidence check (<0.75). Log gaps for registry improvement. |
 | **Ignoring Phase Alignment** | Selecting testing agents during planning phase or research agents during deployment. Creates phase mismatch where agent expertise doesn't match current workflow stage. | Match agent's designated phase to current workflow phase. Planning agents for Phase 1-2, development agents for Phase 3-4, quality agents for Phase 5, operations agents for Phase 6. |
 | **Skipping Capability Scoring** | Selecting first agent that mentions relevant keywords without scoring match quality. Leads to suboptimal selection when multiple candidates exist. | Apply 6-tier scoring system: Exact capability match (1.0), Domain specialization (0.9), Tool requirements (0.8), Phase alignment (0.7), Semantic similarity (0.6), Generic fallback (0.4). Choose highest score. |
+
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Generic Agent Defaults** | Using generic agents (coder, tester, reviewer) without searching registry for specialists. Misses 203 domain experts with specialized prompts and patterns. Results in 40-60% performance degradation for domain-specific tasks. | Always run Memory MCP semantic search first. Query registry with task description to find specialists. Only use generics after exhaustive search confirms no specialist exists. Log gaps for registry improvement. |
+| **Ignoring Confidence Thresholds** | Proceeding with agent selection below 0.75 confidence score. Low confidence indicates ambiguous requirements or registry gaps. Creates downstream execution failures from wrong agent assignments. | Never proceed below 0.75 confidence. Surface ambiguity to user or planner for clarification. High confidence (>0.90) correlates with 95%+ task success. Uncertainty in selection compounds into execution failures. |
+| **Phase-Mismatched Selection** | Selecting testing agents during planning phase or research agents during deployment phase. Creates expertise mismatch where agent skills don't align with current workflow stage. | Match agent's designated phase to current workflow phase. Planning agents for Phase 1-2, development for Phase 3-4, quality for Phase 5, operations for Phase 6. Validate phase alignment in selection criteria scoring. |
 
 ---
 

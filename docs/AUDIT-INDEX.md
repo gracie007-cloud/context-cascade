@@ -132,7 +132,7 @@ This audit examined inconsistencies between code artifacts in `.claude/` and doc
    - Time: 10 minutes
 
 4. **Agent Count Mismatch**
-   - Documentation: 131 agents
+   - Documentation: 211 agents
    - Reality: 203+ agents
    - Fix: Update count in CLAUDE.md
    - Time: 2 minutes
@@ -182,7 +182,7 @@ This audit examined inconsistencies between code artifacts in `.claude/` and doc
 
 ```
 Filesystem Reality:
-  .claude/agents/: 208 files (203 agents + 5 support)
+  .claude/agents/: 208 files (211 agents + 5 support)
   .claude/skills/: 103 directories (256 .md files)
   .mcp.json:       3 MCP servers, 62 total tools
 

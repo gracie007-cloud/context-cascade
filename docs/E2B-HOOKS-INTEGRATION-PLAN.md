@@ -123,7 +123,7 @@ PreToolUse → [Tool Execution] → PostToolUse
    - Real-time event broadcasting
 
 3. **Agent Registry**
-   - 207 agents with UUID, role, RBAC
+   - 211 agents with UUID, role, RBAC
    - Complete identity schema (JSON Schema v7)
    - 10 roles with granular permissions
    - Runtime identity store

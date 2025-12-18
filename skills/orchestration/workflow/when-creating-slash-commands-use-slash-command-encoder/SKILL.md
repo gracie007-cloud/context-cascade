@@ -564,6 +564,14 @@ Commands should output structured data that can be consumed by other commands or
 | **Commands without help text** | Users must guess parameter meanings, undiscoverable flags, poor developer experience, reduced adoption | Implement --help flag for every command, generate help text from schema, include examples, auto-generate documentation |
 | **Blocking execution without progress feedback** | Users cannot tell if command is working or hung, no indication of time remaining, frustration and premature cancellation | Show progress indicators for long-running commands, print incremental output, support --quiet flag to disable for scripting |
 
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| **Generic Error Messages** | Users cannot diagnose what went wrong, leading to trial-and-error debugging, frustration, and reduced adoption of command system. | Provide specific error messages with parameter name, actual value received, expected format, and example of correct usage. Include context about what failed and why. |
+| **No Parameter Validation** | Commands execute with invalid inputs causing partial execution with corrupted state, making difficult rollback scenarios and unpredictable failures. | Validate all parameters before execution begins using type checking and schema validation. Fail fast with clear messages. Use type coercion where sensible (string to number conversions). |
+| **Inconsistent Naming Across Commands** | Cognitive load increases as users must remember arbitrary variations, reducing discoverability and causing confusion about command purpose. | Establish naming conventions (verb-noun pattern). Document in style guide. Enforce with linting tools. Refactor existing commands for consistency. Use similar flags across related commands. |
+
 ## Conclusion
 
 Slash command systems represent a powerful paradigm for exposing micro-skills and agent capabilities through ergonomic, discoverable interfaces. When designed well, these command systems become force multipliers for developer productivity, enabling rapid access to complex functionality through simple, memorable syntax. The three core principles - ergonomics through convention, fail-fast error handling, and composability - form the foundation of successful command interfaces that users actually enjoy using.
