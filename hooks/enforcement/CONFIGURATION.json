@@ -1,0 +1,284 @@
+{
+  "description": "Complete hook configuration for skill enforcement system",
+  "version": "1.0.0",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "description": "Initialize workflow state and inject 5-phase reminder for non-trivial requests",
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/user-prompt-submit.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "description": "Log skill invocation and display SOP reminder",
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/pre-skill-invoke.sh"
+          }
+        ]
+      },
+      {
+        "description": "Display agent registry reminder before Task spawn",
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/pre-task-spawn.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "description": "Verify SOP compliance after skill invocation",
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/post-skill-compliance.sh"
+          }
+        ]
+      },
+      {
+        "description": "Track agent spawn and remind about TodoWrite",
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/post-task-spawn.sh"
+          }
+        ]
+      },
+      {
+        "description": "Mark TodoWrite called and verify SOP pattern complete",
+        "matcher": "TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/post-todowrite.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "description": "Inject critical pattern reminders before context compaction",
+        "matcher": "manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/pattern-retention.sh"
+          }
+        ]
+      },
+      {
+        "description": "Inject critical pattern reminders before auto-compaction",
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/pattern-retention.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "description": "Archive state and display session summary",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforcement/session-stop.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "state_management": {
+    "state_file": "${HOME}/.claude/runtime/enforcement-state.json",
+    "archive_directory": "${HOME}/.claude/runtime/enforcement/archive",
+    "state_schema": {
+      "session_id": "string",
+      "started_at": "ISO8601",
+      "workflow_state": {
+        "phase": "idle|intent-analysis|prompt-optimization|planning|routing|execution",
+        "started_at": "ISO8601|null",
+        "completed_phases": ["string"],
+        "current_task": "string|null"
+      },
+      "skill_invocations": [
+        {
+          "skill_name": "string",
+          "invoked_at": "ISO8601",
+          "sop_followed": "boolean",
+          "agents_spawned": ["string"]
+        }
+      ],
+      "agent_spawns": [
+        {
+          "agent_type": "string",
+          "agent_name": "string",
+          "task_description": "string",
+          "spawned_at": "ISO8601",
+          "is_registry_agent": "boolean|string",
+          "category": "string"
+        }
+      ],
+      "violations": [
+        {
+          "type": "generic_agent|missing_agents|missing_todowrite|skipped_phase",
+          "detected_at": "ISO8601",
+          "details": "string"
+        }
+      ],
+      "todos_created": "boolean",
+      "expertise_loaded": ["string"]
+    }
+  },
+  "validation": {
+    "agent_registry": {
+      "path": "claude-code-plugins/ruv-sparc-three-loop-system/agents/REGISTRY.json",
+      "fallback_types": ["coder", "researcher", "tester", "reviewer"],
+      "categories": [
+        "delivery",
+        "research",
+        "quality",
+        "orchestration",
+        "foundry",
+        "operations",
+        "platforms",
+        "security",
+        "specialists",
+        "tooling"
+      ]
+    },
+    "transcript_parser": {
+      "enabled": true,
+      "transcript_file": "${HOME}/.claude/history.jsonl",
+      "run_mode": "async"
+    }
+  },
+  "enforcement_strategy": {
+    "layers": [
+      {
+        "name": "Preventive",
+        "description": "Display reminders before actions",
+        "hooks": ["UserPromptSubmit", "PreToolUse"],
+        "effectiveness": "Medium - depends on Claude following reminders"
+      },
+      {
+        "name": "Detective",
+        "description": "Check compliance after actions",
+        "hooks": ["PostToolUse"],
+        "effectiveness": "High - reliably detects violations"
+      },
+      {
+        "name": "Corrective",
+        "description": "Provide feedback and guidance",
+        "hooks": ["PostToolUse"],
+        "effectiveness": "Medium - guides toward compliance"
+      },
+      {
+        "name": "Retention",
+        "description": "Ensure patterns survive context loss",
+        "hooks": ["PreCompact", "Stop"],
+        "effectiveness": "High - critical for long sessions"
+      }
+    ]
+  },
+  "limitations": {
+    "cannot_do": [
+      "Inspect Task() or Skill() parameters in PreToolUse hooks",
+      "Modify tool inputs or outputs",
+      "Force tool invocations",
+      "Access conversation transcript in real-time",
+      "Validate parameters before tool execution",
+      "Block execution with validation (can block, but cannot validate first)"
+    ],
+    "can_do": [
+      "Display messages to Claude",
+      "Log invocations to state file",
+      "Check compliance after execution",
+      "Run external validation scripts (async)",
+      "Block execution (exit 2)",
+      "Archive state for analysis"
+    ],
+    "workarounds": {
+      "parameter_validation": "Use transcript-parser.sh to parse history.jsonl asynchronously",
+      "forcing_behavior": "Use strong reminders and compliance checklists",
+      "real_time_correlation": "Use state file to accumulate cross-tool information",
+      "validation_blocking": "Use reactive validation in PostToolUse, not preventive blocking"
+    }
+  },
+  "integration": {
+    "recursive_improvement": {
+      "enabled": true,
+      "data_flow": "violations -> analyze-compliance.sh -> metrics -> audit-pipeline -> improvements",
+      "gating": "frozen eval harness"
+    },
+    "expertise_system": {
+      "enabled": true,
+      "check_before": "Phase 3 (Planning)",
+      "location": ".claude/expertise/{domain}.yaml"
+    },
+    "memory_mcp": {
+      "enabled": false,
+      "description": "Future: Store state in memory-mcp for cross-session persistence"
+    }
+  },
+  "scripts": {
+    "core": {
+      "state_tracker": ".claude/hooks/enforcement/state-tracker.sh",
+      "description": "Central state management - called by all hooks"
+    },
+    "hooks": {
+      "user_prompt_submit": ".claude/hooks/enforcement/user-prompt-submit.sh",
+      "pre_skill_invoke": ".claude/hooks/enforcement/pre-skill-invoke.sh",
+      "pre_task_spawn": ".claude/hooks/enforcement/pre-task-spawn.sh",
+      "post_skill_compliance": ".claude/hooks/enforcement/post-skill-compliance.sh",
+      "post_task_spawn": ".claude/hooks/enforcement/post-task-spawn.sh",
+      "post_todowrite": ".claude/hooks/enforcement/post-todowrite.sh",
+      "pattern_retention": ".claude/hooks/enforcement/pattern-retention.sh",
+      "session_stop": ".claude/hooks/enforcement/session-stop.sh"
+    },
+    "validation": {
+      "transcript_parser": ".claude/hooks/enforcement/transcript-parser.sh",
+      "description": "Async validation via transcript parsing"
+    },
+    "testing": {
+      "test_suite": ".claude/hooks/enforcement/test-hooks.sh",
+      "description": "Comprehensive hook testing"
+    },
+    "reporting": {
+      "generate_report": ".claude/hooks/enforcement/generate-report.sh",
+      "analyze_compliance": ".claude/hooks/enforcement/analyze-compliance.sh",
+      "find_violations": ".claude/hooks/enforcement/find-violations.sh",
+      "agent_usage_report": ".claude/hooks/enforcement/agent-usage-report.sh"
+    }
+  },
+  "installation": {
+    "steps": [
+      "1. Copy all scripts to .claude/hooks/enforcement/",
+      "2. Make scripts executable: chmod +x .claude/hooks/enforcement/*.sh",
+      "3. Merge CONFIGURATION.json hooks into .claude/settings.json",
+      "4. Create runtime directory: mkdir -p .claude/runtime/enforcement/archive",
+      "5. Test installation: bash .claude/hooks/enforcement/test-hooks.sh",
+      "6. Verify hooks appear in Claude Code settings"
+    ]
+  },
+  "usage": {
+    "automatic": "Hooks run automatically on tool usage",
+    "manual_state_check": "bash .claude/hooks/enforcement/state-tracker.sh get_state",
+    "manual_validation": "bash .claude/hooks/enforcement/transcript-parser.sh",
+    "generate_report": "bash .claude/hooks/enforcement/generate-report.sh",
+    "analyze_compliance": "bash .claude/hooks/enforcement/analyze-compliance.sh"
+  }
+}

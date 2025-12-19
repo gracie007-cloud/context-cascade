@@ -38,7 +38,7 @@ Before running a skill, check its MCP requirements and activate the appropriate 
 
 ## Global MCPs (Always Available)
 
-**All 183 skills have access to these 3 MCPs:**
+**All 196 skills have access to these 3 MCPs:**
 
 | MCP | Tokens | Tools | Purpose |
 |-----|--------|-------|---------|

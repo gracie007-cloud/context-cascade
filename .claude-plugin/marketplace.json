@@ -1,6 +1,6 @@
 {
   "name": "Context Cascade Marketplace",
-  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks -> Skills -> Agents -> Commands. Load only what you need - 90%+ context savings with 203 agents, 122 skills, 29 playbooks.",
+  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks -> Skills -> Agents -> Commands. Load only what you need - 90%+ context savings with 211 agents, 196 skills, 30 playbooks, 223 commands (660 total components).",
   "version": "3.0.0",
   "author": "DNYoussef",
   "repository": "https://github.com/DNYoussef/context-cascade",

@@ -10,7 +10,7 @@
 PLAYBOOKS (30)     <-- Only these are loaded initially (~2k tokens)
     |
     v
-SKILLS (183)       <-- Loaded when playbook invokes them
+SKILLS (196)       <-- Loaded when playbook invokes them
     |
     v
 AGENTS (211)       <-- Loaded when skill needs them

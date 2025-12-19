@@ -13,7 +13,7 @@ A **three-layer plugin system** for AI-assisted software development:
 ```
 COMMANDS (223)           User interface (slash commands)
     ↓ bind to
-SKILLS (183)              Methodology layer (how to solve problems)
+SKILLS (196)              Methodology layer (how to solve problems)
     ↓ delegate to
 AGENTS (211)             Expertise layer (who solves them)
     ↓ coordinated by

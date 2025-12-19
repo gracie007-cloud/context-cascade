@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-**Current Problem**: CLAUDE.md is organized by RESOURCES (183 skills, 211 agents, MCP tools) rather than by WORKFLOW, creating cognitive overhead and decision paralysis.
+**Current Problem**: CLAUDE.md is organized by RESOURCES (196 skills, 211 agents, MCP tools) rather than by WORKFLOW, creating cognitive overhead and decision paralysis.
 
 **Proposed Solution**: Restructure to playbook-first approach with first-message workflow at top, reducing file size by 60-70% while improving decision clarity by 5x.
 
@@ -38,7 +38,7 @@
 4. Infrastructure (cicd-intelligent-recovery, deployment-readiness)
 5. Specialized Domains (ML, security, frontend, database)
 
-**Current CLAUDE.md**: Treats all 183 skills equally → cognitive overload
+**Current CLAUDE.md**: Treats all 196 skills equally → cognitive overload
 **Optimal CLAUDE.md**: Prioritizes top 0 playbooks → instant routing
 
 ### Core Insight
@@ -156,7 +156,7 @@ NOT SURE? → Run interactive-planner for multi-select questions
 
 ### Category 1: Skill Descriptions (90% Redundant)
 
-**Current**: 183 skills listed with descriptions, triggers, examples
+**Current**: 196 skills listed with descriptions, triggers, examples
 **Problem**: Skills already have this info in their own YAML frontmatter
 **Solution**: Remove descriptions, keep only CATEGORIES and TRIGGER KEYWORDS
 
@@ -797,7 +797,7 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 | **Lookup Time** | 10-30 seconds | <5 seconds | 5-6x faster |
 | **Decision Points** | 5-10 per request | 1-2 per request | 3-5x fewer |
 | **First Section** | Execution rules (tactical) | First-message workflow (strategic) | 100% usage |
-| **Skill Details** | Full descriptions (183 skills) | Categories only | 90% compression |
+| **Skill Details** | Full descriptions (196 skills) | Categories only | 90% compression |
 | **Agent Details** | Full list (211 agents) | Categories only | 85% compression |
 | **MCP Details** | Detailed parameters | Categories + when to use | 75% compression |
 | **Playbooks** | Scattered examples | Structured templates (5-7 core) | Self-contained |

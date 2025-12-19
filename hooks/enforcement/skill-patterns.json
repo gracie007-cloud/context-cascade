@@ -1,0 +1,117 @@
+{
+  "description": "Expected output patterns for skill completion verification",
+  "version": "1.0.0",
+  "patterns": {
+    "intent-analyzer": {
+      "required_outputs": ["understood_intent", "confidence"],
+      "required_followup": ["prompt-architect"],
+      "expected_actions": [],
+      "timeout_seconds": 60,
+      "verification_message": "Intent analysis must output understood_intent and confidence, then invoke prompt-architect"
+    },
+    "prompt-architect": {
+      "required_outputs": ["optimized_request", "success_criteria"],
+      "required_followup": ["planner", "research-driven-planning"],
+      "expected_actions": [],
+      "timeout_seconds": 60,
+      "verification_message": "Prompt optimization must output optimized_request and invoke a planning skill"
+    },
+    "smart-bug-fix": {
+      "required_outputs": ["root_cause", "fix_applied"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 300,
+      "verification_message": "Bug fix must identify root cause, apply fix, spawn Task agents, and call TodoWrite"
+    },
+    "feature-dev-complete": {
+      "required_outputs": ["architecture", "implementation", "tests"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 600,
+      "verification_message": "Feature development must produce architecture, implementation, tests, spawn agents, and track with TodoWrite"
+    },
+    "code-review-assistant": {
+      "required_outputs": ["review_summary", "issues_found", "recommendations"],
+      "required_followup": [],
+      "expected_actions": ["Task"],
+      "timeout_seconds": 300,
+      "verification_message": "Code review must output summary, issues, recommendations and spawn reviewer agents"
+    },
+    "functionality-audit": {
+      "required_outputs": ["audit_result", "execution_verified"],
+      "required_followup": [],
+      "expected_actions": ["Task"],
+      "timeout_seconds": 300,
+      "verification_message": "Functionality audit must verify execution and output audit results"
+    },
+    "theater-detection-audit": {
+      "required_outputs": ["theater_score", "issues_found"],
+      "required_followup": [],
+      "expected_actions": ["Task"],
+      "timeout_seconds": 180,
+      "verification_message": "Theater detection must output theater score and list issues found"
+    },
+    "cascade-orchestrator": {
+      "required_outputs": ["workflow_plan", "execution_result"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 600,
+      "verification_message": "Cascade orchestrator must create workflow plan, execute stages, and track progress"
+    },
+    "swarm-orchestration": {
+      "required_outputs": ["swarm_config", "agents_spawned"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 600,
+      "verification_message": "Swarm orchestration must configure swarm, spawn multiple agents, and track with TodoWrite"
+    },
+    "agent-creator": {
+      "required_outputs": ["agent_spec", "system_prompt", "agent_file"],
+      "required_followup": [],
+      "expected_actions": ["Task", "Write"],
+      "timeout_seconds": 300,
+      "verification_message": "Agent creator must produce agent spec, system prompt, and write agent file"
+    },
+    "research-driven-planning": {
+      "required_outputs": ["research_summary", "plan", "risk_analysis"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 600,
+      "verification_message": "Research planning must output research, plan, risks, and track with TodoWrite"
+    },
+    "deep-research-orchestrator": {
+      "required_outputs": ["literature_review", "methodology", "findings"],
+      "required_followup": [],
+      "expected_actions": ["Task", "TodoWrite"],
+      "timeout_seconds": 1800,
+      "verification_message": "Deep research must complete literature review, methodology, findings with agent coordination"
+    },
+    "github-workflow-automation": {
+      "required_outputs": ["workflow_file", "configuration"],
+      "required_followup": [],
+      "expected_actions": ["Task", "Write"],
+      "timeout_seconds": 300,
+      "verification_message": "GitHub workflow must produce workflow file and configuration"
+    },
+    "pair-programming": {
+      "required_outputs": ["code_changes", "verification_result"],
+      "required_followup": [],
+      "expected_actions": ["Edit", "TodoWrite"],
+      "timeout_seconds": 600,
+      "verification_message": "Pair programming must produce code changes and verify results"
+    }
+  },
+  "default_pattern": {
+    "required_outputs": [],
+    "required_followup": [],
+    "expected_actions": ["Task", "TodoWrite"],
+    "timeout_seconds": 300,
+    "verification_message": "Skill must spawn Task agents and call TodoWrite"
+  },
+  "verification_rules": {
+    "strict_mode": false,
+    "warn_on_missing_pattern": true,
+    "block_on_violation": false,
+    "log_all_verifications": true
+  }
+}

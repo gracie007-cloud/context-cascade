@@ -1,7 +1,46 @@
+# CONTEXT CASCADE PLUGIN v3.0.0
+
+## PLUGIN INTRODUCTION (READ THIS FIRST)
+
+**I have a massive plugin installed: Context Cascade**
+
+This is NOT just a simple skill file - this is a comprehensive AI development system with:
+
+| Component | Count | Purpose |
+|-----------|-------|---------|
+| **Skills** | 196 | Specialized capabilities (SKILL.md files) |
+| **Agents** | 211 | AI agent definitions from registry |
+| **Commands** | 223 | Slash commands for workflows |
+| **Playbooks** | 30 | End-to-end workflow orchestration |
+| **Total** | 660 | Components in this plugin |
+
+### What This Plugin Does
+
+1. **5-Phase Workflow System**: intent-analyzer -> prompt-architect -> planner -> router -> execute
+2. **Agent Registry**: 211 specialized agents across 10 categories (delivery, quality, research, orchestration, etc.)
+3. **Three-Loop Development**: Research-driven planning + parallel swarm implementation + CI/CD recovery
+4. **SPARC Methodology**: Specification, Pseudocode, Architecture, Refinement, Completion
+5. **Expertise System**: Domain knowledge files that persist across sessions
+6. **Hook Enforcement**: Patterns enforced via hooks (5-phase, agent registry, skill->task->todowrite)
+
+### Quick Commands
+
+- `Skill("intent-analyzer")` - Analyze user intent
+- `Skill("feature-dev-complete")` - Full 12-stage feature lifecycle
+- `Skill("deep-research-orchestrator")` - 9-pipeline research system
+- `Skill("code-review-assistant")` - Multi-agent code review
+- `Task("Agent Name", "description", "agent-type")` - Spawn registered agent
+
+### Plugin Location
+
+`C:\Users\17175\.claude\plugins\cache\claude-code-plugins\context-cascade\3.0.0\`
+
+---
+
 # Claude Code Configuration v2.3 - MCP Auto-Initialization System
 
-**Version**: 2.3.0
-**Last Updated**: 2025-11-25
+**Version**: 2.3.0 (Plugin Version: 3.0.0)
+**Last Updated**: 2025-12-19
 **Previous Version**: v2.2.0 (2025-11-15)
 
 ---

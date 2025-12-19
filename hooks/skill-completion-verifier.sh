@@ -1,0 +1,28 @@
+#!/bin/bash
+# Post-Skill Hook: Verify skill completion requirements
+# This hook fires AFTER any Skill tool invocation
+
+echo "=================================================="
+echo "!! SKILL COMPLETION VERIFICATION !!"
+echo "=================================================="
+echo ""
+echo "You just invoked a Skill. Skills are SOPs that MUST spawn agents."
+echo ""
+echo "CHECKLIST - Verify before proceeding:"
+echo "  [ ] Did you spawn at least 1 agent via Task()?"
+echo "  [ ] Is the agent from the registry (not invented)?"
+echo "  [ ] Did you call TodoWrite() with 5+ todos?"
+echo "  [ ] Did you delegate work to agents (not do it yourself)?"
+echo ""
+echo "CORRECT PATTERN:"
+echo "  Skill('skill-name')"
+echo "  Task('Agent Name', 'description', 'agent-type-from-registry')"
+echo "  Task('Agent Name', 'description', 'agent-type-from-registry')"
+echo "  TodoWrite({ todos: [8-10 items] })"
+echo ""
+echo "WRONG PATTERN:"
+echo "  Skill('skill-name')"
+echo "  [Then doing all the work myself without Task() calls]"
+echo ""
+echo "If you haven't spawned agents yet, DO IT NOW before continuing."
+echo "=================================================="

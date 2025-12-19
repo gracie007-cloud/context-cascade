@@ -31,7 +31,7 @@
   },
   "contents": {
     "playbooks": {
-      "count": 29,
+      "count": 30,
       "note": "Top-level entry points - only playbooks loaded initially",
       "categories": [
         "delivery",
@@ -45,7 +45,7 @@
       ]
     },
     "skills": {
-      "count": 122,
+      "count": 196,
       "note": "Loaded by playbooks on demand",
       "categories": [
         "delivery",
@@ -55,11 +55,13 @@
         "platforms",
         "quality",
         "research",
-        "security"
+        "security",
+        "specialists",
+        "tooling"
       ]
     },
     "agents": {
-      "count": 203,
+      "count": 211,
       "note": "Loaded by skills on demand",
       "categories": [
         "delivery",
@@ -75,7 +77,7 @@
       ]
     },
     "commands": {
-      "count": 130,
+      "count": 223,
       "note": "Embedded in agents, loaded last",
       "prefixes": [
         "/sparc",
@@ -103,9 +105,9 @@
   "features": [
     "Context Cascade Architecture - Load only what you need (90%+ context savings)",
     "Nested Hierarchy: Playbooks -> Skills -> Agents -> Commands",
-    "203 AI Agents organized in 10 categories",
-    "122 Skills with SKILL.md format",
-    "29 Playbooks for common workflows",
+    "211 AI Agents organized in 10 categories",
+    "196 Skills with SKILL.md format",
+    "30 Playbooks for common workflows",
     "MCP Auto-Initialization - Agents declare their MCP requirements",
     "Three-Loop Integrated Development System",
     "SPARC Methodology (Specification, Pseudocode, Architecture, Refinement, Completion)",

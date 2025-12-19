@@ -1,6 +1,6 @@
 # Skills Directory
 
-**Status:** 183 skills organised into ten functional categories  
+**Status:** 196 skills organised into ten functional categories  
 **Last reorganised:** 2025-12-17 (consolidated from .claude/skills)  
 **Structure baseline:** Every skill retains the shared template (`skill.md`, `README.md`, `examples/`, `references/`, `resources/`, `tests/`).
 
