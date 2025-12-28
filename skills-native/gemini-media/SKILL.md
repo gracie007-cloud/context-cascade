@@ -284,9 +284,101 @@ gemini "Generate a video: [detailed description]. Duration: [seconds]. Save to [
 
 ## Related Skills
 
-- `gemini-megacontext`: Analyze architecture → visualize with media
-- `gemini-extensions`: Use Figma extension → enhance with generated assets
+- `visual-art-composition`: **PRIMARY** - Use for sophisticated image prompting with 13 orthogonal aesthetic dimensions
+- `gemini-megacontext`: Analyze architecture -> visualize with media
+- `gemini-extensions`: Use Figma extension -> enhance with generated assets
 - `multi-model`: Let orchestrator decide when visualization needed
+
+## Visual Art Composition Integration (RECOMMENDED)
+
+For high-quality, aesthetically sophisticated images, use the **visual-art-composition** skill BEFORE gemini-media:
+
+### Why Use Visual Art Composition?
+
+| Without visual-art-composition | With visual-art-composition |
+|-------------------------------|----------------------------|
+| "Create a dashboard mockup" | Structured 13-dimension prompt with specific spatial representation, color philosophy, emotional register |
+| Generic AI aesthetic | Cross-cultural synthesis (Byzantine + Japanese + Futurist combinations) |
+| Vague style references | Precise cognitive frameworks from 29+ art traditions |
+| Hit-or-miss results | Consistent aesthetic intent with productive tensions |
+
+### Integration Workflow
+
+```
+Step 1: visual-art-composition (Structure the Prompt)
+    |
+    +---> Phase 1: Capture intent (subject, emotional core, novelty)
+    +---> Phase 2: Select 5-8 dimensions (spatial, color, emotion, etc.)
+    +---> Phase 3: Validate combinations (check mutual exclusions)
+    +---> Phase 4: Generate structured prompt
+    |
+    v
+Step 2: gemini-media (Generate the Image)
+    |
+    +---> Receive structured prompt from visual-art-composition
+    +---> Invoke Imagen/Veo via Gemini CLI
+    +---> Save generated media
+    +---> Return file path
+```
+
+### Quick Integration Command
+
+```bash
+# Two-step process for highest quality
+/visual-art-composition "dashboard UI showing user metrics"
+# -> Outputs structured prompt with dimensions
+
+/gemini-media "<structured prompt from above>"
+# -> Generates high-quality image with consistent aesthetic
+```
+
+### Combined Script Usage
+
+```bash
+bash scripts/multi-model/visual-art-gemini-pipeline.sh \
+  --subject "tech dashboard" \
+  --emotional-core "composed calm" \
+  --traditions "Japanese,Byzantine" \
+  --output "docs/images/dashboard.png"
+```
+
+### Example: Before vs After Integration
+
+**WITHOUT visual-art-composition:**
+```
+/gemini-media "Create a modern dashboard UI"
+-> Generic result with default AI aesthetic
+```
+
+**WITH visual-art-composition:**
+```
+/visual-art-composition "dashboard for productivity app"
+-> Structured prompt:
+   SPATIAL: linear_perspective (depth hierarchy)
+   COLOR: emotion_first_ti (calm = low saturation + high brightness)
+   EMOTIONAL: itutu_cool (composed, containing power)
+   SPACE: focal_hierarchy (clear primary metric)
+   VALUE: notan_two_value (strong dark/light contrast)
+   Productive tension: polished_complete vs deliberate_incomplete
+   Resolution: kintsugi principle (polished core, breathing edges)
+
+/gemini-media "<structured prompt above>"
+-> Result: Consistent aesthetic, intentional composition, novel cross-cultural synthesis
+```
+
+### Dimension Quick Reference
+
+| Dimension | Question | Example Values |
+|-----------|----------|----------------|
+| SPATIAL_REPRESENTATION | How does form sit in space? | linear_perspective, reverse_perspective, motion_fragmented |
+| COLOR_PHILOSOPHY | How does color create meaning? | emotion_first_ti, symbolic_coded, emotional_expressive |
+| EMOTIONAL_REGISTER | What should viewer feel? | itutu_cool, qi_yun_resonance, sublime_awe |
+| SPACE_PHILOSOPHY | How is emptiness treated? | ma_emptiness, horror_vacui, focal_hierarchy |
+| VALUE_STRUCTURE | How do light/dark organize? | notan_two_value, tenebrism_extreme, high_key_luminous |
+| IDEALIZATION | How relates to reality? | perfect_ideal, noble_imperfection, emotional_distortion |
+| COMPLETION_PHILOSOPHY | When is work finished? | polished_complete, deliberate_incomplete, process_visible |
+
+For full 13-dimension taxonomy, see: `skills-native/visual-art-composition/SKILL.md`
 
 ## Success Indicators
 

@@ -312,9 +312,77 @@ This system is particularly valuable for AI image generation (where precision ma
 
 ## Related Skills
 
+- **gemini-media**: **PRIMARY OUTPUT** - Generate images/videos from structured prompts via Imagen/Veo
 - pptx-generation (uses visual composition framework for slide design)
 - prompt-architect (applies prompting optimization to visual prompts)
 - gemini-search (research art traditions and historical context)
+- ralph-multimodel (orchestrate visual-art-composition -> gemini-media pipeline)
+
+## Gemini Media Integration (RECOMMENDED OUTPUT)
+
+This skill generates **structured prompts**. For actual image generation, pipe output to **gemini-media**:
+
+### Complete Pipeline
+
+```
+/visual-art-composition "portrait of a programmer"
+    |
+    +---> Phase 1: Intent (subject=portrait, emotional=composed, novelty=high)
+    +---> Phase 2: Dimensions (ma_emptiness, itutu_cool, notan_two_value, ...)
+    +---> Phase 3: Validation (check exclusions, define tensions)
+    +---> Phase 4: Generate structured prompt
+    |
+    v
+/gemini-media "<structured prompt>"
+    |
+    +---> Invoke Gemini CLI with Imagen
+    +---> Generate high-quality image
+    +---> Save to specified path
+    |
+    v
+OUTPUT: docs/images/programmer-portrait.png
+```
+
+### Automated Script
+
+```bash
+# Single command for full pipeline
+bash scripts/multi-model/visual-art-gemini-pipeline.sh \
+  --subject "programmer at keyboard" \
+  --emotional-core "itutu_cool" \
+  --traditions "Byzantine,Japanese" \
+  --dimensions "ma_emptiness,reverse_perspective,notan_two_value" \
+  --output "docs/images/programmer.png"
+```
+
+### Why Use Gemini Media?
+
+| This Skill | Gemini Media |
+|-----------|--------------|
+| Structures the prompt | Generates the image |
+| 13 aesthetic dimensions | Imagen/Veo models |
+| Cross-cultural synthesis | AI image generation |
+| Cognitive frameworks | Pixel output |
+| **Input specification** | **Output creation** |
+
+### Memory Integration for Pipeline
+
+```javascript
+// Store prompt for reuse
+taggedMemoryStore('visual-art-composition', structuredPrompt, {
+  dimensions_used: ['ma_emptiness', 'itutu_cool'],
+  WHO: 'visual-art-composition',
+  WHY: 'image-prompt-generation'
+});
+
+// Pass to gemini-media
+taggedMemoryStore('gemini-media', {
+  input_prompt: structuredPrompt,
+  output_path: 'docs/images/output.png',
+  WHO: 'gemini-media',
+  WHY: 'imagen-generation'
+});
+```
 
 ## MCP Requirements
 
