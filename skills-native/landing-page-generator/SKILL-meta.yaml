@@ -1,0 +1,22 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.0.0
+category: delivery
+complexity: medium
+estimated_time: 2-4 hours
+triggers:
+  - landing page
+  - create landing page
+  - build landing page
+  - marketing page
+  - conversion page
+  - product page
+  - sales page
+  - launch page
+  - signup page
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\landing-page-generator
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.288Z
+  version: 2.0.0

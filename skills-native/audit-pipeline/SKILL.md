@@ -1,6 +1,7 @@
 ---
 name: audit-pipeline
-description: Skill for audit-pipeline
+description: Comprehensive 3-phase code quality pipeline: 1) Theater detection (find mocks/placeholders), 2) Functionality audit with Codex sandbox iteration (verify it works), 3) Style audit (polish and refine)
+allowed-tools: Read, Glob, Grep, Task, TodoWrite
 ---
 
 # Audit Pipeline - Complete Code Quality Workflow
@@ -136,7 +137,34 @@ This orchestrator runs three audit skills in the optimal sequence:
 
 **Output**: Theater audit report + completion roadmap
 
+---
 
+### Phase 2: Functionality Audit with Codex Iteration
+
+This phase uses a **Codex sandbox iteration loop** for safe, automated testing and fixing:
+
+```
+1. Creates isolated sandbox environment
+2. Generates comprehensive test cases
+3. Executes code with realistic inputs
+4. For each failure:
+   a. Analyzes root cause
+   b. Spawns codex-auto to fix in sandbox
+   c. Re-tests until passing
+   d. Validates fix doesn't break other tests
+5. Produces functionality report
+6. All fixes verified before applying to codebase
+```
+
+**Codex Integration**:
+- Uses `codex --full-auto` for iterative fixes
+- Sandboxed execution (network disabled, CWD only)
+- Automatic test-fix-verify loop
+- Safe experimentation without breaking main code
+
+**Output**: Functionality report + verified fixes
+
+---
 
 ### Phase 3: Style & Quality Audit
 ```
@@ -154,7 +182,183 @@ This orchestrator runs three audit skills in the optimal sequence:
 
 **Output**: Style audit report + polished code
 
+---
 
+## Real-World Example
+
+### Before Pipeline
+```python
+# Theater: Mock user service
+def get_user(user_id):
+    # TODO: Implement real database query
+    return {"id": 123, "name": "Test User"}  # FAKE DATA
+
+# Missing error handling
+def process_payment(amount):
+    return {"status": "success"}  # Always succeeds
+
+# Poor style
+def x(a,b,c):  # Cryptic names
+    return a+b*c  # No documentation
+```
+
+### After Phase 1 (Theater Detection)
+```
+Found 3 theater instances:
+1. get_user: Returns hardcoded test data
+2. process_payment: No real payment processing
+3. Function 'x': Needs proper implementation
+
+Recommendations:
+- Implement database query for get_user
+- Integrate real payment gateway
+- Complete function 'x' with clear purpose
+```
+
+### After Phase 2 (Functionality with Codex)
+```python
+# Real implementation
+def get_user(user_id):
+    """Fetch user from database by ID."""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        result = cursor.fetchone()
+        if not result:
+            raise UserNotFoundError(f"User {user_id} not found")
+        return {"id": result[0], "name": result[1]}
+
+# Real payment processing with error handling
+def process_payment(amount):
+    """Process payment through Stripe API."""
+    try:
+        response = stripe.PaymentIntent.create(
+            amount=int(amount * 100),
+            currency="usd"
+        )
+        return {"status": "success", "transaction_id": response.id}
+    except stripe.error.CardError as e:
+        return {"status": "failed", "error": str(e)}
+
+# Completed with clear purpose
+def calculate_total_with_tax(subtotal, tax_rate, shipping):
+    """Calculate order total including tax and shipping."""
+    return subtotal + (subtotal * tax_rate) + shipping
+```
+
+**Codex iterations**: 3 test-fix cycles to get all edge cases working
+
+### After Phase 3 (Style Polish)
+```python
+"""User service module for database operations."""
+
+from typing import Dict, Optional
+import logging
+from .database import get_db_connection
+from .exceptions import UserNotFoundError
+
+logger = logging.getLogger(__name__)
+
+
+def get_user(user_id: int) -> Dict[str, any]:
+    """
+    Fetch user from database by ID.
+
+    Args:
+        user_id: Unique identifier for the user
+
+    Returns:
+        Dictionary containing user data (id, name, email)
+
+    Raises:
+        UserNotFoundError: If user_id doesn't exist in database
+        DatabaseError: If database connection fails
+    """
+    logger.debug(f"Fetching user {user_id}")
+
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, name, email FROM users WHERE id = ?",
+            (user_id,)
+        )
+        result = cursor.fetchone()
+
+        if not result:
+            logger.warning(f"User {user_id} not found")
+            raise UserNotFoundError(f"User {user_id} not found")
+
+        return {
+            "id": result[0],
+            "name": result[1],
+            "email": result[2]
+        }
+
+
+def process_payment(amount: float) -> Dict[str, str]:
+    """
+    Process payment through Stripe payment gateway.
+
+    Args:
+        amount: Payment amount in dollars (will be converted to cents)
+
+    Returns:
+        Dictionary with status and transaction_id or error message
+
+    Example:
+        >>> process_payment(29.99)
+        {'status': 'success', 'transaction_id': 'pi_abc123'}
+    """
+    if amount <= 0:
+        return {"status": "failed", "error": "Invalid amount"}
+
+    try:
+        response = stripe.PaymentIntent.create(
+            amount=int(amount * 100),  # Convert dollars to cents
+            currency="usd"
+        )
+        logger.info(f"Payment processed: {response.id}")
+        return {
+            "status": "success",
+            "transaction_id": response.id
+        }
+    except stripe.error.CardError as e:
+        logger.error(f"Payment failed: {str(e)}")
+        return {"status": "failed", "error": str(e)}
+
+
+def calculate_total_with_tax(
+    subtotal: float,
+    tax_rate: float,
+    shipping: float
+) -> float:
+    """
+    Calculate order total including tax and shipping.
+
+    Args:
+        subtotal: Pre-tax order subtotal
+        tax_rate: Tax rate as decimal (e.g., 0.08 for 8%)
+        shipping: Shipping cost
+
+    Returns:
+        Total amount including tax and shipping
+
+    Example:
+        >>> calculate_total_with_tax(100.00, 0.08, 10.00)
+        118.00
+    """
+    if subtotal < 0 or tax_rate < 0 or shipping < 0:
+        raise ValueError("Amounts must be non-negative")
+
+    tax_amount = subtotal * tax_rate
+    total = subtotal + tax_amount + shipping
+
+    return round(total, 2)
+```
+
+**Result**: Production-ready code with type hints, docstrings, error handling, logging, and validation!
+
+---
 
 ## Quality Finding Template (Evidence + Root Cause)
 
@@ -394,7 +598,25 @@ Pipeline succeeds when:
 
 Times include Codex iteration loops and style refactoring.
 
+---
 
+## Changelog
+
+### v1.1.0 (2025-12-19)
+- **COGNITIVE LENSING APPLIED**: Added evidential (Turkish) + morphological (Arabic) cognitive frames
+- **EVIDENTIAL FRAME**: Every finding requires metric evidence (complexity=13), location ([file:line]), standard reference (NASA limit), and impact quantification (-20 quality points)
+- **MORPHOLOGICAL FRAME**: Root cause decomposition for every issue - DIMENSION (Maintainability/Performance/Security/Reliability) -> SURFACE (symptom) -> ROOT (cause) -> DERIVED (factors) -> REMEDIATION (fix + prevent)
+- **NEW TEMPLATE**: Quality Finding Template with evidence and root_cause sections structured for both cognitive frames
+- **EXAMPLE ADDED**: Complete example showing test coverage issue decomposed from symptom (60% coverage) to root cause (test-after development) to remediation (TDD enforcement)
+- **RATIONALE**: Quality pipeline requires metric-backed findings decomposed to root causes for effective remediation
+
+### v1.0.0 (Initial)
+- 3-phase pipeline: Theater detection, Functionality audit, Style audit
+- Codex sandbox iteration for automated fixes
+- Comprehensive quality report generation
+- Integration with GitHub PR workflow
+
+---
 
 **Remember**: This pipeline transforms code from "it works on my machine" to "it's production-ready". Use it before every major release!
 

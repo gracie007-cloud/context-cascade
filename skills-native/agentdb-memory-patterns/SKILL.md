@@ -1,6 +1,7 @@
 ---
 name: agentdb-memory-patterns
 description: Apply persistent memory patterns for AI agents using AgentDB. Implement session memory, configure long-term storage, enable pattern learning, and manage context across sessions. Use when building stateful agents, creating chat systems, or designing intelligent assistants that learn from interactions.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -384,6 +385,41 @@ npx agentdb@latest migrate --source .swarm/memory.db
 - Documentation: node_modules/agentic-flow/docs/AGENTDB_INTEGRATION.md
 - MCP Integration: `npx agentdb@latest mcp` for Claude Code
 - Website: https://agentdb.ruv.io
+---
+
+## Core Principles
+
+AgentDB Memory Patterns operates on 3 fundamental principles:
+
+### Principle 1: Triple-Layer Memory Retention
+Agent memory organizes across three time horizons: immediate (10 messages), short-term (session context), and long-term (persistent facts), mirroring human memory architecture.
+
+In practice:
+- Store recent messages in immediate memory for context window management
+- Persist session-level context (goals, preferences) in short-term memory
+- Extract important facts to long-term memory for cross-session retrieval
+- Consolidate memories periodically to prevent unbounded growth
+
+### Principle 2: Pattern Learning via Reinforcement
+Agents improve through experience by storing interaction patterns and training on successful/failed attempts using 9 RL algorithms.
+
+In practice:
+- Record trigger-response patterns with success indicators and context
+- Train learning plugins (Decision Transformer, Q-Learning, Actor-Critic) on pattern corpus
+- Retrieve proven patterns via vector similarity for new situations
+- Update pattern confidence scores based on real-world performance
+
+### Principle 3: Reasoning-Augmented Retrieval
+Context synthesis combines multiple memory sources with reasoning agents (PatternMatcher, ContextSynthesizer, MemoryOptimizer) for rich contextual understanding.
+
+In practice:
+- Use `retrieveWithReasoning()` instead of raw vector search
+- Enable `synthesizeContext: true` to generate coherent context from fragments
+- Apply Maximal Marginal Relevance (MMR) to reduce redundancy in results
+- Leverage ExperienceCurator to filter low-quality memories
+
+---
+
 ## Common Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |

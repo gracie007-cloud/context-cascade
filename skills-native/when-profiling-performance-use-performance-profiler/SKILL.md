@@ -1,6 +1,7 @@
 ---
 name: when-profiling-performance-use-performance-profiler
 description: Comprehensive performance profiling, bottleneck detection, and optimization system
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Performance Profiler Skill

@@ -1,6 +1,7 @@
 ---
 name: observability
-description: Observability specialists hub for monitoring, logging, tracing, and alerting. Routes to specialists for metrics collection, log aggregation, distributed tracing, and incident response. Use for system observability, debugging production issues, and performance monitoring. --- # Observability Central hub for monitoring, logging, tracing, and system observability. ## Phase 0: Expertise Loading ```yaml
+description: Observability specialists hub for monitoring, logging, tracing, and alerting. Routes to specialists for metrics collection, log aggregation, distributed tracing, and incident response. Use for system observability, debugging production issues, and performance monitoring.
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 # Observability
@@ -142,7 +143,50 @@ confidence_check:
 
 Works with: **infrastructure**, **deployment-readiness**, **performance-analysis**
 
------------|---------|----------|
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+- [ ] **Agent Spawning**: Spawned agent via Task()
+- [ ] **Agent Registry Validation**: Agent from registry
+- [ ] **TodoWrite Called**: Called with 5+ todos
+- [ ] **Work Delegation**: Delegated to agents
+
+**Remember: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+## Core Principles
+
+### 1. Three Pillars Integration
+Comprehensive observability requires unified collection and correlation of metrics, logs, and traces - no single pillar provides complete system visibility.
+
+**In practice:**
+- Implement metrics collection for quantitative measurements (counters, gauges, histograms)
+- Deploy structured logging with correlation IDs for event tracking across services
+- Configure distributed tracing with span context propagation for request flow visualization
+- Correlate all three pillars using common identifiers (trace IDs, request IDs, user IDs)
+
+### 2. Proactive Alerting with SLO-Based Thresholds
+Alerting must be driven by Service Level Objectives that reflect actual user impact, not arbitrary metric thresholds that generate noise.
+
+**In practice:**
+- Define SLIs (Service Level Indicators) that measure user-facing behavior (p99 latency, error rate)
+- Set SLOs (Service Level Objectives) based on business requirements (99% requests < 200ms)
+- Configure alerts to fire when SLO burn rate exceeds acceptable thresholds
+- Implement multi-window alerting to distinguish temporary spikes from sustained degradation
+
+### 3. Context-Aware Monitoring with Dynamic Baselines
+Effective monitoring adapts to changing system behavior through machine learning baselines, not static thresholds that break during normal traffic variations.
+
+**In practice:**
+- Use anomaly detection algorithms to learn normal behavior patterns
+- Implement seasonal baselines that adjust for daily/weekly traffic cycles
+- Correlate metrics across services to identify cascading failures
+- Apply intelligent noise reduction to focus on actionable signals
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | Metric-Only Monitoring | Collecting metrics without logs or traces misses critical context for debugging failures | Implement all three pillars with correlation, use traces to investigate metric anomalies |
 | Alert Fatigue from Static Thresholds | Setting fixed thresholds generates false alarms during traffic variations, causing alert fatigue | Use SLO-based alerting with burn rate calculations and dynamic baselines that adapt to traffic patterns |
 | Unstructured Logging | Free-form log messages prevent automated analysis and correlation across services | Adopt structured logging with JSON format, include correlation IDs, define standard log levels |

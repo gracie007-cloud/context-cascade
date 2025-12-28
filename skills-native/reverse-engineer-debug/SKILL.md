@@ -1,6 +1,7 @@
 ---
 name: reverse-engineer-debug
-description: Skill for reverse-engineer-debug
+description: Perform systematic reverse engineering root cause analysis to debug issues and find real underlying problems
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 # Reverse Engineer Debug Skill

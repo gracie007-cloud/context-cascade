@@ -1,6 +1,7 @@
 ---
 name: agent-selector
 description: Intelligent agent selection from 203-agent registry using semantic matching and capability analysis
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 # Agent Selector Micro-Skill
@@ -247,9 +248,11 @@ If Memory MCP is unavailable:
 ## Agent Definition
 
 ```yaml
+name: agent-selector
 type: coordinator
 phase: planning
-
+category: orchestration
+description: |
   Intelligent agent selection coordinator that analyzes task requirements
   and matches them to specialized agents from the 203-agent registry using
   semantic search, capability matching, and domain expertise analysis.
@@ -337,7 +340,52 @@ console.log(JSON.stringify(result, null, 2));
 - CLAUDE.md Phase 4: Agent Selection Process
 - Memory MCP Tagging Protocol: `hooks/12fa/memory-mcp-tagging-protocol.js`
 
+---
 
+## Recursive Improvement Integration (v2.1)
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - task_description: string
+  optional:
+    - domain_hint: string
+    - expertise_file: path
+
+output_contract:
+  required:
+    - selected_agent: object
+    - confidence: float
+    - status: string
+```
+
+### Eval Harness Integration
+
+```yaml
+benchmark: agent-selector-benchmark-v1
+  tests:
+    - as-001: Agent Match Accuracy
+    - as-002: Selection Speed
+  minimum_scores:
+    match_accuracy: 0.85
+    selection_time: 100ms
+```
+
+### Memory Namespace
+
+```yaml
+namespaces:
+  - agent-selector/selections/{id}: Selection history
+  - agent-selector/performance: Agent performance tracking
+```
+
+### Cross-Skill Coordination
+
+Works with: **parallel-swarm-implementation**, **cascade-orchestrator**, **skill-forge**
+
+---
 
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
@@ -386,7 +434,22 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
+---
 
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+## Core Principles
+
+### 1. Semantic Precision Over Generic Fallbacks
+The agent registry contains 203 specialized agents for a reason. Always prioritize finding the EXACT specialist match over falling back to generic agents (coder, tester, reviewer). A specialized agent with domain knowledge (e.g., dev-backend-api) will outperform a generic one by 40-60% due to embedded expertise and optimized prompts. Use Memory MCP vector search exhaustively before defaulting to fallbacks.
+
+### 2. Dependency-Aware Agent Selection
+Agent selection must consider not just capability match but also phase alignment and prerequisite dependencies. An agent selected for Phase 2 parallel execution must have NO dependencies on other Phase 2 agents. When multiple agents match capabilities equally, prioritize the one with fewer external dependencies to minimize coordination overhead and reduce failure modes.
+
+### 3. Confidence Thresholds Drive Quality
+Never proceed with agent selection below 0.75 confidence. Low confidence selections (0.50-0.75) indicate ambiguous requirements or gaps in the agent registry. Rather than guess, surface the ambiguity to the user or planner. High confidence (>0.90) selections correlate with 95%+ task success rates. Uncertainty in agent selection compounds into execution failures downstream.
+
+---
 
 ## Anti-Patterns
 
@@ -396,7 +459,12 @@ Skill("<skill-name>")
 | **Ignoring Phase Alignment** | Selecting testing agents during planning phase or research agents during deployment. Creates phase mismatch where agent expertise doesn't match current workflow stage. | Match agent's designated phase to current workflow phase. Planning agents for Phase 1-2, development agents for Phase 3-4, quality agents for Phase 5, operations agents for Phase 6. |
 | **Skipping Capability Scoring** | Selecting first agent that mentions relevant keywords without scoring match quality. Leads to suboptimal selection when multiple candidates exist. | Apply 6-tier scoring system: Exact capability match (1.0), Domain specialization (0.9), Tool requirements (0.8), Phase alignment (0.7), Semantic similarity (0.6), Generic fallback (0.4). Choose highest score. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Generic Agent Defaults** | Using generic agents (coder, tester, reviewer) without searching registry for specialists. Misses 203 domain experts with specialized prompts and patterns. Results in 40-60% performance degradation for domain-specific tasks. | Always run Memory MCP semantic search first. Query registry with task description to find specialists. Only use generics after exhaustive search confirms no specialist exists. Log gaps for registry improvement. |
 | **Ignoring Confidence Thresholds** | Proceeding with agent selection below 0.75 confidence score. Low confidence indicates ambiguous requirements or registry gaps. Creates downstream execution failures from wrong agent assignments. | Never proceed below 0.75 confidence. Surface ambiguity to user or planner for clarification. High confidence (>0.90) correlates with 95%+ task success. Uncertainty in selection compounds into execution failures. |
 | **Phase-Mismatched Selection** | Selecting testing agents during planning phase or research agents during deployment phase. Creates expertise mismatch where agent skills don't align with current workflow stage. | Match agent's designated phase to current workflow phase. Planning agents for Phase 1-2, development for Phase 3-4, quality for Phase 5, operations for Phase 6. Validate phase alignment in selection criteria scoring. |

@@ -1,6 +1,7 @@
 ---
 name: performance-analysis
 description: Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Performance Analysis Skill
@@ -381,6 +382,7 @@ done
 ### CI/CD Integration
 ```yaml
 # .github/workflows/performance.yml
+name: Performance Analysis
 on: [push, pull_request]
 
 jobs:
@@ -551,7 +553,13 @@ npx claude-flow bottleneck detect --fix
 - [Swarm Monitoring Documentation](../swarm-orchestration/SKILL.md)
 - [Memory Management Documentation](../memory-management/SKILL.md)
 
+---
 
+**Version**: 1.0.0
+**Last Updated**: 2025-10-19
+**Maintainer**: Claude Flow Team
+
+---
 
 ## Core Principles
 
@@ -582,12 +590,22 @@ In practice:
 - Run load tests in CI/CD to catch regressions before production
 - Maintain performance budgets as part of code review (max bundle size, max query time)
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Optimizing Without Profiling** | Developer intuition about bottlenecks is wrong 70%+ of the time. Optimizing based on guesses wastes effort on non-critical code while ignoring actual performance issues. Results in complex, hard-to-maintain code with no measurable improvement. | Profile first with production-like data and traffic patterns. Use tools (flamegraphs, performance monitors) to identify actual bottlenecks. Focus optimization on top 3 bottlenecks by measured impact. Quantify improvement with before/after benchmarks. |
 | **Micro-Optimizations Everywhere** | Optimizing rarely-executed code (startup routines, config loading, error paths) provides negligible user-facing benefit while sacrificing code clarity. Developers spend days optimizing code that executes once per server restart. | Optimize critical path only - code executed thousands/millions of times per day (request handlers, data transforms, rendering loops). Use performance profiling to identify hot paths. Preserve code clarity in non-critical paths - maintainability matters more than 2ms saved in startup. |
 | **No Continuous Monitoring** | One-time optimization without ongoing measurement allows performance regressions to accumulate unnoticed. New features, dependency updates, and data growth slowly degrade performance until customer complaints force reactive investigation. | Implement continuous performance monitoring with automated alerts. Track key metrics (p99 latency, throughput, error rate) over time. Run load tests in CI/CD to catch regressions before production deployment. Set performance budgets for bundle size, query time, API latency. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Optimizing Without Profiling** | Developer intuition about bottlenecks is wrong 70%+ of time. Optimizing based on guesses wastes effort on non-critical code while ignoring actual issues. Results in complex code with no measurable improvement. | Profile first with production-like data and traffic. Use flamegraphs and performance monitors to identify actual bottlenecks. Focus on top 3 bottlenecks by measured impact. Quantify improvement with before/after benchmarks. |
 | **Micro-Optimizations Everywhere** | Optimizing rarely-executed code (startup, config loading, error paths) provides negligible user benefit while sacrificing code clarity. Days spent optimizing code that executes once per server restart. | Optimize critical path only - code executed thousands/millions times per day (request handlers, data transforms, rendering). Use profiling to identify hot paths. Preserve clarity in non-critical paths - maintainability matters more than 2ms saved in startup. |
 | **Ignoring p95/p99 Latency** | Reporting average response time while ignoring tail latency. API averages 100ms but p95=2000ms, p99=8000ms means 5% requests take 20x longer. Terrible experience for 1 in 20 users hidden by averages. | ALWAYS measure and optimize for p95/p99 latency, not averages. Run load tests with percentile reporting. Set performance budgets on tail latency (p95 <500ms, p99 <1000ms). Profile slow requests specifically to find root causes (cache misses, lock contention, GC pauses). |
@@ -605,3 +623,136 @@ The key insight is that performance optimization without profiling data is guess
 Continuous monitoring prevents performance regressions by tracking key metrics (p99 latency, throughput, resource utilization) over time and alerting on degradation. Without ongoing measurement, new features and dependency updates slowly degrade performance until customer complaints force reactive firefighting. The performance report generation (`performance-report --compare`) enables trend analysis, regression detection, and proactive optimization before user impact.
 
 Success requires treating performance as a continuous discipline, not a one-time fix. Establish performance budgets (max latency, max bundle size, max query time) during architecture phase, enforce budgets in code review and CI/CD, and prioritize optimization by measured impact rather than developer assumptions. The difference between fast systems and slow systems is systematic profiling, data-driven optimization, and continuous monitoring - not individual developer skill.
+
+---
+
+## System Design Integration (Dr. Synthara Methodology)
+
+### Cache Placement Decision Tree
+
+```
+What are you caching?
+|
++-- Static assets (images/js/css)?
+|   +-- CDN + long TTL + versioned filenames
+|   +-- CloudFront, Cloudflare, Akamai
+|   +-- Invalidation: version in filename (app.v1.2.3.js)
+|
++-- Hot reads that tolerate slight staleness?
+|   +-- App cache (Redis/Memcached) + TTL
+|   +-- Write-through or write-behind pattern
+|   +-- Invalidation: TTL-based or explicit
+|
++-- Expensive computed results (reports, aggregations)?
+    +-- Cache with invalidation strategy + stampede protection
+    +-- Request coalescing / single-flight
+    +-- Stale-while-revalidate patterns
+```
+
+**What I'm Thinking**: Stampedes (thundering herd) and invalidation are the HARDEST parts:
+- TTL + soft TTL (serve stale, refresh async)
+- Request coalescing (one compute, many waiters)
+- Cache warming (preload before traffic)
+- Write-through (update cache on write)
+
+### Performance SPOF Identification
+
+| SPOF Risk | Performance Defense |
+|-----------|---------------------|
+| **Single database** | Read replicas, connection pooling |
+| **No caching** | Cache hot paths, set TTLs |
+| **Sync blocking calls** | Async where possible, timeouts |
+| **No pagination** | Cursor-based pagination, limit results |
+| **N+1 queries** | Batch loading, JOINs, DataLoader |
+| **Missing indexes** | EXPLAIN ANALYZE, add indexes |
+
+**What I'm Thinking**: "Where does latency accumulate?"
+- Network calls compound (100ms * 10 calls = 1s)
+- Database is usually the bottleneck
+- Profile BEFORE optimizing
+
+### Master Performance Design Flow
+
+```
+PERFORMANCE DESIGN FLOW
+1) Define SLOs
+   +-- p50 latency target (user-perceived)
+   +-- p99 latency target (tail latency)
+   +-- Throughput target (requests/second)
+2) Measure baseline
+   +-- Profile production-like traffic
+   +-- Identify top 3 bottlenecks
+   +-- Quantify impact of each
+3) Optimize critical path
+   +-- Cache hot reads (Redis)
+   +-- CDN for static assets
+   +-- Database indexes + query optimization
+   +-- Connection pooling
+4) Implement async patterns
+   +-- Queue non-critical work
+   +-- Background jobs for slow operations
+   +-- Webhooks instead of polling
+5) Add circuit breakers
+   +-- Timeout slow dependencies
+   +-- Fallback to cached data
+   +-- Graceful degradation
+6) Monitor continuously
+   +-- p50/p95/p99 latency dashboards
+   +-- Throughput and error rate
+   +-- Cache hit rate
+```
+
+### Phase 0 Performance Constraint Extraction
+
+| Constraint | Questions |
+|------------|-----------|
+| **Latency Target** | p50? p95? p99? (milliseconds) |
+| **Throughput** | Peak QPS? Sustained QPS? |
+| **Budget** | Acceptable infrastructure cost? |
+| **Hot Paths** | Which endpoints are high-traffic? |
+| **Data Freshness** | How stale can cached data be? |
+
+### The 90-Second Interview Narrative for Performance
+
+1. **Clarify** SLOs (p50/p99 latency, throughput)
+2. **Measure** profile production traffic, find bottlenecks
+3. **Database** indexes, query optimization, read replicas
+4. **Caching** Redis for hot paths, CDN for static
+5. **Async** queue slow work, background jobs
+6. **Resilience** timeouts, circuit breakers, fallbacks
+7. **Monitor** continuous metrics, alert on degradation
+8. **Trade-offs** cost vs latency, freshness vs speed
+
+### Performance Anti-Patterns from System Design
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|--------------|--------------|------------------|
+| Optimizing without profiling | Developer intuition wrong 70%+ of time | Profile first, then optimize top 3 bottlenecks |
+| Caching everything | Memory costs, stale data, invalidation complexity | Cache hot paths only, set appropriate TTLs |
+| Reporting averages only | Hides tail latency (p99 users suffer) | Always measure p95/p99, not just average |
+| Premature optimization | Wastes time on non-critical code | Optimize critical path after profiling |
+| No timeout on external calls | One slow dependency blocks everything | Timeout + circuit breaker + fallback |
+
+### Cache Invalidation Strategies
+
+```
+Which invalidation pattern fits?
+|
++-- Data changes rarely + staleness OK for minutes?
+|   +-- TTL-based (set expiry, auto-refresh)
+|
++-- Data changes frequently + must be fresh?
+|   +-- Write-through (update cache on every write)
+|
++-- Expensive to compute + high read volume?
+|   +-- Stale-while-revalidate (serve stale, refresh async)
+|
++-- Complex dependencies between cached items?
+    +-- Explicit invalidation with cache tags
+    +-- Publish/subscribe for cache updates
+```
+
+**What I'm Thinking**: "There are only two hard things in computer science: cache invalidation and naming things."
+- Start with TTL (simple, predictable)
+- Add explicit invalidation only when freshness critical
+- Monitor cache hit rate (should be >90% for hot paths)

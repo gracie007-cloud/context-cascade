@@ -1,6 +1,7 @@
 ---
 name: theater-detection-audit
 description: Performs comprehensive audits to detect placeholder code, mock data, TODO markers, and incomplete implementations in codebases. Use this skill when you need to find all instances of "theater" in code such as hardcoded mock responses, stub functions, commented-out production logic, or fake data that needs to be replaced with real implementations. The skill systematically identifies these instances, reads their full context, and completes them with production-quality code.
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 ## When to Use This Skill

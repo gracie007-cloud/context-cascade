@@ -1,0 +1,10 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.2.0
+cognitive_frame: primary: evidential secondary: morphological rationale: "Security auditing requires evidence-backed findings (CVE/CWE references) and attack vector decomposition to identify root vulnerabilities" linguistic_anchors: evidential: "Turkish - Every vulnerability must cite evidence" morphological: "Arabic - Decompose attack vectors to root causes"
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\security\security
+  category: security
+  migrated_at: 2025-12-28T15:56:25.108Z
+  version: 2.0.0

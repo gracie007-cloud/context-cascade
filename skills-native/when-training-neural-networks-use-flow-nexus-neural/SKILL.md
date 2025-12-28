@@ -1,6 +1,7 @@
 ---
 name: when-training-neural-networks-use-flow-nexus-neural
-description: ## Core Principles
+description: **In practice**: - Use mesh topology for parameter synchronization across worker nodes - Deploy parameter servers separately from worker nodes - Enable automatic scaling to handle varying compute demands - Example: 6-layer transformer training time reduced from 4 hours (single node) to 40 minutes (8-node cluster)
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 # Flow Nexus Neural Network Training SOP

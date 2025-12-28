@@ -1,0 +1,37 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user reports complex bug, production issue, or requests systematic debugging
+version: 2.0.0
+author: Base Template Generator
+category: debugging
+tags:
+  - bug-fix
+  - debugging
+  - root-cause-analysis
+  - testing
+  - validation
+agents:
+  - researcher (RCA specialist)
+  - coder (fix implementer)
+  - tester (validation specialist)
+  - reviewer (quality assurance)
+  - performance-analyzer
+coordinator: hierarchical-coordinator
+memory_patterns:
+  - swarm/bug-fix/issue-report
+  - swarm/bug-fix/rca-findings
+  - swarm/bug-fix/fix-implementation
+  - swarm/bug-fix/test-validation
+  - swarm/bug-fix/verification
+success_criteria:
+  - Root cause identified and documented
+  - Fix implemented without introducing regressions
+  - All tests passing including new regression tests
+  - Bug verified resolved in production-like environment
+  - Documentation updated with fix details
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\when-fixing-complex-bug-use-smart-bug-fix
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.328Z
+  version: 2.0.0

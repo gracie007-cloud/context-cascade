@@ -1,6 +1,7 @@
 ---
 name: ml
 description: Machine Learning development workflow with experiment tracking, hyperparameter optimization, and MLOps integration
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # ML Development Skill
@@ -220,7 +221,46 @@ For issues or questions:
 - Consult MLflow/Optuna documentation
 - Use `functionality-audit` skill for validation
 
+---
 
+## Core Principles
+
+### 1. Reproducibility First
+Reproducibility is the foundation of scientific machine learning. Every experiment must be independently verifiable by other researchers.
+
+**In practice:**
+- Version control all training code, data, and model artifacts with Git LFS
+- Pin all dependency versions (TensorFlow 2.13.0, not >=2.0)
+- Set deterministic random seeds across all libraries (Python, NumPy, TensorFlow/PyTorch)
+- Document hardware specifications and environment configuration
+- Track hyperparameters, data splits, and preprocessing steps in experiment tracker
+- Store data checksums to verify dataset integrity
+
+### 2. Evidence-Based Validation
+Claims about model performance require rigorous statistical evidence, not cherry-picked metrics.
+
+**In practice:**
+- Use separate train/validation/test splits with no data leakage
+- Perform k-fold cross-validation for robust performance estimates
+- Report confidence intervals using bootstrapping or statistical tests
+- Analyze confusion matrices for per-class performance
+- Conduct ablation studies to validate architectural choices
+- Test statistical significance of improvements (paired t-test, p < 0.05)
+- Never evaluate on training data or touch test set until final evaluation
+
+### 3. Production Readiness from Day One
+Models must be deployable, not just accurate. Production constraints shape development decisions.
+
+**In practice:**
+- Profile inference latency and memory usage during development
+- Design for deployment constraints (model size, hardware availability)
+- Implement monitoring for data drift and performance degradation
+- Document model assumptions, limitations, and failure modes
+- Set up automated retraining pipelines for continuous learning
+- Plan rollback strategies before deployment
+- Test on production-like data distributions
+
+---
 
 ## Anti-Patterns
 

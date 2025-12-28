@@ -1,0 +1,38 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill_name: when-tracking-financial-runway-use-dashboard
+version: 1.0.0
+tier: critical
+category: financial-survival
+auto_trigger:
+  - runway
+  - burn rate
+  - financial status
+  - cash flow
+  - how long can I operate
+created: 2025-01-06
+agents:
+  - analyst (FinTracker role)
+coordinator: single-agent
+topology: simple
+memory_patterns:
+  - life-os/runway/{YYYY-MM}/daily-snapshots
+  - life-os/runway/projections
+mcp_integration:
+  - memory-mcp (WHO/WHEN/PROJECT/WHY tagging required)
+  - claude-flow (hooks)
+data_sources:
+  - data/finances/accounts.yml
+  - data/finances/expenses.yml
+  - data/finances/revenue_streams.yml
+outputs:
+  - outputs/dashboards/runway_{YYYY-MM-DD}.md
+cadence: daily
+scheduled_trigger: days: [Monday, Tuesday, Wednesday, Thursday, Friday] time: "08:00" prompt_file: prompts/runway_update.txt
+estimated_time: 5 min per run
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\when-tracking-financial-runway-use-dashboard
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.208Z
+  version: 2.0.0

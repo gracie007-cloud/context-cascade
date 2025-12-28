@@ -1,6 +1,7 @@
 ---
 name: reasoningbank-intelligence
 description: Implement adaptive learning with ReasoningBank for pattern recognition, strategy optimization, and continuous improvement. Use when building self-learning agents, optimizing workflows, or implementing meta-cognitive systems.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill

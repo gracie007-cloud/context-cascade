@@ -1,6 +1,7 @@
 ---
 name: reverse-engineering-firmware-analysis
 description: Firmware extraction and IoT security analysis (RE Level 5) for routers and embedded systems. Use when analyzing IoT firmware, extracting embedded filesystems (SquashFS/JFFS2/CramFS), finding hardcoded credentials, performing CVE scans, or auditing embedded system security. Handles encrypted firmware with known decryption schemes. Completes in 2-8 hours with binwalk+firmadyne+QEMU emulation.
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -70,6 +71,27 @@ Extracts and analyzes firmware from IoT devices, routers, and embedded systems:
 
 **Timebox**: 2-8 hours total
 
+---
+
+## Prerequisites
+
+### Tools
+- **binwalk** - Firmware extraction (`binwalk -Me firmware.bin`)
+- **unsquashfs** - SquashFS extraction
+- **file** - File type identification
+- **QEMU** (optional) - Emulate extracted binaries
+- **Jefferson** (optional) - JFFS2 extraction
+- **strings** - For string analysis on firmware
+
+### MCP Servers
+- `filesystem` - Navigate extracted firmware
+- `security-manager` - CVE scanning
+- `connascence-analyzer` - Code quality analysis
+- `memory-mcp` - Store findings
+- `sequential-thinking` - Decision gate for binary analysis
+
+---
+
 ## ⚠️ CRITICAL SECURITY WARNING
 
 **NEVER execute firmware binaries or extracted files on your host system!**
@@ -95,6 +117,26 @@ All firmware extraction, binary execution, and emulation MUST be performed in:
 - Monitor all network connections during firmware emulation
 - Treat all IoT firmware as potentially compromised
 - Use read-only mounts for extracted filesystems
+
+---
+
+## Quick Start
+
+```bash
+# 1. Full firmware analysis
+/re:firmware router-firmware.bin
+
+# 2. Extract filesystem only
+/re:firmware iot-device.img --extract-only
+
+# 3. Analyze extracted services
+/re:firmware camera-fw.bin --analyze-services true
+
+# 4. Extract + analyze specific binary
+/re:firmware router.bin --analyze-binary /usr/sbin/httpd
+```
+
+---
 
 ## Phase 1: Firmware Identification (5-10 minutes)
 
@@ -149,6 +191,110 @@ binwalk --signature firmware.bin
 - **Kernel**: Linux kernel (compressed with LZMA/gzip)
 - **Root Filesystem**: SquashFS, JFFS2, CramFS, UBIFS
 - **Configuration**: JFFS2 partition for persistent data
+
+---
+
+## Phase 2: Filesystem Extraction (30 minutes - 2 hours)
+
+### Step 1: Automatic Extraction
+
+```bash
+# Extract all filesystem components automatically
+binwalk --extract --matryoshka firmware.bin
+
+# --extract (-e): Extract identified components
+# --matryoshka (-M): Recursively scan extracted files
+
+# Output directory structure:
+# _firmware.bin.extracted/
+# ├── 0.lzma              # Compressed kernel
+# ├── 100000.squashfs     # Root filesystem
+# ├── squashfs-root/      # Extracted root filesystem
+# └── jffs2-root/         # Extracted configuration partition
+```
+
+### Step 2: Verify Extraction
+
+```bash
+# Navigate to extracted filesystem
+cd _firmware.bin.extracted/squashfs-root/
+
+# Verify critical directories exist
+ls -la
+
+# Expected structure:
+# drwxr-xr-x  bin/        # Binaries
+# drwxr-xr-x  etc/        # Configuration files
+# drwxr-xr-x  lib/        # Shared libraries
+# drwxr-xr-x  usr/        # User programs
+# drwxr-xr-x  www/        # Web interface
+# drwxr-xr-x  sbin/       # System binaries
+```
+
+### Step 3: Manual Extraction (if automatic fails)
+
+#### For SquashFS:
+
+```bash
+# Find SquashFS offset from binwalk
+binwalk firmware.bin | grep -i squashfs
+# Output: 1048576       0x100000        Squashfs filesystem
+
+# Extract from offset
+dd if=firmware.bin bs=1 skip=1048576 of=squashfs.img
+
+# Unsquash manually
+unsquashfs -dest ./squashfs-root squashfs.img
+
+# Verify
+ls ./squashfs-root/
+```
+
+#### For JFFS2:
+
+```bash
+# Install jefferson (JFFS2 extractor)
+pip install jefferson
+
+# Extract JFFS2
+jefferson jffs2.img --dest ./jffs2-root
+
+# Or use firmware-mod-kit
+extract-firmware.sh firmware.bin
+```
+
+#### For CramFS:
+
+```bash
+# Install cramfs tools
+sudo apt install cramfsprogs
+
+# Mount (requires root)
+sudo mount -t cramfs -o loop cramfs.img /mnt/cramfs
+
+# Or extract
+cramfsck -x ./cramfs-root cramfs.img
+```
+
+### Step 4: Handle Encrypted Firmware
+
+```bash
+# Check entropy
+binwalk --entropy firmware.bin
+
+# If high entropy (encrypted):
+# 1. Search for decryption keys in vendor documentation
+# 2. Check for known encryption schemes (AES, 3DES, RSA)
+# 3. Use firmware-mod-kit or binwalk plugins for known devices
+
+# Example: TP-Link firmware decryption
+tplink-safeloader -d firmware.bin -o decrypted.bin
+
+# Example: D-Link firmware decryption
+binwalk -e --dd='.*' firmware.bin
+```
+
+---
 
 ## Phase 3: Service Discovery (1-3 hours)
 
@@ -238,6 +384,87 @@ CGI Scripts Found:
 - /cgi-bin/login.cgi (Credential check)
 - /cgi-bin/upgrade.cgi (Firmware upload)
 ```
+
+---
+
+## Phase 4: Credential Hunting (30 minutes - 1 hour)
+
+### Step 1: Check Shadow and Passwd Files
+
+```bash
+# Unix password files
+cat ./squashfs-root/etc/passwd
+cat ./squashfs-root/etc/shadow
+
+# Example vulnerable shadow file:
+# root:$1$12345678$abcdefghijklmnopqrstuv:0:0:root:/root:/bin/sh
+# admin:admin:0:0:admin:/root:/bin/sh  # CRITICAL: Plaintext password!
+```
+
+**Common Issues**:
+- Empty password hashes (passwordless login)
+- Weak/default passwords (admin/admin)
+- Hardcoded hashes (crackable)
+
+### Step 2: Search Configuration Files
+
+```bash
+# Search for common password keywords
+grep -ri "password" ./squashfs-root/etc/ 2>/dev/null
+grep -ri "passwd" ./squashfs-root/etc/ 2>/dev/null
+grep -ri "pwd" ./squashfs-root/etc/ 2>/dev/null
+grep -ri "secret" ./squashfs-root/etc/ 2>/dev/null
+
+# Example findings:
+# ./etc/config/wireless: option key 'default_wifi_password_12345'
+# ./etc/shadow: root:5up:0:0:root:/root:/bin/sh
+# ./etc/config/system: option admin_password 'admin'
+```
+
+### Step 3: Find API Keys and Tokens
+
+```bash
+# Search for long alphanumeric strings (API keys)
+grep -rE "[A-Za-z0-9]{32,}" ./squashfs-root/etc/config/
+
+# Search for common API key patterns
+grep -ri "api_key\|token\|secret_key" ./squashfs-root/etc/
+
+# Search for cloud service credentials
+grep -ri "aws\|azure\|gcp\|s3" ./squashfs-root/etc/
+
+# Example findings:
+# ./etc/cloud-config.json: "api_key": "sk_live_abcdef1234567890"
+# ./etc/mqtt.conf: mqtt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+### Step 4: Extract SSL Certificates and Private Keys
+
+```bash
+# Find SSL certificates
+find ./squashfs-root/ -name "*.pem" -o -name "*.key" -o -name "*.crt"
+
+# Example findings:
+# ./etc/ssl/private/server.key (CRITICAL: Private key embedded)
+# ./etc/ssl/certs/ca.crt
+
+# Check for weak/default keys
+openssl rsa -in ./etc/ssl/private/server.key -text -noout
+
+# If key is weak (512-bit RSA), flag as critical
+```
+
+**Credential Summary**:
+```
+Hardcoded Credentials Found:
+- Root password: "5up" (plaintext in /etc/shadow)
+- Admin password: "admin" (default credentials)
+- WiFi password: "default_wifi_password_12345" (weak)
+- API key: "sk_live_abcdef..." (exposed in /etc/cloud-config.json)
+- SSL private key: /etc/ssl/private/server.key (512-bit RSA, weak)
+```
+
+---
 
 ## Phase 5: Vulnerability Scanning (1-3 hours)
 
@@ -362,6 +589,102 @@ MEDIUM Vulnerabilities:
 9. SQL Injection - login.cgi
 ```
 
+---
+
+## Phase 6: Binary Analysis (1-2 hours)
+
+After extracting firmware, apply Levels 1-4 to interesting binaries.
+
+### Step 1: Identify Target Binaries
+
+```bash
+# Web server binary
+ls ./squashfs-root/usr/sbin/httpd
+
+# Telnet daemon
+ls ./squashfs-root/usr/sbin/telnetd
+
+# Custom binaries
+find ./squashfs-root/usr/bin/ -type f -executable
+```
+
+### Step 2: Apply Level 1 (String Analysis)
+
+```bash
+# Analyze web server strings
+/re:strings ./squashfs-root/usr/sbin/httpd
+
+# Look for:
+# - Hardcoded URLs (C2 servers, update servers)
+# - Debug messages revealing logic
+# - Version strings
+# - Hardcoded credentials
+```
+
+**Example Output**:
+```
+Strings Found in httpd:
+- "admin:5up" (hardcoded credential)
+- "http://firmware-updates.vendor.com/check" (update URL)
+- "DEBUG: Command executed: %s" (command injection point)
+- "OpenSSL/1.0.1e" (vulnerable version)
+```
+
+### Step 3: Apply Level 2 (Static Analysis)
+
+```bash
+# Disassemble httpd binary
+/re:static ./squashfs-root/usr/sbin/httpd --tool ghidra
+
+# Find critical functions:
+# - handle_cgi_request()
+# - authenticate_user()
+# - execute_command()
+```
+
+**Decompiled Code Example** (Ghidra output):
+
+```c
+// Function: handle_admin_cgi
+void handle_admin_cgi(char *query_string) {
+  char command[256];
+  char *cmd_param;
+
+  // VULNERABILITY: No input validation!
+  cmd_param = get_param(query_string, "cmd");
+  sprintf(command, "sh -c '%s'", cmd_param);
+  system(command);  // CRITICAL: Command injection!
+}
+```
+
+### Step 4: Apply Level 3 (Dynamic Analysis) - Optional
+
+```bash
+# Emulate binary with QEMU
+qemu-mipsel-static ./squashfs-root/usr/sbin/httpd
+
+# Or use full system emulation with firmadyne
+firmadyne.sh router-firmware.bin
+
+# Debug with GDB
+gdb-multiarch ./squashfs-root/usr/sbin/httpd
+(gdb) set architecture mips
+(gdb) break handle_admin_cgi
+(gdb) run
+```
+
+### Step 5: Apply Level 4 (Symbolic Execution) - Advanced
+
+```bash
+# Use Angr for symbolic analysis
+/re:symbolic ./squashfs-root/usr/sbin/httpd \
+  --target-addr 0x401234 \  # execute_command function
+  --input-symbolic cmd_param \
+  --find-exploits true
+```
+
+---
+
 ## Comprehensive Workflow Examples
 
 ### Workflow 1: Router Firmware Complete Analysis
@@ -470,6 +793,118 @@ Recommendation: Update to patched firmware version
 ```
 
 **Time**: 3.25 hours total
+
+---
+
+### Workflow 2: IoT Camera Firmware Security Audit
+
+**Scenario**: Audit Wyze camera firmware for cloud API security
+
+**Step 1: Extraction (45 min)**
+
+```bash
+# Extract firmware
+binwalk --extract --matryoshka wyze-cam-v3-firmware.bin
+
+# Filesystem type: UBIFS (NAND flash filesystem)
+# Manual extraction required
+jefferson ubifs.img --dest ./wyze-root/
+```
+
+**Step 2: Service Discovery (1.5 hrs)**
+
+```bash
+# Find cloud service configuration
+grep -ri "api\|cloud\|server" ./wyze-root/etc/
+
+# Found:
+# ./etc/cloud-config.json:
+# {
+#   "api_endpoint": "https://api.wyze.com/v1",
+#   "device_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+#   "api_key": "sk_live_abcdef1234567890"
+# }
+
+# CRITICAL: Hardcoded API credentials!
+```
+
+**Step 3: Analyze Cloud Communication (1 hr)**
+
+```bash
+# Find MQTT broker configuration
+cat ./wyze-root/etc/mqtt.conf
+
+# Broker: mqtt.wyze.com:8883
+# Username: camera-12345
+# Password: hardcoded_mqtt_pass
+
+# Analyze cloud binary
+/re:strings ./wyze-root/usr/bin/cloud-agent
+
+# Found:
+# - "Bearer eyJhbGci..." (hardcoded auth token)
+# - "https://firmware-updates.wyze.com/" (update URL)
+```
+
+**Step 4: CVE Scan (30 min)**
+
+```bash
+# Check libraries
+ls ./wyze-root/lib/
+
+# Found vulnerable libraries:
+# - libssl.so.1.0.0 (CVE-2014-0160 Heartbleed)
+# - libcurl.so.4 (CVE-2020-8231 Remote code execution)
+```
+
+**Step 5: Binary Analysis of Cloud Agent (1 hr)**
+
+```bash
+# Static analysis
+/re:static ./wyze-root/usr/bin/cloud-agent --tool ghidra
+
+# Decompiled authentication function:
+void cloud_authenticate() {
+  char *token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+  char *api_key = "sk_live_abcdef1234567890";
+
+  http_request("POST", "https://api.wyze.com/v1/auth",
+               headers=["Authorization: Bearer " + token]);
+}
+
+# CRITICAL: All cameras use same API key!
+```
+
+**Final Report**:
+
+```
+Wyze Cam v3 Firmware Security Audit
+====================================
+
+CRITICAL Vulnerabilities:
+1. Hardcoded API credentials shared across all devices
+2. Hardcoded JWT token for cloud authentication
+3. MQTT credentials in plaintext
+4. CVE-2014-0160 (Heartbleed)
+5. CVE-2020-8231 (libcurl RCE)
+
+Attack Scenario:
+1. Extract API key from firmware
+2. Authenticate to Wyze cloud API
+3. Access all cameras using same API key
+4. Stream/download video from any camera
+
+Impact: Complete compromise of all Wyze cameras using this firmware
+
+Recommendation:
+- Implement per-device API keys
+- Remove hardcoded credentials
+- Update vulnerable libraries
+```
+
+**Time**: 4.75 hours total
+
+---
 
 ### Workflow 3: Smart Thermostat Firmware - Finding Debug Interface
 
@@ -580,6 +1015,59 @@ Recommendation:
 
 **Time**: 3 hours total
 
+---
+
+## Advanced Options
+
+### Custom Extraction Targets
+
+```bash
+# Extract specific filesystem only
+/re:firmware router.bin --extract-filesystem squashfs --skip-analysis
+
+# Extract and analyze specific binary
+/re:firmware router.bin --analyze-binary /usr/sbin/httpd --level 2
+
+# Extract configuration partition only
+/re:firmware router.bin --extract-jffs2-only
+```
+
+### Multi-Firmware Analysis
+
+```bash
+# Compare multiple firmware versions
+/re:firmware router-v1.bin --output ./v1-analysis/
+/re:firmware router-v2.bin --output ./v2-analysis/
+
+# Diff analysis
+diff -r ./v1-analysis/squashfs-root/ ./v2-analysis/squashfs-root/
+
+# Find newly introduced binaries
+diff <(ls ./v1-analysis/squashfs-root/usr/bin/) \
+     <(ls ./v2-analysis/squashfs-root/usr/bin/)
+```
+
+### Automated Firmware Emulation
+
+```bash
+# Use firmadyne for full system emulation
+git clone https://github.com/firmadyne/firmadyne
+cd firmadyne
+
+# Setup database
+./download.sh
+
+# Emulate firmware
+./scripts/inferNetwork.sh router-firmware.bin
+./scripts/makeImage.sh router-firmware.bin
+
+# Access emulated device
+http://192.168.1.1  # Default gateway
+telnet 192.168.1.1 23  # Telnet access
+```
+
+---
+
 ## Troubleshooting
 
 ### Issue 1: Encrypted Firmware
@@ -622,6 +1110,64 @@ dd if=firmware.bin bs=1 count=65536 of=bootloader.bin
 
 # Look for AES/DES crypto initialization
 ```
+
+---
+
+### Issue 2: Unable to Extract Filesystem
+
+**Symptoms**: binwalk extraction fails or produces corrupted files
+
+**Cause**: Non-standard filesystem format or compression
+
+**Solution 1**: Try manual extraction with different tools
+
+```bash
+# SquashFS variants
+unsquashfs -d ./output squashfs.img                # Standard
+unsquashfs-lzma -d ./output squashfs.img          # LZMA compressed
+jefferson ./output squashfs.img                    # Alternative tool
+
+# JFFS2
+jefferson jffs2.img -d ./output
+
+# UBIFS
+ubireader_extract_images -o ./output firmware.bin
+
+# CramFS
+cramfsck -x ./output cramfs.img
+```
+
+**Solution 2**: Use firmware-mod-kit
+
+```bash
+# Firmware mod kit supports many formats
+git clone https://github.com/rampageX/firmware-mod-kit
+cd firmware-mod-kit/src
+./configure && make
+
+# Extract
+./extract-firmware.sh ../firmware.bin
+
+# Filesystem extracted to ./fmk/rootfs/
+```
+
+**Solution 3**: Manual carving
+
+```bash
+# Find filesystem magic bytes
+binwalk firmware.bin
+
+# Example: SquashFS at offset 0x100000 (1048576)
+# Magic: 68 73 71 73 (hsqs)
+
+# Extract from offset to end
+dd if=firmware.bin bs=1 skip=1048576 of=filesystem.img
+
+# Try unsquash
+unsquashfs filesystem.img
+```
+
+---
 
 ### Issue 3: Binaries Won't Execute (Architecture Mismatch)
 
@@ -674,6 +1220,56 @@ cd /firmware
 ./usr/sbin/httpd
 ```
 
+---
+
+### Issue 4: CVE Scan Misses Vulnerabilities
+
+**Symptoms**: Known vulnerabilities not detected by automated scan
+
+**Cause**: Version string doesn't match CVE database format
+
+**Solution 1**: Manual version checking
+
+```bash
+# Extract version strings
+strings ./squashfs-root/lib/libssl.so.1.0.0 | grep -i version
+
+# Output: "OpenSSL 1.0.1e 11 Feb 2013"
+
+# Manually check CVE database
+# CVE-2014-0160 affects OpenSSL 1.0.1 - 1.0.1f
+# Result: VULNERABLE
+```
+
+**Solution 2**: Use multiple CVE scanners
+
+```bash
+# Use cve-bin-tool
+cve-bin-tool ./squashfs-root/
+
+# Use grype
+grype dir:./squashfs-root/
+
+# Use trivy
+trivy fs ./squashfs-root/
+```
+
+**Solution 3**: Custom signature matching
+
+```bash
+# Create custom CVE rules
+cat > custom-cve-rules.txt <<EOF
+OpenSSL 1.0.1[a-f]: CVE-2014-0160 (Heartbleed)
+BusyBox 1.2[0-4]: CVE-2021-28831 (Command injection)
+Dropbear 201[0-6]: CVE-2016-7406 (Format string)
+EOF
+
+# Scan with custom rules
+grep -f custom-cve-rules.txt <(find ./squashfs-root/ -exec strings {} \; 2>/dev/null)
+```
+
+---
+
 ### Issue 5: Cannot Find Hardcoded Credentials
 
 **Symptoms**: grep searches return no passwords despite expecting them
@@ -715,6 +1311,45 @@ strings ./squashfs-root/etc/config.bin | grep -i "password\|admin"
 # Decompiled code often reveals credential check:
 # if (strcmp(input, "hardcoded_password") == 0) { ... }
 ```
+
+---
+
+## Performance Optimization
+
+### Speed Up Extraction
+
+```bash
+# Parallel extraction (if multiple partitions)
+binwalk -e partition1.bin &
+binwalk -e partition2.bin &
+wait
+
+# Use faster decompression
+unsquashfs -p 4 squashfs.img  # 4 parallel threads
+```
+
+### Speed Up Service Discovery
+
+```bash
+# Parallel grep searches
+grep -r "telnetd" ./squashfs-root/etc/ &
+grep -r "httpd" ./squashfs-root/etc/ &
+grep -r "sshd" ./squashfs-root/etc/ &
+wait
+```
+
+### Optimize CVE Scanning
+
+```bash
+# Skip common false positives
+mcp__security-manager__scan_vulnerabilities({
+  filesystem_root: "./squashfs-root/",
+  skip_binaries: ["busybox", "dropbear"],  # Manually verified
+  only_critical: true  # Only report CRITICAL and HIGH
+})
+```
+
+---
 
 ## Memory-MCP Integration
 
@@ -773,6 +1408,42 @@ mcp__memory-mcp__memory_store({
 })
 ```
 
+---
+
+## Agents & Commands
+
+### Agents Invoked
+
+1. **RE-Firmware-Analyst** (Level 5)
+   - Specialist: Firmware extraction and IoT security analysis
+   - Tools: binwalk, unsquashfs, jefferson, firmadyne, QEMU
+   - Output: Extracted filesystem, service map, credential list, CVE report
+
+2. **RE-String-Analyst** (Level 1, for extracted binaries)
+   - Applied to extracted binaries for IOC extraction
+
+3. **RE-Disassembly-Expert** (Level 2, for extracted binaries)
+   - Applied to extracted binaries for vulnerability analysis
+
+4. **security-manager** (automatic)
+   - Performs CVE scanning on extracted libraries
+
+### Slash Commands
+
+- `/re:firmware <firmware>` - Full Level 5 analysis (this skill's primary command)
+- `/re:strings <binary>` - Apply to extracted binaries
+- `/re:static <binary>` - Apply to extracted binaries
+
+### MCP Servers
+
+- **filesystem**: Navigate extracted firmware directories
+- **security-manager**: Automated CVE scanning
+- **connascence-analyzer**: Code quality analysis on extracted code
+- **memory-mcp**: Cross-session persistence of firmware analysis
+- **sequential-thinking**: Decision gates for binary analysis escalation
+
+---
+
 ## Related Skills
 
 - [Reverse Engineering: Quick Triage](../reverse-engineering-quick/) - Levels 1-2 (apply to extracted binaries)
@@ -780,11 +1451,72 @@ mcp__memory-mcp__memory_store({
 - [Code Review Assistant](../code-review-assistant/) - Review extracted source code
 - [Security Manager](../security-manager/) - Comprehensive vulnerability scanning
 
+---
+
+## Resources
+
+### External Tools
+
+- [binwalk](https://github.com/ReFirmLabs/binwalk) - Firmware extraction
+- [firmware-mod-kit](https://github.com/rampageX/firmware-mod-kit) - Firmware modification toolkit
+- [firmadyne](https://github.com/firmadyne/firmadyne) - Firmware emulation
+- [QEMU](https://www.qemu.org/) - CPU emulator
+- [jefferson](https://github.com/sviehb/jefferson) - JFFS2 filesystem extractor
+
+### Learning Resources
+
+- [Firmware Analysis Guide](https://github.com/fkie-cad/firmware-analysis-toolkit) - Comprehensive guide
+- [IoT Security Handbook](https://www.iotsecurityhandbook.com/) - IoT security best practices
+- [binwalk Usage Guide](https://github.com/ReFirmLabs/binwalk/wiki) - binwalk documentation
+
+### Community
+
+- [r/ReverseEngineering](https://reddit.com/r/ReverseEngineering) - Subreddit
+- [IoT Village](https://www.iotvillage.org/) - DEF CON IoT security research
+- [Firmware Security Research](https://firmwaresecurity.com/) - Blog and resources
+
+---
+
 **Created**: 2025-11-01
 **RE Level**: 5 (Firmware Analysis)
 **Timebox**: 2-8 hours
 **Category**: IoT Security, Embedded Systems, Firmware Reverse Engineering
 **Difficulty**: Advanced
+---
+
+## Core Principles
+
+Reverse Engineering: Firmware Analysis operates on 3 fundamental principles:
+
+### Principle 1: Layered Extraction Strategy
+Firmware contains multiple nested components (bootloader, kernel, filesystem, configuration) requiring progressive extraction.
+
+In practice:
+- Use binwalk entropy analysis to detect encryption before extraction attempts
+- Extract filesystems recursively (matryoshka mode) to handle nested archives
+- Identify component boundaries with signature scanning (SquashFS, JFFS2, UBIFS magic bytes)
+- Manual carving with dd when automatic extraction fails
+
+### Principle 2: Attack Surface Mapping
+IoT devices expose attack surfaces through network services, web interfaces, and hardcoded credentials.
+
+In practice:
+- Map all network listeners from init scripts (telnetd, httpd, UPnP daemons)
+- Analyze CGI scripts for command injection and path traversal vulnerabilities
+- Extract credentials from shadow files, configuration databases, and binary strings
+- Document firmware update mechanisms for supply chain attack vectors
+
+### Principle 3: Cross-Component Correlation
+Vulnerabilities often span multiple firmware components (web interface + binary daemon + kernel module).
+
+In practice:
+- Correlate CGI script vulnerabilities with backend binary analysis
+- Link hardcoded credentials to service authentication mechanisms
+- Validate CVEs across shared libraries (OpenSSL, BusyBox, Dropbear)
+- Apply Levels 1-4 binary analysis to extracted executables
+
+---
+
 ## Common Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |

@@ -1,6 +1,7 @@
 ---
 name: gemini-megacontext
-description: Skill for gemini-megacontext
+description: Analyze entire codebases with Geminis 1 million token context window - process 30K lines at once
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Gemini Mega-Context Skill

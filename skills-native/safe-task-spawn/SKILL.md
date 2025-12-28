@@ -1,6 +1,7 @@
 ---
 name: safe-task-spawn
-description: Skill for safe-task-spawn
+description: Validated wrapper around Task() calls that enforces agent registry compliance, prevents invalid spawns, and logs all spawn attempts for audit trails
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # Safe Task Spawn - Registry-Validated Task Spawning

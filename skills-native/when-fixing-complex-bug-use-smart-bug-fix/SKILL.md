@@ -1,37 +1,7 @@
-# When Fixing Complex Bug Use Smart Bug Fix
-
 ---
 name: when-fixing-complex-bug-use-smart-bug-fix
-trigger: "when user reports complex bug, production issue, or requests systematic debugging"
-description: "Intelligent bug fixing workflow combining root cause analysis, multi-model reasoning, automated testing, and validation to systematically fix bugs"
-version: 2.0.0
-author: Base Template Generator
-category: debugging
-tags:
-  - bug-fix
-  - debugging
-  - root-cause-analysis
-  - testing
-  - validation
-agents:
-  - researcher (RCA specialist)
-  - coder (fix implementer)
-  - tester (validation specialist)
-  - reviewer (quality assurance)
-  - performance-analyzer
-coordinator: hierarchical-coordinator
-memory_patterns:
-  - swarm/bug-fix/issue-report
-  - swarm/bug-fix/rca-findings
-  - swarm/bug-fix/fix-implementation
-  - swarm/bug-fix/test-validation
-  - swarm/bug-fix/verification
-success_criteria:
-  - Root cause identified and documented
-  - Fix implemented without introducing regressions
-  - All tests passing including new regression tests
-  - Bug verified resolved in production-like environment
-  - Documentation updated with fix details
+description: Intelligent bug fixing workflow combining root cause analysis, multi-model reasoning, automated testing, and validation to systematically fix bugs
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 ## Assigned Agents

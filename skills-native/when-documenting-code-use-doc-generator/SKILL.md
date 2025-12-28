@@ -1,6 +1,7 @@
 ---
 name: when-documenting-code-use-doc-generator
 description: Automated comprehensive code documentation generation with API docs, README files, inline comments, and architecture diagrams
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # When Documenting Code - Use Doc Generator
@@ -443,6 +444,7 @@ MIT © 2025 Your Organization
 **Integration Strategy**:
 ```yaml
 # .github/workflows/docs.yml
+name: Documentation
 
 on:
   push:
@@ -701,7 +703,52 @@ def function_name(param1: str, param2: int = 0) -> bool:
 - [Markdown Guide](https://www.markdownguide.org/)
 - [Graphviz Documentation](https://graphviz.org/documentation/)
 
-----------|---------|----------|
+---
+
+**Version**: 1.0.0
+**Last Updated**: 2025-10-30
+**Maintainer**: Base Template Generator
+**Status**: Production Ready
+
+## Core Principles
+
+### 1. Documentation as First-Class Code
+Documentation is not an afterthought but integral to software quality, maintained with the same rigor as source code.
+
+In practice:
+- Generate documentation during development, not after deployment
+- Use pre-commit hooks to enforce minimum documentation coverage (80% for internal functions, 100% for public APIs)
+- Include documentation validation in CI/CD pipelines (check JSDoc completeness, validate links, verify examples)
+- Treat documentation failures as build blockers equal to test failures
+- Version documentation alongside code releases (tag docs/vX.Y.Z with release commits)
+- Review documentation changes in pull requests with same scrutiny as code changes
+
+### 2. Progressive Disclosure Through Hierarchical Structure
+Different audiences need different depths - organize documentation in layers from quick reference to comprehensive guides.
+
+In practice:
+- README provides 5-minute quick start (installation, basic usage, key features)
+- API reference documents every public function with parameters, return values, examples
+- Architecture docs explain system design, component interactions, data flow diagrams
+- Advanced guides cover complex scenarios, performance optimization, troubleshooting
+- Use collapsible sections in markdown (<details><summary>) for optional deep-dives
+- Link related concepts to create documentation graph (API docs link to architecture diagrams link to troubleshooting guides)
+
+### 3. Examples Demonstrate, Text Explains
+Working code examples are more valuable than verbose descriptions - show, don't just tell.
+
+In practice:
+- Every public function includes at least 1 example showing typical usage
+- Complex functions include 2-3 examples: basic case, advanced features, edge case handling
+- Examples are executable - copy-paste works without modification
+- Test examples in CI/CD to ensure they stay current with code changes
+- README includes end-to-end workflow examples combining multiple components
+- Troubleshooting sections use before/after code snippets showing problem and solution
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|-------------|---------|----------|
 | Deferring documentation to later | Documentation never gets written, becomes outdated before completion | Write documentation as you code. Add JSDoc/docstring when defining function. Update README when adding feature. Documentation debt compounds faster than technical debt. |
 | Explaining "what" instead of "why" | Comments repeat obvious code logic without adding value | Focus on intent, not mechanics. Good: "Cache results to avoid expensive API calls on repeated queries". Bad: "This variable stores the result". Comment complex algorithms, edge case handling, non-obvious optimizations. |
 | Stale examples that don't work | Users copy examples, encounter errors, lose trust | Test examples in CI/CD pipeline. Extract examples from actual test suites to guarantee accuracy. Use automated tools to verify code blocks execute without errors. |

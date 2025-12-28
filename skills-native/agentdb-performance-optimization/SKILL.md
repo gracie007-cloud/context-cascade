@@ -1,6 +1,7 @@
 ---
 name: agentdb-performance-optimization
 description: Apply quantization to reduce memory by 4-32x. Enable HNSW indexing for 150x faster search. Configure caching strategies and implement batch operations. Use when optimizing memory usage, improving search speed, or scaling to millions of vectors. Deploy these optimizations to achieve 12,500x performance gains.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -58,7 +59,43 @@ description: Apply quantization to reduce memory by 4-32x. Enable HNSW indexing 
 
 **Install** Node.js 18+ and AgentDB v1.0.7+ via agentic-flow. **Verify** you have an existing AgentDB database or application ready for optimization.
 
+---
 
+## Quick Start
+
+**Execute** these steps to measure and optimize your AgentDB performance.
+
+### Run Performance Benchmarks
+
+**Execute** benchmarks to establish baseline performance:
+
+```bash
+# Comprehensive performance benchmarking
+npx agentdb@latest benchmark
+
+# Results show:
+# ✅ Pattern Search: 150x faster (100µs vs 15ms)
+# ✅ Batch Insert: 500x faster (2ms vs 1s for 100 vectors)
+# ✅ Large-scale Query: 12,500x faster (8ms vs 100s at 1M vectors)
+# ✅ Memory Efficiency: 4-32x reduction with quantization
+```
+
+### Enable Optimizations
+
+```typescript
+import { createAgentDBAdapter } from 'agentic-flow/reasoningbank';
+
+// Optimized configuration
+const adapter = await createAgentDBAdapter({
+  dbPath: '.agentdb/optimized.db',
+  quantizationType: 'binary',   // 32x memory reduction
+  cacheSize: 1000,               // In-memory cache
+  enableLearning: true,
+  enableReasoning: true,
+});
+```
+
+---
 
 ## Quantization Strategies
 
@@ -147,7 +184,55 @@ const adapter = await createAgentDBAdapter({
 });
 ```
 
+---
 
+## HNSW Indexing
+
+**Hierarchical Navigable Small World** - O(log n) search complexity
+
+### Automatic HNSW
+
+AgentDB automatically builds HNSW indices:
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  dbPath: '.agentdb/vectors.db',
+  // HNSW automatically enabled
+});
+
+// Search with HNSW (100µs vs 15ms linear scan)
+const results = await adapter.retrieveWithReasoning(queryEmbedding, {
+  k: 10,
+});
+```
+
+### HNSW Parameters
+
+```typescript
+// Advanced HNSW configuration
+const adapter = await createAgentDBAdapter({
+  dbPath: '.agentdb/vectors.db',
+  hnswM: 16,              // Connections per layer (default: 16)
+  hnswEfConstruction: 200, // Build quality (default: 200)
+  hnswEfSearch: 100,       // Search quality (default: 100)
+});
+```
+
+**Parameter Tuning**:
+- **M** (connections): Higher = better recall, more memory
+  - Small datasets (<10K): M = 8
+  - Medium datasets (10K-100K): M = 16
+  - Large datasets (>100K): M = 32
+- **efConstruction**: Higher = better index quality, slower build
+  - Fast build: 100
+  - Balanced: 200 (default)
+  - High quality: 400
+- **efSearch**: Higher = better recall, slower search
+  - Fast search: 50
+  - Balanced: 100 (default)
+  - High recall: 200
+
+---
 
 ## Caching Strategies
 
@@ -182,7 +267,53 @@ console.log('Cache Hit Rate:', stats.cacheHitRate);
 // Aim for >80% hit rate
 ```
 
+---
 
+## Batch Operations
+
+### Batch Insert (500x Faster)
+
+```typescript
+// ❌ SLOW: Individual inserts
+for (const doc of documents) {
+  await adapter.insertPattern({ /* ... */ });  // 1s for 100 docs
+}
+
+// ✅ FAST: Batch insert
+const patterns = documents.map(doc => ({
+  id: '',
+  type: 'document',
+  domain: 'knowledge',
+  pattern_data: JSON.stringify({
+    embedding: doc.embedding,
+    text: doc.text,
+  }),
+  confidence: 1.0,
+  usage_count: 0,
+  success_count: 0,
+  created_at: Date.now(),
+  last_used: Date.now(),
+}));
+
+// Insert all at once (2ms for 100 docs)
+for (const pattern of patterns) {
+  await adapter.insertPattern(pattern);
+}
+```
+
+### Batch Retrieval
+
+```typescript
+// Retrieve multiple queries efficiently
+const queries = [queryEmbedding1, queryEmbedding2, queryEmbedding3];
+
+// Parallel retrieval
+const results = await Promise.all(
+  queries.map(q => adapter.retrieveWithReasoning(q, { k: 5 }))
+);
+```
+
+---
 
 ## Memory Optimization
 
@@ -227,7 +358,40 @@ await adapter.prune({
 });
 ```
 
+---
 
+## Performance Monitoring
+
+### Database Statistics
+
+```bash
+# Get comprehensive stats
+npx agentdb@latest stats .agentdb/vectors.db
+
+# Output:
+# Total Patterns: 125,430
+# Database Size: 47.2 MB (with binary quantization)
+# Avg Confidence: 0.87
+# Domains: 15
+# Cache Hit Rate: 84%
+# Index Type: HNSW
+```
+
+### Runtime Metrics
+
+```typescript
+const stats = await adapter.getStats();
+
+console.log('Performance Metrics:');
+console.log('Total Patterns:', stats.totalPatterns);
+console.log('Database Size:', stats.dbSize);
+console.log('Avg Confidence:', stats.avgConfidence);
+console.log('Cache Hit Rate:', stats.cacheHitRate);
+console.log('Search Latency (avg):', stats.avgSearchLatency);
+console.log('Insert Latency (avg):', stats.avgInsertLatency);
+```
+
+---
 
 ## Optimization Recipes
 
@@ -282,7 +446,52 @@ const adapter = await createAgentDBAdapter({
 // Expected: <100µs search, ~10MB for 100K vectors
 ```
 
+---
 
+## Scaling Strategies
+
+### Small Scale (<10K vectors)
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  quantizationType: 'none',    // Full precision
+  cacheSize: 500,
+  hnswM: 8,
+});
+```
+
+### Medium Scale (10K-100K vectors)
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  quantizationType: 'scalar',  // 4x reduction
+  cacheSize: 1000,
+  hnswM: 16,
+});
+```
+
+### Large Scale (100K-1M vectors)
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  quantizationType: 'binary',  // 32x reduction
+  cacheSize: 2000,
+  hnswM: 32,
+});
+```
+
+### Massive Scale (>1M vectors)
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  quantizationType: 'product',  // 8-16x reduction
+  cacheSize: 5000,
+  hnswM: 48,
+  hnswEfConstruction: 400,
+});
+```
+
+---
 
 ## Troubleshooting
 
@@ -320,14 +529,30 @@ const adapter = await createAgentDBAdapter({
 });
 ```
 
---------|-------------|-----------------|-----------|-------------|
+---
+
+## Performance Benchmarks
+
+**Test System**: AMD Ryzen 9 5950X, 64GB RAM
+
+| Operation | Vector Count | No Optimization | Optimized | Improvement |
+|-----------|-------------|-----------------|-----------|-------------|
 | Search | 10K | 15ms | 100µs | 150x |
 | Search | 100K | 150ms | 120µs | 1,250x |
 | Search | 1M | 100s | 8ms | 12,500x |
 | Batch Insert (100) | - | 1s | 2ms | 500x |
 | Memory Usage | 1M | 3GB | 96MB | 32x (binary) |
 
+---
 
+## Learn More
+
+- **Quantization Paper**: docs/quantization-techniques.pdf
+- **HNSW Algorithm**: docs/hnsw-index.pdf
+- **GitHub**: https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb
+- **Website**: https://agentdb.ruv.io
+
+---
 
 **Category**: Performance / Optimization
 **Difficulty**: Intermediate

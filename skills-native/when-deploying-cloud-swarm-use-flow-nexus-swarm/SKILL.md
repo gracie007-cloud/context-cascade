@@ -1,6 +1,7 @@
 ---
 name: when-deploying-cloud-swarm-use-flow-nexus-swarm
-description: ## Anti-Patterns
+description: ---
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # Flow Nexus Cloud Swarm Deployment SOP
@@ -1085,6 +1086,42 @@ npx claude-flow@alpha memory store \
 - Claude Flow: https://github.com/ruvnet/claude-flow
 - Event-Driven Architecture: https://martinfowler.com/articles/201701-event-driven.html
 
+---
+
+## Core Principles
+
+### 1. Cloud-Native Scalability
+**Principle**: Swarms must dynamically scale agent count based on workload demands, leveraging cloud elasticity rather than fixed capacity planning.
+
+**In practice**:
+- Start with minimum viable swarm size (5-8 agents) and scale up based on metrics
+- Auto-scaling rules trigger on utilization thresholds (scale up at 80 percent, down at 30 percent)
+- Use distributed E2B sandboxes for agent isolation preventing cascading failures
+- Implement cooldown periods (5-10 minutes) between scaling operations to prevent thrashing
+- Monitor cost-per-task metrics to optimize agent count against budget constraints
+
+### 2. Event-Driven Coordination
+**Principle**: Agents communicate through asynchronous events rather than synchronous blocking calls, enabling loose coupling and parallel execution.
+
+**In practice**:
+- Workflow steps emit events on completion that trigger dependent steps
+- Message queues buffer events during load spikes preventing agent overload
+- Event sourcing stores full event history enabling workflow replay and debugging
+- Dead letter queues capture failed events for manual intervention and recovery
+- Webhooks integrate external systems (GitHub, deployment pipelines) into workflows
+
+### 3. Progressive Rollout with Observability
+**Principle**: Deploy workflows incrementally with comprehensive monitoring to detect issues early and rollback quickly if problems arise.
+
+**In practice**:
+- Phase deployments start with small percentage of traffic (canary deployment)
+- Real-time dashboards show agent health, workflow success rates, and error patterns
+- Alert thresholds trigger notifications when metrics deviate from baselines
+- Distributed tracing correlates events across agents for end-to-end visibility
+- Automated rollback procedures revert to previous workflow version if error rate exceeds threshold
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |
@@ -1093,7 +1130,12 @@ npx claude-flow@alpha memory store \
 | **Synchronous Workflow Blocking** | Workflows use synchronous API calls between agents causing cascading delays when any agent is slow or unavailable. | Convert to event-driven architecture with message queues. Agents emit completion events asynchronously. Dependent steps poll queue rather than blocking on direct calls. |
 | **No Workflow Isolation** | All workflows share single swarm causing resource contention and failures in one workflow impacting others. | Deploy separate swarms per workflow category (development, testing, production). Use E2B sandboxes for agent isolation. Implement resource quotas per workflow to prevent noisy neighbors. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Fixed Agent Count** | Provisioning static number of agents leads to either over-provisioning (wasted cost) or under-provisioning (poor performance during spikes). | Implement auto-scaling based on workload metrics. Define minimum and maximum agent bounds. Use predictive scaling for known traffic patterns (e.g., business hours). |
 | **Synchronous Workflow Blocking** | Workflows use synchronous API calls between agents causing cascading delays when any agent is slow or unavailable. | Convert to event-driven architecture with message queues. Agents emit completion events asynchronously. Dependent steps poll queue rather than blocking on direct calls. |
 | **No Workflow Isolation** | All workflows share single swarm causing resource contention and failures in one workflow impacting others. | Deploy separate swarms per workflow category (development, testing, production). Use E2B sandboxes for agent isolation. Implement resource quotas per workflow to prevent noisy neighbors. |

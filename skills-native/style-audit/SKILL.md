@@ -1,6 +1,7 @@
 ---
 name: style-audit
 description: Audits code against CI/CD style rules, quality guidelines, and best practices, then rewrites code to meet standards without breaking functionality. Use this skill after functionality validation to ensure code is not just correct but also maintainable, readable, and production-ready. The skill applies linting rules, enforces naming conventions, improves code organization, and refactors for clarity while preserving all behavioral correctness verified by functionality audits.
+allowed-tools: Read, Glob, Grep, Task, TodoWrite
 ---
 
 ## When to Use This Skill

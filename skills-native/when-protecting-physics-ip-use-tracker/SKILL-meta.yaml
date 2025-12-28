@@ -1,0 +1,39 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill_name: when-protecting-physics-ip-use-tracker
+version: 1.0.0
+tier: critical
+category: ip-protection
+auto_trigger:
+  - physics IP
+  - timestamp claims
+  - priority date
+  - vector equilibrium
+  - mass gap
+  - CKM matrix
+created: 2025-01-06
+agents:
+  - researcher (PriorityWatch role)
+  - coder (ClaimPackager role)
+coordinator: hierarchical-coordinator
+topology: hierarchical
+memory_patterns:
+  - life-os/ip/physics/claims
+  - life-os/ip/physics/prior-art-watch
+mcp_integration:
+  - memory-mcp (WHO/WHEN/PROJECT/WHY tagging required)
+  - claude-flow (hooks)
+data_sources:
+  - research/physics/claims.md
+outputs:
+  - outputs/ip/physics_claims_timestamped.md
+  - outputs/ip/prior_art_watch.md
+cadence: weekly (monitoring), immediate (new claims)
+scheduled_trigger: days: [Sunday] time: "20:00" prompt_file: prompts/physics_ip_check.txt
+estimated_time: 15 min per run
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\when-protecting-physics-ip-use-tracker
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.205Z
+  version: 2.0.0

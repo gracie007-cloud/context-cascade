@@ -1,0 +1,9 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.1.0
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\dependencies
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.214Z
+  version: 2.0.0

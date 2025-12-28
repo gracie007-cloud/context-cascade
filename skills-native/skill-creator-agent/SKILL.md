@@ -1,6 +1,7 @@
 ---
 name: skill-creator-agent
 description: Creates Claude Code skills where each skill is tied to a specialist agent optimized with evidence-based prompting techniques. Use this skill when users need to create reusable skills that leverage specialized agents for consistent high-quality performance. The skill ensures that each created skill spawns an appropriately crafted agent that communicates effectively with the parent Claude Code instance using best practices.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->

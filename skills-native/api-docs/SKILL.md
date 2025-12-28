@@ -1,6 +1,7 @@
 ---
 name: api-docs
 description: Generate and maintain comprehensive API documentation using OpenAPI 3.0, Swagger UI, and GraphQL Playground. Use when documenting REST APIs, GraphQL services, or creating API reference materials. Ensures consistent, machine-readable, and developer-friendly documentation.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # API Documentation Generator (Gold Tier)
@@ -251,6 +252,7 @@ python resources/scripts/create_docs.py \
 
 ```yaml
 # .github/workflows/api-docs.yml
+name: API Documentation
 
 on: [push, pull_request]
 

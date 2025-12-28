@@ -1,6 +1,7 @@
 ---
 name: flow-nexus-swarm
 description: Cloud-based AI swarm deployment and event-driven workflow automation with Flow Nexus platform
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -643,6 +644,11 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 - **Documentation**: https://github.com/ruvnet/flow-nexus
 - **Issues**: https://github.com/ruvnet/flow-nexus/issues
 
+---
+
+**Remember**: Flow Nexus provides cloud-based orchestration infrastructure. For local execution and coordination, use the core `claude-flow` MCP server alongside Flow Nexus for maximum flexibility.
+---
+
 ## Core Principles
 
 Flow Nexus Swarm operates on 3 fundamental principles:
@@ -674,7 +680,12 @@ In practice:
 - Trust the platform to consider past performance and current workload
 - Override with explicit `agent_type` only when domain constraints require it
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Wrong Topology Selection** | Using star topology for collaborative research or hierarchical for simple tasks wastes coordination overhead | Match topology to workflow: mesh for collaboration, hierarchical for delegation, ring for pipelines, star for simplicity |
 | **Ignoring Dependencies** | Executing dependent steps in parallel causes race conditions and corrupted state | Always define `depends_on` arrays; use parallel execution only for truly independent steps |
 | **Manual Agent Assignment** | Hardcoding agent assignments ignores capability matching and load balancing | Use `use_vector_similarity: true` to leverage AI-powered agent selection |

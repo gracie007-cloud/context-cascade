@@ -1,6 +1,7 @@
 ---
 name: agentdb-advanced-features
 description: Master advanced AgentDB features including QUIC synchronization, multi-database management, custom distance metrics, hybrid search, and distributed systems integration. Use when building distributed AI systems, multi-agent coordination, or advanced vector search applications.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -61,7 +62,83 @@ Covers advanced AgentDB capabilities for distributed systems, multi-database coo
 - Understanding of distributed systems (for QUIC sync)
 - Vector search fundamentals
 
+---
 
+## QUIC Synchronization
+
+### What is QUIC Sync?
+
+QUIC (Quick UDP Internet Connections) enables sub-millisecond latency synchronization between AgentDB instances across network boundaries with automatic retry, multiplexing, and encryption.
+
+**Benefits**:
+- <1ms latency between nodes
+- Multiplexed streams (multiple operations simultaneously)
+- Built-in encryption (TLS 1.3)
+- Automatic retry and recovery
+- Event-based broadcasting
+
+### Enable QUIC Sync
+
+```typescript
+import { createAgentDBAdapter } from 'agentic-flow/reasoningbank';
+
+// Initialize with QUIC synchronization
+const adapter = await createAgentDBAdapter({
+  dbPath: '.agentdb/distributed.db',
+  enableQUICSync: true,
+  syncPort: 4433,
+  syncPeers: [
+    '192.168.1.10:4433',
+    '192.168.1.11:4433',
+    '192.168.1.12:4433',
+  ],
+});
+
+// Patterns automatically sync across all peers
+await adapter.insertPattern({
+  // ... pattern data
+});
+
+// Available on all peers within ~1ms
+```
+
+### QUIC Configuration
+
+```typescript
+const adapter = await createAgentDBAdapter({
+  enableQUICSync: true,
+  syncPort: 4433,              // QUIC server port
+  syncPeers: ['host1:4433'],   // Peer addresses
+  syncInterval: 1000,          // Sync interval (ms)
+  syncBatchSize: 100,          // Patterns per batch
+  maxRetries: 3,               // Retry failed syncs
+  compression: true,           // Enable compression
+});
+```
+
+### Multi-Node Deployment
+
+```bash
+# Node 1 (192.168.1.10)
+AGENTDB_QUIC_SYNC=true \
+AGENTDB_QUIC_PORT=4433 \
+AGENTDB_QUIC_PEERS=192.168.1.11:4433,192.168.1.12:4433 \
+node server.js
+
+# Node 2 (192.168.1.11)
+AGENTDB_QUIC_SYNC=true \
+AGENTDB_QUIC_PORT=4433 \
+AGENTDB_QUIC_PEERS=192.168.1.10:4433,192.168.1.12:4433 \
+node server.js
+
+# Node 3 (192.168.1.12)
+AGENTDB_QUIC_SYNC=true \
+AGENTDB_QUIC_PORT=4433 \
+AGENTDB_QUIC_PEERS=192.168.1.10:4433,192.168.1.11:4433 \
+node server.js
+```
+
+---
 
 ## Distance Metrics
 
@@ -153,7 +230,86 @@ function customDistance(vec1: number[], vec2: number[]): number {
 // Use in search (requires custom implementation)
 ```
 
+---
 
+## Hybrid Search (Vector + Metadata)
+
+### Basic Hybrid Search
+
+Combine vector similarity with metadata filtering:
+
+```typescript
+// Store documents with metadata
+await adapter.insertPattern({
+  id: '',
+  type: 'document',
+  domain: 'research-papers',
+  pattern_data: JSON.stringify({
+    embedding: documentEmbedding,
+    text: documentText,
+    metadata: {
+      author: 'Jane Smith',
+      year: 2025,
+      category: 'machine-learning',
+      citations: 150,
+    }
+  }),
+  confidence: 1.0,
+  usage_count: 0,
+  success_count: 0,
+  created_at: Date.now(),
+  last_used: Date.now(),
+});
+
+// Hybrid search: vector similarity + metadata filters
+const result = await adapter.retrieveWithReasoning(queryEmbedding, {
+  domain: 'research-papers',
+  k: 20,
+  filters: {
+    year: { $gte: 2023 },          // Published 2023 or later
+    category: 'machine-learning',   // ML papers only
+    citations: { $gte: 50 },       // Highly cited
+  },
+});
+```
+
+### Advanced Filtering
+
+```typescript
+// Complex metadata queries
+const result = await adapter.retrieveWithReasoning(queryEmbedding, {
+  domain: 'products',
+  k: 50,
+  filters: {
+    price: { $gte: 10, $lte: 100 },      // Price range
+    category: { $in: ['electronics', 'gadgets'] },  // Multiple categories
+    rating: { $gte: 4.0 },                // High rated
+    inStock: true,                        // Available
+    tags: { $contains: 'wireless' },      // Has tag
+  },
+});
+```
+
+### Weighted Hybrid Search
+
+Combine vector and metadata scores:
+
+```typescript
+const result = await adapter.retrieveWithReasoning(queryEmbedding, {
+  domain: 'content',
+  k: 20,
+  hybridWeights: {
+    vectorSimilarity: 0.7,  // 70% weight on semantic similarity
+    metadataScore: 0.3,     // 30% weight on metadata match
+  },
+  filters: {
+    category: 'technology',
+    recency: { $gte: Date.now() - 30 * 24 * 3600000 },  // Last 30 days
+  },
+});
+```
+
+---
 
 ## Multi-Database Management
 
@@ -200,7 +356,39 @@ const db = getDBForDomain('domain-a-task');
 await db.insertPattern({ /* ... */ });
 ```
 
+---
 
+## MMR (Maximal Marginal Relevance)
+
+Retrieve diverse results to avoid redundancy:
+
+```typescript
+// Without MMR: Similar results may be redundant
+const standardResults = await adapter.retrieveWithReasoning(queryEmbedding, {
+  k: 10,
+  useMMR: false,
+});
+
+// With MMR: Diverse, non-redundant results
+const diverseResults = await adapter.retrieveWithReasoning(queryEmbedding, {
+  k: 10,
+  useMMR: true,
+  mmrLambda: 0.5,  // Balance relevance (0) vs diversity (1)
+});
+```
+
+**MMR Parameters**:
+- `mmrLambda = 0`: Maximum relevance (may be redundant)
+- `mmrLambda = 0.5`: Balanced (default)
+- `mmrLambda = 1`: Maximum diversity (may be less relevant)
+
+**Use Cases**:
+- Search result diversification
+- Recommendation systems
+- Avoiding echo chambers
+- Exploratory search
+
+---
 
 ## Context Synthesis
 
@@ -223,7 +411,78 @@ console.log('Patterns:', result.patterns);
 // Extracted common patterns across memories
 ```
 
+---
 
+## Production Patterns
+
+### Connection Pooling
+
+```typescript
+// Singleton pattern for shared adapter
+class AgentDBPool {
+  private static instance: AgentDBAdapter;
+
+  static async getInstance() {
+    if (!this.instance) {
+      this.instance = await createAgentDBAdapter({
+        dbPath: '.agentdb/production.db',
+        quantizationType: 'scalar',
+        cacheSize: 2000,
+      });
+    }
+    return this.instance;
+  }
+}
+
+// Use in application
+const db = await AgentDBPool.getInstance();
+const results = await db.retrieveWithReasoning(queryEmbedding, { k: 10 });
+```
+
+### Error Handling
+
+```typescript
+async function safeRetrieve(queryEmbedding: number[], options: any) {
+  try {
+    const result = await adapter.retrieveWithReasoning(queryEmbedding, options);
+    return result;
+  } catch (error) {
+    if (error.code === 'DIMENSION_MISMATCH') {
+      console.error('Query embedding dimension mismatch');
+      // Handle dimension error
+    } else if (error.code === 'DATABASE_LOCKED') {
+      // Retry with exponential backoff
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return safeRetrieve(queryEmbedding, options);
+    }
+    throw error;
+  }
+}
+```
+
+### Monitoring and Logging
+
+```typescript
+// Performance monitoring
+const startTime = Date.now();
+const result = await adapter.retrieveWithReasoning(queryEmbedding, { k: 10 });
+const latency = Date.now() - startTime;
+
+if (latency > 100) {
+  console.warn('Slow query detected:', latency, 'ms');
+}
+
+// Log statistics
+const stats = await adapter.getStats();
+console.log('Database Stats:', {
+  totalPatterns: stats.totalPatterns,
+  dbSize: stats.dbSize,
+  cacheHitRate: stats.cacheHitRate,
+  avgSearchLatency: stats.avgSearchLatency,
+});
+```
+
+---
 
 ## CLI Advanced Operations
 
@@ -253,7 +512,34 @@ sqlite3 .agentdb/vectors.db "ANALYZE;"
 npx agentdb@latest reindex ./vectors.db
 ```
 
+---
 
+## Environment Variables
+
+```bash
+# AgentDB configuration
+AGENTDB_PATH=.agentdb/reasoningbank.db
+AGENTDB_ENABLED=true
+
+# Performance tuning
+AGENTDB_QUANTIZATION=binary     # binary|scalar|product|none
+AGENTDB_CACHE_SIZE=2000
+AGENTDB_HNSW_M=16
+AGENTDB_HNSW_EF=100
+
+# Learning plugins
+AGENTDB_LEARNING=true
+
+# Reasoning agents
+AGENTDB_REASONING=true
+
+# QUIC synchronization
+AGENTDB_QUIC_SYNC=true
+AGENTDB_QUIC_PORT=4433
+AGENTDB_QUIC_PEERS=host1:4433,host2:4433
+```
+
+---
 
 ## Troubleshooting
 
@@ -292,7 +578,16 @@ const result = await adapter.retrieveWithReasoning(queryEmbedding, {
 });
 ```
 
+---
 
+## Learn More
+
+- **QUIC Protocol**: docs/quic-synchronization.pdf
+- **Hybrid Search**: docs/hybrid-search-guide.md
+- **GitHub**: https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb
+- **Website**: https://agentdb.ruv.io
+
+---
 
 **Category**: Advanced / Distributed Systems
 **Difficulty**: Advanced

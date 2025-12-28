@@ -1,6 +1,7 @@
 ---
 name: ml-expert
-description: '**Version**: 1.0.0'
+description: **Version**: 1.0.0
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # ML Expert - Machine Learning Implementation Specialist
@@ -361,6 +362,17 @@ Test the skill with:
 - SDK implementation: `index.py`
 - Process visualization: `ml-expert-process.dot`
 - Testing guide: `tests/README.md`
+
+---
+
+**Next Steps**:
+1. Create agent system prompt with ML implementation expertise
+2. Implement SDK-based agent spawning
+3. Add model templates and utilities
+4. Test on Phase 1 implementation tasks
+5. Integrate with ml-training-debugger workflow
+
+---
 
 ## Core Principles
 

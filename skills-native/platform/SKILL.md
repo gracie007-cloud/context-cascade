@@ -1,6 +1,7 @@
 ---
 name: platform
-description: Platform services hub routing to Flow Nexus platform skills. Use for cloud AI platform management, neural network training, swarm deployment, and platform authentication. Routes to flow-nexus-neural, flow-nexus-platform, and flow-nexus-swarm. --- # Platform Central hub for Flow Nexus platform services and cloud AI capabilities. ## Phase 0: Expertise Loading ```yaml
+description: Platform services hub routing to Flow Nexus platform skills. Use for cloud AI platform management, neural network training, swarm deployment, and platform authentication. Routes to flow-nexus-neural, flow-nexus-platform, and flow-nexus-swarm.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Platform
@@ -99,7 +100,30 @@ confidence_check:
 
 Works with: **flow-nexus-neural**, **flow-nexus-platform**, **flow-nexus-swarm**
 
------------|--------------|------------------|
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+- [ ] **Agent Spawning**: Spawned agent via Task()
+- [ ] **Agent Registry Validation**: Agent from registry
+- [ ] **TodoWrite Called**: Called with 5+ todos
+- [ ] **Work Delegation**: Delegated to agents
+
+**Remember: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+
+## Core Principles
+
+1. **Service Abstraction**: Platform services abstract away infrastructure complexity (E2B sandboxes, QUIC synchronization, GPU allocation) behind unified API interfaces, allowing agents to focus on neural network design rather than cloud resource management.
+
+2. **Resource Efficiency Through Routing**: Intelligent routing minimizes unnecessary service hops - neural training requests go directly to flow-nexus-neural, swarm deployments to flow-nexus-swarm, avoiding generic platform overhead when domain-specific paths are available.
+
+3. **Graceful Degradation with Confidence Scoring**: When routing confidence falls below 0.8, the system presents service options rather than making incorrect assumptions, preventing wasted computation on misrouted requests while maintaining user control.
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|--------------|--------------|------------------|
 | Hardcoding service endpoints | Breaks when Flow Nexus platform migrates infrastructure or updates API versions | Use platform routing logic to resolve services dynamically, load from expertise files |
 | Skipping Phase 0 expertise loading | Every request re-discovers service quotas, rate limits, and authentication patterns | Always check .claude/expertise/platform.yaml first, cache service configs in memory-mcp namespace |
 | Bypassing confidence checks (forcing routes <0.5) | Routes neural training to generic platform service, wasting GPU time on incorrect setup | Respect confidence thresholds, present options or ask clarifying questions when uncertain |

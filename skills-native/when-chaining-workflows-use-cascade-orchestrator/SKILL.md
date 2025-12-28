@@ -1,6 +1,7 @@
 ---
 name: when-chaining-workflows-use-cascade-orchestrator
 description: Create sophisticated workflow cascades with sequential pipelines, parallel execution, and conditional branching
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # Cascade Orchestrator SOP
@@ -45,6 +46,7 @@ Design cascade structure with workflows, dependencies, and branching logic.
 ```bash
 # Create cascade definition
 cat > cascade-definition.yaml <<EOF
+name: full-stack-development
 workflows:
   - id: design
     type: sequential
@@ -460,6 +462,42 @@ mcp__flow-nexus__workflow_create({
 - Conditional Execution Strategies
 - Performance Optimization Techniques
 
+---
+
+## Core Principles
+
+### 1. Dependency-First Design
+**Principle**: Always identify dependencies before execution order. Sequential tasks must complete before dependent tasks begin, while independent tasks should execute in parallel.
+
+**In practice**:
+- Map workflow dependencies as a directed acyclic graph (DAG) before execution
+- Sequential cascades chain workflows where output of one feeds input of next
+- Parallel cascades spawn independent workflows concurrently for maximum throughput
+- Use conditional branching only when decision logic requires runtime evaluation
+- Never create circular dependencies - validate DAG before execution
+
+### 2. Fail-Fast with Graceful Recovery
+**Principle**: Detect failures immediately and provide multiple recovery strategies based on failure severity and workflow context.
+
+**In practice**:
+- Implement timeout mechanisms for each workflow node to prevent indefinite blocking
+- Use retry logic with exponential backoff for transient failures (network, rate limits)
+- Provide fallback workflows for critical path failures (circuit breaker pattern)
+- Store intermediate state in memory coordination layer for recovery after crashes
+- Log failure context (stack trace, input data, workflow state) for post-mortem analysis
+
+### 3. Observability Throughout Execution
+**Principle**: Every workflow execution must be fully traceable, monitorable, and debuggable from start to finish.
+
+**In practice**:
+- Emit structured logs at workflow boundaries (start, complete, error, transition)
+- Track performance metrics per workflow node (execution time, resource usage, throughput)
+- Store workflow execution history in memory for audit trails and replay
+- Generate real-time progress reports showing current state and completion percentage
+- Create visual workflow diagrams (Gantt charts, flow diagrams) updated during execution
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |
@@ -468,7 +506,12 @@ mcp__flow-nexus__workflow_create({
 | **Implicit Dependencies** | Workflows depend on undocumented side effects or shared global state, causing unexpected failures when execution order changes. | Explicitly declare all dependencies in cascade definition. Use data flow configuration to pass outputs as inputs. Avoid shared mutable state - use message passing instead. |
 | **Ignoring Workflow Failures** | Cascade continues executing dependent workflows even when prerequisites fail, wasting resources and producing invalid results. | Implement strict dependency checking. Use fail-fast strategy where failure of prerequisite immediately halts dependent workflows. Provide rollback or compensation logic for partial failures. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Monolithic Workflows** | Single massive workflow with no decomposition leads to poor maintainability, difficult debugging, and inability to parallelize independent tasks. | Break workflows into smaller, composable units. Use hierarchical cascades where high-level workflows orchestrate sub-workflows. Each workflow should have single responsibility. |
 | **Implicit Dependencies** | Workflows depend on undocumented side effects or shared global state, causing unexpected failures when execution order changes. | Explicitly declare all dependencies in cascade definition. Use data flow configuration to pass outputs as inputs. Avoid shared mutable state - use message passing instead. |
 | **Ignoring Workflow Failures** | Cascade continues executing dependent workflows even when prerequisites fail, wasting resources and producing invalid results. | Implement strict dependency checking. Use fail-fast strategy where failure of prerequisite immediately halts dependent workflows. Provide rollback or compensation logic for partial failures. |

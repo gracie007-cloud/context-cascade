@@ -1,6 +1,7 @@
 ---
 name: when-tracking-dual-career-intelligence-use-career-intel
-description: Automated tracking of internal/external roles across US/EU markets with policy monitoring, visa leverage analysis, and tailored pitch generation.
+description: Automated US/EU career opportunity tracking with policy monitoring, EV-based ranking, and tailored application materials
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Dual-Track Career Intelligence
@@ -64,6 +65,108 @@ Phase 4: PitchPrep (coder) → tailored materials
   ↓
 All phases coordinate via Memory MCP with WHO/WHEN/PROJECT/WHY tagging
 ```
+
+---
+
+## Phase 1: Scout (Data Collection)
+
+**Agent**: `researcher` (Scout role)
+
+### Inputs
+- `data/sources/job_boards.yml` - Job board APIs and search parameters
+- `data/profiles/cv_core.md` - Keywords and skills to match
+
+### Commands Executed
+
+```bash
+#!/bin/bash
+# Phase 1: Job Board Scanning
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Career intel: job board scanning" \
+  --agent "researcher" \
+  --role "Scout" \
+  --skill "dual-track-career-intelligence"
+
+# SESSION RESTORE (if resuming)
+npx claude-flow@alpha hooks session-restore \
+  --session-id "career-intel-$(date +%Y-%W)"
+
+# SETUP
+WEEK=$(date +%Y-%W)
+mkdir -p outputs/reports
+mkdir -p raw_data
+
+# READ CONFIG
+BOARDS=$(yq eval '.boards[].url' data/sources/job_boards.yml)
+KEYWORDS=$(yq eval '.search_keywords | join(",")' data/sources/job_boards.yml)
+GEO=$(yq eval '.geo_filters | join(",")' data/sources/job_boards.yml)
+
+# SCRAPE JOB BOARDS
+echo "title,company,location,url,posted_date,visa_support,remote_ok,comp_signal" > raw_data/jobs_${WEEK}.csv
+
+for BOARD in $BOARDS; do
+  echo "[Scout] Scanning: $BOARD"
+
+  # Example API call (adapt to actual board APIs)
+  curl -s "${BOARD}/api/jobs?keywords=${KEYWORDS}&geo=${GEO}" \
+    | jq -r '.results[] | [
+        .title,
+        .company,
+        .location,
+        .apply_url,
+        .posted_date,
+        .visa_sponsorship,
+        .remote_allowed,
+        (.salary.min // 0)
+      ] | @csv' \
+    >> raw_data/jobs_${WEEK}.csv
+
+  sleep 2  # Rate limiting
+done
+
+JOB_COUNT=$(wc -l < raw_data/jobs_${WEEK}.csv)
+echo "[Scout] Found $JOB_COUNT opportunities"
+
+# MEMORY STORE (with WHO/WHEN/PROJECT/WHY tagging)
+npx claude-flow@alpha memory store \
+  --key "life-os/career/opportunities/${WEEK}/raw-data" \
+  --value "$(cat raw_data/jobs_${WEEK}.csv)" \
+  --metadata "{
+    \"WHO\": {
+      \"agent\": \"researcher\",
+      \"role\": \"Scout\",
+      \"category\": \"career-intelligence\",
+      \"capabilities\": [\"web-scraping\", \"api-integration\", \"data-normalization\"]
+    },
+    \"WHEN\": {
+      \"iso\": \"$(date -Iseconds)\",
+      \"unix\": $(date +%s),
+      \"readable\": \"$(date)\"
+    },
+    \"PROJECT\": \"life-os-career-tracking\",
+    \"WHY\": {
+      \"intent\": \"research\",
+      \"task_type\": \"opportunity-scanning\",
+      \"outcome_expected\": \"raw-job-list\",
+      \"phase\": \"data-collection\"
+    }
+  }"
+
+# POST-TASK HOOK
+npx claude-flow@alpha hooks post-task \
+  --task-id "career-intel-phase1-scout" \
+  --metrics "jobs_found=${JOB_COUNT}"
+
+echo "[Scout] Phase 1 complete: $JOB_COUNT opportunities stored"
+```
+
+### Outputs
+- `raw_data/jobs_{YYYY-WW}.csv` - Normalized job data
+- Memory: `life-os/career/opportunities/{YYYY-WW}/raw-data`
+
+---
 
 ## Phase 2: RegWatch (Policy Monitoring)
 
@@ -180,6 +283,107 @@ echo "[RegWatch] Phase 2 complete: $CHANGES_DETECTED changes documented"
 - `outputs/reports/policy_changes_{YYYY-WW}.md` - Policy diff report
 - Memory: `life-os/career/policy-changes/{YYYY-WW}/snapshots` + `/report`
 
+---
+
+## Phase 3: Ranker (Opportunity Scoring)
+
+**Agent**: `analyst` (Ranker role)
+
+### Inputs
+- Memory: `life-os/career/opportunities/{YYYY-WW}/raw-data`
+- `data/profiles/cv_core.md` - Skills for fit scoring
+
+### Commands Executed
+
+```bash
+#!/bin/bash
+# Phase 3: Multi-Factor Opportunity Ranking
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Career intel: opportunity ranking" \
+  --agent "analyst" \
+  --role "Ranker" \
+  --skill "dual-track-career-intelligence"
+
+# SETUP
+WEEK=$(date +%Y-%W)
+
+# RETRIEVE RAW DATA
+npx claude-flow@alpha memory retrieve \
+  --key "life-os/career/opportunities/${WEEK}/raw-data" \
+  > raw_data/jobs_${WEEK}.csv
+
+# READ SKILLS PROFILE
+MY_SKILLS=$(grep -A 100 '## Skills' data/profiles/cv_core.md | grep '- ' | sed 's/- //' | tr '\n' ',' | sed 's/,$//')
+
+# SCORING SCRIPT (Node.js for simplicity)
+cat > raw_data/score_opportunities.js <<'SCORER'
+const fs = require('fs');
+const csv = require('csv-parser'); // npm install csv-parser
+
+const mySkills = process.argv[2].toLowerCase().split(',');
+const results = [];
+
+fs.createReadStream('raw_data/jobs_' + process.argv[3] + '.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    // Fit Score (0-100): keyword match in title/company
+    const titleLower = row.title.toLowerCase();
+    const fitMatches = mySkills.filter(skill => titleLower.includes(skill)).length;
+    const fitScore = Math.min(100, (fitMatches / mySkills.length) * 100);
+
+    // Option Value (0-100): visa support + EU location
+    let optionValue = 0;
+    if (row.visa_support === 'true' || row.visa_support === '1') optionValue += 50;
+    if (row.location.includes('EU') || row.location.includes('Netherlands') || row.location.includes('Switzerland')) optionValue += 50;
+
+    // Speed to Apply (0-100): inverse of days since posted
+    const daysOld = Math.floor((Date.now() - new Date(row.posted_date).getTime()) / (1000 * 60 * 60 * 24));
+    const speedScore = Math.max(0, 100 - (daysOld * 5));
+
+    // Cred Stack (0-100): comp signal proxy
+    const compSignal = parseInt(row.comp_signal) || 0;
+    const credScore = Math.min(100, (compSignal / 150000) * 100);
+
+    // Weighted Total
+    const totalScore = (fitScore * 0.4) + (optionValue * 0.3) + (speedScore * 0.2) + (credScore * 0.1);
+
+    results.push({
+      ...row,
+      fit_score: fitScore.toFixed(1),
+      option_value: optionValue.toFixed(1),
+      speed_score: speedScore.toFixed(1),
+      cred_score: credScore.toFixed(1),
+      total_score: totalScore.toFixed(1)
+    });
+  })
+  .on('end', () => {
+    // Sort by total score descending
+    results.sort((a, b) => parseFloat(b.total_score) - parseFloat(a.total_score));
+
+    // Output top 15
+    console.log(JSON.stringify(results.slice(0, 15), null, 2));
+  });
+SCORER
+
+# RUN SCORER
+node raw_data/score_opportunities.js "$MY_SKILLS" "$WEEK" > raw_data/scored_opportunities_${WEEK}.json
+
+TOP_COUNT=$(jq length raw_data/scored_opportunities_${WEEK}.json)
+echo "[Ranker] Scored and ranked $TOP_COUNT opportunities"
+
+# GENERATE MARKDOWN REPORT
+cat > outputs/reports/career_intel_${WEEK}.md <<REPORT_HEADER
+# Career Intelligence Report - Week $WEEK
+
+**Generated**: $(date)
+**Source**: Automated dual-track scanning (US/EU)
+**Opportunities Scanned**: $(wc -l < raw_data/jobs_${WEEK}.csv)
+**Top Opportunities**: $TOP_COUNT
+
+---
+
 ## Top 15 Opportunities
 
 | Rank | Title | Company | Location | Fit | Option | Speed | Cred | Total | Action Deadline | Link |
@@ -249,11 +453,95 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 - `outputs/reports/career_intel_{YYYY-WW}.md` - Comprehensive ranked report
 - Memory: `life-os/career/opportunities/{YYYY-WW}/ranked`
 
+---
+
+## Phase 4: PitchPrep (Tailored Messaging)
+
+**Agent**: `coder` (PitchPrep role)
+
+### Inputs
+- Memory: `life-os/career/opportunities/{YYYY-WW}/ranked` (top 5)
+- `data/profiles/cv_core.md` - Anecdotes and achievements
+
+### Commands Executed
+
+```bash
+#!/bin/bash
+# Phase 4: Generate Tailored Pitch Materials
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Career intel: tailored pitch generation" \
+  --agent "coder" \
+  --role "PitchPrep" \
+  --skill "dual-track-career-intelligence"
+
+# SETUP
+WEEK=$(date +%Y-%W)
+mkdir -p outputs/briefs
+
+# RETRIEVE TOP 5 OPPORTUNITIES
+npx claude-flow@alpha memory retrieve \
+  --key "life-os/career/opportunities/${WEEK}/ranked" \
+  | jq '.[0:5]' > raw_data/top5_${WEEK}.json
+
+# READ CV ANECDOTES
+CV_ANECDOTES=$(grep -A 200 '## Achievements' data/profiles/cv_core.md)
+
+# GENERATE PITCH FOR EACH TOP OPPORTUNITY
+jq -c '.[]' raw_data/top5_${WEEK}.json | while read -r opportunity; do
+  ORG=$(echo "$opportunity" | jq -r '.company' | sed 's/[^a-zA-Z0-9]/_/g')
+  TITLE=$(echo "$opportunity" | jq -r '.title')
+  URL=$(echo "$opportunity" | jq -r '.url')
+  FIT=$(echo "$opportunity" | jq -r '.fit_score')
+
+  echo "[PitchPrep] Generating pitch for: $ORG - $TITLE"
+
+  # CREATE PITCH BRIEF
+  cat > outputs/briefs/career_pitch_${ORG}.md <<PITCH_TEMPLATE
+# Application Pitch: $TITLE at $ORG
+
+**Position**: $TITLE
+**Company**: $ORG
+**Fit Score**: $FIT/100
+**Application URL**: $URL
+**Generated**: $(date)
+
+---
+
 ## Positioning Statement
 
 **Core Thesis**: [Your unique value proposition for this role]
 
 *Example*: "As someone who bridges AI implementation, systems thinking, and education design, I bring a rare combination that aligns perfectly with $ORG's mission to [inferred mission from job description]."
+
+---
+
+## Tailored Bullets (Top 5)
+
+Use these in cover letter and resume customization:
+
+1. **[Relevant achievement from CV]**
+   - *Why it matters*: Demonstrates [required skill from JD]
+   - *Proof*: [Link to publication, GitHub, portfolio]
+
+2. **[Cross-domain expertise example]**
+   - *Why it matters*: Shows ability to [job requirement]
+   - *Proof*: [Concrete evidence]
+
+3. **[Technical credential]**
+   - *Why it matters*: Directly applicable to [job responsibility]
+   - *Proof*: [Demo, code sample, case study]
+
+4. **[Soft skill / leadership example]**
+   - *Why it matters*: Critical for [team/culture fit aspect]
+   - *Proof*: [Testimonial, outcome metric]
+
+5. **[Unique differentiator]**
+   - *Why it matters*: Sets you apart from typical candidates
+   - *Proof*: [Evidence of novelty]
+
+---
 
 ## Likely Interview Questions (Top 5)
 
@@ -265,6 +553,18 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 
 **Practice response**: [Draft 2-minute answer]
 
+---
+
+### Question 2: "Why this role/company?"
+**Recommended approach**:
+- Reference specific company initiatives (research their recent work)
+- Show genuine intellectual alignment, not just job-seeking
+- Mention EU/US optionality if relevant
+
+**Practice response**: [Draft answer with company-specific details]
+
+---
+
 ### Question 3: "Describe a technical challenge you solved"
 **Recommended approach**:
 - Pick achievement from CV that matches role requirements
@@ -273,6 +573,18 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 
 **Practice response**: [Draft using specific example]
 
+---
+
+### Question 4: "How do you handle [domain-specific scenario]?"
+**Recommended approach**:
+- Show systematic thinking (SPARC methodology reference?)
+- Demonstrate awareness of trade-offs
+- Mention collaborative approach if team role
+
+**Practice response**: [Draft scenario-based answer]
+
+---
+
 ### Question 5: "Where do you see yourself in 3-5 years?"
 **Recommended approach**:
 - Align with company growth trajectory
@@ -280,6 +592,23 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 - Mention continuous learning and impact focus
 
 **Practice response**: [Draft forward-looking answer]
+
+---
+
+## Cred Stack Mapping (3 Anecdotes)
+
+### Anecdote 1: [Title from CV]
+**Full story**:
+$CV_ANECDOTES
+
+**When to deploy**:
+- Behavioral question about [specific skill]
+- Technical deep-dive on [domain]
+- Cultural fit discussion about [value]
+
+**Impact framing**: "This experience taught me [lesson] which directly applies to [job responsibility]"
+
+---
 
 ### Anecdote 2: [Cross-domain example]
 **Full story**: [Extract from CV]
@@ -290,6 +619,20 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 - Why you vs. traditional candidates
 
 **Impact framing**: "My unusual background in [domains] gives me the ability to [unique capability]"
+
+---
+
+### Anecdote 3: [Recent achievement]
+**Full story**: [Extract from CV]
+
+**When to deploy**:
+- "What have you done recently?"
+- Proof of continuous growth
+- Demonstration of self-direction
+
+**Impact framing**: "Even outside traditional employment, I've been [actively developing/researching/building]"
+
+---
 
 ## Application Checklist
 
@@ -302,6 +645,18 @@ echo "[Ranker] Phase 3 complete: Top $TOP_COUNT opportunities ranked"
 - [ ] Set up Google Alert for company name
 - [ ] Document application in tracking system
 - [ ] Follow up in 1 week if no response
+
+---
+
+## Unique Angle
+
+**What makes you different for THIS role**:
+
+*[AI-generated suggestion based on CV + job description analysis]*
+
+Example: "Most candidates will come from pure biotech OR pure AI backgrounds. You're one of the few who has published research in both domains (microbiology paper + AI cultural bias work) AND has practical implementation experience (commercial AI courses, workshop delivery). This positions you as a bridge-builder, which is exactly what interdisciplinary teams need."
+
+---
 
 **Next Steps**:
 1. Refine bullets based on actual job description deep-read
@@ -346,6 +701,78 @@ echo "[PitchPrep] Phase 4 complete: $PITCH_COUNT pitch briefs generated"
 ### Outputs
 - `outputs/briefs/career_pitch_{org}.md` (one per top 5 opportunity)
 - Memory: `life-os/career/pitches/{YYYY-WW}/generated`
+
+---
+
+## Complete Workflow Orchestration
+
+**Master command**: Runs all 4 phases sequentially
+
+```bash
+#!/bin/bash
+# Master Orchestration: Dual-Track Career Intelligence
+
+set -e  # Exit on error
+
+WEEK=$(date +%Y-%W)
+
+echo "=========================================="
+echo "Career Intelligence - Week $WEEK"
+echo "=========================================="
+echo ""
+
+# OPTIONAL: Initialize swarm coordination
+echo "[Coordinator] Initializing hierarchical swarm..."
+npx claude-flow@alpha swarm init \
+  --topology hierarchical \
+  --max-agents 4 \
+  --strategy specialized
+
+# SESSION START
+npx claude-flow@alpha hooks session-start \
+  --session-id "career-intel-${WEEK}"
+
+echo ""
+echo "[Phase 1/4] Scout - Job board scanning..."
+bash phases/phase1_scout.sh
+
+echo ""
+echo "[Phase 2/4] RegWatch - Policy monitoring..."
+bash phases/phase2_regwatch.sh
+
+echo ""
+echo "[Phase 3/4] Ranker - Opportunity scoring..."
+bash phases/phase3_ranker.sh
+
+echo ""
+echo "[Phase 4/4] PitchPrep - Tailored pitch generation..."
+bash phases/phase4_pitchprep.sh
+
+# SESSION END
+npx claude-flow@alpha hooks session-end \
+  --session-id "career-intel-${WEEK}" \
+  --export-metrics true
+
+echo ""
+echo "=========================================="
+echo "✓ Career Intelligence Complete"
+echo "=========================================="
+echo ""
+echo "📊 Generated Reports:"
+echo "  - outputs/reports/career_intel_${WEEK}.md"
+echo "  - outputs/reports/policy_changes_${WEEK}.md"
+echo ""
+echo "📝 Tailored Pitches:"
+ls outputs/briefs/career_pitch_*.md 2>/dev/null | sed 's/^/  - /'
+echo ""
+echo "🎯 Next Actions:"
+jq -r '.[0:3] | .[] | "  - Apply to \(.title) at \(.company) (Score: \(.total_score))"' \
+  raw_data/scored_opportunities_${WEEK}.json
+echo ""
+echo "🔗 Full Report: outputs/reports/career_intel_${WEEK}.md"
+```
+
+---
 
 ## Usage
 
@@ -460,6 +887,33 @@ bash phases/phase3_ranker.sh
 bash phases/phase4_pitchprep.sh
 ```
 
+---
+
+## Integration Points
+
+### Memory MCP
+
+All agents use WHO/WHEN/PROJECT/WHY tagging:
+- **WHO**: Agent name, role, category, capabilities
+- **WHEN**: ISO timestamp, Unix timestamp, readable format
+- **PROJECT**: `life-os-career-tracking`
+- **WHY**: Intent (research/analysis/implementation), task type, expected outcome, phase
+
+### Connascence Analyzer
+
+When `coder` agent generates scoring scripts:
+- Auto-invoke connascence analysis
+- Flag God Objects, Parameter Bombs
+- Ensure NASA compliance (max 6 params, 4-level nesting)
+
+### Hooks Automation
+
+- **Pre-task**: Agent assignment, resource prep, context load
+- **Post-task**: Metrics export, session persistence
+- **Post-edit**: File tracking, memory updates, neural training
+
+---
+
 ## Expected Outcomes
 
 ### Week 1 Baseline
@@ -479,6 +933,32 @@ bash phases/phase4_pitchprep.sh
 - **Interview conversion**: Track ratio (aim for >10%)
 - **Time per application**: <30 min with pre-generated pitch
 - **EU option awareness**: Zero missed policy deadlines
+
+---
+
+## Troubleshooting
+
+### No jobs found
+- Check `data/sources/job_boards.yml` for valid URLs
+- Verify API access / rate limits
+- Adjust keywords to be less restrictive
+
+### Policy diff errors
+- Ensure previous week's snapshots exist
+- Check network connectivity to policy sources
+- Review diff output for formatting issues
+
+### Low fit scores
+- Update `data/profiles/cv_core.md` with more keywords
+- Adjust scoring weights in phase3 script
+- Expand search keywords in job_boards.yml
+
+### Pitch generation incomplete
+- Verify CV anecdotes section exists and is populated
+- Check jq syntax for JSON parsing
+- Review top 5 opportunities for completeness
+
+---
 
 ## Future Enhancements
 

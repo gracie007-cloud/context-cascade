@@ -1,0 +1,26 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+triggers:
+  - generate documentation
+  - create API docs
+  - write README
+  - add comments
+  - document this code
+agents:
+  - code-analyzer
+  - base-template-generator
+complexity: medium
+tags:
+  - documentation
+  - api-docs
+  - readme
+  - comments
+  - diagrams
+  - automation
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\when-documenting-code-use-doc-generator
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.267Z
+  version: 2.0.0

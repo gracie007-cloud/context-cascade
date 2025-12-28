@@ -1,0 +1,19 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+tags:
+  - platform
+  - integration
+  - api
+  - webhooks
+  - sync
+  - essential
+  - tier-2
+version: 2.0.0
+category: operations
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\operations\platform-integration
+  category: operations
+  migrated_at: 2025-12-28T15:56:24.609Z
+  version: 2.0.0

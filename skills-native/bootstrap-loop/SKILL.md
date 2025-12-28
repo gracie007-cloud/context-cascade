@@ -1,6 +1,7 @@
 ---
 name: bootstrap-loop
 description: Orchestrates the recursive self-improvement cycle where Prompt Forge improves Skill Forge, Skill Forge improves Prompt Forge, and both audit/improve everything else. All changes gated by frozen eval harness.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Bootstrap Loop (Recursive Self-Improvement Orchestrator)
@@ -51,7 +52,188 @@ Orchestrate the recursive improvement cycle:
 claude mcp add memory-mcp npx @modelcontextprotocol/server-memory
 ```
 
+---
 
+## Core Operations
+
+### Operation 1: Run Single Improvement Cycle
+
+Execute one full cycle of recursive improvement.
+
+```yaml
+cycle:
+  id: "cycle-{timestamp}"
+  target: "prompt-forge|skill-forge|all"
+
+  phases:
+    1_analyze:
+      action: "Prompt Forge analyzes target for weaknesses"
+      output: "Analysis with improvement opportunities"
+
+    2_propose:
+      action: "Prompt Forge generates improvement proposals"
+      output: "Concrete proposals with diffs"
+
+    3_apply:
+      action: "Skill Forge applies proposals (builds new version)"
+      output: "New version of target"
+
+    4_evaluate:
+      action: "Eval Harness tests new version"
+      output: "Benchmark + regression results"
+
+    5_decide:
+      action: "Compare results, decide ACCEPT or REJECT"
+      output: "Decision with reasoning"
+
+    6_commit_or_rollback:
+      action: "If ACCEPT: commit + archive. If REJECT: rollback"
+      output: "Final state + audit log"
+```
+
+### Operation 2: Improve Prompt Forge
+
+Use Skill Forge to improve Prompt Forge.
+
+```yaml
+improve_prompt_forge:
+  process:
+    - step: "Analyze Prompt Forge with prompt-auditor"
+      agent: "prompt-auditor"
+      output: "Audit report with issues"
+
+    - step: "Generate improvement proposals"
+      agent: "prompt-forge" (self-analysis)
+      output: "Proposals for self-improvement"
+
+    - step: "Apply improvements with Skill Forge"
+      agent: "skill-forge"
+      output: "prompt-forge-v{N+1}"
+
+    - step: "Test against eval harness"
+      eval: "prompt-generation-benchmark-v1"
+      regression: "prompt-forge-regression-v1"
+
+    - step: "If improved: commit. If regressed: reject"
+
+  safeguards:
+    - "Previous version archived before changes"
+    - "Requires eval harness pass"
+    - "Rollback available for 30 days"
+    - "Auditor agents must agree on improvement"
+
+  forbidden_changes:
+    - "Removing safeguards"
+    - "Bypassing eval harness"
+    - "Modifying frozen benchmarks"
+```
+
+### Operation 3: Improve Skill Forge
+
+Use Prompt Forge to improve Skill Forge.
+
+```yaml
+improve_skill_forge:
+  process:
+    - step: "Analyze Skill Forge with skill-auditor"
+      agent: "skill-auditor"
+      output: "Audit report with issues"
+
+    - step: "Generate improvement proposals with Prompt Forge"
+      agent: "prompt-forge"
+      output: "Proposals with rationale"
+
+    - step: "Apply improvements (Skill Forge rebuilds itself)"
+      agent: "skill-forge" (self-rebuild)
+      output: "skill-forge-v{N+1}"
+
+    - step: "Test against eval harness"
+      eval: "skill-generation-benchmark-v1"
+      regression: "skill-forge-regression-v1"
+
+    - step: "If improved: commit. If regressed: reject"
+
+  safeguards:
+    - "Previous version archived before changes"
+    - "Requires eval harness pass"
+    - "Self-rebuild uses PREVIOUS version (not new)"
+    - "Human gate for breaking changes"
+```
+
+### Operation 4: Audit Everything
+
+Use improved meta-tools to audit and improve all prompts/skills.
+
+```yaml
+audit_all:
+  scope:
+    prompts: [".claude/skills/**/SKILL.md"]
+    expertise: [".claude/expertise/*.yaml"]
+
+  process:
+    - step: "Run prompt-auditor on all skills"
+      parallel: true
+      output: "Audit reports per skill"
+
+    - step: "Run skill-auditor on all skills"
+      parallel: true
+      output: "Compliance reports per skill"
+
+    - step: "Run expertise-auditor on all expertise"
+      parallel: true
+      output: "Drift reports per domain"
+
+    - step: "Prioritize issues by severity"
+      output: "Prioritized issue list"
+
+    - step: "Generate improvement proposals for top issues"
+      max_proposals: 10
+      output: "Proposal queue"
+
+    - step: "Process proposals through eval harness"
+      sequential: true  # One at a time
+      output: "ACCEPT/REJECT decisions"
+```
+
+### Operation 5: Monitor Improvement Trend
+
+Track improvement over time.
+
+```yaml
+monitoring:
+  metrics:
+    - name: "prompt_generation_quality"
+      source: "prompt-generation-benchmark-v1"
+      target: "> 0.85"
+
+    - name: "skill_generation_quality"
+      source: "skill-generation-benchmark-v1"
+      target: "> 0.85"
+
+    - name: "regression_rate"
+      source: "rollback events / commits"
+      target: "< 5%"
+
+    - name: "cycle_time"
+      source: "proposal to commit duration"
+      target: "< 4 hours"
+
+    - name: "improvement_acceptance_rate"
+      source: "accepted / proposed"
+      target: "> 60%"
+
+  alerts:
+    - trigger: "regression_rate > 10%"
+      action: "Pause improvement cycles, human review"
+
+    - trigger: "improvement_acceptance_rate < 40%"
+      action: "Review proposal quality, adjust auditor sensitivity"
+
+    - trigger: "3 consecutive rejections"
+      action: "Analyze patterns, possible eval harness gap"
+```
+
+---
 
 ## Cycle Protocol
 
@@ -177,7 +359,51 @@ function decideOnResults(evalResults) {
 }
 ```
 
+---
 
+## Version Management
+
+### Archive Protocol
+
+```yaml
+archive_protocol:
+  location: ".claude/skills/{skill}/.archive/"
+  naming: "SKILL-v{version}.md"
+  retention: "90 days minimum"
+
+  metadata:
+    - version: "semantic version"
+    - timestamp: "ISO-8601"
+    - cycle_id: "cycle that created this"
+    - improvement_delta: "measured improvement"
+    - changes_summary: "brief description"
+```
+
+### Rollback Protocol
+
+```yaml
+rollback_protocol:
+  trigger: "regression_detected OR manual_request"
+
+  process:
+    - step: "Identify version to restore"
+      source: ".archive/ directory"
+
+    - step: "Copy archived version to active location"
+
+    - step: "Verify restoration"
+
+    - step: "Log rollback event"
+      namespace: "improvement/rollbacks/{id}"
+
+    - step: "Increment rollback counter"
+
+  alerts:
+    - "3+ rollbacks in 24 hours = pause cycles"
+    - "Rollback of same skill 2x = human review"
+```
+
+---
 
 ## Multi-Agent Coordination
 
@@ -225,7 +451,57 @@ consensus:
     - "High-risk change detected"
 ```
 
+---
 
+## Output Format
+
+```yaml
+bootstrap_cycle_output:
+  cycle_id: "cycle-{timestamp}"
+  target: "{skill|prompt}"
+  timestamp: "ISO-8601"
+
+  phases:
+    analyze:
+      status: "completed"
+      duration: "Xms"
+      output: {...}
+    propose:
+      status: "completed"
+      duration: "Xms"
+      proposals: [...]
+    apply:
+      status: "completed"
+      duration: "Xms"
+      new_version: "v{N+1}"
+    evaluate:
+      status: "completed"
+      duration: "Xms"
+      results: {...}
+    decide:
+      status: "completed"
+      verdict: "ACCEPT|REJECT|PENDING_HUMAN_REVIEW"
+      reason: "..."
+    commit_or_rollback:
+      status: "completed"
+      action: "committed|rolled_back"
+
+  result: "ACCEPTED|REJECTED|PENDING"
+  improvement_delta: "+X%"
+  cycle_duration: "Xms"
+
+  next_steps:
+    - "Step 1"
+    - "Step 2"
+
+  metrics_update:
+    total_cycles: N
+    accepted: M
+    rejected: K
+    acceptance_rate: M/N
+```
+
+---
 
 ## Anti-Patterns
 
@@ -245,19 +521,85 @@ consensus:
 4. **Track metrics over time**
 5. **Respect human gates**
 
---------|---------|-----------|
+---
+
+## Memory Namespaces
+
+| Namespace | Purpose | Retention |
+|-----------|---------|-----------|
 | `improvement/cycles/{id}` | Full cycle details | 90 days |
 | `improvement/proposals/{id}` | Pending proposals | Until resolved |
 | `improvement/commits/{id}` | Committed changes | Permanent |
 | `improvement/rollbacks/{id}` | Rollback events | Permanent |
 | `improvement/metrics` | Aggregate metrics | Permanent |
 
+---
 
+## Integration Points
+
+**Depends On**:
+- `prompt-forge`: For generating proposals
+- `skill-forge`: For applying changes
+- `eval-harness`: For testing (FROZEN)
+- `prompt-auditor`: For prompt analysis
+- `skill-auditor`: For skill analysis
+- `expertise-auditor`: For expertise analysis
+- `output-auditor`: For output validation
+
+**Coordinates With**:
+- `domain-expert`: For domain-specific improvements
+- `expertise-adversary`: For adversarial validation
+
+---
 
 **Status**: Production-Ready
 **Version**: 1.0.0
 **Key Constraint**: All changes gated by frozen eval harness
 **Safety**: Eval harness NEVER self-improves
+
+---
+
+## Core Principles
+
+### 1. The Eval Harness is Immutable
+The eval harness serves as the objective anchor that prevents Goodhart's Law. It measures improvement without being subject to improvement itself.
+
+**In practice:**
+- The eval harness (benchmarks + regression tests) NEVER self-improves
+- Prompt Forge and Skill Forge cannot modify eval criteria
+- Benchmarks are frozen per improvement cycle
+- New benchmarks can be added, but existing benchmarks never change
+- Human gates are the only mechanism to update eval harness
+- All improvement proposals must pass unchanged eval standards
+- If eval harness needs updating, it requires manual approval outside the loop
+
+### 2. Improvement Requires Consensus and Evidence
+No change is accepted based on a single metric or agent opinion. Improvements must demonstrate measurable gains and pass multi-agent validation.
+
+**In practice:**
+- All regression tests must pass (100% pass rate required)
+- All benchmarks must meet minimum thresholds
+- Improvement delta must be positive (better than previous version)
+- Multiple auditor agents must agree (prompt-auditor, skill-auditor, etc.)
+- Disagreement among auditors triggers human review
+- Previous version is archived before applying changes
+- Rollback capability maintained for 90 days minimum
+- Metrics tracked over time to detect improvement trends
+
+### 3. Recursive Improvement is Bounded and Observable
+The bootstrap loop improves tools recursively, but every cycle is logged, versioned, and reversible to prevent runaway optimization.
+
+**In practice:**
+- Every improvement cycle has a unique ID and timestamp
+- All phases (analyze, propose, apply, evaluate, decide, commit/rollback) are logged
+- Version history maintained with semantic versioning (v1.0, v1.1, v2.0)
+- Rollback protocol triggers on regression or manual request
+- Alerts fire on 3+ rollbacks in 24 hours (pause cycles)
+- Improvement acceptance rate tracked (target: >60%)
+- Cycle time monitored (target: <4 hours per cycle)
+- No concurrent cycles on same target (sequential only)
+
+---
 
 ## Anti-Patterns
 

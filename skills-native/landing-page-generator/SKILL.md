@@ -1,6 +1,7 @@
 ---
 name: landing-page-generator
 description: Comprehensive 6-phase SOP for AI-driven landing page creation (Research -> Copy -> Inspiration -> Build -> Iterate -> Deploy). Use when building marketing pages, sales pages, or product landing pages. Combines web research for current best practices, structured copywriting from product briefs, design system extraction via Firecrawl, and multi-model code generation to produce high-converting, deployable landing pages. Integrates with expertise system for marketing/frontend/deployment domains.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Landing Page Generator
@@ -93,7 +94,29 @@ mcp_servers:
 - **playwright**: Enables programmatic full-page screenshots when manual capture isn't practical
 - **flow-nexus**: Advanced scraping capabilities for complex inspiration sites
 
+---
 
+## Phase 0: Expertise Loading
+
+Before beginning landing page creation:
+
+```yaml
+actions:
+  - Check: .claude/expertise/marketing.yaml
+  - Check: .claude/expertise/frontend.yaml
+  - Check: .claude/expertise/deployment.yaml
+
+if expertise_exists:
+  - Load: conversion patterns, design systems, deployment configs
+  - Apply: Proven landing page structures
+  - Avoid: Known anti-patterns
+
+else:
+  - Flag: Discovery mode
+  - Plan: Generate expertise learnings after successful deployment
+```
+
+---
 
 ## When to Use This Skill
 
@@ -109,7 +132,109 @@ mcp_servers:
 - Need custom CMS integration (use `backend-api-development`)
 - Require e-commerce checkout flows (use specialized e-commerce skills)
 
+---
 
+## Landing Page Type Recognition
+
+Different landing page types require different approaches. Identify the type early to optimize the entire workflow:
+
+### SaaS Product Pages
+**Patterns**: "software", "app", "platform", "tool", "subscription"
+**Common characteristics**:
+- Feature-benefit focus
+- Free trial or freemium CTA
+- Pricing tier comparison
+- Integration logos and API mentions
+- Screenshots or product demos
+
+**Key research focus**:
+- Competitor positioning
+- Feature comparison tables
+- Trial-to-paid conversion tactics
+
+**Copy framework**: Problem-Agitation-Solution (PAS)
+
+### Local Service Business Pages
+**Patterns**: "plumber", "lawyer", "dentist", "contractor", "local"
+**Common characteristics**:
+- Trust signals (licenses, insurance, reviews)
+- Service area maps
+- Emergency/24-7 availability
+- Phone number prominence
+- Google reviews integration
+
+**Key research focus**:
+- Local SEO requirements
+- Trust badge placement
+- Click-to-call optimization
+
+**Copy framework**: Trust-Authority-Action
+
+### E-commerce Product Pages
+**Patterns**: "buy", "shop", "product", "order", "purchase"
+**Common characteristics**:
+- Product images/gallery
+- Price and shipping info
+- Add to cart CTA
+- Reviews and ratings
+- Scarcity/urgency elements
+
+**Key research focus**:
+- Product photography best practices
+- Cart abandonment reduction
+- Upsell/cross-sell placement
+
+**Copy framework**: Features-Advantages-Benefits (FAB)
+
+### Lead Generation Pages
+**Patterns**: "contact", "quote", "consultation", "demo", "signup"
+**Common characteristics**:
+- Form above the fold
+- Minimal navigation
+- Social proof near form
+- Privacy assurance
+- Clear value proposition for submitting
+
+**Key research focus**:
+- Form field optimization
+- Multi-step vs single-step forms
+- Lead magnet effectiveness
+
+**Copy framework**: AIDA (Attention-Interest-Desire-Action)
+
+### Event/Webinar Registration Pages
+**Patterns**: "register", "event", "webinar", "conference", "workshop"
+**Common characteristics**:
+- Date/time prominence
+- Speaker credentials
+- Agenda/what you'll learn
+- Countdown timer
+- Calendar integration
+
+**Key research focus**:
+- Registration form optimization
+- Reminder email sequences
+- No-show reduction tactics
+
+**Copy framework**: Value-Urgency-Action
+
+### App Download Pages
+**Patterns**: "download", "mobile app", "iOS", "Android", "install"
+**Common characteristics**:
+- App store badges
+- Device mockups
+- Feature highlights
+- User testimonials
+- QR code for direct download
+
+**Key research focus**:
+- App store optimization (ASO)
+- Screenshot best practices
+- Rating/review prominence
+
+**Copy framework**: Benefit-Social Proof-Download
+
+---
 
 ## The 6-Phase SOP
 
@@ -155,7 +280,57 @@ required:
 - Self-consistency: Cross-validate across multiple sources
 - Recency emphasis: Date-specific queries prevent stale tactics
 
+---
 
+### Phase 2: Copy (20-40 min)
+
+**Purpose**: AI writes landing page copy using research insights and product/service brief.
+
+**Agent**: `content-writer` or `coder`
+
+**Prompt Template**:
+```
+Using the Landing Page Playbook from Phase 1, create the copy for my landing page.
+
+IMPORTANT: Only write the TEXT content. Do not write any code yet.
+
+Product/Service Brief:
+{PRODUCT_BRIEF}
+
+Include sections:
+- Hero headline and subheadline
+- Problem statement
+- Solution positioning
+- Features/Benefits (3-5 key points)
+- Social proof (testimonials framework)
+- FAQ (3-5 common questions)
+- CTA (primary and secondary)
+
+Output: Render as markdown artifact titled "Landing Page Copy"
+```
+
+**Input Contract**:
+```yaml
+required:
+  - product_brief: string  # What you're selling
+  - playbook: artifact  # Phase 1 output
+optional:
+  - tone: string  # Professional, casual, urgent
+  - unique_selling_proposition: string
+  - pricing: string
+  - target_pain_points: list
+```
+
+**Output Contract**:
+```yaml
+required:
+  - copy_markdown: string  # All page copy
+  - section_breakdown: object  # Copy organized by section
+```
+
+**User Checkpoint**: Review copy before proceeding. This is the most critical alignment point.
+
+---
 
 ### Phase 3: Inspiration (10-20 min)
 
@@ -204,7 +379,65 @@ required:
   - screenshot_png: file  # Full-page capture
 ```
 
+---
 
+### Phase 4: Build (30-60 min)
+
+**Purpose**: AI generates the landing page code using all gathered inputs.
+
+**Agent**: `coder`, `frontend-dev`
+
+**Prompt Template**:
+```
+You are an expert developer. Create an extremely beautiful and well-structured landing page.
+
+I am providing:
+1. Landing Page Playbook (best practices) - {PLAYBOOK}
+2. Landing Page Copy (all text content) - {COPY}
+3. Branding Guidelines (from Firecrawl) - {BRANDING_JSON}
+4. Design Inspiration Screenshot - {SCREENSHOT}
+
+Requirements:
+- Single HTML file with inline CSS and JavaScript
+- Mobile-responsive design
+- Use the EXACT copy provided (do not modify text)
+- Match branding colors, fonts, and styling from JSON
+- Render via artifacts feature to preview
+
+Technical Stack:
+- HTML5 semantic markup
+- CSS3 with flexbox/grid
+- Vanilla JavaScript (no frameworks)
+- Optional: Tailwind CSS via CDN
+
+Output: Single index.html file rendered as artifact
+```
+
+**Input Contract**:
+```yaml
+required:
+  - playbook: artifact  # Phase 1 output
+  - copy: artifact  # Phase 2 output
+  - branding_json: file  # Phase 3A output
+  - screenshot: file  # Phase 3B output
+optional:
+  - tech_preferences: object  # Framework preferences
+  - accessibility_level: string  # WCAG AA/AAA
+```
+
+**Output Contract**:
+```yaml
+required:
+  - index_html: file  # Complete landing page
+  - preview_artifact: artifact  # Rendered preview
+```
+
+**Model Recommendation**: Use highest-capability model available:
+- Claude: Opus 4.5 with extended thinking
+- OpenAI: GPT-5.1 with high reasoning
+- Google: Gemini 3 Pro
+
+---
 
 ### Phase 5: Iterate (Variable)
 
@@ -255,7 +488,59 @@ required:
 
 **Context Preservation**: After 2 iterations, export HTML and continue in fresh context or external tool.
 
+---
 
+### Phase 6: Deploy (15-30 min)
+
+**Purpose**: Deploy the landing page to production via Netlify CLI.
+
+**Agent**: `cicd-engineer`, `deployment-readiness`
+
+**Prerequisites**:
+1. Subdomain configured (e.g., `product.yourdomain.com`)
+2. Netlify account connected
+3. Netlify CLI authenticated
+
+**Deployment Script**:
+```bash
+# Use helper script
+node resources/scripts/netlify-deploy.js --site-name {SITE_NAME} --dir {BUILD_DIR}
+```
+
+**Manual Netlify CLI Steps**:
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Authenticate
+netlify login
+
+# Initialize site
+netlify init
+
+# Deploy
+netlify deploy --prod
+```
+
+**Input Contract**:
+```yaml
+required:
+  - index_html: file  # Final landing page
+  - site_name: string  # Netlify site name
+optional:
+  - custom_domain: string  # If using custom domain
+  - environment: string  # staging or production
+```
+
+**Output Contract**:
+```yaml
+required:
+  - deploy_url: string  # Live URL
+  - deploy_id: string  # Deployment identifier
+  - status: string  # success or failed
+```
+
+---
 
 ## Agent Mapping
 
@@ -304,7 +589,42 @@ agents:
     subagent_type: cicd-engineer
 ```
 
+---
 
+## Input/Output Contracts (Full Skill)
+
+### Skill Input Contract
+
+```yaml
+input_contract:
+  required:
+    - product_brief: string  # What you're selling (name, description, price, value prop)
+  optional:
+    - inspiration_url: string  # Design inspiration website
+    - existing_brand_url: string  # Your existing website for brand consistency
+    - tone: string  # Professional, casual, urgent, playful
+    - target_audience: string  # Who you're selling to
+    - industry: string  # For industry-specific research
+    - tech_preferences: object  # Framework preferences
+    - deploy_config: object  # Netlify/deployment settings
+```
+
+### Skill Output Contract
+
+```yaml
+output_contract:
+  required:
+    - landing_page_html: file  # Final deployable HTML
+    - copy_document: artifact  # All page copy for reference
+    - deploy_url: string  # Live URL (if deployed)
+  optional:
+    - playbook: artifact  # Research findings
+    - branding_json: file  # Extracted branding
+    - iteration_history: list  # Change log
+    - performance_metrics: object  # Lighthouse scores
+```
+
+---
 
 ## MCP Requirements
 
@@ -384,7 +704,29 @@ const priorDeploys = await vector_search('SaaS landing page', {
 });
 ```
 
+---
 
+## Helper Scripts
+
+### firecrawl-scraper.js
+
+Location: `resources/scripts/firecrawl-scraper.js`
+
+Extracts branding guidelines from any URL using Firecrawl API.
+
+### screenshot-capture.js
+
+Location: `resources/scripts/screenshot-capture.js`
+
+Captures full-page screenshots using Puppeteer/Playwright.
+
+### netlify-deploy.js
+
+Location: `resources/scripts/netlify-deploy.js`
+
+Automates Netlify CLI deployment with proper configuration.
+
+---
 
 ## GraphViz Process Diagram
 
@@ -421,7 +763,64 @@ digraph LandingPageGenerator {
 }
 ```
 
+---
 
+## Examples
+
+### Example 1: SaaS Product Landing Page
+
+```javascript
+// User: "Create a landing page for my AI writing assistant called WriteGenius"
+
+[Single Message]:
+  Skill("landing-page-generator")
+
+  // Phase 1: Research
+  Task("Researcher", "Research landing page best practices as of 2025-01-15, focus on SaaS AI tools", "researcher")
+
+  // Phase 2: Copy (after research)
+  Task("Content Writer", "Write landing page copy for WriteGenius AI writing assistant, $29/month, helps writers 10x output", "content-writer")
+
+  // Phase 3: Inspiration
+  Task("Frontend Dev", "Extract branding from jasper.ai and capture screenshot", "frontend-dev")
+
+  // Phase 4-6: Build, Iterate, Deploy
+  Task("Coder", "Build landing page using playbook, copy, and branding", "coder")
+  Task("CI/CD Engineer", "Deploy to Netlify as writegenius-landing", "cicd-engineer")
+
+  TodoWrite({ todos: [
+    {content: "Research SaaS landing page best practices", status: "in_progress", activeForm: "Researching best practices"},
+    {content: "Write compelling copy for WriteGenius", status: "pending", activeForm: "Writing copy"},
+    {content: "Extract branding from Jasper.ai", status: "pending", activeForm: "Extracting branding"},
+    {content: "Capture inspiration screenshot", status: "pending", activeForm: "Capturing screenshot"},
+    {content: "Build HTML landing page", status: "pending", activeForm: "Building landing page"},
+    {content: "Review and iterate on design", status: "pending", activeForm: "Iterating on design"},
+    {content: "Deploy to Netlify", status: "pending", activeForm: "Deploying to Netlify"}
+  ]})
+```
+
+### Example 2: Local Business Landing Page
+
+```javascript
+// User: "Build a landing page for my plumbing business, Joe's Plumbing, serving Austin TX"
+
+[Single Message]:
+  Skill("landing-page-generator")
+
+  Task("Researcher", "Research local service business landing page best practices 2025, focus on trust signals and local SEO", "researcher")
+  Task("Content Writer", "Write copy for Joe's Plumbing Austin TX, emergency service, 24/7, licensed and insured", "content-writer")
+  Task("Coder", "Build professional local business landing page with contact form, service areas, testimonials", "coder")
+
+  TodoWrite({ todos: [
+    {content: "Research local business landing pages", status: "in_progress", activeForm: "Researching local pages"},
+    {content: "Write trust-focused copy", status: "pending", activeForm: "Writing copy"},
+    {content: "Build responsive landing page", status: "pending", activeForm: "Building page"},
+    {content: "Add contact form integration", status: "pending", activeForm: "Adding contact form"},
+    {content: "Deploy and test", status: "pending", activeForm: "Deploying"}
+  ]})
+```
+
+---
 
 ## Advanced Techniques
 
@@ -525,7 +924,16 @@ Ensure landing pages load fast:
 - Cumulative Layout Shift: <0.1
 - Lighthouse Performance: >90
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+Avoid these common mistakes that kill conversions:
+
+### Copy Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Feature dumping** | Lists features without benefits | Transform every feature into "so you can..." |
 | **Vague headlines** | "Welcome to Our Site" | Specific value prop: "Cut Your Tax Bill in Half" |
 | **Jargon overload** | Industry terms confuse visitors | Write for a smart 12-year-old |
@@ -564,7 +972,55 @@ Ensure landing pages load fast:
 | **Too many iterations** | Context degradation | Export to Cursor after 2-3 rounds |
 | **No deployment testing** | Live site has issues | Always verify deployed URL |
 
--------|----------|
+---
+
+## Practical Guidelines
+
+### When to Use Full Workflow vs. Quick Mode
+
+**Full 6-Phase Workflow** (2-4 hours):
+- New product launches
+- High-stakes campaigns
+- Brand-new businesses
+- Significant budget behind traffic
+- Complex value propositions
+
+**Quick Mode** (1-2 hours, skip Phase 1):
+- Refreshing existing pages with known best practices
+- Similar pages to recently completed projects
+- Time-critical launches with existing playbooks
+- Low-traffic testing pages
+
+### Quality Checkpoints
+
+**Phase 2 Checkpoint** (CRITICAL):
+Before moving to design, verify:
+- [ ] Headline passes the "would I click?" test
+- [ ] Value proposition is clear in 5 seconds
+- [ ] CTA is compelling and specific
+- [ ] Copy addresses main objection
+- [ ] Tone matches target audience
+
+**Phase 4 Checkpoint**:
+Before iterating, verify:
+- [ ] All copy from Phase 2 is present
+- [ ] Branding matches inspiration (colors, fonts)
+- [ ] Mobile layout works
+- [ ] CTA is visually prominent
+- [ ] No placeholder content remains
+
+**Phase 6 Checkpoint**:
+Before considering complete:
+- [ ] Live URL is accessible
+- [ ] Forms submit correctly
+- [ ] Analytics tracking fires
+- [ ] Page loads in <3 seconds
+- [ ] SSL certificate is valid
+
+### Balancing Speed and Quality
+
+| Priority | Approach |
+|----------|----------|
 | **Speed over quality** | Use templates, skip Phase 3 inspiration, minimal iterations |
 | **Quality over speed** | Full research, multiple inspiration sources, 5+ iterations |
 | **Balanced** | Standard 6-phase workflow with 2-3 iterations |
@@ -584,7 +1040,16 @@ When iterating based on feedback:
 - Address structural issues before cosmetic ones
 - Track iteration count to know when to export
 
-----|------------------|------------------|
+---
+
+## Cross-Skill Coordination
+
+Landing Page Generator works with other skills in the ecosystem:
+
+### Upstream Skills (provide input)
+
+| Skill | When to Use First | What It Provides |
+|-------|------------------|------------------|
 | `intent-analyzer` | Unclear requirements | Clarified landing page goals |
 | `prompt-architect` | Complex product briefs | Optimized product description |
 | `research-driven-planning` | Large campaign planning | Strategic context for the page |
@@ -626,7 +1091,25 @@ When iterating based on feedback:
   Skill("github-workflow-automation")
 ```
 
+---
 
+## Conclusion
+
+Landing Page Generator transforms the complex, multi-disciplinary task of creating high-converting landing pages into a systematic, AI-assisted workflow. By combining research-driven best practices, structured copywriting, design system extraction, and iterative refinement, it produces pages that don't just look professional--they convert visitors into customers.
+
+The 6-phase workflow mirrors how professional CRO teams operate:
+1. **Research** grounds every decision in current best practices
+2. **Copy** ensures the message resonates with the target audience
+3. **Inspiration** maintains brand consistency without imitation
+4. **Build** leverages AI's design capabilities
+5. **Iterate** refines while preserving context
+6. **Deploy** gets the page live with confidence
+
+Use Landing Page Generator thoughtfully--not every landing page needs the full workflow, but high-stakes campaigns benefit enormously from this systematic approach. The investment in proper research and copy review pays dividends through higher conversion rates and better ROI on marketing spend.
+
+Remember: Copy before design, one page one goal, and always verify at checkpoints. The best landing page is the one that converts.
+
+---
 
 ## Recursive Improvement Integration
 
@@ -673,7 +1156,23 @@ namespaces:
   - improvement/audits/landing-page-generator: Skill audits
 ```
 
------|--------|
+---
+
+## Skill Completion Verification
+
+**After invoking this skill, verify:**
+
+- [ ] **Phase 1 Complete**: Playbook artifact generated with current best practices
+- [ ] **Phase 2 Complete**: Copy reviewed and approved by user
+- [ ] **Phase 3 Complete**: Branding JSON and screenshot captured
+- [ ] **Phase 4 Complete**: HTML landing page renders correctly
+- [ ] **Phase 5 Complete**: Iterations applied (if needed)
+- [ ] **Phase 6 Complete**: Live URL returned and accessible
+
+### Success Criteria
+
+| Metric | Target |
+|--------|--------|
 | Copy alignment | 100% matches product brief |
 | Design fidelity | Matches inspiration branding |
 | Mobile responsive | 100% (test on 3 viewports) |
@@ -681,7 +1180,12 @@ namespaces:
 | Lighthouse Accessibility | > 90 |
 | Deploy success | Live URL accessible |
 
-----|----------|
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
 | Firecrawl rate limited | Use backup inspiration method (manual screenshot) |
 | Copy doesn't resonate | Return to Phase 2, provide more product context |
 | Design looks generic | Provide stronger inspiration URL or existing brand |
@@ -709,7 +1213,38 @@ When Phase 5 iterations exceed 2-3 rounds:
 # 4. Each edit = new focused conversation
 ```
 
+---
 
+## Post-Deployment Learning (Expertise Auto-Update)
+
+After successful deployment, extract learnings to improve future landing pages:
+
+```yaml
+post_deployment_learning:
+  trigger: "Successful deployment with live URL"
+
+  extract_learnings:
+    - conversion_patterns: "What copy/design elements worked"
+    - technical_patterns: "Build configurations, deployment settings"
+    - issues_resolved: "Problems encountered and solutions"
+
+  propose_expertise_updates:
+    - domain: marketing.yaml
+      updates:
+        - "Effective headline patterns for {industry}"
+        - "CTA placement that converted"
+
+  validation:
+    - Run adversarial validation (expertise-adversary)
+    - Survival threshold: 70%
+    - Apply only if validated
+
+  storage:
+    namespace: "landing-page/learnings/{deployment_id}"
+    retention: "permanent"
+```
+
+---
 
 ## Changelog
 

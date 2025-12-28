@@ -1,0 +1,1504 @@
+{
+  "timestamp": "2025-12-28T15:56:25.276Z",
+  "source": "C:\\Users\\17175\\claude-code-plugins\\ruv-sparc-three-loop-system\\skills",
+  "target": "C:\\Users\\17175\\claude-code-plugins\\ruv-sparc-three-loop-system\\skills-native",
+  "summary": {
+    "total": 186,
+    "migrated": 186,
+    "failed": 0,
+    "validated": 186,
+    "invalid": 0
+  },
+  "migrated": [
+    {
+      "success": true,
+      "originalName": "api-docs",
+      "name": "api-docs",
+      "category": "delivery",
+      "description": "Generate and maintain comprehensive API documentation using OpenAPI 3.0, Swagger...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "debugging",
+      "name": "debugging",
+      "category": "delivery",
+      "description": "Systematic debugging methodology using a 5-phase protocol. Use when troubleshoot...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "feature-dev-complete",
+      "name": "feature-dev-complete",
+      "category": "delivery",
+      "description": "Complete feature development lifecycle from research to deployment. Uses Gemini ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "i18n-automation",
+      "name": "i18n-automation",
+      "category": "delivery",
+      "description": "Automate internationalization and localization workflows for web applications wi...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "landing-page-generator",
+      "name": "landing-page-generator",
+      "category": "delivery",
+      "description": "Comprehensive 6-phase SOP for AI-driven landing page creation (Research -> Copy ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "pair-programming",
+      "name": "pair-programming",
+      "category": "delivery",
+      "description": "AI-assisted pair programming with multiple modes (driver/navigator/switch), real...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "smart-bug-fix",
+      "name": "smart-bug-fix",
+      "category": "delivery",
+      "description": "Intelligent bug fixing workflow combining root cause analysis, multi-model reaso...",
+      "allowedTools": "Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sop-api-development",
+      "name": "sop-api-development",
+      "category": "delivery",
+      "description": "Complete REST API development workflow coordinating backend, database, testing, ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "sparc-methodology",
+      "name": "sparc-methodology",
+      "category": "delivery",
+      "description": "SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) comprehe...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-collaborative-coding-use-pair-programming",
+      "name": "when-collaborative-coding-use-pair-programming",
+      "category": "delivery",
+      "description": "AI-assisted pair programming with multiple modes (driver/navigator/switch), real...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-debugging-code-use-debugging-assistant",
+      "name": "when-debugging-code-use-debugging-assistant",
+      "category": "delivery",
+      "description": "Debugging Assistant operates on 3 fundamental principles that ensure systematic ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-developing-complete-feature-use-feature-dev-complete",
+      "name": "when-developing-complete-feature-use-feature-dev-complete",
+      "category": "delivery",
+      "description": "Comprehensive end-to-end feature development using multi-agent coordination with...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-fixing-complex-bug-use-smart-bug-fix",
+      "name": "when-fixing-complex-bug-use-smart-bug-fix",
+      "category": "delivery",
+      "description": "Intelligent bug fixing workflow combining root cause analysis, multi-model reaso...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-internationalizing-app-use-i18n-automation",
+      "name": "when-internationalizing-app-use-i18n-automation",
+      "category": "delivery",
+      "description": "Automate internationalization and localization workflows for web applications wi...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "agent-creation",
+      "name": "agent-creation",
+      "category": "foundry",
+      "description": "Systematic agent creation using evidence-based prompting principles and 4-phase ...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "agent-creator",
+      "name": "agent-creator",
+      "category": "foundry",
+      "description": "Creates specialized AI agents with optimized system prompts using the official 5...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "agent-selector",
+      "name": "agent-selector",
+      "category": "foundry",
+      "description": "Intelligent agent selection from 203-agent registry using semantic matching and ...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "base-template-generator",
+      "name": "base-template-generator",
+      "category": "foundry",
+      "description": "Generate clean, production-ready boilerplate templates for Node.js, Python, Go, ...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "cognitive-lensing",
+      "name": "cognitive-lensing",
+      "category": "foundry",
+      "description": "Cross-lingual cognitive framing system that activates different reasoning patter...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "meta-tools",
+      "name": "meta-tools",
+      "category": "foundry",
+      "description": "Meta-tools is a comprehensive framework for creating, validating, optimizing, an...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "micro-skill-creator",
+      "name": "micro-skill-creator",
+      "category": "foundry",
+      "description": "Rapidly creates atomic, focused skills optimized with evidence-based prompting, ...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "playbook-architect",
+      "name": "playbook-architect",
+      "category": "foundry",
+      "description": "Comprehensive framework for creating, analyzing, and optimizing playbooks that o...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "prompt-architect",
+      "name": "prompt-architect",
+      "category": "foundry",
+      "description": "Comprehensive framework for analyzing, creating, and refining prompts for AI sys...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "prompt-forge",
+      "name": "prompt-forge",
+      "category": "foundry",
+      "description": "Meta-prompt that generates improved prompts and templates. Can improve other pro...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "recursive-improvement",
+      "name": "recursive-improvement",
+      "category": "foundry",
+      "description": "Self-improving meta-loop that audits and enhances skills, prompts, and expertise...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "Skill Builder",
+      "name": "skill-builder",
+      "category": "foundry",
+      "description": "Create new Claude Code Skills with proper YAML frontmatter, progressive disclosu...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "skill-creator-agent",
+      "name": "skill-creator-agent",
+      "category": "foundry",
+      "description": "Creates Claude Code skills where each skill is tied to a specialist agent optimi...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "skill-forge",
+      "name": "skill-forge",
+      "category": "foundry",
+      "description": "Advanced skill creation system for Claude Code that combines deep intent analysi...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "AgentDB Semantic Vector Search",
+      "name": "agentdb-semantic-vector-search",
+      "category": "foundry",
+      "description": "---...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-creating-skill-template-use-skill-builder",
+      "name": "when-creating-skill-template-use-skill-builder",
+      "category": "foundry",
+      "description": "Create new Claude Code Skills with proper YAML frontmatter, progressive disclosu...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ReasoningBank Adaptive Learning with AgentDB",
+      "name": "reasoningbank-adaptive-learning-with-agentdb",
+      "category": "foundry",
+      "description": "---...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "AgentDB Persistent Memory Patterns",
+      "name": "agentdb-persistent-memory-patterns",
+      "category": "foundry",
+      "description": "AgentDB Persistent Memory Patterns operates on 3 fundamental principles:...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "AgentDB Vector Search Optimization",
+      "name": "agentdb-vector-search-optimization",
+      "category": "foundry",
+      "description": "AgentDB Vector Search Optimization operates on 3 fundamental principles:...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "AgentDB Reinforcement Learning Training",
+      "name": "agentdb-reinforcement-learning-training",
+      "category": "foundry",
+      "description": "AgentDB Reinforcement Learning Training operates on 3 fundamental principles:...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "Advanced AgentDB Vector Search Implementation",
+      "name": "advanced-agentdb-vector-search-implementation",
+      "category": "foundry",
+      "description": "Advanced AgentDB Vector Search Implementation operates on 3 fundamental principl...",
+      "allowedTools": "Read, Write, Edit, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "cicd-intelligent-recovery",
+      "name": "cicd-intelligent-recovery",
+      "category": "operations",
+      "description": "Loop 3 of the Three-Loop Integrated Development System. CI/CD automation with in...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "cloud-platforms",
+      "name": "cloud-platforms",
+      "category": "operations",
+      "description": "Multi-cloud deployment and infrastructure management across AWS, GCP, and Azure....",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "deployment-readiness",
+      "name": "deployment-readiness",
+      "category": "operations",
+      "description": "Production deployment validation for Deep Research SOP Pipeline H ensuring model...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "github-multi-repo",
+      "name": "github-multi-repo",
+      "category": "operations",
+      "description": "Multi-repository coordination, synchronization, and architecture management with...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "github-project-management",
+      "name": "github-project-management",
+      "category": "operations",
+      "description": "Comprehensive GitHub project management with swarm-coordinated issue tracking, p...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "github-release-management",
+      "name": "github-release-management",
+      "category": "operations",
+      "description": "Comprehensive GitHub release orchestration with AI swarm coordination for automa...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "github-workflow-automation",
+      "name": "github-workflow-automation",
+      "category": "operations",
+      "description": "Advanced GitHub Actions workflow automation with AI swarm coordination, intellig...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "hooks-automation",
+      "name": "hooks-automation",
+      "category": "operations",
+      "description": "Automated coordination, formatting, and learning from Claude Code operations usi...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "infrastructure",
+      "name": "infrastructure",
+      "category": "operations",
+      "description": "- **Skill ID**: infrastructure-orchestration...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "opentelemetry-observability",
+      "name": "opentelemetry-observability",
+      "category": "operations",
+      "description": "OpenTelemetry specialist for distributed tracing, metrics collection, log correl...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "performance-analysis",
+      "name": "performance-analysis",
+      "category": "operations",
+      "description": "Comprehensive performance analysis, bottleneck detection, and optimization recom...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "platform-integration",
+      "name": "platform-integration",
+      "category": "operations",
+      "description": "Enterprise platform integration orchestration with API connectivity, webhook aut...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "production-readiness",
+      "name": "production-readiness",
+      "category": "operations",
+      "description": "Comprehensive pre-deployment validation ensuring code is production-ready. Runs ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "sop-product-launch",
+      "name": "sop-product-launch",
+      "category": "operations",
+      "description": "Complete product launch workflow coordinating 15+ specialist agents across resea...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-analyzing-performance-use-performance-analysis",
+      "name": "when-analyzing-performance-use-performance-analysis",
+      "category": "operations",
+      "description": "Comprehensive performance analysis, bottleneck detection, and optimization recom...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-managing-github-projects-use-github-project-management",
+      "name": "when-managing-github-projects-use-github-project-management",
+      "category": "operations",
+      "description": "Comprehensive GitHub project management with swarm-coordinated issue tracking, p...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-managing-multiple-repos-use-github-multi-repo",
+      "name": "when-managing-multiple-repos-use-github-multi-repo",
+      "category": "operations",
+      "description": "Multi-repository coordination, synchronization, and architecture management with...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-profiling-performance-use-performance-profiler",
+      "name": "when-profiling-performance-use-performance-profiler",
+      "category": "operations",
+      "description": "Comprehensive performance profiling, bottleneck detection, and optimization syst...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-releasing-software-use-github-release-management",
+      "name": "when-releasing-software-use-github-release-management",
+      "category": "operations",
+      "description": "Comprehensive GitHub release orchestration with AI swarm coordination for automa...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "advanced-coordination",
+      "name": "advanced-coordination",
+      "category": "orchestration",
+      "description": "Advanced multi-agent coordination patterns for complex distributed systems. Use ...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ai-dev-orchestration",
+      "name": "ai-dev-orchestration",
+      "category": "orchestration",
+      "description": "Meta-orchestrator for AI-assisted app development with behavioral guardrails and...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "cascade-orchestrator",
+      "name": "cascade-orchestrator",
+      "category": "orchestration",
+      "description": "Creates sophisticated workflow cascades coordinating multiple micro-skills with ...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "coordination",
+      "name": "coordination",
+      "category": "orchestration",
+      "description": "Advanced multi-agent coordination patterns including mesh, hierarchical, and ada...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "flow-nexus-swarm",
+      "name": "flow-nexus-swarm",
+      "category": "orchestration",
+      "description": "Cloud-based AI swarm deployment and event-driven workflow automation with Flow N...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "hive-mind-advanced",
+      "name": "hive-mind-advanced",
+      "category": "orchestration",
+      "description": "Advanced Hive Mind collective intelligence system for queen-led multi-agent coor...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "parallel-swarm-implementation",
+      "name": "parallel-swarm-implementation",
+      "category": "orchestration",
+      "description": "Loop 2 of the Three-Loop Integrated Development System. META-SKILL that dynamica...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ralph-loop",
+      "name": "ralph-loop",
+      "category": "orchestration",
+      "description": "Persistence loop system that prevents premature task completion by using Stop ho...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "safe-task-spawn",
+      "name": "safe-task-spawn",
+      "category": "orchestration",
+      "description": "Validated wrapper around Task() calls that enforces agent registry compliance, p...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "slash-command-encoder",
+      "name": "slash-command-encoder",
+      "category": "orchestration",
+      "description": "Creates ergonomic slash commands (/command) that provide fast, unambiguous acces...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "stream-chain",
+      "name": "stream-chain",
+      "category": "orchestration",
+      "description": "Stream-JSON chaining for multi-agent pipelines, data transformation, and sequent...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "swarm-advanced",
+      "name": "swarm-advanced",
+      "category": "orchestration",
+      "description": "Advanced swarm orchestration patterns for research, development, testing, and co...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "swarm-orchestration",
+      "name": "swarm-orchestration",
+      "category": "orchestration",
+      "description": "Orchestrate multi-agent swarms with agentic-flow for parallel task execution, dy...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-automating-github-actions-use-workflow-automation",
+      "name": "when-automating-github-actions-use-workflow-automation",
+      "category": "orchestration",
+      "description": "Advanced GitHub Actions workflow automation with AI swarm coordination, intellig...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-automating-workflows-use-hooks-automation",
+      "name": "when-automating-workflows-use-hooks-automation",
+      "category": "orchestration",
+      "description": "Automated coordination, formatting, and learning from Claude Code operations usi...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-building-backend-api-orchestrate-api-development",
+      "name": "when-building-backend-api-orchestrate-api-development",
+      "category": "orchestration",
+      "description": "Use when building a production-ready REST API from requirements through deployme...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-chaining-workflows-use-cascade-orchestrator",
+      "name": "when-chaining-workflows-use-cascade-orchestrator",
+      "category": "orchestration",
+      "description": "Create sophisticated workflow cascades with sequential pipelines, parallel execu...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-coordinating-collective-intelligence-use-hive-mind",
+      "name": "when-coordinating-collective-intelligence-use-hive-mind",
+      "category": "orchestration",
+      "description": "Advanced Hive Mind collective intelligence for queen-led multi-agent coordinatio...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-deploying-cloud-swarm-use-flow-nexus-swarm",
+      "name": "when-deploying-cloud-swarm-use-flow-nexus-swarm",
+      "category": "orchestration",
+      "description": "---...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-releasing-new-product-orchestrate-product-launch",
+      "name": "when-releasing-new-product-orchestrate-product-launch",
+      "category": "orchestration",
+      "description": "Use when launching a new product end-to-end from market research through post-la...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-reviewing-pull-request-orchestrate-comprehensive-code-review",
+      "name": "when-reviewing-pull-request-orchestrate-comprehensive-code-revie",
+      "category": "orchestration",
+      "description": "Use when conducting comprehensive code review for pull requests across multiple ...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-using-sparc-methodology-use-sparc-workflow",
+      "name": "when-using-sparc-methodology-use-sparc-workflow",
+      "category": "orchestration",
+      "description": "Complete SPARC (Specification, Pseudocode, Architecture, Refinement, Completion)...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-bridging-web-cli-use-web-cli-teleport",
+      "name": "when-bridging-web-cli-use-web-cli-teleport",
+      "category": "orchestration",
+      "description": "Bridge web interfaces with CLI workflows for seamless bidirectional integration...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-chaining-agent-pipelines-use-stream-chain",
+      "name": "when-chaining-agent-pipelines-use-stream-chain",
+      "category": "orchestration",
+      "description": "Chain agent outputs as inputs in sequential or parallel pipelines for data flow ...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-creating-slash-commands-use-slash-command-encoder",
+      "name": "when-creating-slash-commands-use-slash-command-encoder",
+      "category": "orchestration",
+      "description": "Create ergonomic slash commands for fast access to micro-skills with auto-discov...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-orchestrating-swarm-use-swarm-orchestration",
+      "name": "when-orchestrating-swarm-use-swarm-orchestration",
+      "category": "orchestration",
+      "description": "Complex multi-agent swarm orchestration with task decomposition, distributed exe...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-using-advanced-swarm-use-swarm-advanced",
+      "name": "when-using-advanced-swarm-use-swarm-advanced",
+      "category": "orchestration",
+      "description": "Advanced swarm patterns with dynamic topology switching and self-organizing beha...",
+      "allowedTools": "Read, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb",
+      "name": "agentdb",
+      "category": "platforms",
+      "description": "High-performance vector search and semantic memory for AI agents. Use when imple...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb-advanced-features",
+      "name": "agentdb-advanced-features",
+      "category": "platforms",
+      "description": "Master advanced AgentDB features including QUIC synchronization, multi-database ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb-learning-plugins",
+      "name": "agentdb-learning-plugins",
+      "category": "platforms",
+      "description": "Create AI learning plugins using AgentDBs 9 reinforcement learning algorithms. T...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb-memory-patterns",
+      "name": "agentdb-memory-patterns",
+      "category": "platforms",
+      "description": "Apply persistent memory patterns for AI agents using AgentDB. Implement session ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb-performance-optimization",
+      "name": "agentdb-performance-optimization",
+      "category": "platforms",
+      "description": "Apply quantization to reduce memory by 4-32x. Enable HNSW indexing for 150x fast...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "agentdb-vector-search",
+      "name": "agentdb-vector-search",
+      "category": "platforms",
+      "description": "Implement semantic vector search with AgentDB for intelligent document retrieval...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "codex-auto",
+      "name": "codex-auto",
+      "category": "platforms",
+      "description": "Use Codex CLIs Full Auto mode for unattended sandboxed prototyping and scaffoldi...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "codex-reasoning",
+      "name": "codex-reasoning",
+      "category": "platforms",
+      "description": "Use GPT-5-Codexs specialized reasoning for alternative approaches and second opi...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "flow-nexus-neural",
+      "name": "flow-nexus-neural",
+      "category": "platforms",
+      "description": "Train and deploy neural networks in distributed E2B sandboxes with Flow Nexus...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "flow-nexus-platform",
+      "name": "flow-nexus-platform",
+      "category": "platforms",
+      "description": "Comprehensive Flow Nexus platform management - authentication, sandboxes, app de...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "gemini-extensions",
+      "name": "gemini-extensions",
+      "category": "platforms",
+      "description": "Access Geminis 70+ extensions ecosystem including Figma, Stripe, Postman, Shopif...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "gemini-media",
+      "name": "gemini-media",
+      "category": "platforms",
+      "description": "Generate images and videos using Geminis Imagen and Veo integration...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "gemini-megacontext",
+      "name": "gemini-megacontext",
+      "category": "platforms",
+      "description": "Analyze entire codebases with Geminis 1 million token context window - process 3...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "gemini-search",
+      "name": "gemini-search",
+      "category": "platforms",
+      "description": "Get real-time web information using Geminis built-in Google Search grounding...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "machine-learning",
+      "name": "machine-learning",
+      "category": "platforms",
+      "description": "Comprehensive machine learning development with training, evaluation, and deploy...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "multi-model",
+      "name": "multi-model",
+      "category": "platforms",
+      "description": "Intelligent multi-model orchestrator that routes tasks to Gemini or Codex based ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "platform",
+      "name": "platform",
+      "category": "platforms",
+      "description": "Platform services hub routing to Flow Nexus platform skills. Use for cloud AI pl...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "reasoningbank-with-agentdb",
+      "name": "reasoningbank-with-agentdb",
+      "category": "platforms",
+      "description": "Implement ReasoningBank adaptive learning with AgentDBs 150x faster vector datab...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "reasoningbank-intelligence",
+      "name": "reasoningbank-intelligence",
+      "category": "platforms",
+      "description": "Implement adaptive learning with ReasoningBank for pattern recognition, strategy...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "when-using-flow-nexus-platform-use-flow-nexus-platform",
+      "name": "when-using-flow-nexus-platform-use-flow-nexus-platform",
+      "category": "platforms",
+      "description": "**In practice:** - Always check auth status before workflow execution - Store us...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch"
+    },
+    {
+      "success": true,
+      "originalName": "audit-pipeline",
+      "name": "audit-pipeline",
+      "category": "quality",
+      "description": "Comprehensive 3-phase code quality pipeline: 1) Theater detection (find mocks/pl...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "code-review-assistant",
+      "name": "code-review-assistant",
+      "category": "quality",
+      "description": "Comprehensive PR review using multi-agent swarm with specialized reviewers for s...",
+      "allowedTools": "Read, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "connascence-quality-gate",
+      "name": "connascence-quality-gate",
+      "category": "quality",
+      "description": "Skill for connascence-quality-gate...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "dogfooding-system",
+      "name": "dogfooding-system",
+      "category": "quality",
+      "description": "Self-improvement system enabling Claude Code to detect code quality violations, ...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "functionality-audit",
+      "name": "functionality-audit",
+      "category": "quality",
+      "description": "Validates that code actually works through sandbox testing, execution verificati...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task"
+    },
+    {
+      "success": true,
+      "originalName": "gate-validation",
+      "name": "gate-validation",
+      "category": "quality",
+      "description": "Validate Deep Research SOP quality gates (Gates 1-3) ensuring rigorous\\ \\ GO/NO-...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "github-code-review",
+      "name": "github-code-review",
+      "category": "quality",
+      "description": "Comprehensive GitHub code review with AI-powered swarm coordination...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "holistic-evaluation",
+      "name": "holistic-evaluation",
+      "category": "quality",
+      "description": "Comprehensive multi-dimensional model evaluation across accuracy, fairness, robu...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "quick-quality-check",
+      "name": "quick-quality-check",
+      "category": "quality",
+      "description": "Lightning-fast quality check using parallel command execution. Runs theater dete...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "reproducibility-audit",
+      "name": "reproducibility-audit",
+      "category": "quality",
+      "description": "Comprehensive audit of ML reproducibility packages ensuring ACM Artifact\\ \\ Eval...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sop-code-review",
+      "name": "sop-code-review",
+      "category": "quality",
+      "description": "Comprehensive code review workflow coordinating quality, security, performance, ...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sop-dogfooding-continuous-improvement",
+      "name": "sop-dogfooding-continuous-improvement",
+      "category": "quality",
+      "description": "3-part dogfooding workflow Phase 3 - Full cycle orchestration combining Quality ...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sop-dogfooding-pattern-retrieval",
+      "name": "sop-dogfooding-pattern-retrieval",
+      "category": "quality",
+      "description": "3-part dogfooding workflow Phase 2 - Query Memory-MCP for similar past fixes usi...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sop-dogfooding-quality-detection",
+      "name": "sop-dogfooding-quality-detection",
+      "category": "quality",
+      "description": "3-part dogfooding workflow Phase 1 - Run Connascence analysis, store results in ...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "style-audit",
+      "name": "style-audit",
+      "category": "quality",
+      "description": "Audits code against CI/CD style rules, quality guidelines, and best practices, t...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-testing-code-use-testing-framework",
+      "name": "when-testing-code-use-testing-framework",
+      "category": "quality",
+      "description": "- **Skill ID**: when-testing-code-use-testing-framework...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-auditing-code-style-use-style-audit",
+      "name": "when-auditing-code-style-use-style-audit",
+      "category": "quality",
+      "description": "Code style and conventions audit with auto-fix capabilities for comprehensive st...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-detecting-fake-code-use-theater-detection",
+      "name": "when-detecting-fake-code-use-theater-detection",
+      "category": "quality",
+      "description": "Detects non-functional theater code that appears complete but doesnt actually wo...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-reviewing-code-comprehensively-use-code-review-assistant",
+      "name": "when-reviewing-code-comprehensively-use-code-review-assistant",
+      "category": "quality",
+      "description": "Comprehensive PR review with multi-agent swarm specialization for security, perf...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-validating-code-works-use-functionality-audit",
+      "name": "when-validating-code-works-use-functionality-audit",
+      "category": "quality",
+      "description": "Validates that code actually works through sandbox testing, execution verificati...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-verifying-quality-use-verification-quality",
+      "name": "when-verifying-quality-use-verification-quality",
+      "category": "quality",
+      "description": "Comprehensive quality verification and validation through static analysis, dynam...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "theater-detection-audit",
+      "name": "theater-detection-audit",
+      "category": "quality",
+      "description": "Performs comprehensive audits to detect placeholder code, mock data, TODO marker...",
+      "allowedTools": "Read, Glob, Grep, Bash"
+    },
+    {
+      "success": true,
+      "originalName": "verification-and-quality-assurance",
+      "name": "verification-and-quality-assurance",
+      "category": "quality",
+      "description": "Comprehensive truth scoring, code quality verification, and automatic rollback s...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-reviewing-github-pr-use-github-code-review",
+      "name": "when-reviewing-github-pr-use-github-code-review",
+      "category": "quality",
+      "description": "Comprehensive GitHub pull request code review using multi-agent swarm with speci...",
+      "allowedTools": "Read, Glob, Grep, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "academic-reading-workflow",
+      "name": "academic-reading-workflow",
+      "category": "research",
+      "description": "Systematic reading methodology for academic papers and complex texts implementin...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "baseline-replication",
+      "name": "baseline-replication",
+      "category": "research",
+      "description": "Skill for baseline-replication...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "deep-research-orchestrator",
+      "name": "deep-research-orchestrator",
+      "category": "research",
+      "description": "Skill for deep-research-orchestrator...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "general-research-workflow",
+      "name": "general-research-workflow",
+      "category": "research",
+      "description": "Systematic 6-phase research methodology for history, mythology, and literature i...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "intent-analyzer",
+      "name": "intent-analyzer",
+      "category": "research",
+      "description": "Skill for intent-analyzer...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "interactive-planner",
+      "name": "interactive-planner",
+      "category": "research",
+      "description": "Skill for interactive-planner...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "literature-synthesis",
+      "name": "literature-synthesis",
+      "category": "research",
+      "description": "Skill for literature-synthesis...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "method-development",
+      "name": "method-development",
+      "category": "research",
+      "description": "Skill for method-development...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "observability",
+      "name": "observability",
+      "category": "research",
+      "description": "Observability specialists hub for monitoring, logging, tracing, and alerting. Ro...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "rapid-idea-generator",
+      "name": "rapid-idea-generator",
+      "category": "research",
+      "description": "Skill for rapid-idea-generator...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "rapid-manuscript-drafter",
+      "name": "rapid-manuscript-drafter",
+      "category": "research",
+      "description": "Skill for rapid-manuscript-drafter...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "research-driven-planning",
+      "name": "research-driven-planning",
+      "category": "research",
+      "description": "Skill for research-driven-planning...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "research-gap-visualizer",
+      "name": "research-gap-visualizer",
+      "category": "research",
+      "description": "Skill for research-gap-visualizer...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "research-publication",
+      "name": "research-publication",
+      "category": "research",
+      "description": "Skill for research-publication...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "researcher",
+      "name": "researcher",
+      "category": "research",
+      "description": "Skill for researcher...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "source-credibility-analyzer",
+      "name": "source-credibility-analyzer",
+      "category": "research",
+      "description": "Standalone tool for automated source evaluation using program-of-thought scoring...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-gathering-requirements-use-interactive-planner",
+      "name": "when-gathering-requirements-use-interactive-planner",
+      "category": "research",
+      "description": "---...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "testing-quality",
+      "name": "testing-quality",
+      "category": "research",
+      "description": "Testing quality assessment for test suite health, coverage analysis, and test ef...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "visual-asset-generator",
+      "name": "visual-asset-generator",
+      "category": "research",
+      "description": "Skill for visual-asset-generator...",
+      "allowedTools": "Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "compliance",
+      "name": "compliance",
+      "category": "security",
+      "description": "Regulatory compliance validation and documentation for GDPR, HIPAA, SOC 2, PCI-D...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "network-security-setup",
+      "name": "network-security-setup",
+      "category": "security",
+      "description": "Configure Claude Code sandbox network isolation with trusted domains, custom acc...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "reverse-engineer-debug",
+      "name": "reverse-engineer-debug",
+      "category": "security",
+      "description": "Perform systematic reverse engineering root cause analysis to debug issues and f...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "reverse-engineering-deep-analysis",
+      "name": "reverse-engineering-deep-analysis",
+      "category": "security",
+      "description": "Advanced binary analysis with runtime execution and symbolic path exploration (R...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "reverse-engineering-firmware-analysis",
+      "name": "reverse-engineering-firmware-analysis",
+      "category": "security",
+      "description": "Firmware extraction and IoT security analysis (RE Level 5) for routers and embed...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "reverse-engineering-quick-triage",
+      "name": "reverse-engineering-quick-triage",
+      "category": "security",
+      "description": "Fast binary analysis with string reconnaissance and static disassembly\\ \\ (RE Le...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sandbox-configurator",
+      "name": "sandbox-configurator",
+      "category": "security",
+      "description": "Configure Claude Code sandbox security with file system and network isolation bo...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "security",
+      "name": "security",
+      "category": "security",
+      "description": "Security specialists hub for application security, vulnerability assessment, and...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-configuring-sandbox-security-use-sandbox-configurator",
+      "name": "when-configuring-sandbox-security-use-sandbox-configurator",
+      "category": "security",
+      "description": "```yaml...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-setting-network-security-use-network-security-setup",
+      "name": "when-setting-network-security-use-network-security-setup",
+      "category": "security",
+      "description": "```yaml...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-auditing-security-use-security-analyzer",
+      "name": "when-auditing-security-use-security-analyzer",
+      "category": "security",
+      "description": "Comprehensive security auditing across static analysis, dynamic testing, depende...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "when-training-neural-networks-use-flow-nexus-neural",
+      "name": "when-training-neural-networks-use-flow-nexus-neural",
+      "category": "security",
+      "description": "**In practice**: - Use mesh topology for parameter synchronization across worker...",
+      "allowedTools": "Read, Glob, Grep, Bash, Task, TodoWrite"
+    },
+    {
+      "success": true,
+      "originalName": "sql-database-specialist",
+      "name": "sql-database-specialist",
+      "category": "specialists",
+      "description": "SQL database specialist for PostgreSQL/MySQL optimization, EXPLAIN plan analysis...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "expertise-manager",
+      "name": "expertise-manager",
+      "category": "specialists",
+      "description": "Manages domain expertise files for Agent Experts-style learning. Handles experti...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "frontend-specialists",
+      "name": "frontend-specialists",
+      "category": "specialists",
+      "description": "Comprehensive frontend development system with specialist agents for React, Vue,...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "language-specialists",
+      "name": "language-specialists",
+      "category": "specialists",
+      "description": "Unified language specialists for Python and TypeScript development, providing ex...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ml",
+      "name": "ml",
+      "category": "specialists",
+      "description": "Machine Learning development workflow with experiment tracking, hyperparameter o...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ml-expert",
+      "name": "ml-expert",
+      "category": "specialists",
+      "description": "**Version**: 1.0.0...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ml-training-debugger",
+      "name": "ml-training-debugger",
+      "category": "specialists",
+      "description": "**Version**: 1.0.0...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "physics-simulation-creator",
+      "name": "physics-simulation-creator",
+      "category": "specialists",
+      "description": "Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "system-design-architect",
+      "name": "system-design-architect",
+      "category": "specialists",
+      "description": "Comprehensive system design methodology using Dr. Syntharas organism-based appro...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "visual-art-composition",
+      "name": "visual-art-composition",
+      "category": "specialists",
+      "description": "Orthogonal framework for generating image prompts using 13 independently combina...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-finding-high-ev-hackathons-use-ev-optimizer",
+      "name": "when-finding-high-ev-hackathons-use-ev-optimizer",
+      "category": "specialists",
+      "description": "Expected value optimization for hackathons and bounties with judge analysis and ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-protecting-physics-ip-use-tracker",
+      "name": "when-protecting-physics-ip-use-tracker",
+      "category": "specialists",
+      "description": "Timestamped IP protection for physics research claims with arXiv monitoring and ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-tracking-dual-career-intelligence-use-career-intel",
+      "name": "when-tracking-dual-career-intelligence-use-career-intel",
+      "category": "specialists",
+      "description": "Automated US/EU career opportunity tracking with policy monitoring, EV-based ran...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-tracking-financial-runway-use-dashboard",
+      "name": "when-tracking-financial-runway-use-dashboard",
+      "category": "specialists",
+      "description": "Daily financial tracking with burn rate calculation, runway projection, and aler...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "bootstrap-loop",
+      "name": "bootstrap-loop",
+      "category": "tooling",
+      "description": "Orchestrates the recursive self-improvement cycle where Prompt Forge improves Sk...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "clarity-linter",
+      "name": "clarity-linter",
+      "category": "tooling",
+      "description": "Machine-readable code clarity auditing with cognitive load optimization. 3-phase...",
+      "allowedTools": "Read, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "dependencies",
+      "name": "dependencies",
+      "category": "tooling",
+      "description": "Dependency management and analysis hub. Map project dependencies, analyze depend...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "documentation",
+      "name": "documentation",
+      "category": "tooling",
+      "description": "Documentation generation hub for code documentation, API docs, READMEs, and inli...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "eval-harness",
+      "name": "eval-harness",
+      "category": "tooling",
+      "description": "Frozen evaluation harness that gates all self-improvement changes. Contains benc...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "improvement-pipeline",
+      "name": "improvement-pipeline",
+      "category": "tooling",
+      "description": "Executable implementation of the Propose -> Test -> Compare -> Commit -> Rollbac...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "pptx-generation",
+      "name": "pptx-generation",
+      "category": "tooling",
+      "description": "Enterprise-grade PowerPoint deck generation system using evidence-based promptin...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "template-extractor",
+      "name": "template-extractor",
+      "category": "tooling",
+      "description": "Reverse-engineer document templates to extract exact design specifications and g...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "ui-ux-excellence",
+      "name": "ui-ux-excellence",
+      "category": "tooling",
+      "description": "Comprehensive UI/UX enhancement cascade that transforms generic websites into po...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-analyzing-user-intent-use-intent-analyzer",
+      "name": "when-analyzing-user-intent-use-intent-analyzer",
+      "category": "tooling",
+      "description": "Advanced intent interpretation system using cognitive science principles and pro...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-creating-presentations-use-pptx-generation",
+      "name": "when-creating-presentations-use-pptx-generation",
+      "category": "tooling",
+      "description": "Enterprise-grade PowerPoint deck generation using evidence-based prompting, work...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-optimizing-agent-learning-use-reasoningbank-intelligence",
+      "name": "when-optimizing-agent-learning-use-reasoningbank-intelligence",
+      "category": "tooling",
+      "description": "Implement adaptive learning with ReasoningBank for pattern recognition, strategy...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-optimizing-prompts-use-prompt-architect",
+      "name": "when-optimizing-prompts-use-prompt-architect",
+      "category": "tooling",
+      "description": "Comprehensive framework for analyzing, creating, and refining prompts for AI sys...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "web-cli-teleport",
+      "name": "web-cli-teleport",
+      "category": "tooling",
+      "description": "Guide users on when to use Claude Code Web vs CLI and seamlessly teleport sessio...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-documenting-code-use-doc-generator",
+      "name": "when-documenting-code-use-doc-generator",
+      "category": "tooling",
+      "description": "Automated comprehensive code documentation generation with API docs, README file...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    },
+    {
+      "success": true,
+      "originalName": "when-mapping-dependencies-use-dependency-mapper",
+      "name": "when-mapping-dependencies-use-dependency-mapper",
+      "category": "tooling",
+      "description": "Comprehensive dependency mapping, analysis, and visualization tool for software ...",
+      "allowedTools": "Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep"
+    }
+  ],
+  "failed": [],
+  "invalid": []
+}

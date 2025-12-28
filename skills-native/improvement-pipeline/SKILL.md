@@ -1,6 +1,7 @@
 ---
 name: improvement-pipeline
 description: Executable implementation of the Propose -> Test -> Compare -> Commit -> Rollback pipeline for recursive self-improvement. Provides concrete commands and workflows for each stage.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Improvement Pipeline (Executable Stages)
@@ -19,7 +20,135 @@ Each stage has:
 - Validation checks
 - Failure handling
 
+---
 
+## Stage 1: PROPOSE
+
+Generate concrete improvement proposals with diffs.
+
+### Input
+```yaml
+propose_input:
+  target: "{path to skill/prompt}"
+  audit_report: "{from prompt-auditor or skill-auditor}"
+  improvement_type: "clarity|completeness|precision|safety|technique"
+```
+
+### Process
+
+```javascript
+async function generateProposal(target, auditReport) {
+  const proposal = {
+    id: `prop-${Date.now()}`,
+    target,
+    timestamp: new Date().toISOString(),
+    changes: [],
+    predicted_improvement: {},
+    risk_assessment: {}
+  };
+
+  // 1. Read current version
+  const currentContent = await readFile(target);
+
+  // 2. Identify improvement opportunities from audit
+  const opportunities = auditReport.issues
+    .filter(issue => issue.priority === 'critical' || issue.priority === 'high')
+    .slice(0, 5); // Max 5 changes per proposal
+
+  // 3. Generate changes for each opportunity
+  for (const opp of opportunities) {
+    const change = await generateChange(currentContent, opp);
+    proposal.changes.push({
+      section: opp.section,
+      location: opp.location,
+      before: change.before,
+      after: change.after,
+      rationale: change.rationale,
+      technique_applied: change.technique
+    });
+  }
+
+  // 4. Predict improvement
+  proposal.predicted_improvement = {
+    primary_metric: auditReport.lowest_score_dimension,
+    expected_delta: `+${(opportunities.length * 3)}%`, // ~3% per fix
+    confidence: 0.7
+  };
+
+  // 5. Assess risk
+  proposal.risk_assessment = {
+    regression_risk: opportunities.length > 3 ? 'medium' : 'low',
+    affected_components: findAffectedComponents(target, proposal.changes),
+    rollback_complexity: 'simple' // Always simple with archives
+  };
+
+  return proposal;
+}
+```
+
+### Output
+```yaml
+proposal:
+  id: "prop-1734567890123"
+  target: ".claude/skills/skill-forge/SKILL.md"
+  timestamp: "2025-12-15T10:30:00Z"
+
+  changes:
+    - section: "Phase 3: Structural Architecture"
+      location: "Lines 145-160"
+      before: |
+        Design the skill's structure based on progressive disclosure.
+      after: |
+        Design the skill's structure based on progressive disclosure.
+
+        ### Failure Handling (REQUIRED)
+
+        For each operation in the skill:
+        1. Identify possible failure modes
+        2. Define explicit error messages
+        3. Specify recovery actions
+        4. Include timeout handling
+
+        ```yaml
+        error_handling:
+          timeout:
+            threshold: 30s
+            action: "Return partial results with warning"
+          invalid_input:
+            detection: "Validate against schema"
+            action: "Return clear error message with fix suggestion"
+        ```
+      rationale: "Adds explicit failure handling missing from Phase 3"
+      technique_applied: "completeness_enhancement"
+
+  predicted_improvement:
+    primary_metric: "failure_coverage"
+    expected_delta: "+9%"
+    confidence: 0.7
+
+  risk_assessment:
+    regression_risk: "low"
+    affected_components: ["micro-skill-creator", "agent-creator"]
+    rollback_complexity: "simple"
+```
+
+### Validation
+```yaml
+proposal_validation:
+  required_fields:
+    - id: "Must be unique"
+    - target: "Must be valid file path"
+    - changes: "At least 1 change"
+    - predicted_improvement: "Must have primary_metric"
+    - risk_assessment: "Must have regression_risk"
+
+  change_validation:
+    - before: "Must exist in current file"
+    - after: "Must be different from before"
+    - rationale: "Must not be empty"
+```
+
+---
 
 ## Stage 2: TEST
 
@@ -142,7 +271,161 @@ test_validation:
     - all_gates_evaluated: true
 ```
 
+---
 
+## Stage 3: COMPARE
+
+Compare baseline vs candidate, decide ACCEPT or REJECT.
+
+### Input
+```yaml
+compare_input:
+  proposal_id: "prop-1734567890123"
+  baseline_scores: "{from previous eval}"
+  candidate_scores: "{from Stage 2}"
+  test_results: "{full test results}"
+```
+
+### Process
+
+```javascript
+function compareAndDecide(baseline, candidate, testResults) {
+  const comparison = {
+    proposal_id: testResults.proposal_id,
+    timestamp: new Date().toISOString(),
+    baseline_scores: baseline,
+    candidate_scores: candidate,
+    delta: {},
+    verdict: null,
+    reason: null
+  };
+
+  // 1. Calculate deltas
+  for (const [metric, candidateScore] of Object.entries(candidate)) {
+    const baselineScore = baseline[metric] || 0;
+    comparison.delta[metric] = {
+      baseline: baselineScore,
+      candidate: candidateScore,
+      change: candidateScore - baselineScore,
+      percent_change: ((candidateScore - baselineScore) / baselineScore * 100).toFixed(2)
+    };
+  }
+
+  // 2. Check for regressions (hard fail)
+  for (const [suite, result] of Object.entries(testResults.regressions)) {
+    if (result.status === 'FAIL') {
+      comparison.verdict = 'REJECT';
+      comparison.reason = `Regression test failed: ${result.failed_tests.join(', ')}`;
+      return comparison;
+    }
+  }
+
+  // 3. Check benchmarks meet minimum (hard fail)
+  for (const [suite, result] of Object.entries(testResults.benchmarks)) {
+    if (result.status === 'FAIL') {
+      comparison.verdict = 'REJECT';
+      comparison.reason = `Benchmark ${suite} below minimum: ${result.score} < ${result.minimum}`;
+      return comparison;
+    }
+  }
+
+  // 4. Check for improvement (soft requirement)
+  const avgDelta = Object.values(comparison.delta)
+    .reduce((sum, d) => sum + d.change, 0) / Object.keys(comparison.delta).length;
+
+  if (avgDelta < 0) {
+    comparison.verdict = 'REJECT';
+    comparison.reason = `No improvement: average delta = ${avgDelta.toFixed(3)}`;
+    return comparison;
+  }
+
+  // 5. Check human gates
+  if (testResults.human_gates.length > 0) {
+    comparison.verdict = 'PENDING_HUMAN_REVIEW';
+    comparison.reason = `Human review required: ${testResults.human_gates.join(', ')}`;
+    return comparison;
+  }
+
+  // 6. All passed - ACCEPT
+  comparison.verdict = 'ACCEPT';
+  comparison.reason = `All checks passed. Average improvement: +${(avgDelta * 100).toFixed(2)}%`;
+  comparison.improvement_summary = {
+    average_delta: avgDelta,
+    best_improvement: Object.entries(comparison.delta)
+      .sort((a, b) => b[1].change - a[1].change)[0],
+    regressions_passed: Object.keys(testResults.regressions).length,
+    benchmarks_passed: Object.keys(testResults.benchmarks).length
+  };
+
+  return comparison;
+}
+```
+
+### Output
+```yaml
+comparison_result:
+  proposal_id: "prop-1734567890123"
+  timestamp: "2025-12-15T10:40:00Z"
+
+  baseline_scores:
+    clarity: 0.82
+    completeness: 0.78
+    precision: 0.80
+
+  candidate_scores:
+    clarity: 0.85
+    completeness: 0.87
+    precision: 0.82
+
+  delta:
+    clarity:
+      baseline: 0.82
+      candidate: 0.85
+      change: 0.03
+      percent_change: "3.66%"
+    completeness:
+      baseline: 0.78
+      candidate: 0.87
+      change: 0.09
+      percent_change: "11.54%"
+    precision:
+      baseline: 0.80
+      candidate: 0.82
+      change: 0.02
+      percent_change: "2.50%"
+
+  verdict: "ACCEPT"
+  reason: "All checks passed. Average improvement: +4.67%"
+
+  improvement_summary:
+    average_delta: 0.0467
+    best_improvement: ["completeness", { change: 0.09 }]
+    regressions_passed: 1
+    benchmarks_passed: 1
+```
+
+### Validation
+```yaml
+comparison_validation:
+  required:
+    - verdict: "Must be ACCEPT|REJECT|PENDING_HUMAN_REVIEW"
+    - reason: "Must explain decision"
+
+  verdict_rules:
+    REJECT:
+      - "Any regression failure"
+      - "Any benchmark below minimum"
+      - "Negative improvement delta"
+    PENDING_HUMAN_REVIEW:
+      - "Human gate triggered"
+    ACCEPT:
+      - "All regressions pass"
+      - "All benchmarks meet minimum"
+      - "Positive improvement delta"
+      - "No human gates"
+```
+
+---
 
 ## Stage 4: COMMIT
 
@@ -269,7 +552,106 @@ commit_validation:
     - memory_stored: "Commit record in memory"
 ```
 
+---
 
+## Stage 5: MONITOR
+
+Track metrics after commit to detect delayed regressions.
+
+### Input
+```yaml
+monitor_input:
+  commit_id: "commit-1734567890456"
+  target: "{file path}"
+  metrics_window: "7 days"
+  alert_thresholds:
+    regression: 0.03  # 3% regression triggers alert
+```
+
+### Process
+
+```javascript
+async function setupMonitoring(commit, window = '7d') {
+  const monitor = {
+    commit_id: commit.id,
+    target: commit.target,
+    start_time: new Date().toISOString(),
+    end_time: addDays(new Date(), 7).toISOString(),
+    baseline_metrics: await getCurrentMetrics(commit.target),
+    alerts: [],
+    status: 'ACTIVE'
+  };
+
+  // Store monitoring config
+  await storeInMemory(`improvement/monitors/${commit.id}`, monitor);
+
+  return monitor;
+}
+
+async function checkMonitor(commitId) {
+  const monitor = await retrieveFromMemory(`improvement/monitors/${commitId}`);
+  if (!monitor || monitor.status !== 'ACTIVE') return null;
+
+  const currentMetrics = await getCurrentMetrics(monitor.target);
+  const alerts = [];
+
+  // Check for regressions
+  for (const [metric, baseline] of Object.entries(monitor.baseline_metrics)) {
+    const current = currentMetrics[metric] || 0;
+    const delta = current - baseline;
+
+    if (delta < -0.03) { // 3% regression
+      alerts.push({
+        type: 'REGRESSION',
+        metric,
+        baseline,
+        current,
+        delta,
+        severity: delta < -0.1 ? 'CRITICAL' : 'WARNING'
+      });
+    }
+  }
+
+  // Update monitor
+  monitor.latest_check = new Date().toISOString();
+  monitor.current_metrics = currentMetrics;
+  monitor.alerts = alerts;
+
+  if (alerts.some(a => a.severity === 'CRITICAL')) {
+    monitor.status = 'ALERT_CRITICAL';
+    // Trigger rollback consideration
+    await notifyRollbackNeeded(monitor);
+  }
+
+  await storeInMemory(`improvement/monitors/${commitId}`, monitor);
+
+  return monitor;
+}
+```
+
+### Output
+```yaml
+monitor_status:
+  commit_id: "commit-1734567890456"
+  target: ".claude/skills/skill-forge/SKILL.md"
+  status: "ACTIVE"
+
+  baseline_metrics:
+    clarity: 0.85
+    completeness: 0.87
+    precision: 0.82
+
+  current_metrics:
+    clarity: 0.84
+    completeness: 0.88
+    precision: 0.82
+
+  alerts: []
+  days_remaining: 5
+  next_check: "2025-12-16T10:00:00Z"
+```
+
+---
 
 ## Stage 6: ROLLBACK
 
@@ -399,7 +781,83 @@ rollback_validation:
     - monitor_cancelled: "Monitoring stopped"
 ```
 
+---
 
+## Pipeline Orchestration
+
+### Full Pipeline Execution
+
+```javascript
+async function runImprovementPipeline(target, auditReport) {
+  const pipeline = {
+    id: `pipeline-${Date.now()}`,
+    target,
+    timestamp: new Date().toISOString(),
+    stages: {}
+  };
+
+  try {
+    // Stage 1: PROPOSE
+    pipeline.stages.propose = await generateProposal(target, auditReport);
+    if (pipeline.stages.propose.changes.length === 0) {
+      pipeline.result = 'NO_PROPOSALS';
+      return pipeline;
+    }
+
+    // Stage 2: TEST
+    const candidateContent = applyChanges(
+      await readFile(target),
+      pipeline.stages.propose.changes
+    );
+    pipeline.stages.test = await runTests(pipeline.stages.propose, candidateContent);
+
+    // Stage 3: COMPARE
+    const baseline = await getBaselineScores(target);
+    const candidate = extractScores(pipeline.stages.test);
+    pipeline.stages.compare = compareAndDecide(baseline, candidate, pipeline.stages.test);
+
+    // Decision point
+    if (pipeline.stages.compare.verdict === 'REJECT') {
+      pipeline.result = 'REJECTED';
+      pipeline.reason = pipeline.stages.compare.reason;
+      return pipeline;
+    }
+
+    if (pipeline.stages.compare.verdict === 'PENDING_HUMAN_REVIEW') {
+      pipeline.result = 'PENDING';
+      pipeline.reason = pipeline.stages.compare.reason;
+      // Store for human review
+      await storeInMemory(`improvement/pending/${pipeline.id}`, pipeline);
+      return pipeline;
+    }
+
+    // Stage 4: COMMIT
+    pipeline.stages.commit = await commitChanges(
+      pipeline.stages.propose,
+      target,
+      candidateContent,
+      pipeline.stages.compare
+    );
+
+    // Stage 5: MONITOR
+    pipeline.stages.monitor = await setupMonitoring(pipeline.stages.commit);
+
+    pipeline.result = 'ACCEPTED';
+    pipeline.reason = pipeline.stages.compare.reason;
+
+  } catch (error) {
+    pipeline.result = 'ERROR';
+    pipeline.error = error.message;
+  }
+
+  // Store pipeline record
+  await storeInMemory(`improvement/pipelines/${pipeline.id}`, pipeline);
+
+  return pipeline;
+}
+```
+
+---
 
 ## Memory Namespaces
 
@@ -411,6 +869,14 @@ rollback_validation:
 | `improvement/monitors/{id}` | Active monitoring | 30 days |
 | `improvement/pipelines/{id}` | Full pipeline runs | 90 days |
 | `improvement/pending/{id}` | Awaiting human review | Until resolved |
+
+---
+
+**Status**: Production-Ready
+**Version**: 1.0.0
+**Key Constraint**: Every stage has clear inputs, outputs, and validation
+
+---
 
 ## Core Principles
 
@@ -444,7 +910,12 @@ Rollback must be as easy and reliable as deployment to enable confident experime
 - Make rollback single-command: restore archive, update changelog, cancel monitoring
 - Track rollback events as learning opportunities, not failures
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Skipping Baseline Comparison** | Deploying changes without comparing candidate vs baseline hides regressions and prevents measuring actual improvement | Always run COMPARE stage. Calculate deltas for all metrics. Reject if average delta is negative. Log comparison results for trend analysis. |
 | **Manual Rollback Procedures** | Complex rollback steps discourage experimentation and slow incident response when production breaks | Automate rollback: single function call restores archive, updates changelog, cancels monitoring. Test rollback in staging. Make rollback safer than staying broken. |
 | **Ignoring Delayed Regressions** | Committing changes and moving on without monitoring allows subtle bugs to compound over time | Set up automatic monitoring for 7 days post-commit. Define alert thresholds. Link monitoring to rollback consideration. Store monitoring results in memory. |

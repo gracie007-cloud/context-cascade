@@ -1,6 +1,7 @@
 ---
 name: gate-validation
-description: "Validate Deep Research SOP quality gates (Gates 1-3) ensuring rigorous\ \ GO/NO-GO decisions based on comprehensive requirement checklists with statistical\ \ validation. Use at end of research phases (Foundations\u2192Development\u2192\ Production) to determine if criteria met for phase transition. Coordinates evaluator\ \ agent with ethics-agent, data-steward, and archivist for systematic validation\ \ across data quality, baseline replication, novel methods, holistic evaluation,\ \ reproducibility, and production readiness. Implements multiple comparison correction\ \ (Bonferroni), effect size calculation (Cohen's d), and statistical power analysis\ \ (1-\u03B2 \u2265 0.8)."
+description: Validate Deep Research SOP quality gates (Gates 1-3) ensuring rigorous\ \ GO/NO-GO decisions based on comprehensive requirement checklists with statistical\ \ validation. Use at end of research phases (Foundations\u2192Development\u2192\ Production) to determine if criteria met for phase transition. Coordinates evaluator\ \ agent with ethics-agent, data-steward, and archivist for systematic validation\ \ across data quality, baseline replication, novel methods, holistic evaluation,\ \ reproducibility, and production readiness. Implements multiple comparison correction\ \ (Bonferroni), effect size calculation (Cohen's d), and statistical power analysis\ \ (1-\u03B2 \u2265 0.8)."
+allowed-tools: Read, Glob, Grep, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -106,6 +107,109 @@ Systematic validation of Deep Research SOP quality gates ensuring rigorous GO/NO
 
 **Agents Used**: evaluator (lead), ethics-agent, data-steward, archivist
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Quick Start
+
+### Gate 1 Validation (End of Phase 1)
+```bash
+# Validate Gate 1 requirements
+claude-code invoke-skill gate-validation --gate 1
+
+# Or use command directly
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-1 --pipeline F --verbose"
+```
+
+### Gate 2 Validation (End of Phase 2)
+```bash
+# Validate Gate 2 requirements
+claude-code invoke-skill gate-validation --gate 2
+
+# Or use command directly
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-2 --pipeline E --include-ethics"
+```
+
+### Gate 3 Validation (End of Phase 3)
+```bash
+# Validate Gate 3 requirements
+claude-code invoke-skill gate-validation --gate 3
+
+# Or use command directly
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-3 --pipeline G --include-deployment"
+```
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -199,6 +303,101 @@ papers_reviewed = len(literature_database.query("status == 'reviewed'"))
 assert papers_reviewed >= 50, f"Only {papers_reviewed}/50 papers reviewed"
 ```
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 1.2 Datasheet (Pipeline B)
+```bash
+# Check datasheet completion
+npx claude-flow@alpha sparc run data-steward \
+  "Validate datasheet completeness" \
+  --datasheet phase1-foundations/datasheet.md
+```
+
+**Requirements**:
+- [ ] Datasheet complete (Form F-P1) with ≥90% sections filled
+- [ ] Motivation, composition, collection process documented
+- [ ] Preprocessing and labeling procedures described
+- [ ] Recommended uses and limitations identified
+- [ ] Distribution and maintenance plan established
+
+**Validation**:
+```python
+from datasheet_parser import parse_datasheet
+
+datasheet = parse_datasheet("phase1-foundations/datasheet.md")
+completion = datasheet.calculate_completion()
+assert completion >= 0.90, f"Datasheet only {completion*100:.1f}% complete"
+```
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -291,6 +490,100 @@ with open("phase1-foundations/bias-audit.json") as f:
 max_demographic_gap = max(audit["demographic_parity_differences"].values())
 assert max_demographic_gap < 0.10, f"Demographic parity gap {max_demographic_gap*100:.1f}% > 10%"
 ```
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 1.4 Ethics Review (Pipeline B, F)
+```bash
+# Validate ethics review
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component dataset --gate 1 --validation-mode"
+```
+
+**Requirements**:
+- [ ] Ethics review form (F-F1) complete
+- [ ] Risk assessment across 6 domains completed
+- [ ] IRB approval obtained (if human subjects data)
+- [ ] Dual-use risks assessed and mitigated
+- [ ] Ethics review status: APPROVED
+
+**Validation**:
+```bash
+ethics_status=$(npx claude-flow@alpha memory retrieve --key "sop/gate-1/ethics-status")
+if [ "$ethics_status" != "APPROVED" ]; then
+    echo "ERROR: Ethics review not approved: $ethics_status"
+    exit 1
+fi
+```
+
+---
 
 ## When to Use This Skill
 
@@ -390,6 +683,109 @@ assert delta <= tolerance, f"Baseline replication Δ={delta*100:.2f}% > ±1%"
 t_stat, p_value = stats.ttest_rel(baseline_runs, replicated_runs)
 assert p_value >= 0.05, f"Significant difference detected (p={p_value:.4f})"
 ```
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 1.6 Gate 1 Decision
+**evaluator agent synthesizes all requirements:**
+
+```bash
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-1 --pipeline F --comprehensive"
+```
+
+**Decision Criteria**:
+
+**APPROVED** (all critical requirements met):
+- ✅ Literature review ≥50 papers
+- ✅ Datasheet ≥90% complete
+- ✅ Bias audit complete, gaps <10%
+- ✅ Ethics review APPROVED
+- ✅ Baseline replication ±1% tolerance
+- ✅ Reproducibility 3/3 runs successful
+- **Action**: Proceed to Phase 2 (Method Development)
+
+**CONDITIONAL** (minor gaps, mitigation plan in place):
+- ✅ Most requirements met
+- ⚠️ Datasheet 85-89% complete (minor sections missing)
+- ⚠️ Bias gaps 10-15% (mitigation plan documented)
+- **Action**: Proceed to Phase 2 with restrictions, complete missing items in parallel
+
+**REJECTED** (critical issues):
+- ❌ Baseline replication >±1% tolerance
+- ❌ Ethics review flagged critical risks
+- ❌ Reproducibility tests failed
+- ❌ Datasheet <85% complete
+- **Action**: Return to Phase 1, address critical issues
+
+---
 
 ## When to Use This Skill
 
@@ -491,6 +887,147 @@ t_stat, p_value = stats.ttest_ind(novel_runs, baseline_runs)
 assert p_value < 0.05, f"Improvement not statistically significant (p={p_value:.4f})"
 ```
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 2.2 Ablation Studies (Pipeline D)
+```bash
+# Validate ablation studies
+python scripts/validate_ablations.py \
+  --ablation-results phase2-development/ablations/
+```
+
+**Requirements**:
+- [ ] Minimum 5 components ablated independently
+- [ ] 3 runs per ablation configuration
+- [ ] Statistical analysis complete (t-tests with Bonferroni correction)
+- [ ] Component importance ranking documented
+- [ ] Critical components identified (p<0.05)
+
+**Validation**:
+```python
+from scipy import stats
+import numpy as np
+
+ablation_results = load_ablation_results("phase2-development/ablations/")
+num_components = len(ablation_results["components"])
+assert num_components >= 5, f"Only {num_components}/5 components ablated"
+
+for component in ablation_results["components"]:
+    assert len(component["runs"]) >= 3, f"{component['name']}: only {len(component['runs'])}/3 runs"
+
+# Statistical validation with multiple comparison correction
+baseline_scores = np.array(ablation_results["baseline_runs"])
+p_values = []
+
+for component in ablation_results["components"]:
+    ablated_scores = np.array(component["runs"])
+
+    # Paired t-test
+    t_stat, p_value = stats.ttest_rel(baseline_scores, ablated_scores)
+    p_values.append(p_value)
+
+    # Effect size (Cohen's d)
+    mean_diff = np.mean(baseline_scores - ablated_scores)
+    pooled_std = np.sqrt((np.std(baseline_scores)**2 + np.std(ablated_scores)**2) / 2)
+    cohens_d = mean_diff / pooled_std
+
+    # Statistical power analysis
+    from statsmodels.stats.power import ttest_power
+    power = ttest_power(cohens_d, nobs=len(baseline_scores), alpha=0.05, alternative='two-sided')
+
+    component["t_statistic"] = t_stat
+    component["p_value"] = p_value
+    component["cohens_d"] = cohens_d
+    component["statistical_power"] = power
+
+    # Validate sufficient power
+    if power < 0.8:
+        print(f"⚠️  WARNING: {component['name']} has low statistical power ({power:.2f} < 0.80)")
+
+# Multiple comparison correction (Bonferroni)
+bonferroni_alpha = 0.05 / num_components
+print(f"Bonferroni-corrected α: {bonferroni_alpha:.4f}")
+
+significant_components = []
+for component, p_val in zip(ablation_results["components"], p_values):
+    if p_val < bonferroni_alpha:
+        significant_components.append(component["name"])
+        print(f"✅ {component['name']}: Significant after Bonferroni correction (p={p_val:.4f})")
+    else:
+        print(f"❌ {component['name']}: Not significant after correction (p={p_val:.4f})")
+
+assert len(significant_components) > 0, "No components significant after multiple comparison correction"
+```
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -589,6 +1126,93 @@ assert eval_report["fairness"]["equalized_odds_tpr"] < 0.10, "TPR gap >10%"
 assert eval_report["safety"]["harmful_output_rate"] < 0.0005, "Harmful output rate >0.05%"
 ```
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 2.4 Ethics & Safety Review (Pipeline F)
+```bash
+# Validate Gate 2 ethics review
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component model --gate 2 --validation-mode"
+```
+
+**Requirements**:
+- [ ] Ethics review complete for Gate 2
+- [ ] Model safety evaluation passed
+- [ ] Fairness audit passed
+- [ ] Privacy audit passed (membership inference AUC ≤0.55)
+- [ ] Adversarial prompt testing passed (>90% rejection)
+- [ ] Dual-use risk assessment complete
+- [ ] Ethics status: APPROVED
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -671,6 +1295,108 @@ npx claude-flow@alpha sparc run archivist \
 - [ ] Training details complete
 - [ ] Ethical considerations addressed
 - [ ] Limitations documented
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 2.6 Gate 2 Decision
+**evaluator agent synthesizes all requirements:**
+
+```bash
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-2 --pipeline E --include-ethics --comprehensive"
+```
+
+**Decision Criteria**:
+
+**APPROVED**:
+- ✅ Novel method > baseline (statistically significant)
+- ✅ Ablation studies ≥5 components
+- ✅ Holistic evaluation 6+ dimensions
+- ✅ Ethics review APPROVED
+- ✅ Method card ≥90% complete
+- ✅ Reproducibility 3/3 runs
+- **Action**: Proceed to Phase 3 (Production)
+
+**CONDITIONAL**:
+- ✅ Most requirements met
+- ⚠️ Fairness gaps 10-15% (mitigation plan)
+- ⚠️ Adversarial robustness <30% (acceptable for non-adversarial deployment)
+- **Action**: Proceed with deployment restrictions
+
+**REJECTED**:
+- ❌ Performance regression vs. baseline
+- ❌ Ethics review flagged critical safety risks
+- ❌ Fairness gaps >15%
+- **Action**: Return to Phase 2
+
+---
 
 ## When to Use This Skill
 
@@ -760,6 +1486,93 @@ npx claude-flow@alpha sparc run archivist \
 - [ ] Datasheets and risk assessments linked
 - [ ] Ethical considerations complete
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 3.2 Reproducibility Package (Pipeline G)
+```bash
+# Test reproducibility package
+python scripts/test_reproducibility.py \
+  --package phase3-production/reproducibility-package/ \
+  --runs 3
+```
+
+**Requirements**:
+- [ ] Reproducibility package complete (code + data + environment)
+- [ ] Docker environment builds successfully
+- [ ] README with ≤5 steps to reproduce
+- [ ] All hyperparameters and seeds documented
+- [ ] 3/3 reproduction runs successful
+- [ ] Results within ±1% of reported values
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -839,6 +1652,91 @@ npx claude-flow@alpha sparc run archivist \
 - [ ] Model DOI assigned (Zenodo)
 - [ ] Code DOI assigned (GitHub + Zenodo)
 - [ ] Citation formats generated
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 3.4 Public Registry Publishing (Pipeline G)
+```bash
+# Validate public registry publishing
+python scripts/validate_registry_publishing.py \
+  --registries "huggingface,zenodo,mlflow,github"
+```
+
+**Requirements**:
+- [ ] Code public on GitHub (release created)
+- [ ] Model published to HuggingFace Hub
+- [ ] Artifacts published to Zenodo
+- [ ] Registry URLs documented
+- [ ] All artifacts accessible publicly
+
+---
 
 ## When to Use This Skill
 
@@ -922,6 +1820,92 @@ python scripts/validate_deployment_readiness.py \
 - [ ] Incident response plan created
 - [ ] Performance benchmarks (production environment) complete
 - [ ] Rollback strategy documented
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+#### 3.6 Publication Artifacts (Pipeline I)
+```bash
+# Validate publication readiness
+npx claude-flow@alpha sparc run researcher \
+  "Validate publication artifacts" \
+  --venue NeurIPS
+```
+
+**Requirements**:
+- [ ] Research paper draft complete
+- [ ] Reproducibility checklist complete (NeurIPS/ICML)
+- [ ] Supplementary materials prepared
+- [ ] Artifact submission ready (ACM badges)
+- [ ] Code release finalized
+
+---
 
 ## When to Use This Skill
 
@@ -1020,6 +2004,99 @@ npx claude-flow@alpha sparc run evaluator \
 - ❌ Critical ethics violations
 - ❌ DOIs not assigned
 - **Action**: Return to Phase 3
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Integration with Deep Research SOP
+
+### Quality Gate System
+The three quality gates ensure systematic progression through the research lifecycle:
+
+```
+Gate 1 (End of Phase 1):
+  INPUTS: Literature review, datasheet, bias audit, ethics review, baseline replication
+  OUTPUT: GO/NO-GO for method development
+  AGENTS: evaluator, data-steward, ethics-agent
+
+Gate 2 (End of Phase 2):
+  INPUTS: Novel method, ablations, holistic evaluation, ethics review, method card
+  OUTPUT: GO/NO-GO for production deployment
+  AGENTS: evaluator, ethics-agent
+
+Gate 3 (End of Phase 3):
+  INPUTS: Model card, reproducibility package, DOIs, deployment plan, publication artifacts
+  OUTPUT: GO/NO-GO for deployment and publication
+  AGENTS: evaluator, archivist
+```
+
+---
 
 ## When to Use This Skill
 
@@ -1130,6 +2207,94 @@ python scripts/audit_reproducibility.py \
 python scripts/test_determinism.py --runs 10 --strict
 ```
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Related Skills and Commands
+
+### Related Skills
+- `baseline-replication` - Required for Gate 1
+- `method-development` - Required for Gate 2
+- `holistic-evaluation` - Required for Gate 2
+- `reproducibility-audit` - Required for Gate 3
+- `deep-research-orchestrator` - Uses this skill for all 3 gates
+
+### Related Commands
+- `/validate-gate-1` - Gate 1 validation (evaluator)
+- `/validate-gate-2` - Gate 2 validation (evaluator)
+- `/validate-gate-3` - Gate 3 validation (evaluator)
+- `/assess-risks` - Ethics assessment (ethics-agent)
+- `/init-datasheet` - Datasheet creation (data-steward)
+- `/init-model-card` - Model card creation (archivist)
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -1208,6 +2373,21 @@ This skill integrates with:
 - NeurIPS Reproducibility Checklist
 - ACM Artifact Evaluation Badging
 - IEEE Software Quality Assurance Standards
+---
+
+## Core Principles
+
+### 1. GO/NO-GO Decisions Require Quantitative Evidence
+Quality gate validation is not a rubber-stamp approval process - it is a rigorous GO/NO-GO decision framework backed by quantitative evidence. Every gate requirement has explicit pass/fail criteria with numerical thresholds (e.g., baseline replication within 1% tolerance, demographic parity < 10%, test coverage >= 90%). Subjective assessments ("looks good enough") are rejected. This principle ensures that phase transitions are defensible under academic peer review, regulatory audit, and production incident retrospectives.
+
+### 2. Multiple Comparison Correction Prevents Statistical Illusions
+Testing multiple hypotheses without correction inflates false positive rates exponentially. Gate validation implements Bonferroni correction to control family-wise error rate, ensuring that approval decisions maintain statistical rigor across dozens of simultaneous checks. A Gate 2 validation testing 30 requirements at p<0.05 would have 78% chance of false positive without correction - Bonferroni reduces this to 5%. This principle prevents the approval of models that pass gates by statistical luck rather than genuine quality.
+
+### 3. Phase Transitions Require Cross-Agent Consensus
+No single agent has complete view of production readiness. Gate validation coordinates evaluator, ethics-agent, data-steward, and archivist for multi-perspective assessment. Gate 1 cannot approve without data-steward datasheet validation AND ethics-agent risk assessment. Gate 2 requires evaluator holistic evaluation AND ethics-agent safety review. This principle prevents blind spots where technical excellence masks ethical risks or where comprehensive documentation hides functionality gaps.
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Why It Fails | Correct Approach |

@@ -1,0 +1,14 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.0
+agents:
+  - researcher
+  - analyst
+duration: 2-6 hours per source
+quality_gates: 3
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\research\academic-reading-workflow
+  category: research
+  migrated_at: 2025-12-28T15:56:24.981Z
+  version: 2.0.0

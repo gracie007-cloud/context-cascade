@@ -1,0 +1,31 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+tags:
+  - slash-commands
+  - cli
+  - automation
+  - micro-skills
+  - encoding
+category: workflow
+agents:
+  - coder
+  - base-template-generator
+complexity: intermediate
+estimated_duration: 20-40 minutes
+prerequisites:
+  - Claude Flow installed
+  - Understanding of command-line interfaces
+  - Micro-skills knowledge
+outputs:
+  - Slash command definitions
+  - Command handlers
+  - Documentation
+  - Validation logic
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\workflow\when-creating-slash-commands-use-slash-command-encoder
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.740Z
+  version: 2.0.0

@@ -1,6 +1,7 @@
 ---
 name: when-finding-high-ev-hackathons-use-ev-optimizer
-description: Expected Value (EV) calculator for hackathons and bounties. Optimizes for prize × p(win) − time_cost with judge fit analysis and past win pattern learning.
+description: Expected value optimization for hackathons and bounties with judge analysis and MVS generation
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Hackathon EV Optimizer
@@ -64,6 +65,167 @@ Phase 4: SubmissionKit (coder) → MVS packages for top 3
   ↓
 All phases coordinate via Memory MCP with WHO/WHEN/PROJECT/WHY tagging
 ```
+
+---
+
+## Phase 1: Collector (Hackathon Scanning)
+
+**Agent**: `researcher` (Collector role)
+
+### Inputs
+- `data/sources/hackathons.yml` - Hackathon aggregators, bounty platforms
+- Web scraping targets (DevPost, Gitcoin, DoraHacks, etc.)
+
+### Commands Executed
+
+```bash
+#!/bin/bash
+# Phase 1: Hackathon Data Collection
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Hackathon EV: opportunity scanning" \
+  --agent "researcher" \
+  --role "Collector" \
+  --skill "hackathon-ev-optimizer"
+
+# SESSION RESTORE
+npx claude-flow@alpha hooks session-restore \
+  --session-id "hackathon-ev-$(date +%Y-%W)"
+
+# SETUP
+WEEK=$(date +%Y-%W)
+mkdir -p outputs/reports outputs/briefs raw_data/hackathons
+
+# READ SOURCES
+PLATFORMS=$(yq eval '.platforms[].url' data/sources/hackathons.yml)
+
+echo "slug,name,theme,prize_pool,top_prize,deadline,location,judges,deliverables,url,posted_date" > raw_data/hackathons/events_${WEEK}.csv
+
+# SCRAPE PLATFORMS
+for PLATFORM in $PLATFORMS; do
+  echo "[Collector] Scanning: $PLATFORM"
+
+  # Example: DevPost API (adapt to actual endpoints)
+  if [[ $PLATFORM == *"devpost"* ]]; then
+    curl -s "https://devpost.com/api/hackathons?status[]=upcoming&status[]=open" \
+      | jq -r '.hackathons[] | [
+          .slug,
+          .title,
+          .themes[0].name,
+          (.prizes | map(.amount) | add // 0),
+          (.prizes | max_by(.amount).amount // 0),
+          .submission_period_ends,
+          .location,
+          (.judges | map(.name) | join(";")),
+          .requirements,
+          .url,
+          .published_at
+        ] | @csv' \
+      >> raw_data/hackathons/events_${WEEK}.csv
+  fi
+
+  # Example: Gitcoin Bounties
+  if [[ $PLATFORM == *"gitcoin"* ]]; then
+    curl -s "https://gitcoin.co/api/v0.1/bounties/?is_open=True" \
+      | jq -r '.[] | [
+          .id,
+          .title,
+          .keywords[0],
+          .value_in_usdt,
+          .value_in_usdt,
+          .expires_date,
+          "Remote",
+          "",
+          .issue_description,
+          .url,
+          .created_on
+        ] | @csv' \
+      >> raw_data/hackathons/events_${WEEK}.csv
+  fi
+
+  # Example: DoraHacks
+  if [[ $PLATFORM == *"dorahacks"* ]]; then
+    curl -s "https://dorahacks.io/api/buidl/grants?status=active" \
+      | jq -r '.data[] | [
+          .id,
+          .name,
+          .category,
+          .total_amount,
+          .max_award,
+          .end_time,
+          "Hybrid",
+          "",
+          .description,
+          ("https://dorahacks.io/buidl/" + .id),
+          .start_time
+        ] | @csv' \
+      >> raw_data/hackathons/events_${WEEK}.csv
+  fi
+
+  sleep 3  # Rate limiting
+done
+
+EVENT_COUNT=$(tail -n +2 raw_data/hackathons/events_${WEEK}.csv | wc -l)
+echo "[Collector] Found $EVENT_COUNT hackathons/bounties"
+
+# JUDGE RESEARCH (for top 20 by prize)
+echo "[Collector] Researching judges for top opportunities..."
+
+tail -n +2 raw_data/hackathons/events_${WEEK}.csv \
+  | sort -t',' -k4 -nr \
+  | head -n 20 \
+  | while IFS=',' read -r slug name theme prize top deadline location judges deliverables url posted; do
+      if [[ -n "$judges" ]]; then
+        echo "[Collector] Judges for $slug: $judges"
+
+        # Store judge profiles for similarity matching
+        echo "$judges" | tr ';' '\n' | while read -r judge; do
+          # Placeholder: In production, scrape LinkedIn/Twitter for judge expertise
+          echo "$slug,$judge,AI|biotech|systems" >> raw_data/hackathons/judge_profiles_${WEEK}.csv
+        done
+      fi
+    done
+
+# MEMORY STORE
+npx claude-flow@alpha memory store \
+  --key "life-os/hackathons/${WEEK}/opportunities" \
+  --value "$(cat raw_data/hackathons/events_${WEEK}.csv)" \
+  --metadata "{
+    \"WHO\": {
+      \"agent\": \"researcher\",
+      \"role\": \"Collector\",
+      \"category\": \"revenue-generation\",
+      \"capabilities\": [\"web-scraping\", \"api-integration\", \"judge-research\"]
+    },
+    \"WHEN\": {
+      \"iso\": \"$(date -Iseconds)\",
+      \"unix\": $(date +%s),
+      \"readable\": \"$(date)\"
+    },
+    \"PROJECT\": \"life-os-hackathon-optimization\",
+    \"WHY\": {
+      \"intent\": \"research\",
+      \"task_type\": \"opportunity-scanning\",
+      \"outcome_expected\": \"raw-hackathon-list\",
+      \"phase\": \"data-collection\"
+    }
+  }"
+
+# POST-TASK HOOK
+npx claude-flow@alpha hooks post-task \
+  --task-id "hackathon-ev-phase1-collector" \
+  --metrics "events_found=${EVENT_COUNT}"
+
+echo "[Collector] Phase 1 complete: $EVENT_COUNT events stored"
+```
+
+### Outputs
+- `raw_data/hackathons/events_{YYYY-WW}.csv` - Normalized event data
+- `raw_data/hackathons/judge_profiles_{YYYY-WW}.csv` - Judge expertise tags
+- Memory: `life-os/hackathons/{YYYY-WW}/opportunities`
+
+---
 
 ## Phase 2: EVCalc (Expected Value Calculation)
 
@@ -200,7 +362,12 @@ cat > outputs/reports/hackathons_${WEEK}.md <<REPORT_HEADER
 **Total Scanned**: $(tail -n +2 raw_data/hackathons/events_${WEEK}.csv | wc -l)
 **High-EV Opportunities**: $RANKED_COUNT
 
----|-------|-------|-------|--------|------|----|----|----------|-------|------|
+---
+
+## Top 20 by Expected Value
+
+| Rank | Event | Theme | Prize | p(win) | Time | EV | EV/hr | Deadline | Risks | Link |
+|------|-------|-------|-------|--------|------|----|----|----------|-------|------|
 REPORT_HEADER
 
 jq -r '.[] | [
@@ -221,6 +388,29 @@ jq -r '.[] | [
 # APPEND EV METHODOLOGY
 cat >> outputs/reports/hackathons_${WEEK}.md <<'METHODOLOGY'
 
+---
+
+## EV Calculation Methodology
+
+**Formula**: EV = (Prize × p(win)) − Time Cost
+
+**p(win) estimation**:
+- 40%: Similarity to past projects (keyword overlap)
+- 30%: Judge alignment (expertise match)
+- 30%: Skill coverage (deliverables feasibility)
+
+**Time cost**:
+- Hackathons: 48 hours @ $75/hr = $3,600
+- Bounties: 20 hours @ $75/hr = $1,500
+
+**Risk flags**:
+- SHORT_NOTICE: <7 days to deadline
+- LOW_PRIZE: <$5,000 top prize
+- LOW_WIN_PROB: <20% estimated win probability
+- HIGH_TIME_COST: >40 hours required
+
+---
+
 ## Recommended Action
 
 ### Immediate Priorities (EV > $1,000)
@@ -237,6 +427,42 @@ Consider if time allows or theme strongly aligns.
 
 ### Skip (EV < $500)
 Opportunity cost too high - focus on higher-EV options or direct client work.
+
+---
+
+**Next Steps**:
+1. Review top 3 deliverables in detail
+2. Assess skill gaps and team needs
+3. Generate MVS (Minimum Viable Submission) plan
+4. Commit or skip decision by EOD
+
+**Last updated**: FOOTER
+echo "$(date)" >> outputs/reports/hackathons_${WEEK}.md
+
+# MEMORY STORE
+npx claude-flow@alpha memory store \
+  --key "life-os/hackathons/${WEEK}/ev-ranked" \
+  --value "$(cat raw_data/hackathons/ev_ranked_${WEEK}.json)" \
+  --metadata "{
+    \"WHO\": {\"agent\": \"analyst\", \"role\": \"EVCalc\", \"capabilities\": [\"probability-estimation\", \"ev-calculation\", \"risk-analysis\"]},
+    \"WHEN\": {\"iso\": \"$(date -Iseconds)\", \"unix\": $(date +%s)},
+    \"PROJECT\": \"life-os-hackathon-optimization\",
+    \"WHY\": {\"intent\": \"analysis\", \"task_type\": \"ev-ranking\", \"outcome\": \"prioritized-opportunities\", \"phase\": \"scoring\"}
+  }"
+
+# POST-TASK HOOK
+npx claude-flow@alpha hooks post-task \
+  --task-id "hackathon-ev-phase2-evcalc" \
+  --metrics "high_ev_count=$(jq '[.[] | select(.ev | tonumber > 1000)] | length' raw_data/hackathons/ev_ranked_${WEEK}.json)"
+
+echo "[EVCalc] Phase 2 complete: $RANKED_COUNT opportunities ranked"
+```
+
+### Outputs
+- `outputs/reports/hackathons_{YYYY-WW}.md` - EV-ranked report
+- Memory: `life-os/hackathons/{YYYY-WW}/ev-ranked`
+
+---
 
 ## Phase 3: TeamBuilder (Skill Gap Analysis)
 
@@ -288,6 +514,21 @@ jq -c '.[]' raw_data/hackathons/top3_${WEEK}.json | while read -r event; do
 **EV**: \$$(echo "$event" | jq -r '.ev')
 **Deadline**: $(echo "$event" | jq -r '.days_until') days
 
+---
+
+## Required Skills (from deliverables)
+
+TEAM_HEADER
+
+  # Extract skill requirements
+  echo "$DELIVERABLES" | tr ',' '\n' | while read -r req; do
+    echo "- $req" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+  done
+
+  cat >> outputs/briefs/teams/${SLUG}_team_analysis.md <<'GAPS'
+
+---
+
 ## Your Skills Coverage
 
 GAPS
@@ -303,9 +544,64 @@ GAPS
 
   cat >> outputs/briefs/teams/${SLUG}_team_analysis.md <<'RECOMMENDATIONS'
 
+---
+
+## Skill Gaps & Team Needs
+
+**Analysis**: Based on deliverables vs. your profile
+
+RECOMMENDATIONS
+
+  # Identify gaps (placeholder - in production, use more sophisticated analysis)
+  if echo "$DELIVERABLES" | grep -qi "frontend"; then
+    echo "- **Gap**: Frontend development (React/Vue)" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Recommendation**: Find UI/UX specialist" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Outreach channels**: LinkedIn, Discord, Twitter" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+  fi
+
+  if echo "$DELIVERABLES" | grep -qi "blockchain"; then
+    echo "- **Gap**: Smart contract development" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Recommendation**: Find Web3 developer" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Outreach channels**: ETHGlobal Discord, BuildSpace" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+  fi
+
+  if echo "$DELIVERABLES" | grep -qi "mobile"; then
+    echo "- **Gap**: Mobile development (iOS/Android)" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Recommendation**: Find mobile engineer" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+    echo "  - **Outreach channels**: React Native community, Flutter Discord" >> outputs/briefs/teams/${SLUG}_team_analysis.md
+  fi
+
+  cat >> outputs/briefs/teams/${SLUG}_team_analysis.md <<OUTREACH_TEMPLATE
+---
+
 ## Outreach Email Template
 
 **Subject**: Hackathon Team Formation - $NAME
+
+---
+
+Hi [Name],
+
+I'm assembling a team for **$NAME** (deadline: $(echo "$event" | jq -r '.days_until') days) and saw your work on [specific project].
+
+**The opportunity**:
+- Theme: $(echo "$event" | jq -r '.theme')
+- Prize: \$$(echo "$event" | jq -r '.top_prize')
+- My EV estimate: \$$(echo "$event" | jq -r '.ev') ($(echo "$event" | jq -r '.p_win | tonumber * 100')% win probability)
+
+**Your role**: [Specific skill gap you'd fill]
+
+**My contribution**: AI/ML implementation, systems design, research-backed approach
+
+**Time commitment**: ~$(echo "$event" | jq -r '.time_hours') hours over [timeframe]
+
+Interested in collaborating? Happy to jump on a quick call to discuss.
+
+Best,
+David Youssef
+dnyoussef.com
+
+---
 
 OUTREACH_TEMPLATE
 
@@ -324,6 +620,58 @@ echo "[TeamBuilder] Phase 3 complete: $TEAM_ANALYSIS_COUNT team analyses created
 
 ### Outputs
 - `outputs/briefs/teams/{slug}_team_analysis.md` - Skill gaps + outreach templates
+
+---
+
+## Phase 4: SubmissionKit (MVS Generation)
+
+**Agent**: `coder` (SubmissionKit role)
+
+### Inputs
+- Memory: `life-os/hackathons/{YYYY-WW}/ev-ranked` (top 3)
+
+### Commands Executed
+
+```bash
+#!/bin/bash
+# Phase 4: Minimum Viable Submission (MVS) Package Generation
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Hackathon EV: MVS generation" \
+  --agent "coder" \
+  --role "SubmissionKit" \
+  --skill "hackathon-ev-optimizer"
+
+# SETUP
+WEEK=$(date +%Y-%W)
+mkdir -p outputs/briefs/mvs
+
+# RETRIEVE TOP 3
+npx claude-flow@alpha memory retrieve \
+  --key "life-os/hackathons/${WEEK}/ev-ranked" \
+  | jq '.[0:3]' > raw_data/hackathons/top3_${WEEK}.json
+
+# GENERATE MVS FOR EACH
+jq -c '.[]' raw_data/hackathons/top3_${WEEK}.json | while read -r event; do
+  SLUG=$(echo "$event" | jq -r '.slug')
+  NAME=$(echo "$event" | jq -r '.name')
+  THEME=$(echo "$event" | jq -r '.theme')
+  DEADLINE=$(echo "$event" | jq -r '.deadline')
+
+  echo "[SubmissionKit] Generating MVS for: $SLUG"
+
+  # CREATE MVS BRIEF
+  cat > outputs/briefs/mvs/h_${SLUG}_MVS.md <<MVS_HEADER
+# Minimum Viable Submission: $NAME
+
+**Event**: $NAME
+**Theme**: $THEME
+**Deadline**: $DEADLINE
+**EV**: \$$(echo "$event" | jq -r '.ev')
+**Generated**: $(date)
+
+---
 
 ## 24-Hour Plan
 
@@ -355,6 +703,30 @@ echo "[TeamBuilder] Phase 3 complete: $TEAM_ANALYSIS_COUNT team analyses created
 - [ ] Submit 2 hours before deadline (buffer for issues)
 - [ ] Tweet/post about submission (social proof)
 
+---
+
+## Repository Skeleton Checklist
+
+\`\`\`
+${SLUG}/
+├── README.md                 # ✓ Compelling overview, demo video, screenshots
+├── JUDGING_CRITERIA.md       # ✓ Map features to scoring rubric
+├── docs/
+│   ├── ARCHITECTURE.md       # ✓ System design (impress technical judges)
+│   ├── DEMO_SCRIPT.md        # ✓ Walkthrough for video recording
+│   └── API.md                # ✓ If applicable
+├── src/
+│   ├── main.*                # ✓ Entry point
+│   ├── core/                 # ✓ Business logic
+│   └── utils/                # ✓ Helpers
+├── tests/                    # ✓ At least smoke tests
+├── .env.example              # ✓ Configuration template
+├── package.json / requirements.txt
+└── LICENSE                   # ✓ Open source (if allowed)
+\`\`\`
+
+---
+
 ## Judging Criteria Mapping
 
 $(echo "$event" | jq -r '.deliverables' | tr ',' '\n' | while read -r criterion; do
@@ -366,6 +738,37 @@ $(echo "$event" | jq -r '.deliverables' | tr ',' '\n' | while read -r criterion;
   echo "- [Evidence/metrics to show success]"
   echo ""
 done)
+
+---
+
+## Demo Storyboard (2-3 min video)
+
+**0:00-0:15 - Hook**
+- "Imagine you're a [target user] facing [problem]..."
+- Show the pain point visually
+- Tease the solution
+
+**0:15-0:45 - Solution Overview**
+- "We built [project name] to solve this using [key innovation]"
+- Quick architecture diagram or visual
+- Highlight unique angle (AI, systems thinking, cross-domain)
+
+**0:45-2:00 - Core Demo**
+- Walkthrough of main workflow (3-5 steps max)
+- Show most impressive feature in action
+- Real data/example that resonates with judges
+
+**2:00-2:30 - Technical Depth**
+- Brief architecture explanation (if technical judges)
+- Mention tech stack and why (show thought process)
+- Highlight scalability or innovation
+
+**2:30-3:00 - Impact & Vision**
+- Quantify impact (time saved, cost reduced, users helped)
+- Future roadmap (if we had more time...)
+- Call to action (try it, star repo, connect)
+
+---
 
 ## Submission Form Auto-Fill
 
@@ -405,6 +808,30 @@ done)
 - [Scaling plan]
 - [Potential users or customers]
 
+---
+
+## Risk Mitigation
+
+**If behind schedule**:
+- Cut scope ruthlessly (demo > features)
+- Focus on one killer feature vs. many mediocre ones
+- Pre-record demo early (can edit later)
+- Submit SOMETHING even if incomplete
+
+**If technical blockers**:
+- Switch to simpler tech stack you know
+- Use third-party APIs instead of building from scratch
+- Mock/hardcode data if integration fails
+- Document the intended approach in README
+
+**If team coordination issues**:
+- Establish clear ownership early
+- Use feature branches and PRs
+- Over-communicate via Discord/Slack
+- Have backup plan for solo completion
+
+---
+
 ## Post-Submission Actions
 
 - [ ] Tweet about submission with demo link
@@ -413,6 +840,54 @@ done)
 - [ ] Prepare 1-min pitch for potential sponsor calls
 - [ ] Document lessons learned for next time
 - [ ] Update case_studies.md with project (win or lose)
+
+---
+
+**Next Steps**:
+1. Review this MVS plan and adjust based on your strengths
+2. Decide GO/NO-GO based on EV, time availability, team formation
+3. If GO: Block calendar, inform stakeholders, commit fully
+4. If NO-GO: Keep on watch list, wait for better opportunity
+
+**Last updated**: $(date)
+**Source**: Hackathon EV Optimizer v1.0.0
+MVS_HEADER
+
+  echo "[SubmissionKit] Created: outputs/briefs/mvs/h_${SLUG}_MVS.md"
+done
+
+MVS_COUNT=$(ls outputs/briefs/mvs/h_*_MVS.md 2>/dev/null | wc -l)
+
+# MEMORY STORE
+npx claude-flow@alpha memory store \
+  --key "life-os/hackathons/mvs/${WEEK}/generated" \
+  --value "$(ls outputs/briefs/mvs/h_*_MVS.md | xargs -I {} basename {})" \
+  --metadata "{
+    \"WHO\": {\"agent\": \"coder\", \"role\": \"SubmissionKit\", \"capabilities\": [\"template-generation\", \"automation\", \"documentation\"]},
+    \"WHEN\": {\"iso\": \"$(date -Iseconds)\", \"unix\": $(date +%s)},
+    \"PROJECT\": \"life-os-hackathon-optimization\",
+    \"WHY\": {\"intent\": \"implementation\", \"task_type\": \"mvs-generation\", \"outcome\": \"submission-packages\", \"phase\": \"automation\"}
+  }"
+
+# POST-TASK HOOK
+npx claude-flow@alpha hooks post-task \
+  --task-id "hackathon-ev-phase4-submissionkit" \
+  --metrics "mvs_generated=${MVS_COUNT}"
+
+# POST-EDIT HOOKS
+for MVS in outputs/briefs/mvs/h_*_MVS.md; do
+  npx claude-flow@alpha hooks post-edit \
+    --file "$MVS" \
+    --memory-key "life-os/hackathons/mvs/$(basename $MVS)"
+done
+
+echo "[SubmissionKit] Phase 4 complete: $MVS_COUNT MVS packages created"
+```
+
+### Outputs
+- `outputs/briefs/mvs/h_{slug}_MVS.md` - Complete 24-hour execution plan
+
+---
 
 ## Master Orchestration + Scheduling
 
@@ -476,6 +951,54 @@ echo ""
 echo "📦 MVS Packages:"
 ls outputs/briefs/mvs/h_*_MVS.md 2>/dev/null | sed 's/^/  - /' || echo "  (none generated)"
 ```
+
+---
+
+## Scheduled Automation Setup
+
+### Prompt File for Windows Task Scheduler
+
+Create: `prompts/hackathon_scan.txt`
+
+```
+Run the hackathon-ev-optimizer skill for this week.
+
+Execute all 4 phases:
+1. Scan hackathon platforms (DevPost, Gitcoin, DoraHacks)
+2. Calculate expected values for all opportunities
+3. Analyze skill gaps for top 3 opportunities
+4. Generate MVS packages for top 3
+
+Save all outputs to outputs/reports/ and outputs/briefs/.
+
+After completion, show me:
+- Top 3 high-EV opportunities with deadlines
+- Any opportunities with EV > $2,000 that need immediate action
+- Summary of time saved vs manual searching
+```
+
+### Windows Task Scheduler Script
+
+Create: `scheduled_tasks/hackathon_scan_scheduled.ps1`
+
+```powershell
+# Scheduled Hackathon EV Scan
+# Runs: Monday & Thursday at 9:00 AM
+
+$PROJECT_PATH = "C:\Users\17175"
+$PROMPT_FILE = "$PROJECT_PATH\prompts\hackathon_scan.txt"
+
+# Change to project directory
+cd $PROJECT_PATH
+
+# Run hackathon EV optimizer via Claude Code
+Get-Content $PROMPT_FILE | claude --project $PROJECT_PATH
+
+# Optional: Send notification when complete
+# (requires notification setup)
+```
+
+---
 
 ## Usage
 
@@ -547,6 +1070,25 @@ echo "✓ Setup complete! Run: ./hackathon_ev_master.sh"
 # Scheduled execution (automated via Task Scheduler)
 # Runs Monday & Thursday at 9:00 AM automatically
 ```
+
+---
+
+## Expected Outcomes
+
+### Week 1
+- **10-20 hackathons/bounties** scanned
+- **Top 5 by EV** with rationale
+- **3 MVS packages** ready to execute
+- **Team formation plans** for skill gaps
+- **Time saved**: 8-10 hours vs manual
+
+### Ongoing
+- **Weekly scans** (Mon/Thu) keep pipeline full
+- **EV learning** improves over time (actual wins train model)
+- **Quick decisions** (GO/NO-GO in <10 min)
+- **Higher win rate** (focus on high-probability opportunities)
+
+---
 
 ## Success Metrics
 

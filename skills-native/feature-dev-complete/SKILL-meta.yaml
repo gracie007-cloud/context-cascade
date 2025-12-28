@@ -1,0 +1,19 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+tags:
+  - feature
+  - development
+  - lifecycle
+  - multi-model
+  - essential
+  - tier-1
+version: 1.1.0
+category: delivery
+author: ruv
+cognitive_frame: primary: aspectual secondary: hierarchical rationale: "Feature development requires rigorous state tracking across 12 stages (aspectual) with epic > story > task breakdown (hierarchical)"
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\feature-dev-complete
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.268Z
+  version: 2.0.0

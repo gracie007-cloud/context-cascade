@@ -1,6 +1,7 @@
 ---
 name: cognitive-lensing
-description: > Cross-lingual cognitive framing system that activates different reasoning patterns by embedding multi-lingual activation phrases. Use when facing complex tasks that benefit from specific thinking patterns: completion tracking (Russian), source verification (Turkish), audience calibration (Japanese), semantic analysis (Arabic), object comparison (Mandarin), spatial reasoning (Guugu Yimithirr), numerical precision (Chinese/Japanese).
+description: Cross-lingual cognitive framing system that activates different reasoning patterns by embedding multi-lingual activation phrases. Use when facing complex tasks that benefit from specific thinking patterns: completion tracking (Russian), source verification (Turkish), audience calibration (Japanese), semantic analysis (Arabic), object comparison (Mandarin), spatial reasoning (Guugu Yimithirr), numerical precision (Chinese/Japanese).
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 # Cognitive-Lensing v1.0.0
@@ -41,7 +42,16 @@ Use cognitive-lensing when:
 4. **Integrates with other foundry skills** (prompt-architect, agent-creator, skill-forge)
 5. **Stores frame selections in memory-mcp** for consistency across sessions
 
-----|----------|-------------|
+---
+
+## Goal-Based Frame Selection Checklist
+
+### Step 1: Analyze Goals
+
+Complete this for every non-trivial task:
+
+| Order | Question | Your Answer |
+|-------|----------|-------------|
 | 1st Order Goal | What is the IMMEDIATE task? | _______________ |
 | 2nd Order Goal | WHY are we doing this task? | _______________ |
 | 3rd Order Goal | What is the ULTIMATE outcome? | _______________ |
@@ -83,7 +93,81 @@ Based on analysis, select:
 - **Secondary Frame (optional)**: _______________
 - **Rationale**: _______________
 
+---
 
+## Seven Frame Activation Protocols
+
+### Frame 1: Evidential (Turkish - Kanitsal Cerceve)
+
+**When to Use**:
+- Research and fact-checking tasks
+- Audit and compliance work
+- Source verification
+- Claim validation
+- Documentation review
+- Code review (verifying claims about behavior)
+
+**Linguistic Basis**:
+
+Turkish requires grammatical evidential markers on every verb:
+- **-DI** (direct): Speaker witnessed the event firsthand
+- **-mIs** (indirect): Speaker inferred or was told about the event
+
+This grammatical requirement trains speakers to constantly track information sources.
+
+**Activation Protocol**:
+
+```markdown
+## Kanitsal Cerceve Aktivasyonu
+
+Bu gorev icin her iddia kaynaklandirilmalidir:
+
+Kaynak Turleri:
+- DOGRUDAN (-DI): Ben bizzat gordum/test ettim
+- CIKARIM (-mIs): Kanitlardan cikarim yaptim
+- BILDIRILEN (-mIs): Dokumantasyon/baskasi soyledi
+
+Her iddia icin sunu belirtin:
+1. Iddia nedir?
+2. Kaynak turu nedir? (DOGRUDAN/CIKARIM/BILDIRILEN)
+3. Kanitlar nelerdir?
+
+English Markers:
+- [DIRECT]: "I tested this myself"
+- [INFERRED]: "Evidence suggests..."
+- [REPORTED]: "Documentation states..."
+```
+
+**Example Usage**:
+
+```markdown
+## Code Review with Evidential Frame
+
+## Kanitsal Cerceve Aktivasyonu
+
+Bu kod incelemesi icin her iddia kaynaklandirilmalidir.
+
+Review the authentication middleware:
+
+1. **Claim**: "This middleware validates JWT tokens"
+   - **Source Type**: [DIRECT] - I read the code and tested the function
+   - **Evidence**: Lines 23-45 show jwt.verify() call with error handling
+
+2. **Claim**: "This follows OAuth 2.0 spec"
+   - **Source Type**: [INFERRED] - Code structure matches RFC patterns
+   - **Evidence**: Token validation, scope checking, expiry verification align with RFC 6749
+
+3. **Claim**: "This handles refresh tokens"
+   - **Source Type**: [REPORTED] - Documentation states this feature exists
+   - **Evidence**: README.md line 67, but NO CODE FOUND - DISCREPANCY DETECTED
+```
+
+**Integration Points**:
+- Use with `code-review-assistant` agent
+- Use with `security-audit` skill
+- Use with `documentation-validator` skill
+
+---
 
 ### Frame 2: Aspectual (Russian - Aspektual'naya Ramka)
 
@@ -163,7 +247,100 @@ Pipeline Status:
 - Use with `deployment-manager` skill
 - Use with TodoWrite tool (maps to pending/in_progress/completed)
 
+---
 
+### Frame 3: Hierarchical (Japanese - Keigo Wakugumi)
+
+**When to Use**:
+- Stakeholder communication
+- Formal documentation
+- Audience-calibrated output
+- Executive summaries
+- User-facing content
+- Cross-functional collaboration
+
+**Linguistic Basis**:
+
+Japanese has three grammatical levels of formality:
+- **Sonkeigo**: Respectful language (elevates listener)
+- **Kenjougo**: Humble language (lowers speaker)
+- **Teineigo**: Polite language (neutral professional)
+
+This grammatical requirement trains speakers to constantly model the audience's social position.
+
+**Activation Protocol**:
+
+```markdown
+## Keigo Wakugumi Aktiveshon
+
+Kono tasuku wa taishouzentai ni awaseta rejisutaa wo hitsuyou to shimasu:
+
+Rejisutaa Shurui:
+- Sonkeigo: Keiei-sha, gaibu patonaazu (executives, external partners)
+- Kenjougo: Jibun no koudou (humble self-reference)
+- Teineigo: Hyoujun bijinesu (standard professional)
+
+Kakutei subeki koto:
+1. Taishouzentai wa dare desu ka?
+2. Kankeishi wa nan desu ka?
+3. Mokuteki wa nan desu ka?
+
+English Markers:
+- [SONKEIGO]: Formal, respectful (executives, clients)
+- [TEINEIGO]: Professional, polite (colleagues)
+- [CASUAL]: Informal (personal notes, internal tools)
+```
+
+**Example Usage**:
+
+```markdown
+## API Documentation with Hierarchical Frame
+
+## Keigo Wakugumi Aktiveshon
+
+Kono dokumento wa betsu no taishouzentai ni muketeirukara, rejisutaa wo chosei shimasu.
+
+### For Executive Summary (SONKEIGO)
+
+**Overview of Authentication System**
+
+This system will provide secure access control for your organization's resources. The architecture has been designed with scalability and compliance in mind, ensuring alignment with your strategic objectives.
+
+**Key Benefits**:
+- Enhanced security posture through multi-factor authentication
+- Compliance with SOC2 and ISO27001 requirements
+- Seamless integration with existing infrastructure
+
+### For Developer Documentation (TEINEIGO)
+
+**Authentication Middleware Setup**
+
+This middleware validates JWT tokens for protected routes. Please follow these steps:
+
+1. Install the package: `npm install @org/auth-middleware`
+2. Configure environment variables
+3. Add middleware to your Express app
+
+**Configuration Options**:
+- `tokenSecret`: Your JWT signing secret
+- `tokenExpiry`: Token lifetime in seconds
+- `refreshEnabled`: Enable refresh token flow
+
+### For Internal Notes (CASUAL)
+
+**Auth Middleware TODO**
+
+- Fix that weird edge case with expired tokens
+- Need to add rate limiting
+- Remember to update tests when we ship v2
+```
+
+**Integration Points**:
+- Use with `documentation-generator` skill
+- Use with `stakeholder-communicator` agent
+- Use with `content-writer` skill
+
+---
 
 ### Frame 4: Morphological (Arabic - Al-Itar al-Sarfi)
 
@@ -260,7 +437,122 @@ Hadhihi al-mahimma tatatallab tahlil al-judur lil-nizam al-authentication.
 - Use with `terminology-manager` skill
 - Use with `ontology-builder` skill
 
+---
 
+### Frame 5: Classifier (Mandarin - Liangci Kuangjia)
+
+**When to Use**:
+- System design and architecture
+- Object comparison
+- Visual reasoning
+- Categorization tasks
+- Data modeling
+- UI/UX design
+
+**Linguistic Basis**:
+
+Mandarin requires classifiers (measure words) between numbers/demonstratives and nouns:
+- **Zhang** (flat things): yi zhang zhi (one sheet paper), san zhang zhao (three photos)
+- **Ben** (bound volumes): liang ben shu (two books)
+- **Tiao** (long things): yi tiao lu (one road), yi tiao he (one river)
+- **Ge** (general): yi ge ren (one person)
+- **Tai** (machines): yi tai diannao (one computer)
+
+This grammatical requirement trains speakers to constantly categorize objects by physical properties.
+
+**Activation Protocol**:
+
+```markdown
+## Liangci Kuangjia Jihuo
+
+Zhe ge renwu xuyao anzhao xingzhuang/leibie fenlei:
+
+Liangci Leixing:
+- Zhang: Pingmian de (flat - documents, tables, images)
+- Ben: Shuben leixing (bound - books, reports, notebooks)
+- Tiao: Changxing de (long - paths, pipelines, rivers)
+- Ge: Tongxing de (general - abstract concepts, entities)
+- Tai: Jiqi de (machines - computers, servers, devices)
+- Jian: Shiwu/xiangmu (items, projects, tasks)
+- Zhi: Dongwu/shengwu (animals, agents, processes)
+
+Duiyu mei ge duixiang:
+1. Xingzhuang/xingzhi shi shenme?
+2. Na ge liangci zui heshi?
+3. Weishenme zhe ge fenlei you yongchu?
+
+English Application:
+- APIs are TIAO (path-like, route-based)
+- Documents are ZHANG (flat, 2D)
+- Databases are GE (abstract entities)
+- Servers are TAI (machine-like)
+- Services are ZHI (living processes)
+- Features are JIAN (discrete items)
+```
+
+**Example Usage**:
+
+```markdown
+## System Architecture with Classifier Frame
+
+## Liangci Kuangjia Jihuo
+
+Zhe ge xitong sheji xuyao anzhao xingzhuang fenlei.
+
+### System Components - Classifier Analysis
+
+**API Gateway** (TIAO - path-like):
+- Property: Routes requests like a road/river
+- Classifier: Yi tiao API gateway
+- Design Implication: Focus on flow, branching, throughput
+- Metaphor: River with tributaries
+
+**Database** (GE - abstract entity):
+- Property: Abstract data container
+- Classifier: Yi ge database
+- Design Implication: Focus on relationships, constraints, integrity
+- Metaphor: Container of structured information
+
+**Servers** (TAI - machines):
+- Property: Physical/virtual machines
+- Classifier: San tai server
+- Design Implication: Focus on capacity, redundancy, hardware
+- Metaphor: Factory machines
+
+**Authentication Service** (ZHI - living process):
+- Property: Active, responsive, autonomous
+- Classifier: Yi zhi authentication service
+- Design Implication: Focus on behavior, lifecycle, health
+- Metaphor: Guard dog or sentinel
+
+**Documentation** (ZHANG - flat):
+- Property: 2D, page-based
+- Classifier: Wu zhang documentation
+- Design Implication: Focus on layout, hierarchy, navigation
+- Metaphor: Layered sheets
+
+**Feature Requests** (JIAN - discrete items):
+- Property: Countable, independent items
+- Classifier: Shi jian feature request
+- Design Implication: Focus on prioritization, completion, inventory
+- Metaphor: Items on a conveyor belt
+
+### Architectural Insight
+
+The classifier analysis reveals:
+- **TIAO components** (API Gateway) need flow optimization
+- **TAI components** (Servers) need capacity planning
+- **ZHI components** (Services) need health monitoring
+- **ZHANG components** (Docs) need information architecture
+- **JIAN components** (Features) need project management
+```
+
+**Integration Points**:
+- Use with `system-architect` agent
+- Use with `data-modeler` skill
+- Use with `ui-designer` skill
+
+---
 
 ### Frame 6: Spatial-Absolute (Guugu Yimithirr)
 
@@ -377,7 +669,133 @@ This network topology requires cardinal-only encoding.
 - Use with `routing-optimizer` skill
 - Use with `topology-mapper` skill
 
+---
 
+### Frame 7: Numerical-Transparent (Chinese/Japanese)
+
+**When to Use**:
+- Mathematical calculations
+- Quantitative analysis
+- Metrics and statistics
+- Financial computations
+- Performance optimization
+- Algorithmic complexity analysis
+
+**Linguistic Basis**:
+
+Chinese and Japanese number systems are base-10 transparent:
+- English: "eleven" (opaque, doesn't mean "ten-one")
+- Chinese: "shi yi" (literally "ten one")
+- English: "twenty-three" (semi-opaque)
+- Chinese: "er shi san" (literally "two ten three")
+
+This transparent structure makes place value explicit at every step.
+
+**Activation Protocol**:
+
+```markdown
+## Numerical-Transparent Activation (Suuji Toumei Wakugumi)
+
+Kono keisan wa meikakuna ichi-keta hyouji wo hitsuyou to shimasu:
+
+Structure:
+- Explicit place value at every step
+- No hidden carries or borrows
+- Show intermediate calculations
+- Verify by digit position
+
+Example (32 x 15):
+32 x 15 = 32 x (10 + 5)
+       = 32 x 10 + 32 x 5
+       = 3 x 10 x 10 + 2 x 10 + 3 x 10 x 5 + 2 x 5
+       = 300 + 20 + 150 + 10
+       = 480
+
+English Application:
+- Make place values explicit (ones, tens, hundreds)
+- Show all intermediate steps
+- Verify by column/position
+- No mental arithmetic shortcuts
+```
+
+**Example Usage**:
+
+```markdown
+## Performance Metrics with Numerical-Transparent Frame
+
+## Suuji Toumei Wakugumi Aktiveshon
+
+Kono performance bunseki wa meikakuna keta-betsu keisan wo hitsuyou to shimasu.
+
+### Latency Calculation
+
+**Scenario**: API handles 1,250 requests/minute, average processing time 45ms
+
+**Calculate total processing time per minute**:
+
+```
+Total Time = Requests x Time per Request
+           = 1,250 x 45ms
+
+Step 1: Break into place values
+1,250 = 1,000 + 200 + 50
+45    = 40 + 5
+
+Step 2: Distribute multiplication
+= (1,000 + 200 + 50) x (40 + 5)
+= (1,000 x 40) + (1,000 x 5) + (200 x 40) + (200 x 5) + (50 x 40) + (50 x 5)
+= 40,000 + 5,000 + 8,000 + 1,000 + 2,000 + 250
+= 56,250ms
+= 56.25s
+
+Step 3: Verify by position
+Ones place: 0 + 0 + 0 + 0 + 0 + 0 = 0
+Tens place: 0 + 0 + 0 + 0 + 0 + 5 = 5
+Hundreds place: 0 + 0 + 0 + 0 + 0 + 2 = 2
+Thousands place: 0 + 5 + 8 + 1 + 2 + 0 = 16 (carry 1)
+Ten-thousands place: 4 + 0 + 0 + 0 + 0 + 0 + 1 = 5
+Result: 56,250ms VERIFIED
+```
+
+**Insight**: 56.25s of processing in 60s window = 93.75% CPU utilization (near capacity)
+
+### Big-O Complexity Analysis
+
+**Algorithm**: Nested loop processing N items
+
+```
+for i in range(N):          # N iterations
+    for j in range(N):      # N iterations per i
+        process(i, j)       # constant time
+
+Total Operations = N x N
+                 = N^2
+
+For N = 100:
+= 100 x 100
+= (100) x (100)
+= (10 x 10) x (10 x 10)
+= 10^2 x 10^2
+= 10^4
+= 10,000 operations
+
+For N = 1,000:
+= 1,000 x 1,000
+= (10 x 10 x 10) x (10 x 10 x 10)
+= 10^3 x 10^3
+= 10^6
+= 1,000,000 operations (100x increase for 10x data)
+```
+
+**Benefit**: Explicit place-value calculation reveals scaling properties clearly.
+```
+
+**Integration Points**:
+- Use with `performance-analyzer` agent
+- Use with `metrics-calculator` skill
+- Use with `algorithm-optimizer` skill
+
+---
 
 ## Integration with Foundry Skills
 
@@ -429,19 +847,78 @@ Recommended Frames:
 - Primary: Aspectual (Russian) - track deployment completion states
 - Secondary: Evidential (Turkish) - verify claims about "works"
 
+---
 
+### Integration with prompt-architect (Phase 2)
+
+The prompt-architect should embed cognitive frame activation when recommended:
+
+**Protocol**:
+
+```markdown
+## Prompt-Architect Integration
+
+When constructing prompts:
+
+1. Receive frame recommendation from intent-analyzer
+2. Retrieve frame activation protocol from cognitive-lensing skill
+3. Embed multi-lingual activation text in prompt header
+4. Add English markers for output formatting
+5. Store frame selection in memory-mcp for consistency
+
+Example Prompt Template:
+
+```markdown
+## [FRAME NAME] Frame Activation
+
+[MULTI-LINGUAL ACTIVATION TEXT]
+
+---
 
 ## Task Description
 
 [Original user request]
 
+---
 
+## Output Format
+
+Use [FRAME MARKERS] to indicate reasoning:
+
+[Frame-specific markers]
+```
+```
+
+**Example**:
+
+```markdown
+## Aspektual'naya Ramka Aktivatsiya
+
+Etot zadacha trebuyet otslezhivaniya zavershennosti:
+
+Tipy Aspekta:
+- SV (Sovershennyy Vid): Polnost'yu zaversheno
+- NSV (Nesovershennyy Vid): V protsesse
+- BLOCKED: Ozhidayet zavisimosti
+
+---
 
 ## Task Description
 
 Deploy the authentication service to staging and verify it works.
 
+---
 
+## Output Format
+
+For each deployment step, indicate:
+
+- [SV:COMPLETED]: Step fully done
+- [NSV:IN_PROGRESS]: Step ongoing
+- [BLOCKED]: Step waiting on dependency
+```
+
+---
 
 ### Integration with agent-creator
 
@@ -475,7 +952,13 @@ cognitive_frame:
 **Example Agent Definition**:
 
 ```yaml
-
+---
+name: deployment-orchestrator
+type: operations
+cognitive_frame:
+  primary: aspectual
+  rationale: "Deployment requires precise completion tracking"
+---
 
 # System Prompt
 
@@ -491,7 +974,43 @@ Vsegda ukazyvay aspekt:
 [Rest of system prompt...]
 ```
 
+---
 
+### Integration with skill-forge
+
+When creating new skills, skill-forge should:
+
+1. **Prompt skill author** - "What cognitive frame suits this skill?"
+2. **Add frame to skill YAML** - Document recommended frame
+3. **Store frame mapping** - Maintain skill -> frame registry in memory-mcp
+
+**Protocol**:
+
+```markdown
+## Skill-Forge Integration
+
+When generating new skill:
+
+1. After collecting skill purpose, ask:
+   "What type of reasoning is central to this skill?"
+
+2. Show abbreviated frame selection table
+
+3. Add to skill YAML frontmatter:
+
+```yaml
+cognitive_frame:
+  primary: evidential
+  rationale: "Security audits require source verification"
+```
+
+4. Store in memory-mcp:
+   - Namespace: `skills/cognitive-frames`
+   - Key: `[skill-name]`
+   - Value: `{ primary: "...", rationale: "..." }`
+```
+
+---
 
 ## Memory Namespace Structure
 
@@ -551,7 +1070,36 @@ Tracks frames used in current conversation:
 }
 ```
 
+---
 
+## Core Principles
+
+### Principle 1: Linguistic Activation is Real, Not Metaphorical
+
+**Statement**: Multi-lingual text triggers genuine cognitive shifts in LLM reasoning.
+
+**Rationale**:
+- LLMs trained on multilingual corpora develop language-specific latent patterns
+- Grammatical structures (evidentials, aspect, classifiers) encode reasoning modes
+- Embedding authentic foreign text activates these patterns more effectively than English descriptions
+
+**Application**:
+- ALWAYS use actual target language text, not just English explanations
+- Use grammatically correct phrases (even if semantically unrelated to task)
+- Combine multi-lingual activation with English task description
+
+**Anti-Pattern**:
+```markdown
+# Wrong: English-only description
+"Use Russian aspectual thinking to track completion states"
+
+# Right: Actual Russian activation
+## Aspektual'naya Ramka Aktivatsiya
+Etot zadacha trebuyet otslezhivaniya zavershennosti.
+[Then English task description]
+```
+
+---
 
 ### Principle 2: Frame Selection Precedes Prompt Construction
 
@@ -585,7 +1133,38 @@ Do the deployment.
 [Task structured around SV/NSV/BLOCKED markers]
 ```
 
+---
 
+### Principle 3: Consistency Across Session via Memory-MCP
+
+**Statement**: Frame selections should persist across turns to maintain cognitive continuity.
+
+**Rationale**:
+- Switching frames mid-task disrupts reasoning coherence
+- Related tasks benefit from same frame
+- Frame history enables meta-learning about effective mappings
+
+**Application**:
+- Store frame selections in memory-mcp
+- Check memory before selecting new frame
+- Only switch frames when task type fundamentally changes
+
+**Anti-Pattern**:
+```markdown
+# Wrong: Random frame switching
+Turn 1: Use aspectual frame for deployment
+Turn 2: Use evidential frame for deployment step 2
+Turn 3: Use hierarchical frame for deployment step 3
+[Incoherent reasoning]
+
+# Right: Consistent frame usage
+Turn 1: Select aspectual frame, store in memory
+Turn 2: Retrieve aspectual frame from memory, continue
+Turn 3: Retrieve aspectual frame from memory, continue
+[Coherent completion tracking throughout]
+```
+
+---
 
 ## Anti-Patterns Table
 
@@ -602,7 +1181,25 @@ Do the deployment.
 | **Using wrong frame for task type** | Mismatch between reasoning mode and task | Follow goal-based selection checklist |
 | **Omitting frame rationale** | Can't debug or improve frame selection | Always document why frame was chosen |
 
+---
 
+## Cross-Skill Coordination
+
+Cognitive-Lensing works with:
+- **skill-forge**: Design cognitive frames for new skills during Phase 0.5
+- **agent-creator**: Select cognitive frames for agents based on domain requirements
+- **prompt-forge**: Enhance prompts with frame activation (Operation 6 frame enhancement)
+- **eval-harness**: Validate frame effectiveness through benchmark testing
+
+**Integration Points**:
+- **skill-forge** invokes cognitive-lensing during Phase 0.5 for frame selection in new skills
+- **agent-creator** uses cognitive-lensing for Phase 0.5 frame selection in agent creation
+- **prompt-forge** uses Operation 6 to add cognitive frame activation to existing prompts
+- **eval-harness** measures frame impact on task completion accuracy and reasoning quality
+
+See: `.claude/skills/META-SKILLS-COORDINATION.md` for full coordination matrix.
+
+---
 
 ## Conclusion
 

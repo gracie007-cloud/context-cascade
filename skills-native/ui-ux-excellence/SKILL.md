@@ -1,6 +1,7 @@
 ---
 name: ui-ux-excellence
 description: Comprehensive UI/UX enhancement cascade that transforms generic websites into polished, accessible, brand-differentiated experiences. Combines constraint-based design, WCAG accessibility, micro-interactions, typography systems, and responsive refinements. Use when elevating landing pages, marketing sites, or any frontend that needs to stand out.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # UI/UX Excellence Cascade
@@ -56,7 +57,82 @@ Phase 6: Responsive & Mobile Refinement
 Phase 7: Style Audit & Validation
 ```
 
+---
 
+## Phase 1: Brand Analysis & Design System Definition
+
+### Purpose
+Extract brand patterns and codify them into CSS custom properties for consistency.
+
+### Key Activities
+
+1. **Identify Brand Personality**
+   - Professional vs Casual
+   - Luxury vs Accessible
+   - Bold vs Subtle
+   - Modern vs Classic
+
+2. **Define Color Palette**
+   ```css
+   :root {
+     /* Primary - Brand identity color */
+     --color-primary: #2563EB;
+     --color-primary-dark: #1D4ED8;
+     --color-primary-light: #3B82F6;
+
+     /* Accent - Call-to-action, highlights */
+     --color-accent: #F59E0B;
+     --color-accent-dark: #D97706;
+
+     /* Semantic - Success, warning, error */
+     --color-success: #10B981;
+     --color-warning: #F59E0B;
+     --color-error: #EF4444;
+
+     /* Backgrounds */
+     --color-bg: #FFFFFF;
+     --color-bg-dark: #0C0C0C;
+     --color-surface: #F9FAFB;
+     --color-surface-dark: #171717;
+
+     /* Text - Ensure 4.5:1 contrast ratio */
+     --color-text: #1F2937;
+     --color-text-dark: #FAFAF9;
+     --color-text-muted: #6B7280;
+   }
+   ```
+
+3. **Define Spacing Scale** (8px base)
+   ```css
+   :root {
+     --space-1: 0.25rem;   /* 4px */
+     --space-2: 0.5rem;    /* 8px */
+     --space-3: 0.75rem;   /* 12px */
+     --space-4: 1rem;      /* 16px */
+     --space-6: 1.5rem;    /* 24px */
+     --space-8: 2rem;      /* 32px */
+     --space-12: 3rem;     /* 48px */
+     --space-16: 4rem;     /* 64px */
+     --space-24: 6rem;     /* 96px */
+   }
+   ```
+
+4. **Define Transitions**
+   ```css
+   :root {
+     --transition-fast: 150ms ease;
+     --transition-base: 300ms ease;
+     --transition-slow: 500ms ease;
+     --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+     --transition-elegant: 800ms cubic-bezier(0.16, 1, 0.3, 1);
+   }
+   ```
+
+### Output
+- CSS custom properties file or `:root` block
+- Brand personality documentation
+
+---
 
 ## Phase 2: Accessibility Foundation (WCAG)
 
@@ -130,7 +206,78 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
 - Reduced motion media query
 - Semantic HTML structure
 
+---
 
+## Phase 3: Typography System Implementation
+
+### Purpose
+Create harmonious type scale with proper line heights and letter spacing.
+
+### Key Activities
+
+1. **Choose Typography Scale**
+
+   **Major Third (1.25)** - Friendly, approachable:
+   ```css
+   --text-xs: 0.75rem;    /* 12px */
+   --text-sm: 0.875rem;   /* 14px */
+   --text-base: 1rem;     /* 16px */
+   --text-lg: 1.25rem;    /* 20px */
+   --text-xl: 1.5rem;     /* 24px */
+   --text-2xl: 1.875rem;  /* 30px */
+   --text-3xl: 2.25rem;   /* 36px */
+   --text-4xl: 3rem;      /* 48px */
+   ```
+
+   **Perfect Fourth (1.333)** - Authoritative, premium:
+   ```css
+   --text-xs: 0.75rem;    /* 12px */
+   --text-sm: 0.875rem;   /* 14px */
+   --text-base: 1rem;     /* 16px */
+   --text-lg: 1.333rem;   /* ~21px */
+   --text-xl: 1.777rem;   /* ~28px */
+   --text-2xl: 2.369rem;  /* ~38px */
+   --text-3xl: 3.157rem;  /* ~50px */
+   --text-4xl: 4.209rem;  /* ~67px */
+   ```
+
+2. **Font Pairing Strategy**
+
+   **Professional but Warm** (B2C, Real Estate):
+   ```css
+   h1, h2, h3 { font-family: 'Sora', system-ui, sans-serif; }
+   body { font-family: 'Inter', system-ui, sans-serif; }
+   ```
+
+   **Authoritative & Premium** (B2B, Executive):
+   ```css
+   h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+   body { font-family: 'Inter', system-ui, sans-serif; }
+   ```
+
+3. **Line Height & Letter Spacing**
+   ```css
+   h1, h2, h3 {
+     line-height: 1.15;
+     letter-spacing: -0.02em;
+   }
+
+   body {
+     line-height: 1.6;  /* or 1.7 for luxury feel */
+     letter-spacing: -0.01em;
+   }
+
+   p {
+     max-width: 65ch;  /* Optimal reading width */
+   }
+   ```
+
+### Output
+- Typography scale CSS variables
+- Font loading strategy
+- Heading and body styles
+
+---
 
 ## Phase 4: Micro-interactions & Motion Design
 
@@ -245,7 +392,89 @@ Add subtle animations that enhance user experience without overwhelming.
 - Intersection Observer script
 - Hover interaction patterns
 
+---
 
+## Phase 5: Component Enhancement & Polish
+
+### Purpose
+Elevate individual components with consistent patterns.
+
+### Key Activities
+
+1. **Card Components**
+   ```css
+   .card {
+     background: var(--color-surface);
+     border: 1px solid var(--color-border);
+     border-radius: var(--radius-lg);
+     padding: var(--space-6);
+     transition: border-color 0.3s, box-shadow 0.3s;
+   }
+
+   .card:hover {
+     border-color: var(--color-accent);
+     box-shadow: var(--shadow-lg);
+   }
+   ```
+
+2. **Button Variants**
+   ```css
+   .btn-primary {
+     background: var(--color-primary);
+     color: white;
+     padding: var(--space-4) var(--space-8);
+     border-radius: var(--radius-lg);
+     font-weight: 600;
+     transition: background 0.2s, transform 0.15s;
+   }
+
+   .btn-primary:hover {
+     background: var(--color-primary-dark);
+   }
+
+   .btn-outline {
+     border: 1px solid var(--color-accent);
+     color: var(--color-accent);
+     background: transparent;
+     transition: background 0.2s, color 0.2s;
+   }
+
+   .btn-outline:hover {
+     background: var(--color-accent);
+     color: var(--color-bg-dark);
+   }
+   ```
+
+3. **Section Dividers**
+   ```css
+   .section-border {
+     border-top: 1px solid var(--color-border);
+   }
+
+   .accent-line::before {
+     content: '';
+     display: block;
+     width: 60px;
+     height: 2px;
+     background: var(--color-accent);
+     margin-bottom: var(--space-6);
+   }
+   ```
+
+4. **Glass Morphism** (Optional, modern)
+   ```css
+   .glass {
+     background: rgba(255, 255, 255, 0.7);
+     backdrop-filter: blur(12px);
+     border: 1px solid rgba(255, 255, 255, 0.2);
+   }
+   ```
+
+### Output
+- Component CSS patterns
+- Consistent border/shadow usage
+
+---
 
 ## Phase 6: Responsive & Mobile Refinement
 
@@ -304,7 +533,42 @@ Ensure excellent experience across all device sizes.
 - Touch-friendly targets
 - Mobile utility classes
 
+---
 
+## Phase 7: Style Audit & Validation
+
+### Purpose
+Final validation for consistency, performance, and quality.
+
+### Validation Checklist
+
+- [ ] All colors use CSS custom properties
+- [ ] Typography follows defined scale
+- [ ] Spacing uses defined scale
+- [ ] Focus states visible on all interactive elements
+- [ ] Skip link works correctly
+- [ ] Color contrast passes WCAG AA (4.5:1)
+- [ ] Animations respect prefers-reduced-motion
+- [ ] No orphaned/unused CSS
+- [ ] Print styles defined
+- [ ] Lighthouse accessibility score >= 90
+- [ ] All images have alt text
+- [ ] Semantic HTML landmarks present
+
+### Performance Checks
+
+- [ ] CSS is minified in production
+- [ ] Fonts preconnected
+- [ ] Critical CSS inlined (optional)
+- [ ] No layout shifts from font loading
+- [ ] `will-change` used sparingly
+
+### Output
+- Validation report
+- Performance metrics
+- Accessibility score
+
+---
 
 ## Usage Example
 
@@ -312,7 +576,93 @@ Ensure excellent experience across all device sizes.
 # Invoke the UI/UX Excellence Cascade
 
 User: "Make my landing page stand out - it looks too generic"
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+**After invoking this skill, you MUST complete ALL items below before proceeding:**
+
+### Completion Checklist
+
+- [ ] **Agent Spawning**: Did you spawn at least 1 agent via Task()?
+  - Example: `Task("Agent Name", "Task description", "agent-type-from-registry")`
+
+- [ ] **Agent Registry Validation**: Is your agent from the registry?
+  - Registry location: `claude-code-plugins/ruv-sparc-three-loop-system/agents/`
+  - Valid categories: delivery, foundry, operations, orchestration, platforms, quality, research, security, specialists, tooling
+  - NOT valid: Made-up agent names
+
+- [ ] **TodoWrite Called**: Did you call TodoWrite with 5+ todos?
+  - Example: `TodoWrite({ todos: [8-10 items covering all work] })`
+
+- [ ] **Work Delegation**: Did you delegate to agents (not do work yourself)?
+  - CORRECT: Agents do the implementation via Task()
+  - WRONG: You write the code directly after reading skill
+
+### Correct Pattern After Skill Invocation
+
+```javascript
+// After Skill("<skill-name>") is invoked:
+[Single Message - ALL in parallel]:
+  Task("Agent 1", "Description of task 1...", "agent-type-1")
+  Task("Agent 2", "Description of task 2...", "agent-type-2")
+  Task("Agent 3", "Description of task 3...", "agent-type-3")
+  TodoWrite({ todos: [
+    {content: "Task 1 description", status: "in_progress", activeForm: "Working on task 1"},
+    {content: "Task 2 description", status: "pending", activeForm: "Working on task 2"},
+    {content: "Task 3 description", status: "pending", activeForm: "Working on task 3"},
+  ]})
+```
+
+### Wrong Pattern (DO NOT DO THIS)
+
+```javascript
+// WRONG - Reading skill and then doing work yourself:
+Skill("<skill-name>")
+// Then you write all the code yourself without Task() calls
+// This defeats the purpose of the skill system!
+```
+
+**The skill is NOT complete until all checklist items are checked.**
+
+---
+
 **Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+---
+
+## Core Principles
+
+UI/UX Excellence operates on 3 fundamental principles:
+
+### Principle 1: Constraint-Based Design
+Limitations create consistency, and consistency creates professional polish.
+
+In practice:
+- Define CSS custom properties for colors, spacing, typography before implementation
+- Use 8px spacing scale to create harmonious vertical rhythm
+- Limit color palette to 5-7 colors (primary, accent, semantic, backgrounds, text)
+- Establish typographic scale (major third or perfect fourth) for predictable hierarchy
+
+### Principle 2: Accessibility as Foundation
+WCAG compliance is not optional - it benefits all users, not just those with disabilities.
+
+In practice:
+- Implement skip links for keyboard navigation from the start
+- Ensure 4.5:1 color contrast ratio for all text (3:1 for large text)
+- Provide visible focus states on all interactive elements (3px outline offset)
+- Respect prefers-reduced-motion media query to disable animations for users who need it
+
+### Principle 3: Micro-interactions Create Differentiation
+Subtle animations and hover states separate professional sites from amateur ones.
+
+In practice:
+- Add scroll-triggered animations with Intersection Observer (fade-in, slide-up)
+- Implement staggered children animations for lists (0.1s, 0.2s, 0.3s delays)
+- Use hover micro-interactions (lift effect, underline reveal, button press)
+- Apply noise texture overlay for premium feel (0.025 opacity)
+
+---
 
 ## Common Anti-Patterns
 

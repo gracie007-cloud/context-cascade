@@ -1,39 +1,7 @@
-# When Automating Workflows Use Hooks Automation
-
 ---
 name: when-automating-workflows-use-hooks-automation
-trigger: "when user requests workflow automation, Git integration, or Claude Code operation hooks"
-description: "Automated coordination, formatting, and learning from Claude Code operations using intelligent hooks with MCP integration for pre/post task automation"
-version: 2.0.0
-author: Base Template Generator
-category: automation
-tags:
-  - hooks
-  - automation
-  - workflow
-  - git-integration
-  - memory-coordination
-  - neural-training
-agents:
-  - coder
-  - reviewer
-  - system-architect
-  - swarm-memory-manager
-  - smart-agent
-coordinator: adaptive-coordinator
-memory_patterns:
-  - swarm/hooks/pre-task-state
-  - swarm/hooks/post-task-results
-  - swarm/hooks/session-metrics
-  - swarm/hooks/neural-patterns
-  - swarm/hooks/automation-rules
-success_criteria:
-  - Hooks configured and active for all operations
-  - Pre-task automation executing successfully
-  - Post-task coordination working correctly
-  - Session state persisted and restorable
-  - Neural patterns training from operations
-  - Git integration working seamlessly
+description: Automated coordination, formatting, and learning from Claude Code operations using intelligent hooks with MCP integration for pre/post task automation
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## MCP Requirements

@@ -1,0 +1,42 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.0.0
+tier: gold
+category: github
+tags:
+  - code-review
+  - github
+  - swarm
+  - pr-management
+  - automation
+author: Claude Code Flow
+requires:
+  - github-cli
+  - ruv-swarm
+  - claude-flow
+capabilities:
+  - Multi-agent code review
+  - Automated PR management
+  - Security and performance analysis
+  - Swarm-based review orchestration
+  - Intelligent comment generation
+  - Quality gate enforcement
+resources:
+  - pr-analysis.js
+  - swarm-coordinator.js
+  - comment-generator.js
+  - review-metrics.js
+  - templates:
+  - review-config.yml
+  - pr-template.md
+  - github-workflow.yml
+  - tests:
+  - test-pr-analysis.js
+  - test-swarm-coordinator.js
+  - test-comment-generator.js
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\quality\github-code-review
+  category: quality
+  migrated_at: 2025-12-28T15:56:24.926Z
+  version: 2.0.0

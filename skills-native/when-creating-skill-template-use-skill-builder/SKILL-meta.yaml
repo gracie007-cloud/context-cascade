@@ -1,0 +1,33 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+category: utilities
+tags:
+  - skill-creation
+  - templates
+  - yaml
+  - documentation
+agents:
+  - base-template-generator
+  - coder
+difficulty: beginner
+estimated_duration: 15-25min
+success_criteria:
+  - Valid YAML frontmatter
+  - All required files created
+  - Proper directory structure
+  - Documentation complete
+validation_method: skill_execution_test
+dependencies:
+  - claude-flow@alpha
+outputs:
+  - SKILL.md with YAML frontmatter
+  - README.md
+  - PROCESS.md
+  - process-diagram.gv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\foundry\when-creating-skill-template-use-skill-builder
+  category: foundry
+  migrated_at: 2025-12-28T15:56:24.483Z
+  version: 2.0.0

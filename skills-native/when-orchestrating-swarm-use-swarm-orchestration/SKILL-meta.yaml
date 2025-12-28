@@ -1,0 +1,32 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+tags:
+  - swarm
+  - orchestration
+  - coordination
+  - task-decomposition
+  - result-synthesis
+category: workflow
+agents:
+  - task-orchestrator
+  - hierarchical-coordinator
+  - adaptive-coordinator
+complexity: advanced
+estimated_duration: 60-120 minutes
+prerequisites:
+  - Claude Flow installed and configured
+  - Understanding of task decomposition
+  - Multi-agent coordination experience
+outputs:
+  - Orchestrated swarm execution
+  - Task decomposition tree
+  - Synthesized results
+  - Performance metrics
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\workflow\when-orchestrating-swarm-use-swarm-orchestration
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.743Z
+  version: 2.0.0

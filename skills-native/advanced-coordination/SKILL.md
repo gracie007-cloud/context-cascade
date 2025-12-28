@@ -1,6 +1,7 @@
 ---
 name: advanced-coordination
 description: Advanced multi-agent coordination patterns for complex distributed systems. Use when coordinating 5+ agents with dynamic task dependencies, implementing Byzantine fault tolerance, or managing distributed consensus protocols. Provides RAFT, Gossip, and Byzantine coordination strategies.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines

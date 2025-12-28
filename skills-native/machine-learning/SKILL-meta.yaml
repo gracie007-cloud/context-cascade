@@ -1,0 +1,33 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.0.0
+tier: gold
+author: SPARC System
+tags:
+  - ml
+  - deep-learning
+  - training
+  - evaluation
+  - deployment
+  - data-science
+dependencies:
+  - python-specialist
+  - agentdb-learning
+  - ml-expert
+agents:
+  - ml-developer
+  - data-steward
+  - evaluator
+related_skills:
+  - when-debugging-ml-training-use-ml-training-debugger
+  - when-developing-ml-models-use-ml-expert
+  - agentdb-learning
+  - holistic-evaluation
+  - baseline-replication
+category: platforms
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\platforms\machine-learning
+  category: platforms
+  migrated_at: 2025-12-28T15:56:24.840Z
+  version: 2.0.0

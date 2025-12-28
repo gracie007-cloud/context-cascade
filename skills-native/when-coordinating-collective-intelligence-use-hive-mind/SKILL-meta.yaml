@@ -1,0 +1,31 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+tags:
+  - hive-mind
+  - collective-intelligence
+  - consensus
+  - queen-coordinator
+  - distributed-memory
+category: coordination
+agents:
+  - collective-intelligence-coordinator
+  - queen-coordinator
+  - swarm-memory-manager
+complexity: advanced
+estimated_duration: 60-120 minutes
+prerequisites:
+  - Claude Flow installed
+  - Understanding of collective intelligence
+  - Multi-agent coordination experience
+outputs:
+  - Hive Mind infrastructure
+  - Collective decision outputs
+  - Consensus results
+  - Shared memory state
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\when-coordinating-collective-intelligence-use-hive-mind
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.722Z
+  version: 2.0.0

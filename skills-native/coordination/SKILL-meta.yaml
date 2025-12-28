@@ -1,0 +1,36 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.0.0
+tier: gold
+tags:
+  - coordination
+  - multi-agent
+  - orchestration
+  - topology
+  - consensus
+  - distributed
+category: orchestration
+agents:
+  - hierarchical-coordinator
+  - mesh-coordinator
+  - adaptive-coordinator
+  - collective-intelligence-coordinator
+  - consensus-validator
+complexity: advanced
+estimated_duration: 30-120 minutes
+prerequisites:
+  - Claude Flow MCP installed
+  - Understanding of distributed systems
+  - Multi-agent architecture knowledge
+outputs:
+  - Coordination topologies
+  - Agent network configurations
+  - Consensus protocols
+  - Distributed execution plans
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\coordination
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.668Z
+  version: 2.0.0

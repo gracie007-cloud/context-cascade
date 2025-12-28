@@ -1,41 +1,7 @@
-# When Using SPARC Methodology Use SPARC Workflow
-
 ---
 name: when-using-sparc-methodology-use-sparc-workflow
-trigger: "when user requests SPARC methodology, systematic development, or TDD workflow"
-description: "Complete SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) methodology workflow with multi-agent coordination for systematic test-driven development"
-version: 2.0.0
-author: Base Template Generator
-category: methodology
-tags:
-  - sparc
-  - methodology
-  - tdd
-  - systematic-development
-  - multi-phase
-agents:
-  - researcher (specification)
-  - planner (pseudocode)
-  - system-architect (architecture)
-  - coder (refinement)
-  - tester (validation)
-  - reviewer (quality)
-  - api-docs (documentation)
-coordinator: hierarchical-coordinator
-memory_patterns:
-  - swarm/sparc/specification
-  - swarm/sparc/pseudocode
-  - swarm/sparc/architecture
-  - swarm/sparc/refinement
-  - swarm/sparc/completion
-success_criteria:
-  - Detailed specification documented
-  - Pseudocode algorithm designed
-  - System architecture defined
-  - Implementation refined through TDD
-  - All tests passing with ≥90% coverage
-  - Integration complete and validated
-  - Comprehensive documentation generated
+description: Complete SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) methodology workflow with multi-agent coordination for systematic test-driven development
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Trigger Conditions

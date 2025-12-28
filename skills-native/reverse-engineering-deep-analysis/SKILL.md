@@ -1,6 +1,7 @@
 ---
 name: reverse-engineering-deep-analysis
 description: Advanced binary analysis with runtime execution and symbolic path exploration (RE Levels 3-4). Use when need runtime behavior, memory dumps, secret extraction, or input synthesis to reach specific program states. Completes in 3-7 hours with GDB+Angr.
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -70,6 +71,28 @@ Performs deep reverse engineering through runtime execution and symbolic explora
 
 **Timebox**: 3-7 hours total
 
+---
+
+## Prerequisites
+
+### Level 3 Tools
+- **GDB** with **GEF** or **Pwndbg** extensions
+- **strace/ltrace** - System/library call tracing
+- **Sandbox environment** - Isolated execution (firejail, Docker, or custom)
+
+### Level 4 Tools
+- **Angr** - Symbolic execution framework (Python)
+- **Z3** - SMT solver
+- **Python 3.9+** - For Angr scripts
+
+### MCP Servers
+- `sandbox-validator` - Safe binary execution
+- `memory-mcp` - Store runtime findings
+- `sequential-thinking` - Path exploration decisions
+- `graph-analyst` - Visualize execution paths
+
+---
+
 ## ⚠️ CRITICAL SECURITY WARNING
 
 **NEVER execute unknown binaries on your host system!**
@@ -94,6 +117,23 @@ All dynamic analysis, debugging, and symbolic execution MUST be performed in:
 - Never attach debuggers to binaries on production systems
 - Validate all inputs before symbolic execution
 - Assume all binaries are malicious until proven safe through static analysis
+
+---
+
+## Quick Start
+
+```bash
+# 1. Full deep analysis (Levels 3+4)
+/re:deep crackme.exe
+
+# 2. Dynamic analysis only (Level 3)
+/re:dynamic server.bin --args "--port 8080"
+
+# 3. Symbolic execution only (Level 4)
+/re:symbolic challenge.exe --target-addr 0x401337
+```
+
+---
 
 ## Level 3: Dynamic Analysis (≤1 hour)
 
@@ -247,6 +287,180 @@ const decision = await mcp__sequential-thinking__evaluate({
 // DECISION: ESCALATE TO LEVEL 4
 ```
 
+---
+
+## Level 4: Symbolic Execution (2-6 hours)
+
+### Step 1: Define Target State from Dynamic Analysis
+
+```python
+# From Level 3: Couldn't reach "win" function at 0x401337 with manual inputs
+target_addr = 0x401337  # Goal: Find input that reaches this
+
+# From Level 3: These functions lead to failure/exit
+avoid_addrs = [
+  0x401400,  # fail_message function
+  0x401500,  # bad_password function
+  0x401600   # exit_program function
+]
+```
+
+### Step 2: Launch Symbolic Exploration
+
+```bash
+/re:symbolic binary.exe \
+  --target-addr 0x401337 \
+  --avoid-addrs 0x401400,0x401500,0x401600 \
+  --max-states 1000 \
+  --timeout 7200
+```
+
+**What Happens Under the Hood**:
+
+```python
+import angr
+import claripy
+
+# Step 2.1: Load binary into Angr project
+project = angr.Project('./binary.exe', auto_load_libs=False)
+
+# Step 2.2: Create symbolic input
+# Assume input is 32-byte flag
+flag_length = 32
+flag = claripy.BVS('flag', flag_length * 8)
+
+# Step 2.3: Create entry state with symbolic stdin
+state = project.factory.entry_state(
+    stdin=flag,
+    add_options={angr.options.LAZY_SOLVES}
+)
+
+# Step 2.4: Add constraints - printable ASCII only
+for byte in flag.chop(8):
+    state.add_constraints(byte >= 0x20)  # Printable ASCII start
+    state.add_constraints(byte <= 0x7e)  # Printable ASCII end
+
+# Step 2.5: Create simulation manager
+simgr = project.factory.simulation_manager(state)
+
+# Step 2.6: Explore paths (DFS strategy)
+simgr.explore(
+    find=0x401337,      # Target address
+    avoid=[0x401400, 0x401500, 0x401600],  # Avoid addresses
+    num_find=1,         # Stop after finding first solution
+    max_states=1000     # Prevent state explosion
+)
+
+# Step 2.7: Check if solution found
+if simgr.found:
+    # Extract concrete input
+    solution_state = simgr.found[0]
+    solution = solution_state.solver.eval(flag, cast_to=bytes)
+    print(f"Solution: {solution.decode()}")
+
+    # Save solution
+    with open('re-project/sym/solutions/solution-1.txt', 'wb') as f:
+        f.write(solution)
+else:
+    print("No solution found within constraints")
+```
+
+### Step 3: Advanced Symbolic Techniques
+
+#### Technique 1: Hook Library Functions
+
+```python
+# Replace complex library functions with symbolic summaries
+import angr
+
+# Hook strcmp to return symbolic value
+class StrCmpHook(angr.SimProcedure):
+    def run(self, s1, s2):
+        # Return symbolic comparison result
+        s1_str = self.state.memory.load(s1, 32)
+        s2_str = self.state.memory.load(s2, 32)
+        return s1_str == s2_str
+
+project.hook_symbol('strcmp', StrCmpHook())
+```
+
+#### Technique 2: State Merging for Complex Paths
+
+```python
+# Merge states at loop entry to prevent explosion
+simgr.use_technique(angr.exploration_techniques.Veritesting())
+
+# Alternative: Manual state merging
+while simgr.active:
+    simgr.step()
+    if len(simgr.active) > 50:
+        # Merge similar states
+        simgr.merge()
+```
+
+#### Technique 3: Constraint Simplification
+
+```python
+# Add intermediate constraints to guide exploration
+state.add_constraints(
+    flag[0:4] == b'FLAG'  # Known prefix from hints
+)
+
+# This reduces search space dramatically
+# Without: 256^32 possibilities
+# With: 256^28 possibilities (4 bytes fixed)
+```
+
+### Step 4: Validate Solution
+
+```bash
+# Test synthesized input
+echo "FLAG_synthesized_solution_here" | ./binary.exe
+
+# Expected output:
+# "Success! You reached the target state."
+# "Congratulations! Flag: CTF{...}"
+```
+
+**Validation Steps**:
+1. Run binary with synthesized input
+2. Verify execution reaches target address (0x401337)
+3. Check output matches expected success message
+4. Store validated solution in memory-mcp
+
+### Step 5: Output Structure
+
+```
+re-project/sym/
+├── angr-script.py           # Reproducible Angr script
+├── solutions/
+│   ├── solution-1.txt       # First valid solution
+│   ├── solution-2.txt       # Alternative solution (if --find-all)
+│   └── solution-3.txt
+├── constraints/
+│   ├── path-1.smt2          # Z3 constraints for path 1
+│   ├── path-2.smt2
+│   └── simplified.smt2      # Simplified constraint set
+├── validation.log           # Validation test results
+└── exploration-metrics.json # States explored, time taken, coverage
+```
+
+**exploration-metrics.json**:
+```json
+{
+  "total_states": 847,
+  "found_states": 3,
+  "avoided_states": 124,
+  "deadended_states": 720,
+  "execution_time_sec": 3245,
+  "coverage_percent": 78.5,
+  "memory_usage_mb": 2847,
+  "solutions_found": 3
+}
+```
+
+---
+
 ## Advanced Options
 
 ### Custom Breakpoints (Dynamic Analysis)
@@ -394,6 +608,61 @@ def analyze_heap():
 analyze_heap()
 ```
 
+---
+
+## Comprehensive Workflow Examples
+
+### Workflow 1: Malware Analysis with Runtime Secrets
+
+**Scenario**: Analyze malware sample to extract C2 server URL and encryption keys
+
+**Phase 1: Dynamic Analysis (Level 3)**
+
+```bash
+# Step 1: Safe sandbox execution
+/re:dynamic malware.exe --sandbox true --network-monitor true
+
+# Step 2: GDB session auto-starts with breakpoints from static analysis
+# Breakpoints at: decrypt_config, connect_to_c2, send_beacon
+
+# Step 3: At decrypt_config breakpoint (0x401234)
+(gdb) info registers
+RAX: 0x0000000000601000  → encrypted_buffer
+RDI: 0x0000000000601100  → decryption_key
+
+(gdb) x/s 0x601100
+0x601100: "hardcoded_AES_key_12345"
+
+# Step 4: Continue to connect_to_c2 breakpoint (0x401567)
+(gdb) continue
+
+(gdb) x/s $rdi
+0x601200: "http://malicious-c2.tk:8443/beacon"
+
+# Step 5: Extract all findings
+Runtime Secrets Found:
+- AES Key: "hardcoded_AES_key_12345"
+- C2 URL: "http://malicious-c2.tk:8443/beacon"
+- User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+```
+
+**Phase 2: Decision Gate**
+
+```javascript
+// Automatically evaluated
+QUESTION: "Proceed to symbolic execution?"
+FACTORS:
+- All critical functions reached ✅
+- Secrets extracted (AES key, C2 URL) ✅
+- User's question answered (extract IOCs) ✅
+- No unreachable paths requiring symbolic execution ❌
+DECISION: STOP AT LEVEL 3 (sufficient findings)
+```
+
+**Output**: Malware analysis complete in 45 minutes with full IOC extraction.
+
+---
+
 ### Workflow 2: CTF Challenge - Reversing License Check
 
 **Scenario**: Find valid license key to unlock "premium features" in binary
@@ -493,6 +762,59 @@ Congratulations! Here is your flag: CTF{symbolic_execution_wins}
 
 **Output**: Challenge solved in 3.5 hours total (45min dynamic + 3hr symbolic).
 
+---
+
+### Workflow 3: Vulnerability Research - Buffer Overflow
+
+**Scenario**: Find exploitable buffer overflow in server binary
+
+**Phase 1: Dynamic Analysis (Level 3)**
+
+```bash
+# Step 1: Launch server in sandbox
+/re:dynamic server.bin --args "--port 8080" --sandbox true
+
+# Step 2: Fuzz with large inputs
+echo "A"*1000 | nc localhost 8080
+
+# GDB catches segfault
+Program received signal SIGSEGV, Segmentation fault.
+0x4141414141414141 in ?? ()
+
+# Step 3: Analyze crash
+(gdb) info registers
+RIP: 0x4141414141414141  # Overwritten return address
+RSP: 0x7fffffffe100
+RBP: 0x4141414141414141
+
+(gdb) x/100x $rsp
+# Shows stack completely overwritten with 'A' (0x41)
+
+# Step 4: Find offset to return address
+# Use pattern_create and pattern_offset from GEF/Pwndbg
+(gdb) pattern create 1000
+(gdb) run
+# Crash at offset 512
+
+# Confirmed: Buffer overflow at offset 512, control of RIP
+```
+
+**Phase 2: Decision Gate**
+
+```javascript
+QUESTION: "Proceed to symbolic execution?"
+FACTORS:
+- Buffer overflow confirmed ✅
+- Offset to RIP known (512 bytes) ✅
+- Exploitation demonstrated ✅
+- User's goal: find vulnerability ✅ (COMPLETE)
+DECISION: STOP AT LEVEL 3 (vulnerability found)
+```
+
+**Output**: Vulnerability research complete in 30 minutes.
+
+---
+
 ## Troubleshooting
 
 ### Issue 1: Sandbox Blocks Execution
@@ -531,6 +853,45 @@ EOF
 # Or use Docker instead of seccomp
 docker run --rm -v $(pwd):/work -it ubuntu:20.04 /work/binary.exe
 ```
+
+---
+
+### Issue 2: GDB Fails to Attach
+
+**Symptoms**: "ptrace: Operation not permitted" or GDB won't start
+
+**Cause**: System security settings prevent ptrace
+
+**Solution 1**: Temporarily allow ptrace (Linux)
+
+```bash
+# Check current setting
+cat /proc/sys/kernel/yama/ptrace_scope
+# 1 = restricted, 0 = unrestricted
+
+# Temporarily allow (requires sudo)
+echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+
+# Rerun analysis
+/re:dynamic binary.exe
+```
+
+**Solution 2**: Run GDB with sudo
+
+```bash
+sudo /re:dynamic binary.exe
+```
+
+**Solution 3**: Use container (bypass host restrictions)
+
+```bash
+docker run --cap-add=SYS_PTRACE --rm -it ubuntu:20.04 bash
+# Inside container:
+apt update && apt install gdb
+gdb ./binary.exe
+```
+
+---
 
 ### Issue 3: Angr State Explosion
 
@@ -574,6 +935,44 @@ simgr = project.factory.simulation_manager(state)
 simgr.explore(find=0x401337)
 ```
 
+---
+
+### Issue 4: Memory Dumps Too Large
+
+**Symptoms**: GDB dumps gigabytes of memory, fills disk space
+
+**Cause**: Dumping entire address space instead of targeted regions
+
+**Solution 1**: Target specific memory regions from vmmap
+
+```gdb
+# Check memory mappings
+(gdb) info proc mappings
+
+# Example output:
+# 0x400000-0x600000  r-xp  /path/binary.exe  (code)
+# 0x600000-0x700000  rw-p  /path/binary.exe  (data)
+# 0x7ffff7a0d000-0x7ffff7bcd000  r-xp  /lib/libc.so  (library)
+
+# Dump ONLY data section (where secrets likely are)
+(gdb) dump binary memory data-section.bin 0x600000 0x700000
+
+# Dump ONLY stack (where local variables are)
+(gdb) dump binary memory stack.bin $rsp-0x1000 $rsp+0x1000
+```
+
+**Solution 2**: Use selective breakpoint dumps
+
+```bash
+# Only dump memory at specific breakpoints, not every instruction
+/re:dynamic binary.exe \
+  --breakpoints 0x401234,0x401567 \
+  --dump-at-breakpoints true \
+  --dump-regions stack,heap
+```
+
+---
+
 ### Issue 5: Symbolic Execution Timeout
 
 **Symptoms**: Angr runs for hours without finding solution
@@ -612,6 +1011,68 @@ claripy.backends.backend_manager.backends._eager_backends = [
     claripy.backends.BackendZ3  # Replace with BackendCVC4
 ]
 ```
+
+---
+
+## Performance Optimization
+
+### Speed Up Dynamic Analysis (Level 3)
+
+#### Optimization 1: Parallel Syscall Tracing
+
+```bash
+# Run strace and ltrace in parallel
+(strace -o syscalls.log ./binary.exe &)
+(ltrace -o libcalls.log ./binary.exe &)
+wait
+```
+
+#### Optimization 2: GDB Scripting for Automation
+
+```python
+# GDB Python script for automatic analysis
+# re-project/auto-analyze.py
+
+import gdb
+
+breakpoints = [0x401234, 0x401567, 0x4018ab]
+
+for bp_addr in breakpoints:
+    gdb.Breakpoint(f"*{bp_addr}")
+
+# Run until first breakpoint
+gdb.execute('run')
+
+# At each breakpoint, dump and continue
+for i in range(len(breakpoints)):
+    # Dump state
+    regs = gdb.execute('info registers', to_string=True)
+    stack = gdb.execute('x/100x $rsp', to_string=True)
+
+    with open(f'bp-{i}-state.txt', 'w') as f:
+        f.write(f"Registers:\n{regs}\nStack:\n{stack}\n")
+
+    # Continue
+    if i < len(breakpoints) - 1:
+        gdb.execute('continue')
+```
+
+**Usage**:
+
+```bash
+gdb -x auto-analyze.py ./binary.exe
+```
+
+#### Optimization 3: Selective Memory Dumping
+
+```bash
+# Only dump memory if interesting patterns found
+/re:dynamic binary.exe \
+  --dump-on-pattern "password|secret|key|token" \
+  --dump-regions heap
+```
+
+---
 
 ### Speed Up Symbolic Execution (Level 4)
 
@@ -680,6 +1141,124 @@ for found_states in results:
         print(found_states[0].solver.eval(flag, cast_to=bytes))
 ```
 
+---
+
+## Memory-MCP Integration
+
+### Storing Level 3 Findings
+
+```javascript
+// After dynamic analysis completes
+mcp__memory-mcp__memory_store({
+  content: {
+    binary_hash: "sha256:abc123...",
+    re_level: 3,
+    execution_summary: {
+      breakpoints_hit: ["0x401234", "0x401567", "0x4018ab"],
+      runtime_secrets: [
+        {type: "password", value: "admin123", location: "0x601000"},
+        {type: "api_key", value: "sk_live_...", location: "0x601020"}
+      ],
+      syscalls: ["open", "read", "socket", "connect", "send"],
+      network_activity: [
+        {proto: "HTTP", dest: "192.168.1.100:443", data: "POST /api/login"}
+      ]
+    },
+    gdb_dumps: {
+      registers: "re-project/dbg/memory-dumps/",
+      stack: "re-project/dbg/memory-dumps/",
+      heap: "re-project/dbg/memory-dumps/"
+    }
+  },
+  metadata: {
+    agent: "RE-Runtime-Tracer",
+    category: "reverse-engineering",
+    intent: "dynamic-analysis",
+    layer: "long_term",
+    project: `binary-analysis-${date}`,
+    keywords: ["gdb", "dynamic", "runtime", "secrets"],
+    re_level: 3,
+    binary_hash: "sha256:abc123...",
+    timestamp: new Date().toISOString()
+  }
+})
+```
+
+### Storing Level 4 Findings
+
+```javascript
+// After symbolic execution completes
+mcp__memory-mcp__memory_store({
+  content: {
+    binary_hash: "sha256:abc123...",
+    re_level: 4,
+    symbolic_summary: {
+      target_address: "0x401337",
+      avoid_addresses: ["0x401400", "0x401500"],
+      solutions_found: 3,
+      solutions: [
+        {input: "FLAG-A7B2-C9D4-E1F6", validated: true},
+        {input: "FLAG-B8C3-D0E5-F2G7", validated: true},
+        {input: "FLAG-C9D4-E1F6-G3H8", validated: true}
+      ],
+      exploration_metrics: {
+        total_states: 847,
+        execution_time_sec: 3245,
+        coverage_percent: 78.5
+      }
+    },
+    angr_script: "re-project/sym/angr-script.py",
+    constraints: "re-project/sym/constraints/"
+  },
+  metadata: {
+    agent: "RE-Symbolic-Solver",
+    category: "reverse-engineering",
+    intent: "symbolic-execution",
+    layer: "long_term",
+    project: `binary-analysis-${date}`,
+    keywords: ["angr", "symbolic", "z3", "solver"],
+    re_level: 4,
+    binary_hash: "sha256:abc123...",
+    timestamp: new Date().toISOString()
+  }
+})
+```
+
+### Handoff Pattern: Level 3 → Level 4
+
+```javascript
+// Level 3 stores handoff data
+mcp__memory-mcp__memory_store({
+  key: `re-handoff/dynamic-to-symbolic/${binary_hash}`,
+  value: {
+    decision: "ESCALATE_TO_LEVEL_4",
+    reason: "Target function unreachable with manual inputs",
+    target_address: "0x401337",
+    avoid_addresses: ["0x401400", "0x401500", "0x401600"],
+    input_format: "FLAG-XXXX-XXXX-XXXX",
+    breakpoint_findings: {
+      "0x401234": {
+        description: "License check function",
+        comparison_type: "encrypted",
+        extractable: false
+      }
+    }
+  }
+})
+
+// Level 4 retrieves handoff data
+const handoff = await mcp__memory-mcp__vector_search({
+  query: `re-handoff/dynamic-to-symbolic/${binary_hash}`
+})
+
+// Use handoff data to configure Angr
+const target = handoff.target_address
+const avoid = handoff.avoid_addresses
+const input_format = handoff.input_format
+```
+
+---
+
 ## Agents & Commands
 
 ### Agents Invoked
@@ -715,6 +1294,17 @@ for found_states in results:
 - **sequential-thinking**: Decision gate logic for escalation
 - **graph-analyst**: Visualization of execution paths and constraints
 
+---
+
+## Related Skills
+
+- [Reverse Engineering: Quick Triage](../reverse-engineering-quick/) - Levels 1-2 (string + static)
+- [Reverse Engineering: Firmware](../reverse-engineering-firmware/) - Level 5 (firmware extraction)
+- [Functionality Audit](../functionality-audit/) - Validate reverse-engineered logic
+- [Production Validator](../production-validator/) - Ensure analysis results are production-ready
+
+---
+
 ## Resources
 
 ### External Tools
@@ -737,6 +1327,16 @@ for found_states in results:
 - [Angr Slack](https://angr.io/community/) - Official Angr community
 - [r/ReverseEngineering](https://reddit.com/r/ReverseEngineering) - Subreddit
 - [Binary Ninja Discord](https://binary.ninja/discord/) - Reverse engineering community
+
+---
+
+**Created**: 2025-11-01
+**RE Levels**: 3-4 (Dynamic Analysis + Symbolic Execution)
+**Timebox**: 3-7 hours
+**Agents**: RE-Runtime-Tracer, RE-Symbolic-Solver
+**Category**: Security, Malware Analysis, CTF, Binary Exploitation
+**Difficulty**: Advanced
+---
 
 ## Core Principles
 
@@ -769,7 +1369,12 @@ In practice:
 - Use decision gates to avoid over-engineering simple analysis tasks
 - Cache findings in memory-mcp to prevent duplicate work
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Executing malware on host system** | Complete system compromise, data exfiltration, ransomware deployment | ALWAYS use isolated VM with snapshots, network monitoring, and rollback capability |
 | **Skipping static analysis before dynamic** | Waste time executing without understanding, miss packed binaries | Run Level 1-2 (strings + static) first to identify entry points and breakpoints |
 | **Over-relying on symbolic execution** | State explosion, analysis timeout, resource exhaustion | Use symbolic execution only for input-dependent paths unreachable by manual fuzzing |

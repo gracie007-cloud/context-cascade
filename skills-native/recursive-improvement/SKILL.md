@@ -1,9 +1,8 @@
 ---
 name: recursive-improvement
 description: Self-improving meta-loop that audits and enhances skills, prompts, and expertise files
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
-
-# Recursive Improvement - Meta-Loop Skill
 
 ## Trigger Keywords
 

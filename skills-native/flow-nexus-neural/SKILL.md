@@ -1,6 +1,7 @@
 ---
 name: flow-nexus-neural
 description: Train and deploy neural networks in distributed E2B sandboxes with Flow Nexus
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -765,7 +766,41 @@ await mcp__flow-nexus__neural_cluster_terminate({
 - Template Marketplace: https://flow-nexus.ruv.io/templates
 - API Reference: https://flow-nexus.ruv.io/api
 
------------|---------|----------|
+---
+
+**Note**: Distributed training requires authentication. Register at https://flow-nexus.ruv.io or use `npx flow-nexus@latest register`.
+## Core Principles
+
+Flow Nexus Neural Networks operates on 3 fundamental principles:
+
+### Principle 1: Distributed Training Through E2B Sandbox Orchestration
+Scale neural network training across multiple isolated sandboxes with coordinated gradient aggregation and model synchronization.
+
+In practice:
+- Initialize cluster with topology (mesh, ring, hierarchical) for node communication patterns
+- Deploy worker nodes (training), parameter servers (gradient aggregation), and aggregators (model sync) as separate sandboxes
+- WASM-accelerated inference provides 10-100x faster training vs pure JavaScript implementations
+
+### Principle 2: Federated Learning Enables Privacy-Preserving Distributed Training
+Train models on distributed data without centralizing sensitive information by keeping data on local nodes.
+
+In practice:
+- Worker nodes train on local data (medical records, user activity) without uploading raw data
+- Aggregation rounds collect only model updates (gradients) from min 5 nodes per round
+- Proof-of-Learning consensus validates training progress without exposing training data
+
+### Principle 3: Template Marketplace Accelerates Development Through Reusable Models
+Leverage pre-trained models and proven architectures from community templates instead of building from scratch.
+
+In practice:
+- Deploy sentiment analysis, image classification, time series forecasting with single command
+- Customize templates with training config overrides (epochs, learning rate, batch size)
+- Publish successful models as templates for credits or free community contribution
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Deploying All Workers Before Cluster Initialization** | Workers deployed without cluster context fail to connect or coordinate | Initialize cluster first with `neural_cluster_init`, capture cluster_id, then deploy nodes with cluster_id reference |
 | **Ignoring Training Tiers** | Using `large` tier for prototyping wastes compute; `nano` for production underfits | Match tier to task: `nano/mini` for experimentation, `small/medium` for production, `large/xl` for complex models (>1B parameters) |
 | **Sequential Node Deployment** | Deploying 10 workers sequentially takes 50s (5s per sandbox); delays training start | Deploy nodes in parallel by calling `neural_node_deploy` concurrently for all workers (5s total vs 50s sequential) |

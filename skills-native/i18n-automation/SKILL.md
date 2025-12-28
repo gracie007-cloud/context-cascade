@@ -1,6 +1,7 @@
 ---
 name: i18n-automation
 description: Automate internationalization and localization workflows for web applications with translation, key generation, and library setup
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # i18n Automation
@@ -578,7 +579,21 @@ training:
     - completeness_score
 ```
 
+---
 
+**Quick Commands**:
+- Next.js: `npm install next-intl`
+- React: `npm install react-i18next i18next`
+- Vue: `npm install vue-i18n`
+
+**Pro Tips**:
+- Use Claude Code Web for translation tasks (well-defined, one-off)
+- AI translations good for MVP, professional for production
+- Test RTL languages early if supporting Arabic/Hebrew
+- Keep translation keys synchronized across all locales
+- Consider loading translations from CMS for non-developers to update
+
+---
 
 ## Core Principles
 
@@ -591,12 +606,22 @@ Effective internationalization requires cultural adaptation, not just linguistic
 ### 3. RTL Support as Architectural Constraint
 Right-to-left language support cannot be retrofitted effectively; it must be designed into layout architecture from the start. Logical CSS properties (margin-inline-start vs margin-left) and direction-agnostic layouts enable bidirectional support without duplication. Testing Arabic/Hebrew early prevents costly refactoring when RTL is added after launch, as spatial assumptions in LTR-only designs break in RTL contexts.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Hardcoding user-facing strings in components** | Makes translation impossible without code changes, breaks translator workflows, prevents dynamic language switching, creates maintenance burden for every content update. | Externalize all strings to locale files. Use i18n library functions (t(), useTranslation()). Separate content from presentation logic completely. |
 | **Concatenating translated strings** | Breaks grammar rules across languages. English "You have 5 items" becomes garbled in languages with different word order (Japanese: "5 items you have"). Forces unnatural translations. | Use interpolation with placeholders: t('items_count', {count: 5}). Let translators control full sentence structure with {count} variables. Handle pluralization separately. |
 | **Assuming left-to-right text direction** | Causes layout failures for Arabic/Hebrew. Icons, margins, and flow direction break. Mirrored layouts look unnatural. Users perceive as low-quality localization effort. | Use logical CSS properties (inline-start vs left). Test RTL early. Apply dir="rtl" attribute. Mirror only icons/images, not text or UI chrome. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **String Concatenation in Translations** | Building sentences by concatenating translated fragments like `t('hello') + ' ' + t('name')`. Breaks grammar in languages with different word order (Japanese, Arabic). Results in unnatural or nonsensical translations. | Use complete sentence templates with interpolation: `t('greeting', {name})` where translators control full sentence structure. Provide translators context about variable placement. |
 | **Assuming One Translation Per String** | Using same translation key for semantically different contexts. English "Post" (verb) vs "Post" (noun) uses same word but requires different translations in most languages (French: "Publier" vs "Article"). | Create context-specific keys: `t('actions.post')` vs `t('content.post')`. Add translator comments explaining context. Use namespacing to separate domains (UI actions vs content types). |
 | **Late-Stage Internationalization** | Adding i18n after application is built with hardcoded English strings throughout codebase. Requires expensive refactoring, breaks existing components, delays international launches by months. | Architect for i18n from day one. Use translation functions even for English-only MVP. Set up translation infrastructure early (next-intl, locale files, language switcher placeholder). Adding languages becomes configuration change, not refactoring project. |

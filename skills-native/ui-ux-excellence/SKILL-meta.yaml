@@ -1,0 +1,20 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+category: Frontend Development
+complexity: Medium-High
+triggers:
+  - ui enhancement
+  - ux polish
+  - make it stand out
+  - elevate design
+  - premium feel
+  - micro-interactions
+  - accessibility audit
+  - design system
+version: 1.0.0
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\ui-ux-excellence
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.247Z
+  version: 2.0.0

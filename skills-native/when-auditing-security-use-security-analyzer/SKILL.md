@@ -1,6 +1,7 @@
 ---
 name: when-auditing-security-use-security-analyzer
 description: Comprehensive security auditing across static analysis, dynamic testing, dependency vulnerabilities, secrets detection, and OWASP compliance
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -376,7 +377,7 @@ api_key\s*=\s*['"]\w+['"]
 secret\s*=\s*['"]\w+['"]
 
 # Private Keys
---
+-----BEGIN (RSA|DSA|EC|OPENSSH) PRIVATE KEY-----
 
 # Database Credentials
 (mongodb|postgres|mysql):\/\/[^:]+:[^@]+@
@@ -817,6 +818,7 @@ app.delete('/api/users/:id', authenticate, authorize('admin'), (req, res) => {
 
 ```yaml
 # .github/workflows/security-audit.yml
+name: Security Audit
 on: [push, pull_request]
 
 jobs:

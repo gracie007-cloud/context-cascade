@@ -1,6 +1,7 @@
 ---
 name: gemini-search
-description: Skill for gemini-search
+description: Get real-time web information using Geminis built-in Google Search grounding
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Gemini Search Skill

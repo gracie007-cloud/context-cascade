@@ -1,6 +1,7 @@
 ---
 name: functionality-audit
 description: Validates that code actually works through sandbox testing, execution verification, and systematic debugging. Use this skill after code generation or modification to ensure functionality is genuine rather than assumed. The skill creates isolated test environments, executes code with realistic inputs, identifies bugs through systematic analysis, and applies best practices to fix issues without breaking existing functionality. This ensures code delivers its intended behavior reliably.
+allowed-tools: Read, Glob, Grep, Bash, Task
 ---
 
 ## Kanitsal Kalite Denetimi (Evidential Quality Audit)

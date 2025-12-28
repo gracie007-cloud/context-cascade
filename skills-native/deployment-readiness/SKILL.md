@@ -1,11 +1,95 @@
 ---
 name: deployment-readiness
 description: Production deployment validation for Deep Research SOP Pipeline H ensuring models ready for real-world deployment. Use before deploying to production, creating deployment plans, or validating infrastructure requirements. Validates performance benchmarks, monitoring setup, incident response plans, rollback strategies, and infrastructure scalability for Quality Gate 3.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Deployment Readiness
 
 Validate ML models and systems for production deployment, ensuring operational readiness across performance, monitoring, security, and incident management dimensions.
+
+---
+
+## Aspektual'naya Ramka (Deployment State Tracking)
+
+### Tipy Sostoyaniya (State Types)
+
+**Perfective [SV] - Completed Actions**:
+- `[SV:ZAVERSHENO]` - Stage fully completed
+- `[SV:PROVERENO]` - Validated and verified
+- `[SV:ODOBRENO]` - Approved for next stage
+- `[SV:RAZVERNUTO]` - Deployed successfully
+
+**Imperfective [NSV] - Ongoing/Incomplete Actions**:
+- `[NSV:V_PROTSESSE]` - Stage actively in progress
+- `[NSV:VYPOLNYAETSYA]` - Currently executing
+- `[NSV:TESTIRUYETSYA]` - Testing in progress
+- `[NSV:MONITORITSYA]` - Under monitoring
+
+**Blocked/Special States**:
+- `[ZABLOKIROVANO]` - Blocked by dependency
+- `[OZHIDAET]` - Waiting for prerequisite
+- `[OTKAT]` - Rollback initiated
+- `[AVARIYA]` - Emergency state
+
+### Deployment Pipeline States
+
+```
+Infrastructure Setup:
+  Capacity Planning      [SV|NSV|ZABLOKIROVANO]
+  Environment Setup      [SV|NSV|ZABLOKIROVANO]
+  Network Configuration  [SV|NSV|ZABLOKIROVANO]
+  → Output: [SV:ZAVERSHENO] or [NSV:V_PROTSESSE]
+
+Performance Benchmarking:
+  Latency Testing        [SV|NSV|ZABLOKIROVANO]
+  Throughput Testing     [SV|NSV|ZABLOKIROVANO]
+  Resource Utilization   [SV|NSV|ZABLOKIROVANO]
+  → Output: [SV:PROVERENO] or [NSV:TESTIRUYETSYA]
+
+Monitoring Setup:
+  Metrics Collection     [SV|NSV|ZABLOKIROVANO]
+  Alerting Configuration [SV|NSV|ZABLOKIROVANO]
+  Dashboard Creation     [SV|NSV|ZABLOKIROVANO]
+  → Output: [SV:ODOBRENO] or [NSV:V_PROTSESSE]
+
+Deployment Execution:
+  Staging Deployment     [SV|NSV|ZABLOKIROVANO|OTKAT]
+  Production Deployment  [SV|NSV|ZABLOKIROVANO|OTKAT|AVARIYA]
+  Post-Deploy Validation [SV|NSV|ZABLOKIROVANO]
+  → Output: [SV:RAZVERNUTO] or [OTKAT] or [AVARIYA]
+```
+
+### State Transition Rules
+
+1. **Sequential Progression**: `[NSV] → [SV] → Next Stage [NSV]`
+2. **Rollback Path**: `[AVARIYA] → [OTKAT] → Previous [SV]`
+3. **Blocking Cascade**: Parent `[ZABLOKIROVANO]` → Children `[OZHIDAET]`
+4. **Monitoring Loop**: `[SV:RAZVERNUTO] → [NSV:MONITORITSYA]` (continuous)
+
+### Example State Tracking Output
+
+```markdown
+## Deployment Status Report - 2025-12-19 14:32:00
+
+### Infrastructure Validation [SV:ZAVERSHENO]
+- Capacity Planning: [SV:ZAVERSHENO] at 2025-12-19 10:15
+- Environment Setup: [SV:ZAVERSHENO] at 2025-12-19 12:45
+- Network Configuration: [SV:PROVERENO] at 2025-12-19 13:20
+
+### Performance Benchmarking [NSV:TESTIRUYETSYA]
+- Latency Testing: [SV:PROVERENO] at 2025-12-19 14:00
+- Throughput Testing: [NSV:VYPOLNYAETSYA] started 2025-12-19 14:15
+- Resource Utilization: [OZHIDAET] (blocked by throughput test)
+
+### Monitoring Setup [OZHIDAET]
+- Blocked by: Performance Benchmarking [NSV:TESTIRUYETSYA]
+
+### Deployment Execution [OZHIDAET]
+- Blocked by: All prerequisites must be [SV:ZAVERSHENO]
+```
+
+---
 
 ## Liangci Kuangjia (Deployment Classification Framework)
 
@@ -203,6 +287,47 @@ deployment_classification:
 4. Schedule deployment window (Tuesday 10am-12pm)
 ```
 
+---
+
+## Overview
+
+**Purpose**: Validate production deployment readiness
+
+**When to Use**:
+- Before deploying models to production (Phase 3)
+- Quality Gate 3 validation required
+- Creating deployment plans
+- Infrastructure capacity planning
+- Production environment testing
+
+**Quality Gate**: Required for Quality Gate 3 APPROVED status
+
+**Prerequisites**:
+- Model trained and evaluated (Gate 2 APPROVED)
+- Reproducibility audit passed
+- Production environment available for testing
+- Infrastructure requirements documented
+
+**Outputs**:
+- Deployment readiness report (PASS/FAIL)
+- Infrastructure requirements specification
+- Monitoring plan with alerts and dashboards
+- Incident response plan
+- Rollback strategy
+- Performance benchmarks (production environment)
+- Deployment checklist
+
+**Time Estimate**: 1-2 weeks
+- Infrastructure setup: 2-3 days
+- Performance benchmarking: 1-2 days
+- Monitoring setup: 2-3 days
+- Security validation: 1-2 days
+- Documentation: 1-2 days
+
+**Agents Used**: tester, archivist
+
+---
+
 ## Quick Start
 
 ### 1. Infrastructure Requirements
@@ -277,6 +402,51 @@ python scripts/validate_deployment_readiness.py \
   --output deployment/readiness_report.md
 ```
 
+---
+
+## Detailed Instructions
+
+### Phase 1: Infrastructure Validation (2-3 days)
+
+**Objective**: Validate production infrastructure meets requirements
+
+**Steps**:
+
+#### 1.1 Capacity Planning
+```python
+# scripts/capacity_planning.py
+
+def estimate_capacity_requirements(model, workload):
+    """Estimate infrastructure requirements."""
+    # GPU requirements
+    gpu_memory_per_batch = estimate_gpu_memory(model, batch_size=32)
+    num_gpus = math.ceil(gpu_memory_per_batch * target_throughput / gpu_capacity)
+
+    # CPU requirements
+    cpu_cores = estimate_cpu_usage(model, workload)
+
+    # Storage requirements
+    storage_model = model_size_gb
+    storage_data = dataset_size_gb
+    storage_logs = estimated_logs_per_day_gb * retention_days
+
+    return {
+        "gpu": {"count": num_gpus, "memory_per_gpu": gpu_capacity},
+        "cpu": {"cores": cpu_cores},
+        "storage": {
+            "total": storage_model + storage_data + storage_logs
+        }
+    }
+
+# Run capacity planning
+requirements = estimate_capacity_requirements(model, expected_workload)
+print(f"Infrastructure Requirements: {requirements}")
+```
+
+**Deliverable**: Infrastructure requirements specification
+
+---
+
 #### 1.2 Environment Setup
 ```bash
 # Setup production environment
@@ -297,6 +467,61 @@ kubectl get services -n ml-production
 ```
 
 **Deliverable**: Production environment deployed
+
+---
+
+### Phase 2: Performance Benchmarking (1-2 days)
+
+**Objective**: Measure performance in production environment
+
+**Steps**:
+
+#### 2.1 Latency Benchmarking
+```python
+# scripts/benchmark_latency.py
+import time
+import numpy as np
+
+def benchmark_latency(model, test_inputs, num_runs=1000):
+    """Benchmark inference latency."""
+    latencies = []
+
+    for _ in range(num_runs):
+        start = time.perf_counter()
+        output = model(test_inputs)
+        end = time.perf_counter()
+        latencies.append((end - start) * 1000)  # Convert to ms
+
+    results = {
+        "mean": np.mean(latencies),
+        "std": np.std(latencies),
+        "p50": np.percentile(latencies, 50),
+        "p95": np.percentile(latencies, 95),
+        "p99": np.percentile(latencies, 99)
+    }
+
+    print(f"Latency Results (ms):")
+    print(f"  Mean: {results['mean']:.2f}")
+    print(f"  P50: {results['p50']:.2f}")
+    print(f"  P95: {results['p95']:.2f}")
+    print(f"  P99: {results['p99']:.2f}")
+
+    # Check against SLA (e.g., P95 < 100ms)
+    sla_p95 = 100.0
+    if results['p95'] > sla_p95:
+        print(f"⚠️  WARNING: P95 latency {results['p95']:.2f}ms exceeds SLA {sla_p95}ms")
+        return False
+    else:
+        print(f"✅ PASS: P95 latency {results['p95']:.2f}ms within SLA")
+        return True
+
+# Run benchmark
+benchmark_latency(model, test_inputs)
+```
+
+**Deliverable**: Latency benchmarks
+
+---
 
 #### 2.2 Throughput Benchmarking
 ```python
@@ -332,6 +557,32 @@ benchmark_throughput(model)
 
 **Deliverable**: Throughput benchmarks
 
+---
+
+#### 2.3 Resource Utilization
+```bash
+# Monitor GPU/CPU/Memory utilization during load test
+# Using NVIDIA SMI for GPUs
+nvidia-smi dmon -s pucvmet -c 3600 > deployment/gpu_utilization.log &
+
+# Using psutil for CPU/Memory
+python scripts/monitor_resources.py --duration 3600 --output deployment/resource_utilization.json &
+
+# Run load test
+python scripts/load_test.py --requests-per-second 100 --duration 3600
+
+# Analyze utilization
+python scripts/analyze_utilization.py \
+  --gpu deployment/gpu_utilization.log \
+  --cpu deployment/resource_utilization.json \
+  --target-utilization 70 \
+  --output deployment/utilization_report.md
+```
+
+**Deliverable**: Resource utilization report
+
+---
+
 ### Phase 3: Monitoring & Observability (2-3 days)
 
 **Objective**: Set up comprehensive monitoring
@@ -364,6 +615,61 @@ scrape_configs:
 - **Inference Metrics**: Latency (P50, P95, P99), throughput (QPS), error rate
 - **Resource Metrics**: GPU utilization, CPU utilization, memory usage
 - **Business Metrics**: Requests per user, predictions per day, model drift
+
+---
+
+#### 3.2 Alerting
+```yaml
+# deployment/monitoring/alerts.yaml
+
+groups:
+  - name: model_serving_alerts
+    interval: 30s
+    rules:
+      # High latency alert
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(inference_duration_seconds_bucket[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High inference latency"
+          description: "P95 latency {{ $value }}s exceeds 100ms threshold"
+
+      # Low throughput alert
+      - alert: LowThroughput
+        expr: rate(inference_requests_total[5m]) < 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low throughput"
+          description: "QPS {{ $value }} below 50 threshold"
+
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: rate(inference_errors_total[5m]) / rate(inference_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate"
+          description: "Error rate {{ $value | humanizePercentage }} exceeds 5%"
+
+      # GPU out of memory alert
+      - alert: GPUOutOfMemory
+        expr: DCGM_FI_DEV_FB_FREE / DCGM_FI_DEV_FB_USED < 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "GPU out of memory"
+          description: "GPU memory usage > 90%"
+```
+
+**Deliverable**: Alerting configuration
+
+---
 
 #### 3.3 Dashboards
 ```json
@@ -412,6 +718,63 @@ scrape_configs:
 
 **Deliverable**: Monitoring dashboards
 
+---
+
+### Phase 4: Incident Response (1-2 days)
+
+**Objective**: Prepare incident response plan
+
+**Steps**:
+
+#### 4.1 Incident Response Plan
+```markdown
+# Incident Response Plan
+
+## Severity Levels
+
+### P0 - Critical (Production Down)
+- **Response Time**: 15 minutes
+- **Resolution Time**: 2 hours
+- **Escalation**: Immediate page on-call engineer
+
+### P1 - High (Degraded Performance)
+- **Response Time**: 30 minutes
+- **Resolution Time**: 4 hours
+- **Escalation**: Email + Slack alert
+
+### P2 - Medium (Minor Issues)
+- **Response Time**: 2 hours
+- **Resolution Time**: 24 hours
+- **Escalation**: Create ticket
+
+## Runbooks
+
+### High Latency Runbook
+1. Check current load (QPS)
+2. Check GPU/CPU utilization
+3. Scale up instances if utilization >80%
+4. Check for model drift (retrain if needed)
+5. Roll back to previous version if issue persists
+
+### High Error Rate Runbook
+1. Check error logs
+2. Identify error type (input validation, OOM, model error)
+3. If input validation: Update input schema
+4. If OOM: Reduce batch size or add GPU
+5. If model error: Roll back to previous version
+
+### GPU Out of Memory Runbook
+1. Reduce batch size
+2. Enable gradient checkpointing
+3. Use mixed precision (FP16)
+4. Scale up to larger GPU (A100 80GB)
+5. Implement model parallelism
+```
+
+**Deliverable**: Incident response plan
+
+---
+
 #### 4.2 Rollback Strategy
 ```bash
 # deployment/rollback.sh
@@ -448,6 +811,38 @@ echo "✅ Rollback completed successfully"
 ```
 
 **Deliverable**: Rollback strategy
+
+---
+
+### Phase 5: Security Validation (1-2 days)
+
+**Objective**: Validate security posture
+
+**Criteria**:
+
+#### 5.1 Authentication & Authorization
+- [ ] API requires authentication (API keys, OAuth)
+- [ ] Role-based access control (RBAC) implemented
+- [ ] Rate limiting configured (prevent abuse)
+
+#### 5.2 Data Security
+- [ ] Data encrypted in transit (TLS 1.3)
+- [ ] Data encrypted at rest (AES-256)
+- [ ] PII handling compliant with GDPR/HIPAA
+
+#### 5.3 Model Security
+- [ ] Model weights access controlled
+- [ ] Adversarial input detection enabled
+- [ ] Input validation implemented
+
+#### 5.4 Infrastructure Security
+- [ ] Network policies configured (Kubernetes NetworkPolicy)
+- [ ] Container security scanning enabled (Trivy, Aqua)
+- [ ] Secrets management (Vault, Kubernetes Secrets)
+
+**Deliverable**: Security validation checklist
+
+---
 
 ### Phase 6: Documentation (1-2 days)
 
@@ -493,6 +888,25 @@ echo "✅ Rollback completed successfully"
 
 **Deliverable**: Complete deployment documentation
 
+---
+
+## Integration with Deep Research SOP
+
+### Pipeline Integration
+- **Pipeline H (Deployment Readiness)**: This skill validates production deployment readiness
+- **Quality Gate 3**: Deployment readiness PASS required for Gate 3 APPROVED
+
+### Agent Coordination
+```
+tester agent performs performance benchmarking and monitoring setup
+  ↓
+archivist agent documents deployment procedures
+  ↓
+evaluator agent validates Gate 3
+```
+
+---
+
 ## Troubleshooting
 
 ### Issue: High latency (>100ms P95)
@@ -503,6 +917,20 @@ echo "✅ Rollback completed successfully"
 
 ### Issue: Gate 3 validation fails
 **Solution**: Ensure all deployment readiness criteria met (performance, monitoring, incident response)
+
+---
+
+## Related Skills and Commands
+
+### Prerequisites
+- `holistic-evaluation` - Performance evaluation complete
+- `reproducibility-audit` - Reproducibility validated
+
+### Next Steps
+- `research-publication` - Academic publication
+- `gate-validation --gate 3` - Gate 3 validation
+
+---
 
 ## References
 
@@ -515,6 +943,37 @@ echo "✅ Rollback completed successfully"
 - Prometheus Best Practices
 - OpenTelemetry
 - The Four Golden Signals (Latency, Traffic, Errors, Saturation)
+
+---
+
+## Changelog
+
+### Version 1.1.0 (2025-12-19)
+
+**Added**:
+- Cognitive lensing framework with aspectual (Russian) and classifier (Mandarin) frames
+- Aspektual'naya Ramka section for explicit deployment state tracking
+  - Perfective/Imperfective/Blocked state markers (SV/NSV/ZABLOKIROVANO)
+  - Deployment pipeline state tracking with transition rules
+  - Example state tracking output templates
+- Liangci Kuangjia section for deployment classification
+  - Deployment type classifiers: FEATURE, HOTFIX, ROLLBACK, CONFIG, MIGRATION
+  - Risk level classifiers: HIGH, MEDIUM, LOW with gate requirements
+  - Environment progression classifiers: DEV, STAGING, PRODUCTION
+  - Deployment strategy classifiers: BLUE-GREEN, CANARY, ROLLING, BIG-BANG
+  - Classification decision matrix with YAML template
+  - Complete deployment classification report template
+- State transition rules for deployment lifecycle management
+- Risk mitigation patterns integrated with state tracking
+
+**Changed**:
+- Version bumped from 1.0.0 to 1.1.0
+- Added cognitive_frame metadata to YAML frontmatter
+
+**Rationale**:
+Deployment tracking requires explicit state management to avoid ambiguity about deployment readiness. The aspectual frame (borrowed from Russian grammar) provides perfective/imperfective markers that make state completion explicit - critical when deciding whether to proceed to production. The classifier frame (inspired by Mandarin measure words) enables systematic categorization by deployment type, risk level, and environment, ensuring appropriate validation gates and rollback strategies are applied. This cognitive lensing reduces deployment failures by forcing explicit state reasoning and systematic risk classification.
+
+---
 
 ## Core Principles
 

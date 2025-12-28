@@ -1,6 +1,7 @@
 ---
 name: when-creating-skill-template-use-skill-builder
 description: Create new Claude Code Skills with proper YAML frontmatter, progressive disclosure structure, and complete directory organization
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 # Skill Builder - Claude Code Skill Template Generator
@@ -49,7 +50,31 @@ await memory.store('skill-builder/requirements', skillRequirements);
 
 **Step 1.2: Define YAML Frontmatter**
 ```yaml
-
+---
+name: when-[trigger]-use-[skill-name]
+version: 1.0.0
+description: Single sentence describing purpose
+category: utilities
+tags: [tag1, tag2, tag3]
+agents: [agent1, agent2]
+difficulty: beginner|intermediate|advanced
+estimated_duration: 15-30min
+success_criteria:
+  - Criterion 1
+  - Criterion 2
+validation_method: test_type
+dependencies:
+  - claude-flow@alpha
+  - other-dependency
+prerequisites:
+  - Required condition 1
+outputs:
+  - output-file-1
+  - output-file-2
+triggers:
+  - Trigger condition 1
+  - Trigger condition 2
+---
 ```
 
 **Step 1.3: Plan Phase Structure**
@@ -84,7 +109,9 @@ Create skill file structure and boilerplate
 
 **Step 2.1: Create SKILL.md**
 ```markdown
-
+---
+[YAML frontmatter from Phase 1]
+---
 
 # ${skillName} - ${shortDescription}
 
@@ -456,6 +483,44 @@ Outputs:
 4. **process-diagram.gv**: Visual process diagram
 
 Skill complete when all files created and validation passes.
+
+---
+
+## Core Principles
+
+Skill Builder operates on 3 fundamental principles for creating production-ready Claude Code Skills:
+
+### Principle 1: Progressive Disclosure Structure
+
+Skills reveal complexity incrementally - start with high-level overview, then drill into phases, then detailed steps, ensuring readers aren't overwhelmed.
+
+In practice:
+- Structure SKILL.md with YAML frontmatter (metadata), overview (purpose), phase breakdown (objectives), and detailed steps (implementation)
+- Each phase contains objective, duration estimate, responsible agent, step-by-step instructions, validation criteria, and hooks integration
+- README.md provides quick start guide with condensed workflow, while PROCESS.md offers detailed phase-by-phase breakdown for deep dives
+- process-diagram.gv visualizes workflow with boxes for phases, parallelograms for outputs, and directed edges showing dependencies
+
+### Principle 2: YAML-Driven Metadata
+
+All skill metadata lives in valid YAML frontmatter, enabling programmatic skill discovery, validation, and execution by tools.
+
+In practice:
+- Define required fields (name, version, description, category, tags, agents, difficulty, estimated_duration, success_criteria, validation_method)
+- Use consistent naming convention (when-[trigger]-use-[skill-name]) for skills with automatic triggering based on keywords
+- Document dependencies (claude-flow@alpha, other skills), prerequisites (required conditions), and outputs (generated files/artifacts)
+- Include triggers array listing keyword patterns that should activate the skill automatically from user requests
+
+### Principle 3: Validation-First Development
+
+Skills must pass syntax validation, execution tests, and documentation completeness checks before being marked production-ready.
+
+In practice:
+- Validate YAML frontmatter with js-yaml parser to catch syntax errors before runtime
+- Test GraphViz diagram syntax with dot command to ensure process-diagram.gv renders correctly
+- Execute skill in dry-run mode to verify all phases, agents, and hooks work without errors
+- Run documentation checklist (Phase 4.3) to ensure YAML, overview, phases, validation, memory schema, success metrics, and integration examples all present
+
+---
 
 ## Common Anti-Patterns
 

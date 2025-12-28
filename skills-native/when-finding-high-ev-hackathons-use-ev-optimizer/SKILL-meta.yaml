@@ -1,0 +1,42 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill_name: when-finding-high-ev-hackathons-use-ev-optimizer
+version: 1.0.0
+tier: critical
+category: revenue-generation
+auto_trigger:
+  - hackathon
+  - bounty
+  - prize
+  - competition
+  - EV optimization
+  - quick win
+created: 2025-01-06
+agents:
+  - researcher (Collector + TeamBuilder roles)
+  - analyst (EVCalc role)
+  - coder (SubmissionKit role)
+coordinator: hierarchical-coordinator
+topology: hierarchical
+memory_patterns:
+  - life-os/hackathons/{YYYY-WW}/opportunities
+  - life-os/hackathons/{YYYY-WW}/ev-ranked
+  - life-os/hackathons/mvs/{slug}
+mcp_integration:
+  - memory-mcp (WHO/WHEN/PROJECT/WHY tagging required)
+  - claude-flow (hooks + coordination)
+data_sources:
+  - data/sources/hackathons.yml
+  - data/profiles/case_studies.md
+outputs:
+  - outputs/reports/hackathons_{YYYY-WW}.md
+  - outputs/briefs/h_{slug}_MVS.md
+cadence: weekly
+scheduled_trigger: days: [Monday, Thursday] time: "09:00" prompt_file: prompts/hackathon_scan.txt
+estimated_time: 30 min per run
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\when-finding-high-ev-hackathons-use-ev-optimizer
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.203Z
+  version: 2.0.0

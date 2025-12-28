@@ -1,0 +1,36 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user requests collaborative coding, real-time code review, or paired development session
+version: 2.0.0
+author: Base Template Generator
+category: development
+tags:
+  - pair-programming
+  - collaborative
+  - tdd
+  - code-review
+  - quality-assurance
+agents:
+  - coder (driver)
+  - reviewer (navigator)
+  - tester
+  - performance-analyzer
+coordinator: adaptive-coordinator
+memory_patterns:
+  - swarm/pair-programming/session-state
+  - swarm/pair-programming/code-changes
+  - swarm/pair-programming/review-feedback
+  - swarm/pair-programming/test-results
+  - swarm/pair-programming/metrics
+success_criteria:
+  - Code changes reviewed in real-time
+  - All tests passing after each change
+  - Code quality maintained above threshold
+  - Performance metrics within acceptable range
+  - No security vulnerabilities introduced
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\when-collaborative-coding-use-pair-programming
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.318Z
+  version: 2.0.0

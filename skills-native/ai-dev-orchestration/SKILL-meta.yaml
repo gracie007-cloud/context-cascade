@@ -1,0 +1,13 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.1.0
+category: orchestration
+agents: planner, system-architect, coder, tester, reviewer, cicd-engineer
+mcp_tools: memory-mcp
+artifacts: Feature-Prompt-Framework.md, Foundation-Prompt-Template.md, Compliance-Checklist.md, Do-Not-Touch-Template.md
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\ai-dev-orchestration
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.650Z
+  version: 2.0.0

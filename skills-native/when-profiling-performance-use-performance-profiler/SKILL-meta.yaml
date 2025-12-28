@@ -1,0 +1,32 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+author: Claude Code
+category: performance
+complexity: HIGH
+tags:
+  - performance
+  - profiling
+  - optimization
+  - benchmarking
+  - mece
+agents:
+  - performance-analyzer
+  - performance-benchmarker
+  - coder
+  - optimizer
+components:
+  - subagent
+  - slash-command
+  - mcp-tool
+dependencies:
+  - claude-flow@alpha
+  - perf (Linux)
+  - instruments (macOS)
+  - clinic.js (Node.js)
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\operations\when-profiling-performance-use-performance-profiler
+  category: operations
+  migrated_at: 2025-12-28T15:56:24.633Z
+  version: 2.0.0

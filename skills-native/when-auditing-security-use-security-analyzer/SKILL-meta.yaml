@@ -1,0 +1,35 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+agents:
+  - security-manager
+  - code-analyzer
+  - tester
+complexity: HIGH
+triggers:
+  - security audit
+  - vulnerability scan
+  - penetration test
+  - security review
+  - compliance check
+categories:
+  - security
+  - testing
+  - compliance
+coordination: topology: hierarchical pattern: sequential-with-gates
+memory_patterns:
+  - swarm/security/findings
+  - swarm/security/vulnerabilities
+  - swarm/security/compliance
+category: security
+tags:
+  - security
+  - compliance
+  - safety
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\security\when-auditing-security-use-security-analyzer
+  category: security
+  migrated_at: 2025-12-28T15:56:25.120Z
+  version: 2.0.0

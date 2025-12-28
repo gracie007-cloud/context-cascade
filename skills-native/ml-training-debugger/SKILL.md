@@ -1,6 +1,7 @@
 ---
 name: ml-training-debugger
-description: '**Version**: 1.0.0'
+description: **Version**: 1.0.0
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # ML Training Debugger
@@ -321,6 +322,17 @@ Test the skill with:
 - SDK implementation: `index.py`
 - Process visualization: `ml-training-debugger-process.dot`
 - Testing guide: `tests/README.md`
+
+---
+
+**Next Steps**:
+1. Create agent system prompt with ML debugging expertise
+2. Implement SDK-based agent spawning
+3. Add custom analysis tools
+4. Test on Phase 1 training failures
+5. Iterate based on real debugging sessions
+
+---
 
 ## Core Principles
 

@@ -1,6 +1,7 @@
 ---
 name: when-coordinating-collective-intelligence-use-hive-mind
 description: Advanced Hive Mind collective intelligence for queen-led multi-agent coordination with consensus and memory
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # Hive Mind Collective Intelligence SOP
@@ -539,6 +540,42 @@ mcp__memory-mcp__vector_search({ query: "collective decision patterns", limit: 1
 - Distributed Memory Systems
 - Queen-Worker Patterns
 
+---
+
+## Core Principles
+
+### 1. Hierarchical Authority with Distributed Intelligence
+**Principle**: Queen provides strategic direction and conflict resolution while workers execute specialized tasks autonomously. Authority is centralized for decisions, but intelligence is distributed across the collective.
+
+**In practice**:
+- Queen assigns high-level goals and priorities but does not micromanage execution details
+- Workers have autonomy to make tactical decisions within their domain expertise
+- Consensus mechanisms aggregate worker insights for strategic decisions
+- Queen intervenes only when consensus fails or critical decisions require final authority
+- All decisions (queen and collective) are logged to shared memory for transparency and learning
+
+### 2. Continuous Knowledge Synchronization
+**Principle**: Shared memory ensures all agents operate with consistent state and collective learnings propagate rapidly across the hive.
+
+**In practice**:
+- Memory sync runs continuously with configurable consistency levels (immediate vs eventual)
+- Critical data (security alerts, deployment status) uses strong consistency with immediate sync
+- Non-critical insights (code patterns, optimization tips) use eventual consistency for performance
+- Conflict resolution defaults to queen-decides strategy for deterministic outcomes
+- Knowledge graph captures relationships between insights for contextual retrieval
+
+### 3. Emergent Intelligence from Agent Consensus
+**Principle**: Collective decisions emerge from aggregating diverse specialist perspectives, not from single agent authority. The whole is greater than the sum of parts.
+
+**In practice**:
+- Proof-of-intelligence consensus weights votes by agent performance history and domain expertise
+- Byzantine fault tolerant consensus tolerates up to 33 percent malicious or faulty agents
+- Multiple agents analyze same problem from different angles (security, performance, architecture)
+- Consensus threshold (e.g., 67 percent agreement) ensures majority alignment before action
+- Queen validates consensus outcomes and can override with justification for exceptional cases
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |
@@ -547,7 +584,12 @@ mcp__memory-mcp__vector_search({ query: "collective decision patterns", limit: 1
 | **Memory Sync Lag** | Agents operate with stale state due to infrequent or slow memory synchronization, causing inconsistent behavior and duplicate work. | Increase sync frequency for critical data paths. Use event-driven sync triggers for high-priority updates. Implement version vectors to detect and resolve conflicts. Monitor sync latency metrics. |
 | **Consensus Deadlock** | Agents cannot reach agreement due to equally weighted conflicting opinions, blocking progress indefinitely without resolution mechanism. | Set consensus timeout (e.g., 2 minutes) after which queen intervenes. Implement tie-breaking rules based on agent seniority or domain expertise. Allow queen override for time-sensitive decisions. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Queen Bottleneck** | Queen becomes single point of failure when making all decisions, overwhelming coordination capacity and slowing collective progress. | Delegate routine decisions to collective consensus. Queen focuses only on strategic direction, conflict resolution, and exceptional cases. Implement decision delegation rules based on impact and urgency. |
 | **Memory Sync Lag** | Agents operate with stale state due to infrequent or slow memory synchronization, causing inconsistent behavior and duplicate work. | Increase sync frequency for critical data paths. Use event-driven sync triggers for high-priority updates. Implement version vectors to detect and resolve conflicts. Monitor sync latency metrics. |
 | **Consensus Deadlock** | Agents cannot reach agreement due to equally weighted conflicting opinions, blocking progress indefinitely without resolution mechanism. | Set consensus timeout (e.g., 2 minutes) after which queen intervenes. Implement tie-breaking rules based on agent seniority or domain expertise. Allow queen override for time-sensitive decisions. |

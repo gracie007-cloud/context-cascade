@@ -1,0 +1,22 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+category: Observability
+complexity: High
+triggers:
+  - opentelemetry
+  - otel
+  - distributed tracing
+  - observability
+  - metrics
+  - spans
+  - tracing
+  - jaeger
+  - zipkin
+  - tempo
+  - instrumentation
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\operations\observability\opentelemetry-observability
+  category: operations
+  migrated_at: 2025-12-28T15:56:24.585Z
+  version: 2.0.0

@@ -1,21 +1,142 @@
 ---
 name: research-gap-visualizer
-description: Create visual maps of research gaps from literature analysis, showing what has been studied, what is missing, and where opportunities exist. Generates gap matrices, research landscape diagrams, and opportunity maps. Use after literature synthesis to visualize the state of research and identify promising directions.
+description: Skill for research-gap-visualizer
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
-what has been studied, what is missing, and where opportunities exist. Generates
+name: research-gap-visualizer
+description: Create visual maps of research gaps from literature analysis, showing
+  what has been studied, what is missing, and where opportunities exist. Generates
   gap matrices, research landscape diagrams, and opportunity maps. Use after literature
   synthesis to visualize the state of research and identify promising directions.
+version: 1.0.0
+category: research
+tags:
 - research
 - gaps
 - visualization
 - literature
 - analysis
+author: ruv
 mcp_servers:
   required: [memory-mcp]
   optional: [sequential-thinking]
   auto_enable: true
---------|-------|------------|
+---
+
+# Research Gap Visualizer
+
+## Purpose
+
+Transform literature analysis into visual gap maps that clearly show what has been studied, what is missing, and where research opportunities exist. Provides visual evidence for research motivation in proposals and manuscripts.
+
+## When to Use This Skill
+
+Activate this skill when:
+- Completed literature synthesis and need to identify gaps
+- Writing research motivation section (need visual evidence)
+- Preparing grant proposals (need to show novelty)
+- Planning research direction (need to see landscape)
+- Defending thesis topic selection
+
+**DO NOT** use this skill for:
+- Initial literature search (use literature-synthesis first)
+- Idea generation without literature context (use rapid-idea-generator)
+- Detailed methodology planning (use research-driven-planning)
+
+## Visual Output Types
+
+### 1. Gap Matrix
+2D matrix showing which combinations of methods/domains have been studied vs unexplored.
+
+### 2. Research Landscape Map
+Bubble/scatter diagram showing density of research in different areas.
+
+### 3. Temporal Gap Analysis
+Timeline showing when topics were studied and which are stale.
+
+### 4. Method-Application Matrix
+Which methods have been applied to which problems.
+
+### 5. Opportunity Quadrant
+2x2 matrix of feasibility vs impact for potential research directions.
+
+## Input Contract
+
+```yaml
+input:
+  literature_data: object (required)
+    papers: array[object]
+      title: string
+      year: number
+      methods: array[string]
+      domains: array[string]
+      key_findings: string
+
+  analysis_type: enum[gap_matrix, landscape, temporal, method_application, opportunity] (required)
+
+  dimensions:
+    x_axis: string  # e.g., "methods", "year", "domain"
+    y_axis: string  # e.g., "application", "dataset", "metric"
+
+  filters:
+    year_range: [start_year, end_year] (optional)
+    min_papers: number (default: 1)
+
+  output_format: enum[mermaid, ascii, markdown, graphviz] (default: mermaid)
+```
+
+## Output Contract
+
+```yaml
+output:
+  visualization:
+    type: string
+    format: string
+    code: string  # Mermaid/GraphViz/ASCII code
+
+  gap_analysis:
+    total_cells: number
+    studied_cells: number
+    gap_cells: number
+    gap_percentage: number
+
+  identified_gaps:
+    high_priority: array[object]
+      description: string
+      evidence: string  # Why this is a gap
+      opportunity_score: number
+    medium_priority: array[object]
+    low_priority: array[object]
+
+  recommendations:
+    top_opportunities: array[string]
+    rationale: array[string]
+
+  metadata:
+    papers_analyzed: number
+    dimensions_used: array[string]
+    generation_time: number
+```
+
+## SOP Phase 1: Literature Data Parsing
+
+Extract structured data from literature synthesis:
+
+```markdown
+## Literature Parsing
+
+**Papers Analyzed**: [N]
+
+**Extracted Dimensions**:
+- Methods: [list of unique methods]
+- Domains: [list of unique domains/applications]
+- Datasets: [list of unique datasets]
+- Years: [range]
+
+**Dimension Frequency**:
+| Dimension | Count | Percentage |
+|-----------|-------|------------|
 | [Method 1] | [N] | [%] |
 | [Method 2] | [N] | [%] |
 ```
@@ -110,7 +231,7 @@ Show research trends over time:
 
 ```
 Year    | Topic A | Topic B | Topic C | Topic D |
---|---------|---------|---------|---------|
+--------|---------|---------|---------|---------|
 2019    |  ***    |  **     |  *      |         |
 2020    |  ****   |  ***    |  *      |         |
 2021    |  *****  |  ****   |  **     |  *      |
@@ -263,6 +384,15 @@ npx claude-flow@alpha memory store \
 | Integration | Standalone | Feeds into manuscript, planning |
 | Transparency | Black box | Full methodology shown |
 
+---
+
+**Version**: 1.0.0
+**Category**: Research / Gap Analysis
+**Prerequisites**: literature-synthesis output
+**Output Formats**: Mermaid, Markdown, ASCII, GraphViz
+
+---
+
 ## Core Principles
 
 ### 1. Multi-Dimensional Gap Analysis Over Linear Enumeration
@@ -295,7 +425,12 @@ A gap is not inherently valuable. This skill prioritizes gaps by research potent
 - Classify as high/medium/low priority with explicit thresholds (>0.7 = high, 0.4-0.7 = medium, <0.4 = low)
 - Justify prioritization with evidence (why is this gap feasible? what makes it impactful?)
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | Cherry-picking visualization to emphasize desired gaps | Selective axis choice or dimension filtering can make any area appear understudied; creates misleading visual "evidence" for pre-determined research direction | Use systematic dimension selection based on literature data (most common methods/domains). Generate multiple visualizations with different axes. Report both studied AND unstudied areas transparently. |
 | Ignoring corpus limitations in gap claims | A gap in your analyzed papers may not be a gap in the broader literature; limited corpus leads to false gap identification | Report corpus size prominently (e.g., "Analysis based on 150 papers from 2020-2024"). Add caveat: "Gaps may exist outside analyzed corpus". Use confidence scoring based on coverage (>1000 papers = high confidence). |
 | Treating all gaps as equal opportunities | Some gaps exist because they are uninteresting, infeasible, or already attempted and failed; visualization alone doesn't distinguish valuable from valueless gaps | Add feasibility and impact dimensions to opportunity scoring. Research why gap exists (technical barrier? lack of interest? ethical concerns?). Provide rationale for each high-priority gap recommendation. |

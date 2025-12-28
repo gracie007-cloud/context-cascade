@@ -1,6 +1,7 @@
 ---
 name: code-review-assistant
 description: Comprehensive PR review using multi-agent swarm with specialized reviewers for security, performance, style, tests, and documentation. Provides detailed feedback with auto-fix suggestions and merge readiness assessment.
+allowed-tools: Read, Glob, Grep
 ---
 
 ## Kanitsal Kod Incelemesi (Evidential Code Review)
@@ -388,6 +389,14 @@ cat > "$REVIEW_DIR/review-comment.md" <<EOF
 | Tests | $TEST_SCORE/100 | $([ "$TEST_SCORE" -ge 80 ] && echo "PASS" || echo "FAIL") |
 | Quality | $QUALITY_SCORE/100 | $([ "$QUALITY_SCORE" -ge 80 ] && echo "PASS" || echo "FAIL") |
 
+---
+
+## SONKEIGO (CRITICAL) - Architecture-Level Issues
+
+$(cat "$REVIEW_DIR/security-review.json" 2>/dev/null | jq -r '.critical_issues // [] | map("### " + .issue + "\n- **Evidence**: [" + .file + ":" + (.line|tostring) + "]\n- **Reference**: " + .reference + "\n- **Severity**: CRITICAL\n- **Confidence**: " + (.confidence|tostring) + "\n\n```\n" + .code_snippet + "\n```\n\n**Fix**: " + .suggested_fix) | join("\n\n")' || echo "No critical issues found")
+
+---
+
 ## TEINEIGO (MAJOR) - Module-Level Issues
 
 ### Performance Review
@@ -398,9 +407,26 @@ $(cat "$REVIEW_DIR/performance-review.json" 2>/dev/null | jq -r '.major_issues /
 - **All Tests Passing**: $([ "$TESTS_PASSING" = "true" ] && echo "Yes" || echo "No")
 - **Missing Tests**: $(cat "$REVIEW_DIR/test-review.json" 2>/dev/null | jq -r '.missing_tests // [] | join(", ")' || echo "None")
 
+---
+
+## CASUAL (MINOR) - Function-Level Improvements
+
+### Style & Maintainability
+$(cat "$REVIEW_DIR/style-review.json" 2>/dev/null | jq -r '.minor_issues // [] | map("- **" + .issue + "** [" + .file + ":" + (.line|tostring) + "] - " + .reference) | join("\n")' || echo "Code style looks good")
+
+---
+
 ## NIT - Line-Level Suggestions
 
 $(cat "$REVIEW_DIR/style-review.json" 2>/dev/null | jq -r '.nits // [] | map("- " + .issue + " [" + .file + ":" + (.line|tostring) + "]") | join("\n")' || echo "No nits")
+
+---
+
+## Fix Suggestions (Ranked by Severity)
+
+$(cat "$REVIEW_DIR/fix-suggestions.md" 2>/dev/null || echo "No suggestions needed - code looks great")
+
+---
 
 ## When to Use This Skill
 
@@ -534,7 +560,39 @@ code-review-assistant 123 "security,tests" true --auto-merge true
 - **Critical security issues**: Block merge, escalate to security team
 - **Tests failing**: Request changes, provide fix suggestions
 - **GitHub CLI not authenticated**: Guide user to authenticate
------------|---------|----------|
+---
+
+## Core Principles
+
+Code Review Assistant operates on 3 fundamental principles:
+
+### Principle 1: Multi-Perspective Validation
+Every code change must be evaluated from multiple viewpoints to ensure comprehensive quality assessment. No single reviewer can catch all issues.
+
+In practice:
+- Parallel specialized reviews (security, performance, style, tests, docs) prevent blind spots
+- Cross-validation between reviewers catches what individual analysis misses
+
+### Principle 2: Evidence-Based Decision Making
+Review decisions must be grounded in objective metrics and actual execution results, not assumptions or subjective opinions.
+
+In practice:
+- Automated tests MUST pass before human review begins (blocking gate)
+- Security scans provide concrete vulnerability reports with severity ratings
+- Performance analysis uses profiling data and complexity metrics
+
+### Principle 3: Actionable Feedback Over Criticism
+Every finding must include specific location, concrete problem, and clear remediation path. Vague criticism wastes author time.
+
+In practice:
+- All findings include file path and line number (file.js:42)
+- Feedback provides "why it's wrong" + "how to fix it" (not just "change this")
+- Severity ranking (blocking/high/medium/low) guides prioritization
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Approval Without Execution** | Approving code based on reading alone without running tests or seeing actual output | ALWAYS require passing CI/CD, local execution, or sandbox testing before approval |
 | **Nitpicking Style Over Substance** | Focusing on minor formatting issues while missing critical security vulnerabilities or logic errors | Use automated linters for style; human reviewers focus on security, logic, architecture |
 | **Sequential Review Bottleneck** | Running reviews one-by-one (security -> performance -> docs) causing 8+ hour delays | Run all specialized reviews in PARALLEL using swarm coordination (2 hours total) |

@@ -1,6 +1,7 @@
 ---
 name: meta-tools
 description: Meta-tools is a comprehensive framework for creating, validating, optimizing, and composing development tools. It provides automated workflows for tool generation, cross-tool composition, and orchestration patterns that enable developers to build custom tooling ecosystems.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->

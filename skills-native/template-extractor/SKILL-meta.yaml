@@ -1,0 +1,19 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+category: tooling
+version: 1.0.0
+triggers:
+  - extract template
+  - reverse engineer format
+  - document style guide
+  - replicate formatting
+  - template from document
+  - document specification
+  - format analysis
+mcp_servers: required: [] optional: [memory-mcp] auto_enable: false
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\template-extractor
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.242Z
+  version: 2.0.0

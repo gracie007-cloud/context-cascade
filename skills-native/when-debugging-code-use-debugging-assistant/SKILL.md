@@ -1,6 +1,7 @@
 ---
 name: when-debugging-code-use-debugging-assistant
-description: ## Core Principles
+description: Debugging Assistant operates on 3 fundamental principles that ensure systematic problem resolution:
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Debugging Assistant Skill

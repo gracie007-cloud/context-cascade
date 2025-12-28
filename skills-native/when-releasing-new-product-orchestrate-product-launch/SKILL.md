@@ -1,6 +1,7 @@
 ---
 name: when-releasing-new-product-orchestrate-product-launch
-description: | Use when launching a new product end-to-end from market research through post-launch monitoring. Orchestrates 15+ specialist agents across 5 phases in a 10-week coordinated workflow including research, development, marketing, sales preparation, launch execution, and ongoing optimization. Employs hierarchical coordination with parallel execution for efficiency and comprehensive coverage.
+description: Use when launching a new product end-to-end from market research through post-launch monitoring. Orchestrates 15+ specialist agents across 5 phases in a 10-week coordinated workflow including research, development, marketing, sales preparation, launch execution, and ongoing optimization. Employs hierarchical coordination with parallel execution for efficiency and comprehensive coverage.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # Product Launch Orchestration Workflow
@@ -132,7 +133,134 @@ Use this workflow when:
 - [ ] Product strategy approved by stakeholders
 - [ ] Phase 1 deliverables stored in memory
 
+---
 
+### Phase 2: Product Development (Week 3-8, Parallel Execution)
+
+**Duration**: 6 weeks
+**Execution Mode**: Parallel with mesh coordination
+**Agents**: `backend-developer`, `frontend-developer`, `mobile-developer`, `database-architect`, `security-specialist`, `qa-engineer`
+
+**Process**:
+
+1. **Initialize Development Swarm** (Day 1)
+   ```bash
+   npx claude-flow swarm init --topology mesh --max-agents 6 --strategy adaptive
+   npx claude-flow memory retrieve --key "product-launch/${LAUNCH_ID}/phase-1/product-manager/plan"
+   ```
+
+2. **Parallel Development Execution** (Week 3-6)
+
+   Spawn all development agents concurrently:
+   ```bash
+   # Backend development
+   npx claude-flow agent spawn --type backend-dev --capabilities "api,authentication,database"
+
+   # Frontend development
+   npx claude-flow agent spawn --type coder --capabilities "react,ui,state-management"
+
+   # Mobile development
+   npx claude-flow agent spawn --type mobile-dev --capabilities "react-native,ios,android"
+
+   # Database architecture
+   npx claude-flow agent spawn --type code-analyzer --capabilities "database,schema,optimization"
+
+   # Security implementation
+   npx claude-flow agent spawn --type reviewer --capabilities "security,audit,compliance"
+
+   # QA and testing
+   npx claude-flow agent spawn --type tester --capabilities "testing,automation,coverage"
+   ```
+
+   **Backend Developer** builds:
+   - REST/GraphQL API with comprehensive endpoints
+   - Authentication system (OAuth 2.0, JWT)
+   - Business logic layer with validation
+   - Payment gateway integration
+   - Database integration and ORM setup
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/backend-developer/{api-spec,schema,implementation}`
+
+   **Frontend Developer** builds:
+   - React/Vue web application with responsive design
+   - Component library following design system
+   - State management (Redux/Context/Zustand)
+   - API integration layer with error handling
+   - Progressive Web App (PWA) capabilities
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/frontend-developer/{components,architecture}`
+
+   **Mobile Developer** builds:
+   - React Native applications (iOS + Android)
+   - Native modules for device features
+   - Offline-first architecture with sync
+   - Push notifications integration
+   - Deep linking and analytics
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/mobile-developer/{builds,native-modules}`
+
+   **Database Architect** designs:
+   - Optimized schema for scalability
+   - Indexing strategy for performance
+   - Query optimization and stored procedures
+   - Data migration strategy
+   - Backup, recovery, and disaster recovery plans
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/database-architect/{schema,indexes,migrations}`
+
+   **Security Specialist** implements:
+   - OAuth 2.0 + JWT authentication
+   - Role-based access control (RBAC)
+   - Data encryption (at rest and in transit)
+   - Security audit and penetration testing
+   - Compliance validation (GDPR, CCPA, SOC2)
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/security-specialist/{audit,compliance}`
+
+   **QA Engineer** creates:
+   - Unit test suite (target: 90%+ coverage)
+   - Integration test scenarios
+   - End-to-end test workflows
+   - Performance benchmarks
+   - Automated test pipeline
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-2/qa-engineer/{test-plan,coverage-report}`
+
+3. **Integration & Testing** (Week 7-8)
+
+   Sequential integration after parallel development:
+   ```bash
+   npx claude-flow task orchestrate --strategy sequential --task "system-integration"
+   ```
+
+   - Integrate all components (backend + frontend + mobile)
+   - Run full integration test suite
+   - Performance optimization (< 200ms API response, < 2s page load)
+   - Final security audit
+
+   **Coordination Scripts**:
+   ```bash
+   npx claude-flow hooks post-edit --file "src/**/*.{ts,tsx}" \
+     --memory-key "product-launch/${LAUNCH_ID}/phase-2/integration/status"
+   npx claude-flow hooks notify --message "Phase 2 development complete"
+   ```
+
+**Outputs**:
+- Production-ready web application
+- Native mobile applications (iOS + Android)
+- API documentation (OpenAPI spec)
+- Security audit report
+- Performance benchmark results
+- Test coverage report (>90%)
+
+**Success Criteria**:
+- [ ] All applications functional and integrated
+- [ ] Test coverage exceeds 90%
+- [ ] Security audit passed with no critical issues
+- [ ] Performance benchmarks met (API < 200ms, UI < 2s)
+- [ ] All deliverables stored in memory for next phase
+
+---
 
 ### Phase 3: Marketing & Sales Preparation (Week 5-9, Parallel Execution)
 
@@ -224,7 +352,105 @@ Use this workflow when:
 - [ ] Sales team trained and equipped with materials
 - [ ] Support infrastructure tested and operational
 
+---
 
+### Phase 4: Launch Execution (Week 10, Sequential + Parallel)
+
+**Duration**: 1 week
+**Execution Mode**: Sequential validation, parallel launch activities
+**Agents**: `production-validator`, `devops-engineer`, `marketing-specialist`, `sales-specialist`
+
+**Process**:
+
+1. **Pre-Launch Validation** (Day 1-2)
+   ```bash
+   npx claude-flow hooks pre-task --description "Final production validation"
+   npx claude-flow agent spawn --type production-validator
+   ```
+
+   **Production Validator** verifies:
+   - All tests passing (unit, integration, E2E)
+   - Security audit complete with zero critical issues
+   - Performance benchmarks met or exceeded
+   - Monitoring and alerting systems active
+   - Backup and recovery procedures tested
+   - Rollback plan documented and rehearsed
+
+   Generate go/no-go report:
+   ```bash
+   npx claude-flow memory store --key "product-launch/${LAUNCH_ID}/phase-4/production-validator/final-check"
+   ```
+
+2. **Production Deployment** (Day 2-3)
+   ```bash
+   npx claude-flow agent spawn --type cicd-engineer
+   ```
+
+   **DevOps Engineer** executes:
+   - Blue-green deployment to production
+   - Frontend deployment to CDN (global distribution)
+   - Mobile app submission (App Store + Google Play)
+   - Production database configuration and migration
+   - Monitoring, logging, and alerting activation
+
+   **Deployment Script**:
+   ```bash
+   npx claude-flow workflow create --name "production-deployment" \
+     --steps '["backend","frontend","mobile","monitoring"]'
+   npx claude-flow workflow execute --workflow-id "prod-deploy-${LAUNCH_ID}"
+   ```
+
+   **Memory Pattern**: `product-launch/${LAUNCH_ID}/phase-4/devops-engineer/{deployment-log,status}`
+
+3. **Launch Day Marketing Blitz** (Day 3-5, Parallel)
+   ```bash
+   npx claude-flow task orchestrate --strategy parallel --max-agents 4
+   ```
+
+   Parallel campaign execution:
+   - **Email Marketing**: Launch announcement to existing list, automated sequences
+   - **Social Media**: Coordinated posts across all platforms, engagement monitoring
+   - **Paid Advertising**: Google Ads, Facebook/Instagram, LinkedIn campaigns live
+   - **PR Outreach**: Press releases, influencer partnerships, Product Hunt launch
+
+   **Marketing Coordination**:
+   ```bash
+   npx claude-flow hooks notify --message "Launch campaigns live"
+   npx claude-flow memory store --key "product-launch/${LAUNCH_ID}/phase-4/marketing/campaign-metrics"
+   ```
+
+4. **Real-Time Monitoring** (Day 3-7)
+   ```bash
+   npx claude-flow agent spawn --type performance-monitor
+   ```
+
+   **Performance Monitor** tracks:
+   - Application uptime and performance metrics
+   - User signups, activation, and conversion rates
+   - Marketing campaign ROI across all channels
+   - Support ticket volume and response times
+   - Revenue and transaction tracking
+
+   Generate hourly reports during launch week:
+   ```bash
+   npx claude-flow hooks post-task --task-id "launch-monitoring" --export-metrics true
+   ```
+
+**Outputs**:
+- Live production application (web + mobile)
+- Active marketing campaigns across all channels
+- Sales team actively engaging leads
+- Support team handling customer inquiries
+- Real-time monitoring dashboards
+
+**Success Criteria**:
+- [ ] Production deployment successful with zero downtime
+- [ ] All marketing campaigns launched on schedule
+- [ ] Monitoring shows healthy system metrics
+- [ ] First customer conversions recorded
+- [ ] Support team responding within SLA
+
+---
 
 ### Phase 5: Post-Launch Monitoring & Optimization (Week 11+, Continuous)
 
@@ -314,7 +540,52 @@ Use this workflow when:
 - [ ] Product-market fit validated through usage data
 - [ ] Launch learnings documented for knowledge sharing
 
+---
 
+## Memory Coordination
+
+### Namespace Convention
+
+All workflow data follows this hierarchical pattern:
+
+```
+product-launch/{launch-id}/phase-{N}/{agent-type}/{deliverable-type}
+```
+
+**Examples**:
+- `product-launch/saas-app-v1/phase-1/market-researcher/analysis`
+- `product-launch/saas-app-v1/phase-2/backend-developer/api-spec`
+- `product-launch/saas-app-v1/phase-3/marketing-specialist/campaign`
+- `product-launch/saas-app-v1/phase-4/devops-engineer/deployment-log`
+- `product-launch/saas-app-v1/phase-5/weekly-report/week-1`
+
+### Cross-Phase Data Flow
+
+**Phase 1 → Phase 2**:
+```bash
+# Phase 2 agents retrieve Phase 1 strategy
+npx claude-flow memory retrieve --key "product-launch/${LAUNCH_ID}/phase-1/product-manager/plan"
+```
+
+**Phase 2 → Phase 3**:
+```bash
+# Marketing agents retrieve product specs
+npx claude-flow memory retrieve --key "product-launch/${LAUNCH_ID}/phase-2/backend-developer/api-spec"
+```
+
+**Phase 3 → Phase 4**:
+```bash
+# Deployment retrieves marketing timeline
+npx claude-flow memory retrieve --key "product-launch/${LAUNCH_ID}/phase-3/marketing-specialist/campaign"
+```
+
+**Phase 4 → Phase 5**:
+```bash
+# Monitoring retrieves launch metrics baseline
+npx claude-flow memory retrieve --pattern "product-launch/${LAUNCH_ID}/phase-4/*/metrics"
+```
+
+---
 
 ## Scripts & Automation
 
@@ -413,7 +684,43 @@ echo "📊 Summary report: /tmp/${LAUNCH_ID}-data.json"
 echo "📈 Workflow export: /tmp/${LAUNCH_ID}-workflow.json"
 ```
 
+---
 
+## Success Metrics
+
+### Technical Metrics (Phase 2 & 4)
+- **Uptime**: 99.9%+ during launch week
+- **API Response Time**: < 200ms (p95)
+- **Page Load Time**: < 2 seconds
+- **Error Rate**: < 0.1%
+- **Test Coverage**: > 90%
+- **Mobile App Ratings**: > 4.0 stars
+
+### Business Metrics (Phase 5)
+- **User Signups**: Target defined in Phase 1 strategy
+- **Activation Rate**: > 40% (activated within 7 days)
+- **Conversion Rate**: > 2.5% (free to paid)
+- **Customer Acquisition Cost (CAC)**: Within budget
+- **Monthly Recurring Revenue (MRR)**: Target growth trajectory
+- **Churn Rate**: < 5% monthly
+- **Net Promoter Score (NPS)**: > 50
+
+### Marketing Metrics (Phase 3 & 4)
+- **Campaign ROI**: > 3:1 across all channels
+- **Email Open Rate**: > 25%
+- **Social Engagement**: > 5% (likes, comments, shares)
+- **Paid Ad CTR**: > 2%
+- **Organic Traffic Growth**: > 20% month-over-month
+- **Press Coverage**: 5+ publications
+
+### Support Metrics (Phase 5)
+- **First Response Time**: < 2 hours
+- **Resolution Time**: < 24 hours
+- **Customer Satisfaction (CSAT)**: > 4.5/5
+- **Self-Service Rate**: > 60% (resolved without ticket)
+- **Ticket Volume**: Declining trend
+
+---
 
 ## Usage Examples
 
@@ -484,7 +791,18 @@ npx claude-flow task orchestrate --strategy "account-based-marketing"
 # Output: 50 target accounts engaged, 10 pilot customers secured
 ```
 
+---
 
+## GraphViz Process Diagram
+
+See `when-releasing-new-product-orchestrate-product-launch-process.dot` for visual workflow representation showing:
+- 5 phases with sequential and parallel execution patterns
+- 15+ agent interactions and data flows
+- Memory coordination points between phases
+- Decision gates and validation checkpoints
+- Optimization loops in Phase 5
+
+---
 
 ## Quality Checklist
 
@@ -502,6 +820,15 @@ Before considering launch complete, verify:
 - [ ] `product-launch/${LAUNCH_ID}/phase-3/*` - Marketing materials
 - [ ] `product-launch/${LAUNCH_ID}/phase-4/*` - Launch metrics
 - [ ] `product-launch/${LAUNCH_ID}/phase-5/*` - Weekly reports
+
+---
+
+**Workflow Complexity**: High (15+ agents, 10 weeks, 5 phases)
+**Coordination Pattern**: Hierarchical with adaptive parallel execution
+**Memory Footprint**: ~50-100 memory entries per launch
+**Typical Use Case**: Major product launches requiring comprehensive coordination
+
+---
 
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
@@ -550,6 +877,12 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
+---
+
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+---
+
 ## Core Principles
 
 ### 1. Phased Execution with Clear Gates
@@ -582,12 +915,22 @@ Skill("<skill-name>")
 - Launch learnings captured in memory namespace for future product launches
 - Audit trail preserved showing decision rationale for compliance and retrospectives
 
-----------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|-------------|---------|----------|
 | **Launch Without Market Validation** | Skipping Phase 1 research to accelerate timeline results in building product nobody wants, wasting months of effort on unvalidated assumptions. | Never skip market validation phase. Spend 2 weeks upfront researching target market, competitors, and customer pain points. Use findings to validate product-market fit before committing to development. |
 | **Siloed Development Without Marketing** | Engineering builds product in isolation while marketing scrambles to prepare campaigns days before launch, resulting in rushed messaging and weak go-to-market. | Run Phase 3 marketing preparation in parallel with Phase 2 development. Share product specs and demos early. Marketing needs 4-6 weeks lead time for campaign creation and sales enablement. |
 | **No Production Readiness Validation** | Deploying to production without comprehensive validation (Phase 4) risks critical failures on launch day when maximum traffic and visibility occurs. | Implement mandatory production validator review in Phase 4. Check all tests passing, security audit complete, performance benchmarks met, monitoring active, rollback plan tested. Go/no-go decision must be evidence-based. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Launch Without Market Validation** | Skipping Phase 1 research to accelerate timeline results in building product nobody wants, wasting months of effort on unvalidated assumptions. | Never skip market validation phase. Spend 2 weeks upfront researching target market, competitors, and customer pain points. Use findings to validate product-market fit before committing to development. |
 | **Siloed Development Without Marketing** | Engineering builds product in isolation while marketing scrambles to prepare campaigns days before launch, resulting in rushed messaging and weak go-to-market. | Run Phase 3 marketing preparation in parallel with Phase 2 development. Share product specs and demos early. Marketing needs 4-6 weeks lead time for campaign creation and sales enablement. |
 | **No Production Readiness Validation** | Deploying to production without comprehensive validation (Phase 4) risks critical failures on launch day when maximum traffic and visibility occurs. | Implement mandatory production validator review in Phase 4. Check all tests passing, security audit complete, performance benchmarks met, monitoring active, rollback plan tested. Go/no-go decision must be evidence-based. |

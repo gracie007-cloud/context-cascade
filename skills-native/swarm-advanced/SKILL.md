@@ -1,6 +1,7 @@
 ---
 name: swarm-advanced
 description: Advanced swarm orchestration patterns for research, development, testing, and complex distributed workflows
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -1005,6 +1006,15 @@ mcp__claude-flow__swarm_init({ topology: "mesh", maxAgents: 4 })
 - [MCP Tools Reference](https://github.com/ruvnet/claude-flow/wiki/mcp)
 - [Performance Optimization](https://github.com/ruvnet/claude-flow/wiki/performance)
 
+---
+
+**Version**: 2.0.0
+**Last Updated**: 2025-10-19
+**Skill Level**: Advanced
+**Estimated Learning Time**: 2-3 hours
+
+---
+
 ## Core Principles
 
 ### 1. Topology Determines Coordination Cost
@@ -1016,10 +1026,29 @@ Byzantine consensus requires 2f+1 agents to tolerate f faults, with O(N^2) messa
 ### 3. Agent Specialization Over Generalization
 A swarm of 6 specialized agents (researcher, coder, tester, reviewer, documenter, monitor) outperforms a swarm of 6 generalist agents attempting all tasks. Specialization enables parallel execution of diverse tasks, reduces context switching, and leverages domain expertise. Assign agents roles based on capabilities, not convenience.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Swarm for Sequential Work** | 8 agents waiting on each other in strict sequence. Coordination overhead (agent spawning, state sync, health monitoring) exceeds work parallelization benefits. | Use swarms only when 3+ tasks can execute concurrently. For sequential workflows, use stream-chain skill instead. Swarms optimize parallelism, chains optimize dependencies. |
 | **Mesh Topology for Large Swarms** | 12-agent mesh creates 66 communication channels. Agents spend >50% time coordinating, <50% working. Byzantine consensus with 12 agents requires 30+ minutes. | Mesh topology limited to 3-8 agents. For larger swarms, use hierarchical (coordinator delegates to sub-teams) or star (hub-and-spoke). Reduce coordination surface area as swarm size grows. |
 | **Ignoring Agent Health** | Agent 3 crashes silently, swarm waits indefinitely for output that never arrives. No timeout, no detection, no recovery. Entire swarm deadlocks on single agent failure. | Implement mandatory health checks (heartbeat every 5-10s), failure detection (3 missed heartbeats = dead), and recovery strategy (spawn replacement or redistribute work). Treat agent failure as expected, not exceptional. |
+
+---
+
+## Enhanced Conclusion
+
+Advanced swarm orchestration transforms single-threaded development into parallel, distributed execution. The key insight: coordination cost must be justified by parallelization benefits. A 6-agent swarm achieves 4-5x speedup (not 6x) because 15-20% of time is spent coordinating. This tradeoff is favorable for complex, multi-domain tasks but wasteful for simple, sequential work.
+
+Swarm success depends on topology selection (mesh for small collaborative swarms, hierarchical for large coordinated swarms), consensus usage (sparingly for critical decisions only), and fault tolerance (health monitoring, failure detection, automatic recovery). Without these safeguards, swarms introduce coordination complexity without delivering parallelization benefits.
+
+The patterns documented here (research swarms for information gathering, development swarms for parallel implementation, testing swarms for comprehensive validation, analysis swarms for multi-perspective evaluation) provide proven architectures for common workflows. Adapt topology, consensus, and agent assignments to your specific task characteristics, but preserve the core principle: swarms are for parallelizable work, not sequential work forced into concurrent execution.
+
+When 3+ independent tasks exist with domain-specific requirements, swarms deliver measurable speedup. When tasks are sequential or domain-agnostic, simpler orchestration patterns (stream-chain, single-agent) are more efficient.
+
+---
 
 ## Common Anti-Patterns
 

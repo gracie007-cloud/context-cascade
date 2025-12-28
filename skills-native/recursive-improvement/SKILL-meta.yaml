@@ -1,0 +1,17 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+category: foundry
+version: 2.0.0
+triggers:
+  - improve skill
+  - audit skill
+  - run improvement cycle
+  - meta-loop
+  - self-improve
+mcp_servers: required: [memory-mcp] optional: [connascence-analyzer]
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\foundry\recursive-improvement
+  category: foundry
+  migrated_at: 2025-12-28T15:56:24.423Z
+  version: 2.0.0

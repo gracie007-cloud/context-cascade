@@ -1,6 +1,7 @@
 ---
 name: visual-art-composition
 description: Orthogonal framework for generating image prompts using 13 independently combinable aesthetic dimensions from 29+ cultural and theoretical art traditions
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Visual Art Composition System

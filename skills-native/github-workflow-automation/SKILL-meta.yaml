@@ -1,0 +1,28 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+category: github
+tags:
+  - github
+  - github-actions
+  - ci-cd
+  - workflow-automation
+  - swarm-coordination
+  - deployment
+  - security
+authors:
+  - claude-flow
+requires:
+  - gh (GitHub CLI)
+  - git
+  - claude-flow@alpha
+  - node (v16+)
+priority: high
+progressive_disclosure: true
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\operations\github-workflow-automation
+  category: operations
+  migrated_at: 2025-12-28T15:56:24.557Z
+  version: 2.0.0

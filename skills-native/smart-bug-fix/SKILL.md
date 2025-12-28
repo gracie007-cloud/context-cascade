@@ -1,6 +1,7 @@
 ---
 name: smart-bug-fix
 description: Intelligent bug fixing workflow combining root cause analysis, multi-model reasoning, Codex auto-fix, and comprehensive testing. Uses RCA agent, Codex iteration, and validation to systematically fix bugs.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
 ---
 
 # Smart Bug Fix

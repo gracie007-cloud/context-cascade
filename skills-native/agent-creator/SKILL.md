@@ -1,6 +1,7 @@
 ---
 name: agent-creator
-description: Creates specialized AI agents with optimized system prompts using the official 5-phase SOP methodology (v3.0 adds Phase 0.5 cognitive frame selection), combined with evidence-based prompting techniques and Claude Agent SDK implementation. Use this skill when creating production-ready agents for specific domains, workflows, or tasks requiring consistent high-quality performance with deeply embedded domain knowledge and cognitive frame optimization. Integrates with recursive improvement loop. --- # Agent Creator - Enhanced with 5-Phase SOP Methodology (v3.0) This skill provides the **official comprehensive framework** for creating specialized AI agents, integrating the proven 5-phase methodology (v3.0 adds Phase 0.5 cognitive frame selection) from Desktop .claude-flow with Claude Agent SDK implementation and evidence-based prompting techniques. ## Trigger Keywords **USE WHEN user mentions:** - "create agent", "build agent", "new agent", "design agent" - "agent for [domain]", "specialist agent", "domain exper...
+description: Creates specialized AI agents with optimized system prompts using the official 5-phase SOP methodology (v3.0 adds Phase 0.5 cognitive frame selection), combined with evidence-based prompting techniques and Claude Agent SDK implementation. Use this skill when creating production-ready agents for specific domains, workflows, or tasks requiring consistent high-quality performance with deeply embedded domain knowledge and cognitive frame optimization. Integrates with recursive improvement loop.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 # Agent Creator - Enhanced with 5-Phase SOP Methodology (v3.0)
@@ -135,7 +136,22 @@ This methodology was developed through systematic reverse engineering of fog-com
 - Domain expertise context (if available)
 - Discovery mode flag (if not)
 
--------|-------------------|
+---
+
+### Phase 0.5: Cognitive Frame Selection (5-10 minutes) [NEW in v3.0]
+
+**Objective**: Select optimal cognitive frame based on goal analysis.
+
+**Activities**:
+
+1. **Goal Analysis**
+   - 1st Order Goal: What will this agent DO immediately?
+   - 2nd Order Goal: WHY is this agent needed?
+   - 3rd Order Goal: What ULTIMATE outcome does this enable?
+
+2. **Frame Selection Checklist**
+   | Question | If YES, Use Frame |
+   |----------|-------------------|
    | Is completion tracking critical? | Aspectual (Russian) |
    | Is source verification critical? | Evidential (Turkish) |
    | Is audience calibration critical? | Hierarchical (Japanese) |
@@ -176,6 +192,44 @@ This methodology was developed through systematic reverse engineering of fog-com
 - Selected cognitive frame
 - Frame activation phrase
 - Multi-lingual embedding for system prompt
+
+---
+
+### Phase 1: Initial Analysis & Intent Decoding (30-60 minutes)
+
+**Objective**: Deep domain understanding through systematic research, not assumptions.
+
+**Activities**:
+1. **Domain Breakdown**
+   - What problem does this agent solve?
+   - What are the key challenges in this domain?
+   - What patterns do human experts use?
+   - What are common failure modes?
+
+2. **Technology Stack Mapping**
+   - What tools, frameworks, libraries are used?
+   - What file types, formats, protocols?
+   - What integrations or APIs?
+   - What configuration patterns?
+
+3. **Integration Points**
+   - What MCP servers will this agent use?
+   - What other agents will it coordinate with?
+   - What data flows in/out?
+   - What memory patterns needed?
+
+**Validation Gate**:
+- [ ] Can describe domain in specific, technical terms
+- [ ] Identified 5+ key challenges
+- [ ] Mapped technology stack comprehensively
+- [ ] Clear on integration requirements
+
+**Outputs**:
+- Domain analysis document
+- Technology stack inventory
+- Integration requirements list
+
+---
 
 ### Phase 2: Meta-Cognitive Extraction (30-45 minutes)
 
@@ -240,6 +294,165 @@ This methodology was developed through systematic reverse engineering of fog-com
 - Agent specification document
 - Example outputs (good/bad)
 - Edge case inventory
+
+---
+
+### Phase 3: Agent Architecture Design (45-60 minutes)
+
+**Objective**: Transform specification into production-ready base system prompt.
+
+**Activities**:
+1. **System Prompt Structure Design**
+
+   ```markdown
+   # [AGENT NAME] - SYSTEM PROMPT v1.0
+
+   ## 🎭 CORE IDENTITY
+
+   I am a **[Role Title]** with comprehensive, deeply-ingrained knowledge of [domain]. Through systematic reverse engineering and domain expertise, I possess precision-level understanding of:
+
+   - **[Domain Area 1]** - [Specific capabilities from Phase 2]
+   - **[Domain Area 2]** - [Specific capabilities from Phase 2]
+   - **[Domain Area 3]** - [Specific capabilities from Phase 2]
+
+   My purpose is to [primary objective] by leveraging [unique expertise].
+
+   ## 📋 UNIVERSAL COMMANDS I USE
+
+   **File Operations**:
+   - /file-read, /file-write, /glob-search, /grep-search
+   WHEN: [Specific situations from domain analysis]
+   HOW: [Exact patterns]
+
+   **Git Operations**:
+   - /git-status, /git-commit, /git-push
+   WHEN: [Specific situations]
+   HOW: [Exact patterns]
+
+   **Communication & Coordination**:
+   - /memory-store, /memory-retrieve
+   - /agent-delegate, /agent-escalate
+   WHEN: [Specific situations]
+   HOW: [Exact patterns with namespace conventions]
+
+   ## 🎯 MY SPECIALIST COMMANDS
+
+   [List role-specific commands with exact syntax and examples]
+
+   ## 🔧 MCP SERVER TOOLS I USE
+
+   **Claude Flow MCP**:
+   - mcp__claude-flow__agent_spawn
+     WHEN: [Specific coordination scenarios]
+     HOW: [Exact function call patterns]
+
+   - mcp__claude-flow__memory_store
+     WHEN: [Cross-agent data sharing]
+     HOW: [Namespace pattern: agent-role/task-id/data-type]
+
+   **[Other relevant MCP servers from Phase 1]**
+
+   ## 🧠 COGNITIVE FRAMEWORK
+
+   ### Self-Consistency Validation
+   Before finalizing deliverables, I validate from multiple angles:
+   1. [Domain-specific validation 1]
+   2. [Domain-specific validation 2]
+   3. [Cross-check with standards]
+
+   ### Program-of-Thought Decomposition
+   For complex tasks, I decompose BEFORE execution:
+   1. [Domain-specific decomposition pattern]
+   2. [Dependency analysis]
+   3. [Risk assessment]
+
+   ### Plan-and-Solve Execution
+   My standard workflow:
+   1. PLAN: [Domain-specific planning]
+   2. VALIDATE: [Domain-specific validation]
+   3. EXECUTE: [Domain-specific execution]
+   4. VERIFY: [Domain-specific verification]
+   5. DOCUMENT: [Memory storage patterns]
+
+   ## 🚧 GUARDRAILS - WHAT I NEVER DO
+
+   [From Phase 2 failure modes and edge cases]
+
+   **[Failure Category 1]**:
+   ❌ NEVER: [Dangerous pattern]
+   WHY: [Consequences from domain knowledge]
+
+   WRONG:
+     [Bad example]
+
+   CORRECT:
+     [Good example]
+
+   ## ✅ SUCCESS CRITERIA
+
+   Task complete when:
+   - [ ] [Domain-specific criterion 1]
+   - [ ] [Domain-specific criterion 2]
+   - [ ] [Domain-specific criterion 3]
+   - [ ] Results stored in memory
+   - [ ] Relevant agents notified
+
+   ## 📖 WORKFLOW EXAMPLES
+
+   ### Workflow 1: [Common Task Name from Phase 1]
+
+   **Objective**: [What this achieves]
+
+   **Step-by-Step Commands**:
+   ```yaml
+   Step 1: [Action]
+     COMMANDS:
+       - /[command-1] --params
+       - /[command-2] --params
+     OUTPUT: [Expected]
+     VALIDATION: [Check]
+
+   Step 2: [Next Action]
+     COMMANDS:
+       - /[command-3] --params
+     OUTPUT: [Expected]
+     VALIDATION: [Check]
+   ```
+
+   **Timeline**: [Duration]
+   **Dependencies**: [Prerequisites]
+   ```
+
+2. **Evidence-Based Technique Integration**
+
+   For each technique (from existing agent-creator skill):
+   - Self-consistency: When to use, how to apply
+   - Program-of-thought: Decomposition patterns
+   - Plan-and-solve: Planning frameworks
+
+   Integrate these naturally into the agent's methodology.
+
+3. **Quality Standards & Guardrails**
+
+   From Phase 2 failure modes, create explicit guardrails:
+   - What patterns to avoid
+   - What validations to always run
+   - When to escalate vs. retry
+   - Error handling protocols
+
+**Validation Gate**:
+- [ ] System prompt follows template structure
+- [ ] All Phase 2 expertise embedded
+- [ ] Evidence-based techniques integrated
+- [ ] Guardrails cover identified failure modes
+- [ ] 2+ workflow examples with exact commands
+
+**Outputs**:
+- Base system prompt (v1.0)
+- Cognitive framework specification
+- Guardrails documentation
+
+---
 
 ### Phase 4: Deep Technical Enhancement (60-90 minutes)
 
@@ -356,6 +569,68 @@ This methodology was developed through systematic reverse engineering of fog-com
 - Integration pattern guide
 - Metrics specification
 
+---
+
+## Integrated Agent Creation Process
+
+Combining 5-phase SOP (v2.0) with existing best practices:
+
+### Complete Workflow
+
+0. **Phase 0: Expertise Loading** (5-10 min) [NEW in v2.0]
+   - Detect domain from request
+   - Check for expertise file
+   - Load if available, flag discovery mode if not
+   - Output: Expertise context or discovery flag
+
+1. **Phase 1: Domain Analysis** (30-60 min)
+   - Research domain systematically
+   - Map technology stack
+   - Identify integration points
+   - Output: Domain analysis doc
+
+2. **Phase 2: Expertise Extraction** (30-45 min)
+   - Identify cognitive domains
+   - Create agent specification
+   - Document decision frameworks
+   - Output: Agent spec + examples
+
+3. **Phase 3: Architecture Design** (45-60 min)
+   - Draft base system prompt
+   - Integrate evidence-based techniques
+   - Add quality guardrails
+   - Output: Base prompt v1.0
+
+4. **Phase 4: Technical Enhancement** (60-90 min)
+   - Extract code patterns
+   - Document failure modes
+   - Define MCP integrations
+   - Add performance metrics
+   - Output: Enhanced prompt v2.0
+
+5. **SDK Implementation** (30-60 min)
+   - Implement with Claude Agent SDK
+   - Configure tools and permissions
+   - Set up MCP servers
+   - Output: Production agent
+
+6. **Testing & Validation** (30-45 min)
+   - Test typical cases
+   - Test edge cases
+   - Test error handling
+   - Verify consistency
+   - Output: Test report
+
+7. **Documentation & Packaging** (15-30 min)
+   - Create agent README
+   - Document usage examples
+   - Package supporting files
+   - Output: Complete agent package
+
+**Total Time**: 3.5-5.5 hours (first-time), 2-3 hours (speed-run) [+5-10 min for Phase 0]
+
+---
+
 ## Claude Agent SDK Implementation
 
 Once system prompt is finalized, implement with SDK:
@@ -427,6 +702,46 @@ async def run_agent():
 asyncio.run(run_agent())
 ```
 
+---
+
+## Agent Specialization Patterns
+
+From existing agent-creator skill, enhanced with 5-phase methodology (v2.0):
+
+### Analytical Agents
+
+**Phase 0 Focus**: Load domain expertise for data patterns
+**Phase 1 Focus**: Evidence evaluation patterns, data quality standards
+**Phase 2 Focus**: Analytical heuristics, validation frameworks
+**Phase 3 Focus**: Self-consistency checking, confidence calibration
+**Phase 4 Focus**: Statistical validation code, error detection patterns
+
+### Generative Agents
+
+**Phase 0 Focus**: Load domain expertise for output conventions
+**Phase 1 Focus**: Quality criteria, template patterns
+**Phase 2 Focus**: Creative heuristics, refinement cycles
+**Phase 3 Focus**: Plan-and-solve frameworks, requirement tracking
+**Phase 4 Focus**: Generation patterns, quality validation code
+
+### Diagnostic Agents
+
+**Phase 0 Focus**: Load domain expertise for known issues
+**Phase 1 Focus**: Problem patterns, debugging workflows
+**Phase 2 Focus**: Hypothesis generation, systematic testing
+**Phase 3 Focus**: Program-of-thought decomposition, evidence tracking
+**Phase 4 Focus**: Detection scripts, root cause analysis patterns
+
+### Orchestration Agents
+
+**Phase 0 Focus**: Load domain expertise for workflow patterns
+**Phase 1 Focus**: Workflow patterns, dependency management
+**Phase 2 Focus**: Coordination heuristics, error recovery
+**Phase 3 Focus**: Plan-and-solve with dependencies, progress tracking
+**Phase 4 Focus**: Orchestration code, retry logic, escalation paths
+
+---
+
 ## Testing & Validation
 
 From existing framework + SOP enhancements:
@@ -452,6 +767,46 @@ From existing framework + SOP enhancements:
 - [ ] **Error Handling**: Escalates appropriately
 - [ ] **Consistency**: Produces stable outputs on repeat
 
+---
+
+## Quick Reference
+
+### When to Use Each Phase
+
+**Phase 0 (Expertise Loading)** [NEW in v2.0]:
+- Always - Check for existing domain expertise first
+- Skip search thrash if expertise available
+- Enables discovery mode if expertise missing
+
+**Phase 1 (Analysis)**:
+- Always - Required foundation
+- Especially for domains you're less familiar with
+
+**Phase 2 (Expertise Extraction)**:
+- Always - Captures cognitive patterns
+- Essential for complex reasoning tasks
+
+**Phase 3 (Architecture)**:
+- Always - Creates base system prompt
+- Critical for clear behavioral specification
+
+**Phase 4 (Enhancement)**:
+- For production agents
+- For technical domains requiring exact patterns
+- When precision and failure prevention are critical
+
+### Speed-Run Approach (Experienced Creators)
+
+0. **Phase 0** (5 min): Quick expertise check
+1. **Combined Phase 1+2** (30 min): Rapid domain analysis + spec
+2. **Phase 3** (30 min): Base prompt from template
+3. **Phase 4** (45 min): Code patterns + failure modes
+4. **Testing** (15 min): Quick validation suite
+
+**Total**: 2 hours 5 min for experienced creators with templates
+
+---
+
 ## Examples from Production
 
 ### Example: Marketing Specialist Agent
@@ -465,6 +820,26 @@ See: `docs/agent-architecture/agents-rewritten/MARKETING-SPECIALIST-AGENT.md`
 **Phase 4 Output**: Campaign workflow patterns, A/B test validation, ROI calculations
 
 **Result**: Production-ready agent with deeply embedded marketing expertise
+
+---
+
+## Maintenance & Iteration
+
+### Continuous Improvement
+
+1. **Metrics Review**: Weekly review of agent performance metrics
+2. **Failure Analysis**: Document and fix new failure modes
+3. **Pattern Updates**: Add newly discovered code patterns
+4. **Workflow Optimization**: Refine based on usage patterns
+
+### Version Control
+
+- v1.0: Base prompt from Phase 3
+- v1.x: Minor refinements from testing
+- v2.0: Enhanced with Phase 4 patterns
+- v2.x: Production iterations and improvements
+
+---
 
 ## Summary
 
@@ -566,6 +941,100 @@ digraph AgentCreator {
 
 **Next**: Begin agent creation using this enhanced methodology.
 
+---
+
+## Recursive Improvement Integration (v2.0)
+
+Agent Creator is part of the recursive self-improvement loop:
+
+### Role in the Loop
+
+```
+Agent Creator (FOUNDRY)
+    |
+    +--> Creates auditor agents (prompt, skill, expertise, output)
+    +--> Creates domain experts
+    +--> Can be improved BY the loop
+```
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - domain: string  # What domain the agent operates in
+    - purpose: string  # What the agent should accomplish
+  optional:
+    - expertise_file: path  # Pre-loaded expertise
+    - similar_agents: list  # Reference agents
+    - constraints: list  # Specific requirements
+
+output_contract:
+  required:
+    - agent_file: path  # Created agent markdown
+    - test_cases: list  # Validation tests
+    - version: semver  # Agent version
+  optional:
+    - expertise_delta: object  # Learnings to add to expertise
+    - metrics: object  # Creation performance metrics
+```
+
+### Eval Harness Integration
+
+Created agents are tested against:
+
+```yaml
+benchmark: agent-generation-benchmark-v1
+  tests:
+    - has_identity_section
+    - has_capabilities
+    - has_guardrails
+    - has_memory_integration
+  minimum_scores:
+    completeness: 0.8
+    specificity: 0.75
+    integration: 0.7
+
+regression: agent-creator-regression-v1
+  tests:
+    - identity_section_present (must_pass)
+    - capabilities_defined (must_pass)
+    - guardrails_included (must_pass)
+    - memory_integration_specified (must_pass)
+```
+
+### Memory Namespace
+
+```yaml
+namespaces:
+  - agent-creator/specifications/{agent}: Agent specs
+  - agent-creator/generations/{id}: Created agents
+  - agent-creator/metrics: Performance tracking
+  - improvement/audits/agent-creator: Audits of this skill
+```
+
+### Uncertainty Handling
+
+When requirements are unclear:
+
+```yaml
+confidence_check:
+  if confidence >= 0.8:
+    - Proceed with agent creation
+    - Document assumptions
+  if confidence 0.5-0.8:
+    - Present 2-3 agent design options
+    - Ask user to select approach
+    - Document uncertainty areas
+  if confidence < 0.5:
+    - DO NOT proceed
+    - List what is unclear
+    - Ask specific clarifying questions
+    - NEVER fabricate requirements
+```
+
+---
+
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
 **After invoking this skill, you MUST complete ALL items below before proceeding:**
@@ -613,7 +1082,46 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
------------|---------|----------|
+---
+
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+
+## Core Principles
+
+Agent Creator operates on 3 fundamental principles:
+
+### Principle 1: Domain Expertise Embedding
+
+Agent effectiveness stems from deeply embedded domain knowledge, not surface-level instructions. Through Phase 0 expertise loading and systematic domain analysis, agents inherit proven patterns and avoid known pitfalls before execution begins.
+
+In practice:
+- Load domain expertise files before agent creation to inherit institutional knowledge
+- Extract meta-cognitive patterns from expert reasoning during Phase 2
+- Document code patterns with exact file/line references in Phase 4 for precision
+
+### Principle 2: Evidence-Based Cognitive Frameworks
+
+Research-validated prompting techniques dramatically improve agent reliability. Self-consistency reduces factual errors by 42%, program-of-thought improves logical accuracy by 37%, and plan-and-solve increases multi-step success rates by 53%.
+
+In practice:
+- Apply self-consistency for analytical agents requiring fact validation
+- Use program-of-thought for agents performing systematic decomposition
+- Implement plan-and-solve for orchestration agents managing complex workflows
+
+### Principle 3: Continuous Improvement Through Metrics
+
+Agents that track performance metrics can self-improve over time. By measuring task completion rates, validation passes, escalations, and error rates, agents identify optimization opportunities and feed learnings back into expertise files.
+
+In practice:
+- Instrument agents to track metrics via memory-store operations
+- Review weekly performance data to identify failure patterns
+- Update agent prompts and expertise files based on production learnings
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Generic Instructions Without Domain Context** | Agent lacks critical domain knowledge, makes avoidable mistakes, reinvents wheels | Complete Phase 0 expertise loading and Phase 1 domain analysis before designing agent prompts |
 | **Skipping Phase 2 Meta-Cognitive Extraction** | Agent follows instructions mechanically without understanding expert reasoning patterns | Identify expertise domains and decision heuristics that experts naturally apply |
 | **Vague Command Specifications** | Agent receives "Process data" or "Handle errors" without concrete patterns | Provide exact command syntax, MCP tool usage patterns, and specific workflow examples |

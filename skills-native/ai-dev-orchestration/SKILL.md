@@ -1,6 +1,7 @@
 ---
 name: ai-dev-orchestration
 description: Meta-orchestrator for AI-assisted app development with behavioral guardrails and prompt templates. 5-phase SOP - Product Framing (planner) -> Setup & Foundations (system-architect) -> Feature Development Loop (coder + tester + reviewer) -> Testing & Refactors (tester + coder) -> Deployment (cicd-engineer). Wraps three-loop system with AI-specific safety patterns.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # AI-Assisted App Development Orchestration
@@ -22,7 +23,33 @@ Before orchestrating AI development:
 
 **Integration**: Wraps feature-dev-complete, sparc-methodology, cicd-intelligent-recovery with AI-specific guardrails
 
+---
 
+## System Architecture
+
+```
+[User Product Idea]
+    ↓
+[Phase 0: Product Framing] (planner) - OPTIONAL
+    ↓  (App One-Pager, Persona, Validation)
+    ↓
+[Phase 1: Setup & Foundations] (system-architect)
+    ↓  (Stack selection, MVP definition, Foundation implementation)
+    ↓
+[Phase 2: Feature Development Loop] (coder + tester + reviewer) - ITERATIVE
+    ↓  (Per-feature: Plan → Implement → Test → Accept/Rollback)
+    ↓  (Fresh context per feature, Do Not Touch lists, Manual testing)
+    ↓
+[Phase 3: Testing & Refactors] (tester + coder)
+    ↓  (Bug fixes, Refactoring with scope limits)
+    ↓
+[Phase 4: Deployment] (cicd-engineer)
+    ↓  (Staging/Production, Monitoring, Health checks)
+    ↓
+[Memory-MCP Storage] (with WHO/WHEN/PROJECT/WHY tags)
+```
+
+---
 
 ## When to Use This Skill
 
@@ -40,7 +67,19 @@ Activate this skill when:
 - Well-understood repetitive tasks (use existing patterns)
 - Emergency hotfixes (skip structured workflow)
 
+---
 
+## Guiding Principles (from second-order insights)
+
+1. **Spec > Code**: Quality depends more on *how well you specify* than how fast you type
+2. **Foundations First**: Mini-waterfall for architecture, agile for features
+3. **Ephemeral Context**: Fresh chat per feature; persistent knowledge in code/docs, not chat history
+4. **Guardrails Over Brute Force**: Constrain what AI can touch; use "do not change X" aggressively
+5. **Small, Tested Steps**: One feature at a time, each fully tested before moving on
+6. **Human Product Judgment**: AI can simulate validation, but real users validate markets
+7. **AI is Factory, You are Orchestrator**: Your job is design specs, run pipeline, decide pass/fail
+
+---
 
 ## Input Contract
 
@@ -115,7 +154,154 @@ output:
     compliance_rate: number  # % of features following framework
 ```
 
+---
 
+## SOP Phase 0: Product Framing & Validation (30-60 min) - OPTIONAL
+
+**Objective**: Define problem, user journey, constraints, and success criteria BEFORE coding
+
+**Agent**: `planner`
+
+**Prompt**:
+```javascript
+await Task("Product Frame Architect", `
+Create comprehensive product frame for AI-assisted app development.
+
+Product Idea: <product-description>
+
+Generate App One-Pager with structure:
+
+## App One-Pager
+
+### Overview
+- **Name**: <product-name>
+- **Target User**: <narrow customer segment>
+  Example: "Working parents with toddlers ages 1-4"
+  NOT: "Busy people" (too broad)
+
+- **Core Problem + Outcome**: <what + for whom + result>
+  Example: "A mobile to-do app to reduce mental load for busy parents of toddlers"
+
+- **Magic Elements**: <1-2 differentiators>
+  Example: "Voice capture, Collaborative lists for co-parents"
+
+### Persona Snapshot
+- **Demographics**: <age, location, job, family>
+- **Daily Routine**: <typical day>
+- **Main Goals**: <what they're trying to achieve>
+- **Pain Points (3-5)**:
+  1. <recurring problem 1>
+  2. <recurring problem 2>
+  ...
+
+### Lightweight Validation
+- **Communities**: <2-3 subreddits/forums/discords where problem is discussed>
+  Examples: r/Parenting, r/toddlers, working-parents Discord
+
+- **Competitors (3-5)**:
+  1. <competitor-name>: <their approach>
+     **How we differ**: <key difference>
+  2. ...
+
+- **Differentiation Summary**: <1-2 sentences on unique value>
+
+### Initial Pricing Hypothesis
+- **Free Tier**: <what's included>
+- **Pro Tier**: <$X/month> - <additional features>
+- **Annual**: <$Y/year> - <discount %>
+
+### Success Criteria (Measurable)
+1. <outcome metric 1>
+2. <outcome metric 2>
+3. <outcome metric 3>
+
+Save to: docs/app-one-pager.md
+
+Store in Memory-MCP with WHO/WHEN/PROJECT/WHY tagging.
+`, "planner");
+```
+
+## MCP Requirements
+
+This skill requires the following MCP servers for optimal functionality:
+
+### memory-mcp (6.0k tokens)
+
+**Purpose**: Store product frames, feature specs, implementation decisions, and compliance metrics across all 5 phases for cross-session persistence.
+
+**Tools Used**:
+- `mcp__memory-mcp__memory_store`: Store product frames, feature specifications, bug logs, deployment configs
+- `mcp__memory-mcp__vector_search`: Retrieve similar feature patterns, past bug fixes, architectural decisions
+
+**Activation** (PowerShell):
+```powershell
+# Check if already active
+claude mcp list
+
+# Add if not present
+claude mcp add memory-mcp node C:\Users\17175\memory-mcp\build\index.js
+```
+
+**Usage Example**:
+```javascript
+// Phase 0: Store product frame
+await mcp__memory-mcp__memory_store({
+  text: `Product frame complete for ${product_name}. Target: ${target_user}. Core problem: ${problem}. Differentiators: ${differentiators}. Validation: ${communities} communities, ${competitors_count} competitors analyzed. Pricing: ${pricing_hypothesis}`,
+  metadata: {
+    key: `ai-dev-orchestration/${project_name}/product-frame`,
+    namespace: "ai-dev/product-framing",
+    layer: "long-term",
+    category: "product-planning",
+    tags: {
+      WHO: "ai-dev-orchestration",
+      WHEN: new Date().toISOString(),
+      PROJECT: project_name,
+      WHY: "product-framing"
+    }
+  }
+});
+
+// Phase 2: Store feature completion
+await mcp__memory-mcp__memory_store({
+  text: `Feature ${feature_name} completed. User journey: ${journey_summary}. Implementation: ${files_changed}. Tests: ${test_results}. Bugs: ${bugs_found}. Status: ACCEPTED`,
+  metadata: {
+    key: `ai-dev-orchestration/${project_name}/features/${feature_id}`,
+    namespace: "ai-dev/features",
+    layer: "mid-term",
+    category: "feature-implementation",
+    tags: {
+      WHO: "ai-dev-orchestration",
+      WHEN: new Date().toISOString(),
+      PROJECT: project_name,
+      WHY: "feature-completion"
+    }
+  }
+});
+
+// Retrieve similar bug fix patterns
+const similarBugs = await mcp__memory-mcp__vector_search({
+  query: `Bug fix for ${error_type} in ${component}`,
+  limit: 5
+});
+```
+
+**Token Cost**: 6.0k tokens (3.0% of 200k context)
+**When to Load**: Always - required for all 5 phases (product framing, foundations, features, testing, deployment)
+
+**MCP Tools Used**:
+- `mcp__memory-mcp__memory_store`
+
+**Memory Storage**:
+
+**Success Criteria**:
+- App One-Pager saved to docs/
+- Target user narrowly defined
+- 3-5 pain points identified
+- 3-5 competitors researched
+- Pricing hypothesis documented
+- Success metrics are measurable
+
+---
 
 ## SOP Phase 1: Setup & Foundations (1-2 hrs)
 
@@ -251,7 +437,30 @@ For EACH foundation item:
 1. Open a FRESH AI chat (Cursor/Claude Code)
 2. Use Foundation Prompt Template:
 
+---
+**Foundation Prompt Template**
 
+You are helping me implement the [DATABASE/AUTH/PAYMENT/API] foundation for my app.
+
+**Context**
+- App: [1-2 sentence description from app-one-pager]
+- Tech stack: [frameworks/services from tech-stack-decision]
+- Current state: [what already exists]
+
+**Goal**
+- Implement [DB/auth/payments/API] capabilities needed for MVP only
+
+**Requirements**
+- [List of tables/fields / flows / API endpoints]
+- [Constraints: multi-tenant, regional, etc.]
+
+**Constraints (DO NOT TOUCH)**
+- Don't change existing routes/components not mentioned
+- Don't add more tables than necessary without asking
+- [Other constraints specific to your app]
+
+Propose a plan, then implement step by step. After each change, summarize what you changed.
+---
 
 3. Apply code changes via tool's review mechanism (diff/preview)
 4. MANUALLY TEST:
@@ -283,7 +492,280 @@ Store decisions in Memory-MCP:
 - All foundations manually tested
 - Decisions stored in Memory-MCP
 
+---
 
+## SOP Phase 2: Feature Development Loop (1-3 hrs per feature) - ITERATIVE
+
+**Objective**: Implement features one at a time with AI safety guardrails
+
+**Core Rule**: ONE FEATURE PER LOOP, ONE FEATURE PER PROMPT THREAD
+
+**Agents**: `coder` + `tester` + `reviewer`
+
+**Per-Feature Workflow**:
+
+### Step 1: Plan the Feature (Human)
+
+**Prompt for Feature Planning**:
+```javascript
+await Task("Feature Spec Writer", `
+Write feature specification for AI implementation.
+
+Feature Name: <short-name>
+Purpose (1 sentence): <what + why>
+
+Generate Feature Spec:
+
+## Feature: <name>
+
+### Purpose
+<One-sentence description of what this feature does and why>
+
+### User Journey (step-by-step narrative)
+1. User opens <screen/page>
+2. User clicks <button/link>
+3. User sees <what appears>
+4. User enters <data>
+5. User clicks <submit>
+6. System <what happens>
+7. User sees <result>
+
+### Data Changes
+- **New tables**: <table-name> with columns <col1, col2, col3>
+- **New columns**: <existing-table>.<new-column>
+- **New relationships**: <table1> → <table2> (foreign key)
+
+### Technology & APIs
+- **Stack**: <Next.js + Supabase + Stripe>
+- **External APIs**: <OpenAI for suggested tasks> (if relevant)
+
+### Design Direction
+- **Style**: Clean, minimal, mobile-first
+- **Reuse**: Use existing button styles from components/Button.tsx
+- **Layout**: Same as task list view (grid, 2-column)
+
+### Negative Constraints (DO NOT TOUCH)
+- Do NOT change auth flow
+- Do NOT rename existing DB columns
+- Do NOT modify payment logic
+- Do NOT alter core navigation components
+
+Save to: docs/features/<feature-name>.md
+`, "planner");
+```
+
+### Step 2: Implement with Feature Prompt Framework
+
+**Feature Prompt Framework** (used in Cursor/Claude Code fresh chat):
+
+```markdown
+# Feature Prompt Framework
+
+## 1. Context
+I'm building a [web/mobile] app for [target user] to [primary outcome].
+This feature is: [short name]
+
+## 2. User Journey
+- User opens X
+- User clicks Y
+- User sees Z
+- User enters A
+- User clicks B
+- System does C
+- User sees D
+
+## 3. Technology & Data
+- **Stack**: [Next.js + Supabase + Stripe]
+- **DB changes**: [Add \`shared_list_id\` to tasks, create \`shared_lists\` table with columns: id, name, owner_id, created_at]
+- **APIs/LLMs**: [Use OpenAI to generate suggested tasks] (if relevant)
+
+## 4. Design Direction
+- Style notes: "Clean, minimal, mobile-first, reusing existing button styles. Use the same layout as the task list view."
+
+## 5. Negative Constraints (DO NOT TOUCH)
+- Do NOT:
+  - change auth flow
+  - rename existing DB columns
+  - modify payment logic
+  - alter core navigation components
+```
+
+**Agent Execution**:
+```javascript
+await Task("Feature Implementer", `
+Implement feature using AI coding tool (Cursor/Claude Code) in FRESH chat.
+
+Feature Spec: docs/features/<feature-name>.md
+
+Instructions:
+1. Open NEW chat in AI coding tool
+2. Paste Feature Prompt Framework from docs/features/<feature-name>.md
+3. Ask AI for brief plan first: "Outline the changes you'll make"
+4. Review plan for scope creep (reject if touches "do not touch" items)
+5. Let AI edit files
+6. Review diffs carefully
+7. Reject any scope creep beyond feature spec
+
+CRITICAL GUARDRAILS:
+- ONE feature per chat (no mixing features)
+- Fresh context (don't reuse previous chat)
+- Do not touch list is MANDATORY
+- Reject changes outside feature scope
+
+Implementation checklist:
+- [ ] Fresh AI chat opened
+- [ ] Feature Prompt Framework used
+- [ ] Plan reviewed (no scope creep)
+- [ ] Files edited (within scope)
+- [ ] Diffs reviewed (approved)
+- [ ] Ready for testing
+`, "coder");
+```
+
+### Step 3: Manual Testing
+
+**Agent Execution**:
+```javascript
+await Task("Feature Tester", `
+Manually test feature following exact user journey.
+
+Feature Spec: docs/features/<feature-name>.md
+Implementation: <files-changed>
+
+Test Steps (from user journey):
+1. <step 1 from spec>
+   Expected: <expected result>
+   Actual: <what happened>
+   Status: PASS / FAIL
+
+2. <step 2 from spec>
+   Expected: <expected result>
+   Actual: <what happened>
+   Status: PASS / FAIL
+
+...
+
+Edge Cases to Test:
+- Empty inputs
+- Invalid data
+- Error states
+- Failure conditions
+- Mobile responsiveness (if applicable)
+
+Log issues in: docs/bugs/<feature-name>-bugs.md
+
+Report:
+- [ ] User journey tested end-to-end
+- [ ] All steps PASS
+- [ ] Edge cases tested
+- [ ] Bugs logged (if any)
+- [ ] Decision: ACCEPT / ROLLBACK
+`, "tester");
+```
+
+### Step 4: Accept or Roll Back
+
+**Agent Execution**:
+```javascript
+await Task("Feature Acceptance Reviewer", `
+Review feature test results and decide acceptance.
+
+Test Results: <from tester>
+Bugs Found: <count>
+
+Decision Criteria:
+- ACCEPT if:
+  - All user journey steps PASS
+  - No critical bugs
+  - Edge cases handled
+  - "Do not touch" constraints respected
+
+- ROLLBACK if:
+  - Critical bugs found
+  - User journey broken
+  - Scope creep into "do not touch" areas
+  - Implementation doesn't match spec
+
+If ACCEPT:
+1. Commit with meaningful message:
+   git add .
+   git commit -m "feat: <feature-name>
+
+   - <what it does>
+   - <key implementation detail>
+   - <tables/routes/components touched>
+
+   Tested: <user-journey-summary>
+
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>"
+
+2. Document in docs/features/<feature-name>.md:
+   - What it does
+   - What tables/routes/components it touches
+   - Any TODOs or known limitations
+
+If ROLLBACK:
+1. git reset --hard HEAD  # Discard changes
+2. Re-scope or clarify spec
+3. Restart feature loop
+
+Report:
+- Decision: ACCEPT / ROLLBACK
+- Reasoning: <why>
+- Next steps: <commit OR re-scope>
+`, "reviewer");
+```
+
+### Step 5: Document & Reset Context
+
+**Agent Execution**:
+```javascript
+// Store feature completion in Memory-MCP
+mcp__memory-mcp__memory_store({
+  text: `Feature ${feature_name} completed. User journey: ${journey_summary}. Implementation: ${files_changed}. Tests: ${test_results}. Bugs: ${bugs_found}. Status: ACCEPTED`,
+  metadata: {
+    key: `ai-dev-orchestration/${project_name}/features/${feature_id}`,
+    namespace: "ai-dev/features",
+    layer: "mid-term",
+    category: "feature-implementation",
+    tags: {
+      WHO: "ai-dev-orchestration",
+      WHEN: new Date().toISOString(),
+      PROJECT: project_name,
+      WHY: "feature-completion"
+    }
+  }
+});
+
+// Close AI chat / start new one for next feature
+// This prevents context pollution
+```
+
+**Compliance Checklist** (per feature):
+```yaml
+- [ ] Feature has brief written spec (name, purpose, user journey)
+- [ ] Feature Prompt Framework used
+- [ ] Work in fresh AI chat (not reused)
+- [ ] "Do not touch" list included in prompt
+- [ ] Manual tests executed against user journey
+- [ ] Bugs fixed or logged with owner & priority
+- [ ] Changes documented (3-5 bullets)
+- [ ] Committed with clear message
+```
+
+**Repeat this loop for every feature in MVP checklist**
+
+**Success Criteria (per feature)**:
+- Feature spec written with user journey
+- Fresh AI chat used (context reset)
+- "Do not touch" list respected
+- Manual tests PASS
+- Feature ACCEPTED or ROLLED BACK (never left broken)
+- Documented and committed
+
+---
 
 ## SOP Phase 3: Testing, Bugs, & Refactors (30-90 min)
 
@@ -354,7 +836,78 @@ Report:
 - No accumulation of technical debt
 - Code quality maintained
 
+---
 
+## SOP Phase 4: Deployment & Monitoring (15-30 min)
+
+**Objective**: Deploy to staging/production with monitoring
+
+**Agent**: `cicd-engineer`
+
+**Prompt for Deployment**:
+```javascript
+await Task("Deployment Engineer", `
+Deploy app to <staging/production>.
+
+Hosting: <Vercel/Netlify/Render>
+Environment Variables: <API keys, DB URLs, secrets>
+
+Steps:
+1. Setup environment variables in hosting platform:
+   - DATABASE_URL
+   - AUTH_SECRET
+   - STRIPE_KEY (if applicable)
+   - etc.
+
+2. Deploy:
+   - Connect GitHub repo to hosting platform
+   - Configure build settings
+   - Deploy
+
+3. Verify in <staging/production>:
+   - App loads
+   - Health check works (/api/health)
+   - Basic functionality works
+
+4. Setup monitoring:
+   - Error tracking: Sentry / Logtail
+   - Health check endpoint: /api/health
+   - Usage metrics: DAU, key actions
+
+Report:
+- [ ] Environment variables configured
+- [ ] Deployed successfully
+- [ ] App verified in environment
+- [ ] Monitoring configured
+- [ ] Deployment URL: <url>
+`, "cicd-engineer");
+```
+
+**Post-Launch Loop**:
+```javascript
+await Task("Product Feedback Collector", `
+Collect user feedback and feed into Feature Development Loop.
+
+Actions:
+1. Monitor user feedback channels
+2. Prioritize improvements
+3. Create feature specs for high-priority items
+4. Feed back into Phase 2 (Feature Development Loop)
+
+Report:
+- Top user requests: <list>
+- Prioritized roadmap: <next 3 features>
+`, "planner");
+```
+
+**Success Criteria**:
+- App deployed to staging/production
+- Environment variables configured
+- Monitoring operational (errors, health, usage)
+- Deployment URL accessible
+- Feedback loop established
+
+---
 
 ## Operational Rules of Thumb (Behavioral)
 
@@ -381,7 +934,20 @@ These encode "unintuitive" insights into simple rules:
 ### Rule 7: AI is a factory, you are the orchestrator
 **Your main job**: design good specs, run the pipeline, decide pass/fail
 
+---
 
+## Compliance Checklist (per feature)
+
+Before calling a feature "done", check:
+- [ ] Feature has brief written spec (name, purpose, user journey, data touchpoints)
+- [ ] Feature Prompt Framework used (context, journey, tech, design, constraints)
+- [ ] Work in fresh AI chat (not messy prior thread)
+- [ ] "Do not touch" list included (DB/auth/payments & other sensitive areas)
+- [ ] Manual tests executed against user journey
+- [ ] Bugs fixed or logged with owner & priority
+- [ ] Changes documented (3-5 bullets) and committed with clear message
+
+---
 
 ## Integration with Three-Loop System
 
@@ -413,7 +979,12 @@ These encode "unintuitive" insights into simple rules:
 - **Context Management**: Ephemeral chat history, persistent memory in code/docs
 - **Scope Limiting**: One feature per chat, guardrails against feature creep
 
-----|-------------|----------------|
+---
+
+## Performance Targets
+
+| Phase | Target Time | Success Metric |
+|-------|-------------|----------------|
 | Phase 0: Product Framing | 30-60 min | App One-Pager complete |
 | Phase 1: Foundations | 1-2 hrs | Base app running + foundations tested |
 | Phase 2: Per-Feature | 1-3 hrs | Feature ACCEPTED with tests passing |
@@ -426,7 +997,29 @@ These encode "unintuitive" insights into simple rules:
 - Rollback rate: ≤20% (80% features accepted first try)
 - Deployment success: 100% (no broken deploys)
 
+---
 
+## Example Usage
+
+```bash
+# Full workflow with product framing
+npx claude-flow@alpha skills run ai-dev-orchestration \
+  --product "TaskMaster for busy parents" \
+  --must-have-features "Voice task capture, Shared family lists" \
+  --run-product-framing true
+
+# Skip product framing (already validated)
+npx claude-flow@alpha skills run ai-dev-orchestration \
+  --product "TaskMaster" \
+  --must-have-features "Voice task capture, Shared family lists" \
+  --run-product-framing false
+
+# Production deployment
+npx claude-flow@alpha skills run ai-dev-orchestration \
+  --deployment-target production
+```
+
+---
 
 ## Artifacts Reference
 
@@ -435,11 +1028,68 @@ These encode "unintuitive" insights into simple rules:
 3. **Compliance-Checklist.md**: Per-feature validation checklist
 4. **Do-Not-Touch-Template.md**: Template for constraint lists
 
+---
 
+## Success Metrics
+
+Track in Memory-MCP:
+- Features shipped per week
+- Rollback rate (target: ≤20%)
+- Bug accumulation trend (target: ≤5 per feature)
+- Test coverage (target: ≥80%)
+- Deployment frequency (target: daily for staging, weekly for production)
+- Compliance rate (% features following framework, target: 100%)
+
+---
 
 **END OF AI-DEV-ORCHESTRATION SKILL SOP**
 
+---
 
+## Recursive Improvement Integration (v2.1)
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - app_requirements: string
+  optional:
+    - tech_stack: string
+    - expertise_file: path
+
+output_contract:
+  required:
+    - app_artifacts: object
+    - deployment_status: string
+    - status: string
+```
+
+### Eval Harness Integration
+
+```yaml
+benchmark: ai-dev-benchmark-v1
+  tests:
+    - ad-001: Feature Completion Rate
+    - ad-002: Bug Prevention Rate
+  minimum_scores:
+    feature_completion: 0.90
+    bug_prevention: 0.85
+```
+
+### Memory Namespace
+
+```yaml
+namespaces:
+  - ai-dev-orchestration/projects/{id}: Project state
+  - ai-dev-orchestration/patterns: Successful patterns
+```
+
+### Cross-Skill Coordination
+
+Works with: **feature-dev-complete**, **cicd-intelligent-recovery**, **skill-forge**
+
+---
 
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
@@ -488,7 +1138,46 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
------------|---------|----------|
+---
+
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+
+## Core Principles
+
+AI-Assisted App Development Orchestration operates on 3 fundamental principles:
+
+### Principle 1: AI as Constrained Factory, Human as Strategic Orchestrator
+Treat AI coding tools as powerful but undisciplined junior developers that require explicit boundaries, not as autonomous decision-makers.
+
+In practice:
+- Write detailed "do not touch" lists for every feature (DB schema, auth flows, payment logic)
+- Use Feature Prompt Framework to constrain AI scope (context + journey + negative constraints)
+- Review AI-generated plans BEFORE code execution, reject scope creep immediately
+- Manual testing gates prevent theater implementations from reaching production
+
+### Principle 2: Ephemeral Context, Persistent Knowledge
+Fresh chat context per feature prevents context pollution while maintaining system intelligence through structured artifacts.
+
+In practice:
+- Open NEW AI chat for every feature or foundation component
+- Store architectural decisions in Memory-MCP with WHO/WHEN/PROJECT/WHY tags
+- Document patterns in code/docs, not in chat history (chat history is throwaway)
+- Reset context aggressively - when a feature is complete, close the chat and move on
+
+### Principle 3: Foundations Before Features, Mini-Waterfall for Architecture
+Invest heavily in technical foundations (DB, auth, payments) using mini-waterfall before entering agile feature loops.
+
+In practice:
+- Phase 1 is 1-2 hours of pure foundation work (no features)
+- Foundations are manually tested exhaustively (migrations, auth flows, payment sandbox)
+- Once foundations are solid, Phase 2 becomes fast agile iterations (1-3 hours per feature)
+- Never skip foundations - fixing broken auth mid-feature development causes 10x rework
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **"Build my whole app" prompts** | AI attempts to implement everything in one massive change, resulting in scope creep, missed requirements, and untested code. | Break into Phase 1 (foundations) and Phase 2 (per-feature loops). One feature per chat, 1-3 hours max per iteration. |
 | **Reusing AI chat context across features** | Context pollution causes AI to make assumptions from previous work, touching files outside current scope. | Open fresh AI chat for every feature or foundation. No exceptions. Reset context to reset AI assumptions. |
 | **Skipping manual testing gates** | Theater implementations (code that looks correct but doesn't work) reach production because automated tests pass but functionality fails. | Manual test EVERY feature against user journey spec before accepting. No "Accept" without human verification. |

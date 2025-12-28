@@ -1,0 +1,28 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.1.0
+category: specialists
+tags:
+  - physics
+  - simulation
+  - numerical-methods
+  - optimization
+  - NNC
+  - scientific-computing
+  - accuracy
+author: meta-calculus-toolkit
+orchestration:
+  - quantum-computing-researcher  # Quantum physics, numerical algorithms
+  - model-evaluation-agent        # Rigorous accuracy comparison vs k=0
+  - experiment-tracking-agent     # Track simulation experiments
+  - evaluator                     # Quality gate validation
+  - root-cause-analyzer           # Debug failed simulations
+  - sublinear-goal-planner        # Complex problem decomposition
+  - coordination: sequential
+mcp_servers: required: [memory-mcp] optional: [flow-nexus]
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\physics-simulation-creator
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.193Z
+  version: 2.0.0

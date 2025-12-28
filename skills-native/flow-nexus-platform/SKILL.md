@@ -1,6 +1,7 @@
 ---
 name: flow-nexus-platform
 description: Comprehensive Flow Nexus platform management - authentication, sandboxes, app deployment, payments, and challenges (Gold Tier)
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -183,7 +184,102 @@ Enterprise-grade deployment configuration with autoscaling, health checks, monit
 6. [Storage & Real-time](#storage--real-time)
 7. [System Utilities](#system-utilities)
 
+---
 
+## Authentication & User Management
+
+### Registration & Login
+
+**Register New Account**
+```javascript
+mcp__flow-nexus__user_register({
+  email: "user@example.com",
+  password: "secure_password",
+  full_name: "Your Name",
+  username: "unique_username" // optional
+})
+```
+
+**Login**
+```javascript
+mcp__flow-nexus__user_login({
+  email: "user@example.com",
+  password: "your_password"
+})
+```
+
+**Check Authentication Status**
+```javascript
+mcp__flow-nexus__auth_status({ detailed: true })
+```
+
+**Logout**
+```javascript
+mcp__flow-nexus__user_logout()
+```
+
+### Password Management
+
+**Request Password Reset**
+```javascript
+mcp__flow-nexus__user_reset_password({
+  email: "user@example.com"
+})
+```
+
+**Update Password with Token**
+```javascript
+mcp__flow-nexus__user_update_password({
+  token: "reset_token_from_email",
+  new_password: "new_secure_password"
+})
+```
+
+**Verify Email**
+```javascript
+mcp__flow-nexus__user_verify_email({
+  token: "verification_token_from_email"
+})
+```
+
+### Profile Management
+
+**Get User Profile**
+```javascript
+mcp__flow-nexus__user_profile({
+  user_id: "your_user_id"
+})
+```
+
+**Update Profile**
+```javascript
+mcp__flow-nexus__user_update_profile({
+  user_id: "your_user_id",
+  updates: {
+    full_name: "Updated Name",
+    bio: "AI Developer and researcher",
+    github_username: "yourusername",
+    twitter_handle: "@yourhandle"
+  }
+})
+```
+
+**Get User Statistics**
+```javascript
+mcp__flow-nexus__user_stats({
+  user_id: "your_user_id"
+})
+```
+
+**Upgrade User Tier**
+```javascript
+mcp__flow-nexus__user_upgrade({
+  user_id: "your_user_id",
+  tier: "pro" // pro, enterprise
+})
+```
+
+---
 
 ## Sandbox Management
 
@@ -360,7 +456,162 @@ mcp__flow-nexus__sandbox_create({
 })
 ```
 
+---
 
+## App Store & Deployment
+
+### Browse & Search
+
+**Search Applications**
+```javascript
+mcp__flow-nexus__app_search({
+  search: "authentication api",
+  category: "backend",
+  featured: true,
+  limit: 20
+})
+```
+
+**Get App Details**
+```javascript
+mcp__flow-nexus__app_get({
+  app_id: "app_id"
+})
+```
+
+**List Templates**
+```javascript
+mcp__flow-nexus__app_store_list_templates({
+  category: "web-api",
+  tags: ["express", "jwt", "typescript"],
+  limit: 20
+})
+```
+
+**Get Template Details**
+```javascript
+mcp__flow-nexus__template_get({
+  template_name: "express-api-starter",
+  template_id: "template_id" // alternative
+})
+```
+
+**List All Available Templates**
+```javascript
+mcp__flow-nexus__template_list({
+  category: "backend",
+  template_type: "starter",
+  featured: true,
+  limit: 50
+})
+```
+
+### Publish Applications
+
+**Publish App to Store**
+```javascript
+mcp__flow-nexus__app_store_publish_app({
+  name: "JWT Authentication Service",
+  description: "Production-ready JWT authentication microservice with refresh tokens",
+  category: "backend",
+  version: "1.0.0",
+  source_code: sourceCodeString,
+  tags: ["auth", "jwt", "express", "typescript", "security"],
+  metadata: {
+    author: "Your Name",
+    license: "MIT",
+    repository: "github.com/username/repo",
+    homepage: "https://yourapp.com",
+    documentation: "https://docs.yourapp.com"
+  }
+})
+```
+
+**Update Application**
+```javascript
+mcp__flow-nexus__app_update({
+  app_id: "app_id",
+  updates: {
+    version: "1.1.0",
+    description: "Added OAuth2 support",
+    tags: ["auth", "jwt", "oauth2", "express"],
+    source_code: updatedSourceCode
+  }
+})
+```
+
+### Deploy Templates
+
+**Deploy Template**
+```javascript
+mcp__flow-nexus__template_deploy({
+  template_name: "express-api-starter",
+  deployment_name: "my-production-api",
+  variables: {
+    api_key: "your_api_key",
+    database_url: "postgres://user:pass@host:5432/db",
+    redis_url: "redis://localhost:6379"
+  },
+  env_vars: {
+    NODE_ENV: "production",
+    PORT: "8080",
+    LOG_LEVEL: "info"
+  }
+})
+```
+
+### Analytics & Management
+
+**Get App Analytics**
+```javascript
+mcp__flow-nexus__app_analytics({
+  app_id: "your_app_id",
+  timeframe: "30d" // 24h, 7d, 30d, 90d
+})
+```
+
+**View Installed Apps**
+```javascript
+mcp__flow-nexus__app_installed({
+  user_id: "your_user_id"
+})
+```
+
+**Get Market Statistics**
+```javascript
+mcp__flow-nexus__market_data()
+```
+
+### App Categories
+
+- **web-api**: RESTful APIs and microservices
+- **frontend**: React, Vue, Angular applications
+- **full-stack**: Complete end-to-end applications
+- **cli-tools**: Command-line utilities
+- **data-processing**: ETL pipelines and analytics
+- **ml-models**: Pre-trained machine learning models
+- **blockchain**: Web3 and blockchain applications
+- **mobile**: React Native and mobile apps
+
+### Publishing Best Practices
+
+1. **Documentation**: Include comprehensive README with setup instructions
+2. **Examples**: Provide usage examples and sample configurations
+3. **Testing**: Include test suite and CI/CD configuration
+4. **Versioning**: Use semantic versioning (MAJOR.MINOR.PATCH)
+5. **Licensing**: Add clear license information (MIT, Apache, etc.)
+6. **Deployment**: Include Docker/docker-compose configurations
+7. **Migrations**: Provide upgrade guides for version updates
+8. **Security**: Document security considerations and best practices
+
+### Revenue Sharing
+
+- Earn rUv credits when others deploy your templates
+- Set pricing (0 for free, or credits for premium)
+- Track usage and earnings via analytics
+- Withdraw credits or use for Flow Nexus services
+
+---
 
 ## Payments & Credits
 
@@ -489,7 +740,137 @@ mcp__flow-nexus__app_store_earn_ruv({
 6. **Use Free Templates**: Leverage community templates
 7. **Schedule Off-Peak**: Run heavy jobs during low-cost periods
 
+---
 
+## Challenges & Achievements
+
+### Browse Challenges
+
+**List Available Challenges**
+```javascript
+mcp__flow-nexus__challenges_list({
+  difficulty: "intermediate", // beginner, intermediate, advanced, expert
+  category: "algorithms",
+  status: "active", // active, completed, locked
+  limit: 20
+})
+```
+
+**Get Challenge Details**
+```javascript
+mcp__flow-nexus__challenge_get({
+  challenge_id: "two-sum-problem"
+})
+```
+
+### Submit Solutions
+
+**Submit Challenge Solution**
+```javascript
+mcp__flow-nexus__challenge_submit({
+  challenge_id: "challenge_id",
+  user_id: "your_user_id",
+  solution_code: `
+    function twoSum(nums, target) {
+      const map = new Map();
+      for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement)) {
+          return [map.get(complement), i];
+        }
+        map.set(nums[i], i);
+      }
+      return [];
+    }
+  `,
+  language: "javascript",
+  execution_time: 45 // milliseconds (optional)
+})
+```
+
+**Mark Challenge as Complete**
+```javascript
+mcp__flow-nexus__app_store_complete_challenge({
+  challenge_id: "challenge_id",
+  user_id: "your_user_id",
+  submission_data: {
+    passed_tests: 10,
+    total_tests: 10,
+    execution_time: 45,
+    memory_usage: 2048 // KB
+  }
+})
+```
+
+### Leaderboards
+
+**Global Leaderboard**
+```javascript
+mcp__flow-nexus__leaderboard_get({
+  type: "global", // global, weekly, monthly, challenge
+  limit: 100
+})
+```
+
+**Challenge-Specific Leaderboard**
+```javascript
+mcp__flow-nexus__leaderboard_get({
+  type: "challenge",
+  challenge_id: "specific_challenge_id",
+  limit: 50
+})
+```
+
+### Achievements & Badges
+
+**List User Achievements**
+```javascript
+mcp__flow-nexus__achievements_list({
+  user_id: "your_user_id",
+  category: "speed_demon" // Optional filter
+})
+```
+
+### Challenge Categories
+
+- **algorithms**: Classic algorithm problems (sorting, searching, graphs)
+- **data-structures**: DS implementation (trees, heaps, tries)
+- **system-design**: Architecture and scalability challenges
+- **optimization**: Performance and efficiency problems
+- **security**: Security-focused vulnerabilities and fixes
+- **ml-basics**: Machine learning fundamentals
+- **distributed-systems**: Concurrency and distributed computing
+- **databases**: Query optimization and schema design
+
+### Challenge Difficulty Rewards
+
+- **Beginner**: 10-25 credits
+- **Intermediate**: 50-100 credits
+- **Advanced**: 150-300 credits
+- **Expert**: 400-500 credits
+- **Master**: 600-1000 credits
+
+### Achievement Types
+
+- **Speed Demon**: Complete challenges in record time
+- **Code Golf**: Minimize code length
+- **Perfect Score**: 100% test pass rate
+- **Streak Master**: Complete challenges N days in a row
+- **Polyglot**: Solve in multiple languages
+- **Debugger**: Fix broken code challenges
+- **Optimizer**: Achieve top performance benchmarks
+
+### Tips for Success
+
+1. **Start Simple**: Begin with beginner challenges to build confidence
+2. **Review Solutions**: Study top solutions after completing
+3. **Optimize**: Aim for both correctness and performance
+4. **Daily Practice**: Complete daily challenges for bonus credits
+5. **Community**: Engage with discussions and learn from others
+6. **Track Progress**: Monitor achievements and leaderboard position
+7. **Experiment**: Try multiple approaches to problems
+
+---
 
 ## Storage & Real-time
 
@@ -596,7 +977,56 @@ mcp__flow-nexus__execution_file_get({
 })
 ```
 
+---
 
+## System Utilities
+
+### Queen Seraphina AI Assistant
+
+**Seek Guidance from Seraphina**
+```javascript
+mcp__flow-nexus__seraphina_chat({
+  message: "How should I architect a distributed microservices system?",
+  enable_tools: true, // Allow her to create swarms, deploy code, etc.
+  conversation_history: [
+    { role: "user", content: "I need help with system architecture" },
+    { role: "assistant", content: "I can help you design that. What are your requirements?" }
+  ]
+})
+```
+
+Queen Seraphina is an advanced AI assistant with:
+- Deep expertise in distributed systems
+- Ability to create swarms and orchestrate agents
+- Code deployment and architecture design
+- Multi-turn conversation with context retention
+- Tool usage for hands-on assistance
+
+### System Health & Monitoring
+
+**Check System Health**
+```javascript
+mcp__flow-nexus__system_health()
+```
+
+**View Audit Logs**
+```javascript
+mcp__flow-nexus__audit_log({
+  user_id: "your_user_id", // optional filter
+  limit: 100
+})
+```
+
+### Authentication Management
+
+**Initialize Authentication**
+```javascript
+mcp__flow-nexus__auth_init({
+  mode: "user" // user, service
+})
+```
+
+---
 
 ## Quick Start Guide
 
@@ -697,7 +1127,43 @@ mcp__flow-nexus__challenge_submit({
 })
 ```
 
+---
 
+## Best Practices
+
+### Security
+1. Never hardcode API keys - use environment variables
+2. Enable 2FA when available
+3. Regularly rotate passwords and tokens
+4. Use private buckets for sensitive data
+5. Review audit logs periodically
+6. Set appropriate file expiration times
+
+### Performance
+1. Clean up unused sandboxes to save credits
+2. Use smaller sandbox templates when possible
+3. Optimize storage by deleting old files
+4. Batch operations to reduce API calls
+5. Monitor usage via `user_stats`
+6. Use temp buckets for transient data
+
+### Development
+1. Start with sandbox testing before deployment
+2. Version your applications semantically
+3. Document all templates thoroughly
+4. Include tests in published apps
+5. Use execution monitoring for debugging
+6. Leverage real-time subscriptions for live updates
+
+### Cost Management
+1. Set auto-refill thresholds carefully
+2. Monitor credit usage regularly
+3. Complete daily challenges for bonus credits
+4. Publish templates to earn passive credits
+5. Use free-tier resources when appropriate
+6. Schedule heavy jobs during off-peak times
+
+---
 
 ## Troubleshooting
 
@@ -722,7 +1188,19 @@ mcp__flow-nexus__challenge_submit({
 - **Wrong Answer**: Review test cases, check edge cases
 - **Performance Too Slow**: Optimize algorithm complexity
 
+---
 
+## Support & Resources
+
+- **Documentation**: https://docs.flow-nexus.ruv.io
+- **API Reference**: https://api.flow-nexus.ruv.io/docs
+- **Status Page**: https://status.flow-nexus.ruv.io
+- **Community Forum**: https://community.flow-nexus.ruv.io
+- **GitHub Issues**: https://github.com/ruvnet/flow-nexus/issues
+- **Discord**: https://discord.gg/flow-nexus
+- **Email Support**: support@flow-nexus.ruv.io (Pro/Enterprise only)
+
+---
 
 ## Progressive Disclosure
 
@@ -825,11 +1303,111 @@ mcp__flow-nexus__realtime_subscribe({
 
 </details>
 
+---
 
+## Testing
+
+Comprehensive test suites in `tests/`:
+
+### 1. Authentication Manager Tests (`auth-manager.test.js`)
+
+Tests registration, login, password management, profile updates, and tier upgrades. Includes validation logic, parameter construction, and error handling.
+
+```bash
+node tests/auth-manager.test.js
+```
+
+### 2. Sandbox Manager Tests (`sandbox-manager.test.js`)
+
+Tests sandbox creation, configuration, execution, monitoring, and cleanup. Covers template validation, environment parsing, and resource management.
+
+```bash
+node tests/sandbox-manager.test.js
+```
+
+### 3. Platform Integration Tests (`platform-integration.test.js`)
+
+End-to-end workflow tests combining authentication, sandbox management, deployment, credit management, and health monitoring.
+
+```bash
+node tests/platform-integration.test.js
+```
+
+## Process Flow Diagram
+
+Visual workflow diagram in `flow-nexus-platform-process.dot`:
+
+- **Authentication & User Management** phase
+- **Sandbox Management** phase
+- **Deployment & App Store** phase
+- **Credit & Payment Management** phase
+- **Monitoring & Health** phase
+- Decision points, warnings, and external tool references
+
+Generate diagram:
+```bash
+dot -Tpng flow-nexus-platform-process.dot -o flow-nexus-platform-process.png
+```
+
+## Version History
+
+- **v2.0.0** (2025-11-02): **Gold Tier Upgrade**
+  - Added 4 functional automation scripts (auth, sandbox, deployment, health monitoring)
+  - Added 3 production-ready configuration templates
+  - Added 3 comprehensive test suites (unit + integration)
+  - Added GraphViz process flow diagram
+  - Added resources README
+  - 13 total files (Gold tier: 12+ files)
+
+- **v1.0.0** (2025-10-19): Initial comprehensive platform skill
+  - Authentication & user management
+  - Sandbox creation and execution
+  - App store and deployment
+  - Payments and credits
+  - Challenges and achievements
+  - Storage and real-time features
+  - System utilities and Queen Seraphina integration
+
+---
 
 **Skill Tier**: Gold (13 files: 1 SKILL.md + 4 scripts + 3 templates + 3 tests + 1 process diagram + 1 resources README)
 
 *This skill consolidates 6 Flow Nexus command modules into a single comprehensive platform management interface with full automation capabilities.*
+
+---
+
+## Core Principles
+
+Flow Nexus Platform operates on 3 fundamental principles:
+
+### Principle 1: Cloud-Native Sandbox Isolation
+Every execution happens in ephemeral, isolated cloud sandboxes with automatic cleanup and resource management.
+
+In practice:
+- Create sandboxes on-demand for development, testing, or production workloads
+- Configure environment variables, packages, and startup scripts declaratively
+- Destroy sandboxes automatically after timeout or manually to prevent resource leaks
+- Upload files, execute code, and monitor logs without affecting host systems
+
+### Principle 2: Credit-Based Resource Metering
+All platform operations consume rUv credits, enabling transparent cost tracking and optimization.
+
+In practice:
+- Monitor credit balance before expensive operations (neural training, long-running sandboxes)
+- Configure auto-refill thresholds to prevent service interruptions
+- Optimize costs by choosing appropriate sandbox templates and cleaning up unused resources
+- Earn credits through challenge completion, template publishing, and referrals
+
+### Principle 3: Gamified Developer Engagement
+Challenges, achievements, and leaderboards transform platform usage into skill-building experiences.
+
+In practice:
+- Complete coding challenges to earn credits and build proficiency
+- Publish templates to the app store for passive credit income
+- Track progress through achievements (Speed Demon, Code Golf, Streak Master)
+- Compete on global and challenge-specific leaderboards
+
+---
 
 ## Common Anti-Patterns
 

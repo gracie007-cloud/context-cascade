@@ -1,6 +1,7 @@
 ---
 name: cicd-intelligent-recovery
 description: Loop 3 of the Three-Loop Integrated Development System. CI/CD automation with intelligent failure recovery, root cause analysis, and comprehensive quality validation. Receives implementation from Loop 2, feeds failure patterns back to Loop 1. Achieves 100% test success through automated repair and theater validation. v2.0.0 with explicit agent SOPs.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # CI/CD Quality & Debugging Loop (Loop 3)
@@ -15,6 +16,25 @@ description: Loop 3 of the Three-Loop Integrated Development System. CI/CD autom
 
 **Version**: 2.0.0
 **Optimization**: Evidence-based prompting with explicit agent SOPs
+
+---
+
+## When to Use This Skill
+
+Activate this skill when:
+- Have complete implementation from Loop 2 (parallel-swarm-implementation)
+- Need CI/CD pipeline automation with intelligent recovery
+- Require root cause analysis for test failures
+- Want automated repair with connascence-aware fixes
+- Need validation of authentic quality (no theater)
+- Generating failure patterns for Loop 1 feedback
+
+**DO NOT** use this skill for:
+- Initial development (use Loop 2 first)
+- Manual debugging without CI/CD integration
+- Quality checks during development (use Loop 2 theater detection)
+
+---
 
 ## Input/Output Contracts
 
@@ -70,6 +90,25 @@ output:
       - feedback for Loop 1
 ```
 
+---
+
+## Prerequisites
+
+Before starting Loop 3, ensure Loop 2 completion:
+
+```bash
+# Verify Loop 2 delivery package exists
+test -f .claude/.artifacts/loop2-delivery-package.json && echo "✅ Ready" || echo "❌ Run parallel-swarm-implementation first"
+
+# Load implementation data
+npx claude-flow@alpha memory query "loop2_complete" --namespace "integration/loop2-to-loop3"
+
+# Verify GitHub CLI authenticated
+gh auth status || gh auth login
+```
+
+---
+
 ## 8-Step CI/CD Process Overview
 
 ```
@@ -89,6 +128,92 @@ Step 7: Differential Analysis (Compare to baseline with metrics)
         ↓
 Step 8: GitHub Feedback (Automated reporting and loop closure)
 ```
+
+---
+
+## Step 1: GitHub Hook Integration
+
+**Objective**: Download and process CI/CD pipeline failure reports from GitHub Actions.
+
+**Agent Coordination**: Single orchestrator agent manages data collection.
+
+### Configure GitHub Hooks
+
+```bash
+# Install GitHub CLI if needed
+which gh || brew install gh
+
+# Authenticate
+gh auth login
+
+# Configure webhook listener
+gh api repos/{owner}/{repo}/hooks \
+  -X POST \
+  -f name='web' \
+  -f active=true \
+  -f events='["check_run", "workflow_run"]' \
+  -f config[url]='http://localhost:3000/hooks/github' \
+  -f config[content_type]='application/json'
+```
+
+### Download Failure Reports
+
+```bash
+# Get recent workflow runs
+gh run list --repo {owner}/{repo} --limit 10 --json conclusion,databaseId \
+  | jq '.[] | select(.conclusion == "failure")' \
+  > .claude/.artifacts/failed-runs.json
+
+# Download logs for each failure
+cat .claude/.artifacts/failed-runs.json | jq -r '.databaseId' | while read RUN_ID; do
+  gh run view $RUN_ID --log \
+    > .claude/.artifacts/failure-logs-$RUN_ID.txt
+done
+```
+
+### Parse Failure Data
+
+```bash
+node <<'EOF'
+const fs = require('fs');
+const failures = [];
+
+// Parse all failure logs
+const logFiles = fs.readdirSync('.claude/.artifacts')
+  .filter(f => f.startsWith('failure-logs-'));
+
+logFiles.forEach(file => {
+  const log = fs.readFileSync(`.claude/.artifacts/${file}`, 'utf8');
+
+  // Extract structured failure data
+  const failureMatches = log.matchAll(/FAIL (.+?):(\d+):(\d+)\n(.+?)\n(.+)/g);
+
+  for (const match of failureMatches) {
+    failures.push({
+      file: match[1],
+      line: parseInt(match[2]),
+      column: parseInt(match[3]),
+      testName: match[4],
+      errorMessage: match[5],
+      runId: file.match(/failure-logs-(\d+)/)[1]
+    });
+  }
+});
+
+fs.writeFileSync(
+  '.claude/.artifacts/parsed-failures.json',
+  JSON.stringify(failures, null, 2)
+);
+
+console.log(`✅ Parsed ${failures.length} failures`);
+EOF
+```
+
+**Validation Checkpoint**:
+- ✅ Failure data parsed and structured
+- ✅ All required fields present (file, line, testName, errorMessage)
+
+---
 
 ## Step 2: AI-Powered Analysis
 
@@ -362,6 +487,270 @@ npx claude-flow@alpha task wait --all --namespace "cicd/analysis"
 - ✅ All 7 agents completed analysis
 - ✅ Byzantine consensus achieved (5/7 agreement on root causes)
 - ✅ Synthesis report generated with confidence scores
+
+---
+
+## Step 3: Root Cause Detection
+
+**Objective**: Reverse engineer to find cascade issues and true root causes using graph analysis and Raft consensus.
+
+**Evidence-Based Techniques**: Graph algorithms, connascence analysis, Raft consensus
+
+### Phase 1: Parallel Cascade Graph Analysis
+
+**Multiple graph analysts for validation**
+
+```javascript
+[Single Message - Parallel Graph Analysis]:
+
+  Task("Failure Graph Analyst 1",
+    `Build failure dependency graph using graph algorithms:
+
+    Load: .claude/.artifacts/parsed-failures.json
+    Load: .claude/.artifacts/gemini-analysis.json (dependency context)
+
+    GRAPH CONSTRUCTION:
+    1. Nodes: Each failure is a node
+    2. Edges: Failure A → Failure B if:
+       - B's error message references A's file
+       - B's file imports A's file
+       - B's line number > A's line number in same file
+       - Gemini dependency graph shows A → B relationship
+
+    3. Apply graph algorithms:
+       - Topological sort to find root nodes (no incoming edges)
+       - Calculate cascade depth (max distance from root)
+       - Find strongly connected components (circular dependencies)
+
+    4. Identify root causes:
+       Root = node with 0 incoming edges OR
+       Root = node in cycle with most outgoing edges
+
+    OUTPUT:
+    {
+      graph: { nodes: [], edges: [] },
+      roots: [ /* root failure nodes */ ],
+      cascadeMap: { /* depth levels */ },
+      circularDeps: [ /* cycles detected */ ]
+    }
+
+    Store: .claude/.artifacts/failure-graph-1.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "graph-1"`,
+    "analyst")
+
+  Task("Failure Graph Analyst 2",
+    `Validate graph structure from Analyst 1:
+
+    Load: .claude/.artifacts/failure-graph-1.json
+    Load: .claude/.artifacts/analysis-synthesis.json (consensus data)
+
+    VALIDATION PROCESS:
+    1. Cross-check edges:
+       - Verify each edge using synthesis consensus
+       - Remove edges with low confidence (< 5/7 agreement)
+       - Add missing edges identified by consensus
+
+    2. Identify hidden cascades:
+       - Indirect cascades (A → B → C, but A → C not obvious)
+       - Time-based cascades (A fails first, causes B later)
+       - State-based cascades (A leaves bad state, B fails on it)
+
+    3. Validate root cause claims:
+       For each claimed root:
+       - Verify no hidden dependencies
+       - Check if truly primary or just first detected
+       - Use 5-Whys: "Why did this fail?" → repeat 5 times
+
+    OUTPUT:
+    {
+      validatedGraph: { /* corrected graph */ },
+      validatedRoots: [ /* confirmed roots */ ],
+      hiddenCascades: [ /* newly discovered */ ],
+      conflicts: [ /* disagreements with Analyst 1 */ ]
+    }
+
+    Store: .claude/.artifacts/failure-graph-2.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "graph-2"`,
+    "analyst")
+
+// Wait for graph analysis
+npx claude-flow@alpha task wait --namespace "cicd/graph-analysis"
+```
+
+### Phase 2: Connascence Analysis
+
+**Identify code coupling that affects fix strategy**
+
+```javascript
+[Single Message - Parallel Connascence Detection]:
+
+  Task("Connascence Detector (Name)",
+    `Scan for connascence of name: shared variable/function names causing failures.
+
+    Load root causes: .claude/.artifacts/failure-graph-2.json (validatedRoots)
+
+    For each root cause file:
+    1. Find all references to symbols (variables, functions, classes)
+    2. Identify which files import/use these symbols
+    3. Determine if failure requires changes across multiple files
+
+    Connascence of Name = When changing a name requires changing it everywhere
+
+    Impact on fixes:
+    - High connascence = Must fix all references atomically
+    - Low connascence = Can fix in isolation
+
+    Store: .claude/.artifacts/connascence-name.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "conn-name"`,
+    "code-analyzer")
+
+  Task("Connascence Detector (Type)",
+    `Scan for connascence of type: type dependencies causing failures.
+
+    Load root causes: .claude/.artifacts/failure-graph-2.json
+
+    For each root cause:
+    1. Identify type signatures (function params, return types)
+    2. Find all code that depends on these types
+    3. Check if failure requires type changes
+
+    Connascence of Type = When changing a type requires updating all users
+
+    TypeScript/Python type hints make this explicit:
+    - function foo(x: string) → changing to number affects all callers
+
+    Store: .claude/.artifacts/connascence-type.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "conn-type"`,
+    "code-analyzer")
+
+  Task("Connascence Detector (Algorithm)",
+    `Scan for connascence of algorithm: shared algorithms causing failures.
+
+    Load root causes: .claude/.artifacts/failure-graph-2.json
+
+    For each root cause:
+    1. Identify algorithmic dependencies:
+       - Shared validation logic
+       - Shared calculation methods
+       - Shared state management patterns
+
+    2. Find code using these algorithms
+    3. Determine if fix requires algorithm changes across multiple locations
+
+    Connascence of Algorithm = When multiple parts depend on same algorithm
+
+    Example: If authentication algorithm is wrong, must fix:
+    - Auth service
+    - Token validation
+    - Session management
+
+    Store: .claude/.artifacts/connascence-algorithm.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "conn-algorithm"`,
+    "code-analyzer")
+
+// Wait for connascence analysis
+npx claude-flow@alpha task wait --namespace "cicd/connascence"
+```
+
+### Phase 3: Raft Consensus on Root Causes
+
+**Leader-based consensus for final root cause list**
+
+```javascript
+[Single Message - Root Cause Consensus]:
+
+  Task("Root Cause Validator",
+    `Validate each identified root cause using 5-Whys methodology.
+
+    Load: .claude/.artifacts/failure-graph-2.json (validatedRoots)
+    Load: .claude/.artifacts/analysis-synthesis.json (consensus data)
+
+    For each root cause:
+    Apply 5-Whys:
+    1. Why did this test fail? → [answer]
+    2. Why did [answer] happen? → [deeper answer]
+    3. Why did [deeper answer] happen? → [deeper still]
+    4. Why did [deeper still] happen? → [approaching root]
+    5. Why did [approaching root] happen? → TRUE ROOT CAUSE
+
+    Validate:
+    - If 5-Whys reveals deeper cause, update root cause
+    - If already at true root, confirm
+    - Ensure not stopping at symptom
+
+    Store: .claude/.artifacts/root-cause-validation.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "root-validation"`,
+    "analyst")
+
+  Task("Root Cause Consensus Coordinator (Raft)",
+    `Use Raft consensus to generate final root cause list.
+
+    INPUTS:
+    - Graph Analyst 1: .claude/.artifacts/failure-graph-1.json
+    - Graph Analyst 2: .claude/.artifacts/failure-graph-2.json
+    - Root Cause Validator: .claude/.artifacts/root-cause-validation.json
+    - Connascence Detectors: .claude/.artifacts/connascence-*.json
+
+    RAFT CONSENSUS PROCESS:
+
+    1. Leader Election:
+       - Graph Analyst 2 is leader (most validated data)
+       - Analyst 1 and Validator are followers
+
+    2. Log Replication:
+       - Leader proposes root cause list
+       - Followers validate against their data
+       - Require majority agreement (2/3)
+
+    3. Conflict Resolution:
+       For disagreements:
+       - Leader's validated graph is authoritative
+       - But if Validator's 5-Whys reveals deeper cause, override
+       - If Analyst 1 found hidden cascade, add to list
+
+    4. Generate Final Root Cause List:
+       {
+         roots: [
+           {
+             failure: failure_object,
+             rootCause: "true root cause from 5-Whys",
+             cascadedFailures: [failure_ids],
+             connascenceContext: {
+               name: [affected_files],
+               type: [type_dependencies],
+               algorithm: [shared_algorithms]
+             },
+             fixComplexity: "simple" | "moderate" | "complex",
+             fixStrategy: "isolated" | "bundled" | "architectural"
+           }
+         ],
+         stats: {
+           totalFailures: number,
+           rootFailures: number,
+           cascadedFailures: number,
+           cascadeRatio: percentage
+         }
+       }
+
+    VALIDATION:
+    - All failures accounted for (either root or cascaded)
+    - Root causes have 5-Whys validation
+    - Connascence context complete for bundled fixes
+    - Fix strategies aligned with connascence analysis
+
+    Store: .claude/.artifacts/root-causes-consensus.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "root-consensus"`,
+    "raft-manager")
+```
+
+**Validation Checkpoint**:
+- ✅ Failure dependency graph validated by 2 analysts
+- ✅ Connascence analysis complete (name, type, algorithm)
+- ✅ Root causes validated with 5-Whys methodology
+- ✅ Raft consensus achieved on final root cause list
+- ✅ Fix strategies determined based on connascence context
+
+---
 
 ## Step 4: Intelligent Fixes
 
@@ -722,6 +1111,219 @@ EOF
 - ✅ Consensus approval for each fix
 - ✅ Approved fixes applied to codebase
 
+---
+
+## Step 5: Theater Detection Audit
+
+**Objective**: Validate that fixes are authentic improvements using 6-agent Byzantine consensus.
+
+**Evidence-Based Techniques**: Self-consistency (multiple theater detectors), Byzantine consensus
+
+### Load Loop 2 Theater Baseline
+
+```bash
+# Get theater baseline from Loop 2
+BASELINE=$(npx claude-flow@alpha memory query "loop2_theater_baseline" \
+  --namespace "integration/loop3-validation")
+
+echo "$BASELINE" > .claude/.artifacts/loop2-theater-baseline.json
+```
+
+### 6-Agent Theater Detection with Byzantine Consensus
+
+```javascript
+[Single Message - Parallel Theater Detection]:
+
+  // Theater Detection Specialists (Multiple Perspectives)
+  Task("Theater Detector (Code)",
+    `Scan for completion theater in fixed code:
+
+    COMPLETION THEATER PATTERNS:
+    - TODOs marked done but not implemented
+    - Empty functions returning success (return true;)
+    - Mock implementations in production code
+    - Commented-out functionality with "FIXED" comments
+    - Placeholder implementations (throw new Error('Not implemented'))
+
+    Scan all fixed files: $(ls .claude/.artifacts/fixes/*.patch | xargs -I {} basename {})
+
+    For each pattern found:
+    1. File location
+    2. Pattern type
+    3. Severity (critical/medium/low)
+    4. Evidence (code snippet)
+
+    Store: .claude/.artifacts/theater-code.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "theater-code"`,
+    "theater-detection-audit")
+
+  Task("Theater Detector (Tests)",
+    `Scan for test theater in test files:
+
+    TEST THEATER PATTERNS:
+    - Meaningless assertions (expect(1).toBe(1))
+    - Tests that don't test anything (empty test bodies)
+    - 100% mocked tests with no integration validation
+    - Tests that only test mocks, not real code
+    - Disabled tests without explanation (test.skip)
+    - Over-broad assertions (expect(result).toBeTruthy())
+
+    Scan test files modified in fixes
+
+    For each pattern:
+    1. Test name
+    2. Pattern type
+    3. Why it's theater
+    4. Evidence (test code)
+
+    Store: .claude/.artifacts/theater-tests.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "theater-tests"`,
+    "tester")
+
+  Task("Theater Detector (Docs)",
+    `Scan for documentation theater:
+
+    DOC THEATER PATTERNS:
+    - Docs that don't match code (incorrect)
+    - Copied templates without customization
+    - Placeholder text (Lorem ipsum, TODO, TBD)
+    - Documentation claiming features not implemented
+    - Outdated examples that don't work
+
+    Scan documentation files modified in fixes
+
+    For each pattern:
+    1. Doc file
+    2. Pattern type
+    3. Why it's theater
+    4. Evidence (doc snippet vs code reality)
+
+    Store: .claude/.artifacts/theater-docs.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "theater-docs"`,
+    "docs-writer")
+
+  // Reality Validation Agents
+  Task("Sandbox Execution Validator",
+    `Execute code in isolated sandbox to verify it actually runs.
+
+    REALITY VALIDATION:
+    1. Create fresh sandbox
+    2. Deploy all fixes
+    3. Run with realistic inputs (not trivial examples)
+    4. Test edge cases, error cases, invalid inputs
+    5. Verify outputs are correct, not just "truthy"
+
+    If code throws unhandled errors → NOT REAL
+    If outputs are wrong → NOT REAL
+    If only works with perfect inputs → NOT REAL
+
+    Store: .claude/.artifacts/sandbox-reality-check.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "sandbox-reality"`,
+    "functionality-audit")
+
+  Task("Integration Reality Checker",
+    `Deploy to integration sandbox and run end-to-end flows.
+
+    INTEGRATION REALITY:
+    1. Deploy full stack with fixes
+    2. Run end-to-end user workflows
+    3. Verify database interactions work
+    4. Check API contracts are satisfied
+    5. Test cross-service communication
+
+    If integration breaks → NOT REAL
+    If only unit tests pass → SUSPICIOUS
+    If E2E flows fail → NOT REAL
+
+    Store: .claude/.artifacts/integration-reality-check.json
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "integration-reality"`,
+    "production-validator")
+
+  // Wait for all 5 detectors
+  npx claude-flow@alpha task wait --namespace "cicd/theater-detection"
+
+  // Byzantine Consensus Coordinator
+  Task("Theater Consensus Coordinator",
+    `Use Byzantine consensus among 5 detection agents to generate consolidated theater report.
+
+    INPUTS:
+    - Code Theater: .claude/.artifacts/theater-code.json
+    - Test Theater: .claude/.artifacts/theater-tests.json
+    - Doc Theater: .claude/.artifacts/theater-docs.json
+    - Sandbox Reality: .claude/.artifacts/sandbox-reality-check.json
+    - Integration Reality: .claude/.artifacts/integration-reality-check.json
+    - Loop 2 Baseline: .claude/.artifacts/loop2-theater-baseline.json
+
+    BYZANTINE CONSENSUS:
+
+    For each theater claim:
+    1. Count agent agreement (need 4/5 for consensus)
+    2. Weight by severity (critical requires 5/5)
+    3. Flag conflicts for manual review
+
+    Theater Instance = TRUE if:
+    - 4/5 agents agree it's theater
+    - OR 3/5 agents agree AND it's critical severity
+
+    No False Positives:
+    - If only 2/5 agree, mark as "disputed"
+    - If reality checkers PASS, override theater claims (code works)
+
+    Differential Analysis:
+    Compare to Loop 2 baseline:
+    - Theater instances removed: POSITIVE
+    - Theater instances added: NEGATIVE (FAIL)
+    - Theater level same: NEUTRAL (PASS)
+
+    FINAL VERDICT:
+    - PASS if: no new theater OR theater reduced
+    - FAIL if: theater increased
+
+    OUTPUT (Consensus Report):
+    {
+      theaterDetected: [
+        {
+          type: "completion" | "test" | "doc",
+          location: "file:line",
+          pattern: "description",
+          consensus: 5/5 or 4/5,
+          severity: "critical" | "medium" | "low"
+        }
+      ],
+      realityChecks: {
+        sandbox: "PASS" | "FAIL",
+        integration: "PASS" | "FAIL"
+      },
+      baselineComparison: {
+        loop2Theater: number,
+        loop3Theater: number,
+        delta: number,
+        improvement: true/false
+      },
+      verdict: "PASS" | "FAIL",
+      reasoning: "detailed explanation"
+    }
+
+    Store: .claude/.artifacts/theater-consensus-report.json
+
+    IF verdict = FAIL:
+      echo "❌ THEATER AUDIT FAILED: New theater introduced!"
+      exit 1
+    ELSE:
+      echo "✅ THEATER AUDIT PASSED: No new theater detected"
+
+    Use hooks: npx claude-flow@alpha hooks post-task --task-id "theater-consensus"`,
+    "byzantine-coordinator")
+```
+
+**Validation Checkpoint**:
+- ✅ 5 theater detection agents completed scans
+- ✅ Byzantine consensus achieved (4/5 agreement on theater instances)
+- ✅ Differential analysis vs Loop 2 baseline complete
+- ✅ Verdict: PASS (no new theater introduced)
+
+---
+
 ## Step 6: Sandbox Validation
 
 **Objective**: Test all changes in isolated production-like environments before deployment.
@@ -820,6 +1422,120 @@ npx claude-flow@alpha sandbox delete --sandbox-id "$SANDBOX_ID"
 - ✅ Fixed code deployed successfully
 - ✅ All test suites passed (unit, integration, E2E)
 - ✅ 100% test success rate achieved
+
+---
+
+## Step 7: Differential Analysis
+
+**Objective**: Compare sandbox results to original failure reports with comprehensive metrics.
+
+### Generate Comparison Report
+
+```bash
+node <<'EOF'
+const fs = require('fs');
+
+const original = JSON.parse(fs.readFileSync('.claude/.artifacts/parsed-failures.json', 'utf8'));
+const sandboxLog = fs.readFileSync('.claude/.artifacts/sandbox-test-results.log', 'utf8');
+const successMetrics = JSON.parse(fs.readFileSync('.claude/.artifacts/sandbox-success-metrics.json', 'utf8'));
+
+// Parse sandbox results
+const sandboxFailures = [];
+const failureMatches = sandboxLog.matchAll(/FAIL (.+?):(\d+):(\d+)\n(.+?)\n(.+)/g);
+for (const match of failureMatches) {
+  sandboxFailures.push({
+    file: match[1],
+    line: parseInt(match[2]),
+    testName: match[4]
+  });
+}
+
+// Build comparison
+const comparison = {
+  before: {
+    totalTests: original.length,
+    failedTests: original.length,
+    passRate: 0
+  },
+  after: {
+    totalTests: successMetrics.total,
+    failedTests: sandboxFailures.length,
+    passedTests: successMetrics.passed,
+    passRate: successMetrics.successRate
+  },
+  improvements: {
+    testsFixed: original.length - sandboxFailures.length,
+    percentageImprovement: ((original.length - sandboxFailures.length) / original.length * 100).toFixed(2)
+  },
+  breakdown: original.map(failure => {
+    const fixed = !sandboxFailures.some(f =>
+      f.file === failure.file && f.testName === failure.testName
+    );
+
+    // Find fix strategy for this failure
+    const fixFiles = fs.readdirSync('.claude/.artifacts')
+      .filter(f => f.startsWith('fix-impl-') && f.includes(failure.testName.replace(/\s+/g, '-')));
+
+    let fixStrategy = null;
+    if (fixFiles.length > 0) {
+      const fixImpl = JSON.parse(fs.readFileSync(`.claude/.artifacts/${fixFiles[0]}`, 'utf8'));
+      fixStrategy = fixImpl.changes.map(c => c.what).join('; ');
+    }
+
+    return {
+      test: failure.testName,
+      file: failure.file,
+      status: fixed ? 'FIXED' : 'STILL_FAILING',
+      fixStrategy: fixed ? fixStrategy : null
+    };
+  })
+};
+
+fs.writeFileSync(
+  '.claude/.artifacts/differential-analysis.json',
+  JSON.stringify(comparison, null, 2)
+);
+
+// Generate human-readable report
+const report = `# Differential Analysis Report
+
+## Before Fixes
+- Total Tests: ${comparison.before.totalTests}
+- Failed Tests: ${comparison.before.failedTests}
+- Pass Rate: ${comparison.before.passRate}%
+
+## After Fixes
+- Total Tests: ${comparison.after.totalTests}
+- Failed Tests: ${comparison.after.failedTests}
+- Pass Rate: ${comparison.after.passRate}%
+
+## Improvements
+- Tests Fixed: ${comparison.improvements.testsFixed}
+- Improvement: ${comparison.improvements.percentageImprovement}%
+
+## Breakdown
+
+${comparison.breakdown.map(b => `### ${b.status}: ${b.test}
+- File: ${b.file}
+${b.fixStrategy ? `- Fix Strategy: ${b.fixStrategy}` : ''}
+`).join('\n')}
+`;
+
+fs.writeFileSync('docs/loop3-differential-report.md', report);
+
+console.log('✅ Differential analysis complete');
+console.log(`   Pass rate: ${comparison.before.passRate}% → ${comparison.after.passRate}%`);
+console.log(`   Tests fixed: ${comparison.improvements.testsFixed}`);
+EOF
+```
+
+**Validation Checkpoint**:
+- ✅ Comparison report generated with before/after metrics
+- ✅ Improvement percentage calculated
+- ✅ Per-test breakdown with fix strategies documented
+- ✅ Human-readable report created in docs/
+
+---
 
 ## Step 8: GitHub Feedback
 
@@ -1074,6 +1790,134 @@ echo "✅ Loop 3 results stored in cross-loop memory"
 - ✅ Failure patterns generated for Loop 1
 - ✅ Cross-loop memory updated
 
+---
+
+## SOP Phase 5: Knowledge Package
+
+**Objective**: Generate comprehensive knowledge package for future iterations and continuous improvement.
+
+### Generate Loop 3 Delivery Package
+
+```bash
+node <<'EOF'
+const fs = require('fs');
+
+const testsFixed = JSON.parse(fs.readFileSync('.claude/.artifacts/differential-analysis.json', 'utf8')).improvements.testsFixed;
+const rootCauses = JSON.parse(fs.readFileSync('.claude/.artifacts/root-causes-consensus.json', 'utf8')).stats.rootFailures;
+const cascade = JSON.parse(fs.readFileSync('.claude/.artifacts/root-causes-consensus.json', 'utf8')).stats.cascadedFailures;
+
+const deliveryPackage = {
+  metadata: {
+    loop: 3,
+    phase: 'cicd-quality-debugging',
+    version: '2.0.0',
+    timestamp: new Date().toISOString(),
+    feedsTo: 'research-driven-planning (next iteration)'
+  },
+  quality: {
+    testSuccess: '100%',
+    failuresFixed: testsFixed,
+    rootCausesResolved: rootCauses,
+    cascadeFailuresPrevented: cascade
+  },
+  analysis: {
+    failurePatterns: JSON.parse(fs.readFileSync('.claude/.artifacts/loop3-failure-patterns.json', 'utf8')),
+    rootCauses: JSON.parse(fs.readFileSync('.claude/.artifacts/root-causes-consensus.json', 'utf8')),
+    connascenceContext: JSON.parse(fs.readFileSync('.claude/.artifacts/connascence-name.json', 'utf8'))
+  },
+  validation: {
+    theaterAudit: 'PASSED',
+    theaterConsensus: '6-agent Byzantine (4/5 agreement)',
+    sandboxTests: '100% success',
+    differentialAnalysis: JSON.parse(fs.readFileSync('.claude/.artifacts/differential-analysis.json', 'utf8'))
+  },
+  techniques: {
+    geminiAnalysis: 'Large-context (2M token) codebase analysis',
+    byzantineConsensus: '7-agent analysis (5/7 agreement required)',
+    raftConsensus: 'Root cause validation with Raft protocol',
+    programOfThought: 'Plan → Execute → Validate → Approve',
+    selfConsistency: 'Dual validation (sandbox + theater)'
+  },
+  feedback: {
+    toLoop1: {
+      failurePatterns: 'Stored in integration/loop3-feedback',
+      premortemEnhancements: 'Historical failure data for future risk analysis',
+      planningLessons: 'Architectural insights from failures',
+      questions: JSON.parse(fs.readFileSync('.claude/.artifacts/loop3-failure-patterns.json', 'utf8')).recommendations.planning.questions
+    }
+  },
+  integrationPoints: {
+    receivedFrom: 'parallel-swarm-implementation',
+    feedsTo: 'research-driven-planning',
+    memoryNamespaces: ['integration/loop3-feedback', 'integration/loop-complete']
+  }
+};
+
+fs.writeFileSync(
+  '.claude/.artifacts/loop3-delivery-package.json',
+  JSON.stringify(deliveryPackage, null, 2)
+);
+
+console.log('✅ Loop 3 delivery package created');
+EOF
+```
+
+### Generate Final Report
+
+```markdown
+# Loop 3: CI/CD Quality & Debugging - Complete
+
+## Quality Validation
+- **Test Success Rate**: 100% (${TESTS_FIXED} tests)
+- **Failures Fixed**: ${TESTS_FIXED} (100% resolution)
+- **Root Causes Resolved**: ${ROOT_CAUSES}
+- **Theater Audit**: PASSED (6-agent Byzantine consensus, authentic improvements)
+
+## Evidence-Based Techniques Applied
+- ✅ **Gemini Large-Context Analysis**: 2M token window for full codebase context
+- ✅ **Byzantine Consensus**: 7-agent analysis with 5/7 agreement requirement
+- ✅ **Raft Consensus**: Root cause validation with leader-based coordination
+- ✅ **Program-of-Thought**: Plan → Execute → Validate → Approve structure
+- ✅ **Self-Consistency**: Dual validation (sandbox + theater) for all fixes
+
+## Intelligent Fixes
+- **Connascence-Aware**: Context bundling applied for atomic changes
+- **Cascade Prevention**: ${CASCADE} secondary failures prevented
+- **Sandbox Validation**: 100% success in production-like environment
+- **Theater-Free**: No false improvements, authentic quality only
+
+## Differential Analysis
+- **Before**: 0% pass rate
+- **After**: 100% pass rate
+- **Improvement**: ${IMPROVEMENT}% increase
+- **Tests Fixed**: ${TESTS_FIXED}
+
+## Loop Integration
+✅ Loop 1: Planning (research-driven-planning) - Received failure patterns
+✅ Loop 2: Implementation (parallel-swarm-implementation) - Validated deliverables
+✅ Loop 3: CI/CD Quality (cicd-intelligent-recovery) - Complete
+
+## Continuous Improvement
+Failure patterns stored for next Loop 1 iteration:
+- Planning lessons: Architectural insights from real failures
+- Pre-mortem enhancements: Historical data for risk analysis
+- Testing strategies: Coverage gaps identified
+- Pre-mortem questions: Derived from actual failure patterns
+
+## Artifacts
+- Delivery Package: `.claude/.artifacts/loop3-delivery-package.json`
+- Failure Patterns: `.claude/.artifacts/loop3-failure-patterns.json`
+- Differential Report: `docs/loop3-differential-report.md`
+- Theater Consensus: `.claude/.artifacts/theater-consensus-report.json`
+- GitHub PR: [Link to PR]
+
+🤖 Three-Loop System Complete - Ready for Production
+```
+
+**Output**: Complete knowledge package with failure patterns for Loop 1 continuous improvement
+
+---
+
 ## Performance Metrics
 
 ### Quality Achievements
@@ -1094,6 +1938,67 @@ echo "✅ Loop 3 results stored in cross-loop memory"
 - **Program-of-Thought**: 20-35% fix quality improvement (structured reasoning)
 - **Gemini Large-Context**: 40-60% analysis depth improvement (2M token window)
 
+---
+
+## Troubleshooting
+
+### Sandbox Tests Fail Despite Local Success
+
+**Symptom**: Tests pass locally but fail in sandbox
+**Fix**:
+```bash
+# Check environment differences
+diff <(env | sort) <(npx claude-flow@alpha sandbox execute --sandbox-id "$SANDBOX_ID" --code "env | sort")
+
+# Add missing env vars
+npx claude-flow@alpha sandbox configure \
+  --sandbox-id "$SANDBOX_ID" \
+  --env-vars "$MISSING_VARS"
+```
+
+### Root Cause Detection Misses Primary Issue
+
+**Symptom**: Fixes don't resolve all failures
+**Fix**:
+```bash
+# Re-run analysis with deeper context
+/gemini:impact "deep analysis: $(cat .claude/.artifacts/parsed-failures.json)" \
+  --context "full-codebase" \
+  --depth "maximum"
+
+# Re-run graph analysis with more analysts
+# Add third graph analyst for tie-breaking
+```
+
+### GitHub Hooks Not Triggering
+
+**Symptom**: Loop 3 doesn't receive CI/CD notifications
+**Fix**:
+```bash
+# Verify webhook configuration
+gh api repos/{owner}/{repo}/hooks | jq '.[] | select(.config.url | contains("localhost"))'
+
+# Re-configure with ngrok or public URL
+ngrok http 3000
+gh api repos/{owner}/{repo}/hooks/{hook_id} -X PATCH \
+  -f config[url]="https://{ngrok-url}/hooks/github"
+```
+
+### Byzantine Consensus Fails to Reach Agreement
+
+**Symptom**: Analysis agents disagree, consensus blocked
+**Fix**:
+```bash
+# Lower consensus threshold temporarily (5/7 → 4/7)
+# Review disagreements manually
+cat .claude/.artifacts/analysis-synthesis.json | jq '.conflicts'
+
+# Add tiebreaker agent
+Task("Tiebreaker Analyst", "Review conflicts and make final decision", "analyst")
+```
+
+---
+
 ## Success Criteria
 
 Loop 3 is successful when:
@@ -1107,11 +2012,54 @@ Loop 3 is successful when:
 - ✅ Memory namespaces populated with complete data
 - ✅ Evidence-based techniques applied (Gemini, Byzantine, Raft, Program-of-Thought, Self-Consistency)
 
+---
+
+## Related Skills
+
+- `research-driven-planning` - Loop 1: Planning (receives Loop 3 feedback)
+- `parallel-swarm-implementation` - Loop 2: Implementation (provides input to Loop 3)
+- `functionality-audit` - Standalone execution testing
+- `theater-detection-audit` - Standalone theater detection
+
+---
+
 **Status**: Production Ready ✅
 **Version**: 2.0.0
 **Loop Position**: 3 of 3 (CI/CD Quality)
 **Integration**: Receives from Loop 2, Feeds Loop 1 (next iteration)
 **Optimization**: Evidence-based prompting with explicit agent SOPs
+---
+
+## Core Principles
+
+CI/CD Intelligent Recovery operates on 3 fundamental principles:
+
+### Principle 1: Failure Isolation Through Root Cause Graphs
+Treat test failures as symptoms, not root causes. Use dependency graph analysis to distinguish cascade failures from genuine root issues.
+
+In practice:
+- Build failure dependency graphs before any fix attempts
+- Apply 5-Whys methodology to reach true root causes, not surface-level errors
+- Prioritize root failures that unblock cascaded failures (fix 1 root = resolve 5 cascades)
+
+### Principle 2: Evidence-Based Consensus Over Individual Agent Opinions
+Byzantine consensus (5/7 agent agreement) prevents false positives and ensures fix quality through distributed validation.
+
+In practice:
+- Spawn 7 parallel analysis agents for cross-validation on every root cause
+- Require 5/7 agreement threshold before accepting root cause claims
+- Weight agent confidence scores in consensus calculation to prioritize high-certainty findings
+
+### Principle 3: Theater Detection as Quality Gate
+Passing tests mean nothing if fixes mask problems instead of solving them. Theater detection ensures authentic improvements.
+
+In practice:
+- Run dual validation (sandbox execution + theater audit) on every fix
+- Reject fixes that introduce new theater patterns even if tests pass
+- Compare against Loop 2 baseline to catch theater regression
+
+---
+
 ## Common Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |

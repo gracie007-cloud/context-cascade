@@ -1,6 +1,7 @@
 ---
 name: frontend-specialists
 description: Comprehensive frontend development system with specialist agents for React, Vue, UI components, CSS styling, accessibility, and performance optimization. Use when building modern web applications, component libraries, or optimizing frontend performance. Includes production-ready scripts, templates, and testing utilities.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Frontend Specialists
@@ -435,6 +436,15 @@ npm run test -- --coverage
 - [Bundle Analyzer Script](./resources/scripts/bundle-analyzer.js)
 - [Accessibility Checker Script](./resources/scripts/a11y-checker.js)
 - [Performance Profiler Script](./resources/scripts/performance-profiler.js)
+
+---
+
+**Skill Version**: 2.0.0 (Gold Tier)
+**Last Updated**: 2025-11-02
+**Maintained By**: Frontend Specialists Team
+**Agent Coordination**: `react-developer`, `vue-developer`, `ui-component-builder`, `css-styling-specialist`, `accessibility-specialist`, `frontend-performance-optimizer`
+
+---
 
 ## Core Principles
 

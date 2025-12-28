@@ -1,6 +1,7 @@
 ---
 name: stream-chain
 description: Stream-JSON chaining for multi-agent pipelines, data transformation, and sequential workflows
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -59,6 +60,27 @@ Stream-Chain provides two powerful modes for orchestrating multi-agent workflows
 2. **Predefined Pipelines** (`pipeline`): Use battle-tested workflows for common tasks
 
 Each step in a chain receives the complete output from the previous step, enabling sophisticated multi-agent coordination through streaming data flow.
+
+---
+
+## Quick Start
+
+### Run a Custom Chain
+
+```bash
+claude-flow stream-chain run \
+  "Analyze codebase structure" \
+  "Identify improvement areas" \
+  "Generate action plan"
+```
+
+### Execute a Pipeline
+
+```bash
+claude-flow stream-chain pipeline analysis
+```
+
+---
 
 ## Custom Chains (`run`)
 
@@ -148,7 +170,100 @@ claude-flow stream-chain run \
   "Generate data quality report"
 ```
 
------|-------------|---------|
+---
+
+## Predefined Pipelines (`pipeline`)
+
+Execute battle-tested workflows optimized for common development tasks.
+
+### Syntax
+
+```bash
+claude-flow stream-chain pipeline <type> [options]
+```
+
+### Available Pipelines
+
+#### 1. Analysis Pipeline
+
+Comprehensive codebase analysis and improvement identification.
+
+```bash
+claude-flow stream-chain pipeline analysis
+```
+
+**Workflow Steps:**
+1. **Structure Analysis**: Map directory structure and identify components
+2. **Issue Detection**: Find potential improvements and problems
+3. **Recommendations**: Generate actionable improvement report
+
+**Use Cases:**
+- New codebase onboarding
+- Technical debt assessment
+- Architecture review
+- Code quality audits
+
+#### 2. Refactor Pipeline
+
+Systematic code refactoring with prioritization.
+
+```bash
+claude-flow stream-chain pipeline refactor
+```
+
+**Workflow Steps:**
+1. **Candidate Identification**: Find code needing refactoring
+2. **Prioritization**: Create ranked refactoring plan
+3. **Implementation**: Provide refactored code for top priorities
+
+**Use Cases:**
+- Technical debt reduction
+- Code quality improvement
+- Legacy code modernization
+- Design pattern implementation
+
+#### 3. Test Pipeline
+
+Comprehensive test generation with coverage analysis.
+
+```bash
+claude-flow stream-chain pipeline test
+```
+
+**Workflow Steps:**
+1. **Coverage Analysis**: Identify areas lacking tests
+2. **Test Design**: Create test cases for critical functions
+3. **Implementation**: Generate unit tests with assertions
+
+**Use Cases:**
+- Increasing test coverage
+- TDD workflow support
+- Regression test creation
+- Quality assurance
+
+#### 4. Optimize Pipeline
+
+Performance optimization with profiling and implementation.
+
+```bash
+claude-flow stream-chain pipeline optimize
+```
+
+**Workflow Steps:**
+1. **Profiling**: Identify performance bottlenecks
+2. **Strategy**: Analyze and suggest optimization approaches
+3. **Implementation**: Provide optimized code
+
+**Use Cases:**
+- Performance improvement
+- Resource optimization
+- Scalability enhancement
+- Latency reduction
+
+### Pipeline Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
 | `--verbose` | Show detailed execution | `false` |
 | `--timeout <seconds>` | Timeout per step | `30` |
 | `--debug` | Enable debug mode | `false` |
@@ -187,6 +302,52 @@ Each pipeline execution provides:
 - **Results**: Success/failure per step
 - **Timing**: Total and per-step execution time
 - **Summary**: Consolidated results and recommendations
+
+---
+
+## Custom Pipeline Definitions
+
+Define reusable pipelines in `.claude-flow/config.json`:
+
+### Configuration Format
+
+```json
+{
+  "streamChain": {
+    "pipelines": {
+      "security": {
+        "name": "Security Audit Pipeline",
+        "description": "Comprehensive security analysis",
+        "prompts": [
+          "Scan codebase for security vulnerabilities",
+          "Categorize issues by severity (critical/high/medium/low)",
+          "Generate fixes with priority and implementation steps",
+          "Create security test suite"
+        ],
+        "timeout": 45
+      },
+      "documentation": {
+        "name": "Documentation Generation Pipeline",
+        "prompts": [
+          "Analyze code structure and identify undocumented areas",
+          "Generate API documentation with examples",
+          "Create usage guides and tutorials",
+          "Build architecture diagrams and flow charts"
+        ]
+      }
+    }
+  }
+}
+```
+
+### Execute Custom Pipeline
+
+```bash
+claude-flow stream-chain pipeline security
+claude-flow stream-chain pipeline documentation
+```
+
+---
 
 ## Advanced Use Cases
 
@@ -241,6 +402,63 @@ claude-flow stream-chain pipeline test
 claude-flow stream-chain pipeline optimize
 ```
 
+---
+
+## Best Practices
+
+### 1. Clear and Specific Prompts
+
+**Good:**
+```bash
+"Analyze authentication.js for SQL injection vulnerabilities"
+```
+
+**Avoid:**
+```bash
+"Check security"
+```
+
+### 2. Logical Progression
+
+Order prompts to build on previous outputs:
+```bash
+1. "Identify the problem"
+2. "Analyze root causes"
+3. "Design solution"
+4. "Implement solution"
+5. "Verify implementation"
+```
+
+### 3. Appropriate Timeouts
+
+- Simple tasks: 30 seconds (default)
+- Analysis tasks: 45-60 seconds
+- Implementation tasks: 60-90 seconds
+- Complex workflows: 90-120 seconds
+
+### 4. Verification Steps
+
+Include validation in your chains:
+```bash
+claude-flow stream-chain run \
+  "Implement feature X" \
+  "Write tests for feature X" \
+  "Verify tests pass and cover edge cases"
+```
+
+### 5. Iterative Refinement
+
+Use chains for iterative improvement:
+```bash
+claude-flow stream-chain run \
+  "Generate initial implementation" \
+  "Review and identify issues" \
+  "Refine based on issues found" \
+  "Final quality check"
+```
+
+---
+
 ## Integration with Claude Flow
 
 ### Combine with Swarm Coordination
@@ -282,12 +500,54 @@ claude-flow stream-chain pipeline optimize --debug
 # Patterns learned and stored for future optimizations
 ```
 
+---
+
+## Troubleshooting
+
+### Chain Timeout
+
+If steps timeout, increase timeout value:
+
+```bash
+claude-flow stream-chain run "complex task" --timeout 120
+```
+
+### Context Loss
+
+If context not flowing properly, use `--debug`:
+
+```bash
+claude-flow stream-chain run "step 1" "step 2" --debug
+```
+
+### Pipeline Not Found
+
+Verify pipeline name and custom definitions:
+
+```bash
+# Check available pipelines
+cat .claude-flow/config.json | grep -A 10 "streamChain"
+```
+
+---
+
 ## Performance Characteristics
 
 - **Throughput**: 2-5 steps per minute (varies by complexity)
 - **Context Size**: Up to 100K tokens per step
 - **Memory Usage**: ~50MB per active chain
 - **Concurrency**: Supports parallel chain execution
+
+---
+
+## Related Skills
+
+- **SPARC Methodology**: Systematic development workflow
+- **Swarm Coordination**: Multi-agent orchestration
+- **Memory Management**: Persistent context storage
+- **Neural Patterns**: Adaptive learning
+
+---
 
 ## Examples Repository
 
@@ -330,7 +590,12 @@ claude-flow stream-chain run \
   "Provide updated code examples"
 ```
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Circular Dependencies** | Step 3 depends on Step 5's output, creating deadlock. Chain execution requires strict DAG (directed acyclic graph). | Design chains as unidirectional flows. If bidirectional refinement needed, use multiple chains or explicit iteration loops with termination conditions. |
 | **Context Explosion** | Each step adds 50KB+ of output, causing later steps to hit token limits and lose early context. | Use summarization steps between major phases. Compress verbose outputs into key findings before passing to next step. Consider splitting into multiple chains with cross-chain memory storage. |
 | **Premature Parallelization** | Converting sequential chain into parallel execution loses the context flow that makes chains valuable. | If tasks are truly independent, use swarm coordination instead. Chains are for dependent tasks where output N feeds input N+1. Parallelization destroys this dependency graph. |
@@ -346,6 +611,21 @@ Stream-Chain enables sophisticated multi-step workflows by:
 - **Data Transformation**: Complex processing through simple steps
 
 Use `run` for custom workflows and `pipeline` for battle-tested solutions.
+---
+
+## Core Principles
+
+### 1. Context Continuity
+Every step receives the complete output from all previous steps, creating an unbroken chain of context. This eliminates information loss and enables each agent to build upon prior work without requiring external state management. The chain itself is the state.
+
+### 2. Progressive Refinement
+Tasks flow from broad to specific - research leads to design, design leads to implementation, implementation leads to validation. Each step narrows scope and increases precision. This natural progression prevents premature optimization and ensures decisions are informed by prior analysis.
+
+### 3. Agent Specialization Through Sequencing
+Rather than creating generalist agents, stream chains leverage specialist agents in sequence. A researcher finds information, an architect designs solutions, a coder implements, a tester validates. Sequential execution turns specialist outputs into integrated solutions without requiring any single agent to master all domains.
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Why It Fails | Correct Approach |

@@ -1,6 +1,7 @@
 ---
 name: when-mapping-dependencies-use-dependency-mapper
 description: Comprehensive dependency mapping, analysis, and visualization tool for software projects
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Dependency Mapper Skill

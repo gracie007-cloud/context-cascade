@@ -1,18 +1,7 @@
 ---
 name: playbook-architect
-description: Comprehensive framework for creating, analyzing, and optimizing playbooks
-  that orchestrate skill sequences. Use when creating new playbooks, improving existing
-  playbook workflows, or applying evidence-based orchestration patterns. Applies
-  7-dimensional playbook analysis, dependency optimization, and parallelization strategies
-  to transform playbooks into highly effective orchestration sequences.
-version: 1.0.0
-category: foundry
-tags:
-- foundry
-- creation
-- meta-tools
-- orchestration
-author: ruv
+description: Comprehensive framework for creating, analyzing, and optimizing playbooks that orchestrate skill sequences. Use when creating new playbooks, improving existing playbook workflows, or applying evidence-based orchestration patterns. Applies 7-dimensional playbook analysis, dependency optimization, and parallelization strategies to transform playbooks into highly effective orchestration sequences.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->

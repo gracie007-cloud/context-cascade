@@ -1,0 +1,20 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 2.1.0
+author: System
+created: 2025-11-18
+category: orchestration
+keywords: agent selection, registry, semantic search, task matching, capability matching
+dependencies:
+  - Memory MCP (vector search)
+  - Agent registry (claude-code-plugins/ruv-sparc-three-loop-system/agents/)
+agents:
+  - name: agent-selector
+  - role: Analyzes task requirements and selects optimal agent from registry
+  - type: coordinator
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\foundry\agent-selector
+  category: foundry
+  migrated_at: 2025-12-28T15:56:24.370Z
+  version: 2.0.0

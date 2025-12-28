@@ -1,6 +1,7 @@
 ---
 name: machine-learning
 description: Comprehensive machine learning development with training, evaluation, and deployment capabilities. Use when training models, developing ML pipelines, or deploying machine learning systems.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -138,6 +139,41 @@ pytest tests/
 - GPU acceleration for training and inference
 - Automated hyperparameter tuning with Optuna
 - Model versioning and experiment tracking with MLflow
+---
+
+## Core Principles
+
+Machine Learning Development operates on 3 fundamental principles:
+
+### Principle 1: Reproducibility Through Determinism
+Every training run must be reproducible via fixed random seeds, version-locked dependencies, and containerized environments to enable scientific validation.
+
+In practice:
+- Set random seeds for PyTorch, NumPy, and Python at training initialization
+- Lock dependency versions in requirements.txt with exact versions (==, not >=)
+- Use Docker containers with pinned base images for training environments
+- Version datasets with DVC to ensure identical train/validation/test splits
+
+### Principle 2: Multi-Metric Holistic Evaluation
+Model quality cannot be reduced to single metrics; accuracy, fairness, robustness, efficiency, interpretability, and safety must all be evaluated.
+
+In practice:
+- Track accuracy metrics (precision, recall, F1) alongside fairness metrics (demographic parity, equalized odds)
+- Measure robustness via adversarial attacks and out-of-distribution detection
+- Monitor efficiency (inference latency, model size, FLOPS) for deployment feasibility
+- Assess interpretability through feature importance, saliency maps, or SHAP values
+
+### Principle 3: Deployment-Aware Training
+Models must be trained with deployment constraints in mind - target latency, memory footprint, and inference hardware determine architecture choices.
+
+In practice:
+- Profile inference latency on target hardware (CPU, GPU, TPU, mobile) early in development
+- Apply model compression (quantization, pruning, distillation) before final training
+- Design architectures compatible with deployment frameworks (ONNX, TensorRT, CoreML)
+- Monitor resource usage during training to predict deployment costs
+
+---
+
 ## Common Anti-Patterns
 
 | Anti-Pattern | Problem | Solution |

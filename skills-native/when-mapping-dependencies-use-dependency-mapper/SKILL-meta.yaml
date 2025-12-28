@@ -1,0 +1,30 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+author: Claude Code
+category: analysis
+complexity: MEDIUM
+tags:
+  - dependencies
+  - graph-analysis
+  - security
+  - visualization
+  - mece
+agents:
+  - code-analyzer
+  - researcher
+  - security-manager
+components:
+  - subagent
+  - slash-command
+  - mcp-tool
+dependencies:
+  - claude-flow@alpha
+  - graphviz (optional)
+  - npm/pip/cargo (auto-detected)
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\when-mapping-dependencies-use-dependency-mapper
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.272Z
+  version: 2.0.0

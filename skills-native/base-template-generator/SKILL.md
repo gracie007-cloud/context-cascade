@@ -1,6 +1,7 @@
 ---
 name: base-template-generator
 description: Generate clean, production-ready boilerplate templates for Node.js, Python, Go, React, Vue, and other frameworks. Use when starting new projects or creating consistent foundational code structures. Provides modern best practices with minimal dependencies. Gold tier with automated scripts, validation tools, and Docker/CI/CD support.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->

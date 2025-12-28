@@ -1,6 +1,7 @@
 ---
 name: cascade-orchestrator
 description: Creates sophisticated workflow cascades coordinating multiple micro-skills with sequential pipelines, parallel execution, conditional branching, and Codex sandbox iteration. Enhanced with multi-model routing (Gemini/Codex), ruv-swarm coordination, memory persistence, and audit-pipeline patterns for production workflows.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Aspektual'naya Ramka Orkestratsii (Workflow State Tracking)
@@ -768,7 +769,59 @@ stages:
 - GitHub PR/issue integration
 - Performance monitoring and optimization
 
------------|---------|----------|
+---
+
+**Version 2.1 Enhancements**:
+- Aspectual cognitive framing for workflow state tracking
+- Hierarchical cognitive framing for phase/stage/task organization
+- State transition visualization (SV/NSV/BLOCKED/PARALLEL/FAILED/PENDING)
+- Agent state tracking (IDLE/WORKING/WAITING/DONE/ERROR)
+- 5-level hierarchy (WORKFLOW > PHASE > STAGE > TASK > SUBTASK)
+- Dependency visualization with state annotations
+
+**Version 2.0 Enhancements**:
+- Codex sandbox iteration pattern
+- Multi-model intelligent routing
+- Ruv-swarm MCP integration
+- Memory persistence
+- GitHub workflow automation
+- Enhanced error recovery
+## Core Principles
+
+Cascade Orchestrator operates on 3 fundamental principles:
+
+### Principle 1: Composable Excellence Through Separation of Concerns
+Complex workflows emerge from composing simple, well-defined micro-skills rather than building monolithic implementations.
+
+In practice:
+- Each stage in a cascade executes ONE focused micro-skill (extract-data, validate-data, transform-data)
+- Stages communicate through explicit data contracts (stage_output, shared_memory, codex_sandbox_state)
+- No micro-skill has visibility into the full cascade - only its inputs and expected outputs
+- Reusability: A "validate-data" micro-skill works in 50 different cascades without modification
+
+### Principle 2: Intelligent Model Routing Optimizes Resource Allocation
+Different AI models excel at different tasks - routing stages to the optimal model maximizes quality and speed.
+
+In practice:
+- Gemini Megacontext for large context analysis (50K+ line codebases)
+- Gemini Search for web-grounded best practices research
+- Codex Full Auto for rapid prototyping with sandbox iteration
+- Claude for best overall reasoning on complex architectural decisions
+- Multi-model cascades combine strengths: Gemini analyzes, Codex implements, Claude reviews
+
+### Principle 3: Iterative Sandbox Auto-Fix Eliminates Manual Debugging
+Testing failures trigger automatic Codex fix loops in isolated sandboxes until tests pass or max iterations reached.
+
+In practice:
+- codex-sandbox stage type runs tests, detects failures, spawns Codex with error context
+- Codex proposes fix, sandbox re-tests, repeats up to 5 iterations automatically
+- Fixes are isolated in sandbox until verified, then applied to main codebase
+- Escalate to user only after max iterations exhausted (95% auto-fix success rate)
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Sequential execution of parallelizable stages** | Stages that have no dependencies run one-after-another, wasting 5-10x time compared to parallel execution. | Use swarm-parallel stage type with ruv-swarm coordination for independent tasks. Execute concurrently with load balancing. |
 | **Circular dependencies in stage graph** | Stage A depends on Stage B, which depends on Stage C, which depends on Stage A, causing infinite loop or deadlock. | Validate cascade definition as DAG (directed acyclic graph) before execution. Reject circular dependencies at design time. |
 | **Hardcoded model selection** | Every stage uses "claude" even when Gemini (megacontext) or Codex (auto-fix) would be 10x better for specific tasks. | Use auto-select or adaptive model routing based on task requirements (large context, visual output, rapid prototyping, etc). |

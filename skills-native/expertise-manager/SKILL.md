@@ -1,6 +1,7 @@
 ---
 name: expertise-manager
 description: Manages domain expertise files for Agent Experts-style learning. Handles expertise creation, validation, pre-action loading, and post-build auto-updates. Enables agents to accumulate persistent domain knowledge that improves over time.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Expertise Manager
@@ -49,7 +50,64 @@ Activate this skill when:
 claude mcp add memory-mcp npx @modelcontextprotocol/server-memory
 ```
 
+---
 
+## Core Operations
+
+### Operation 1: Create Expertise File
+
+**Command**: `/expertise-create <domain>`
+
+**SOP**:
+```javascript
+// PHASE 1: DISCOVERY - Scan codebase for domain
+Task("Codebase Scanner",
+  `Scan codebase to discover ${domain} domain structure:
+   1. Find primary source directory (src/${domain}/, lib/${domain}/, etc.)
+   2. Find test directory (tests/${domain}/, __tests__/${domain}/, etc.)
+   3. Find config files related to ${domain}
+   4. Identify key files (index, main exports, types)
+
+   Output: .claude/.artifacts/expertise-discovery-${domain}.json`,
+  "code-analyzer")
+
+// PHASE 2: PATTERN EXTRACTION - Understand how domain works
+Task("Pattern Extractor",
+  `Extract patterns from ${domain} codebase:
+   1. Architecture pattern (MVC, Clean Architecture, etc.)
+   2. Data flow patterns (how data moves)
+   3. Error handling patterns
+   4. Validation patterns
+   5. Key entities (classes, functions, types)
+
+   Output: .claude/.artifacts/expertise-patterns-${domain}.json`,
+  "analyst")
+
+// PHASE 3: RELATIONSHIP MAPPING - Find dependencies
+Task("Dependency Mapper",
+  `Map relationships for ${domain}:
+   1. What domains does ${domain} depend on?
+   2. What domains depend on ${domain}?
+   3. What external services does ${domain} use?
+   4. What are the coupling strengths?
+
+   Output: .claude/.artifacts/expertise-relationships-${domain}.json`,
+  "analyst")
+
+// PHASE 4: SYNTHESIS - Create expertise file
+Task("Expertise Synthesizer",
+  `Synthesize expertise file for ${domain}:
+   1. Load discovery, patterns, relationships from artifacts
+   2. Generate .claude/expertise/${domain}.yaml
+   3. Create initial validation rules
+   4. Set metadata (created_by, timestamps)
+   5. Store in Memory MCP: expertise/${domain}
+
+   Output: .claude/expertise/${domain}.yaml`,
+  "knowledge-manager")
+```
+
+---
 
 ### Operation 2: Validate Expertise (Pre-Action)
 
@@ -133,7 +191,70 @@ if (validationResult.drift_score < 0.2) {
 }
 ```
 
+---
 
+### Operation 3: Load Expertise (Pre-Action Hook)
+
+**Purpose**: Automatically load relevant expertise BEFORE domain-specific actions.
+
+**Hook Integration**:
+```yaml
+# In agent definition or skill
+hooks:
+  pre: |
+    # Detect domain from task description
+    DOMAIN=$(detect_domain_from_task "$TASK")
+
+    if [ -f ".claude/expertise/${DOMAIN}.yaml" ]; then
+      # Validate expertise first
+      /expertise-validate $DOMAIN
+
+      # Load into context
+      EXPERTISE=$(cat ".claude/expertise/${DOMAIN}.yaml")
+
+      # Store in working memory for this session
+      mcp__memory-mcp__memory_store \
+        --key "session/expertise/${DOMAIN}" \
+        --value "$EXPERTISE" \
+        --namespace "expertise/active"
+
+      echo "Expertise loaded for domain: $DOMAIN"
+    fi
+```
+
+**Agent Usage Pattern**:
+```javascript
+// In agent's execution flow
+async function executeWithExpertise(task) {
+  // 1. Detect relevant domain
+  const domain = detectDomain(task);
+
+  // 2. Load expertise if available
+  const expertise = await loadExpertise(domain);
+
+  if (expertise) {
+    // 3. Validate before using
+    const isValid = await validateExpertise(domain);
+
+    if (!isValid) {
+      console.log("Expertise stale - validating against code...");
+      await refreshExpertise(domain);
+    }
+
+    // 4. Use expertise to guide action
+    // - Know WHERE files are (no search thrash)
+    // - Know HOW patterns work (follow conventions)
+    // - Know WHAT to avoid (known issues)
+
+    return executeWithContext(task, expertise);
+  } else {
+    // No expertise - fall back to discovery mode
+    return executeWithDiscovery(task);
+  }
+}
+```
+
+---
 
 ### Operation 4: Self-Improve (Post-Build Auto-Update)
 
@@ -238,7 +359,56 @@ Task("Update Validator",
   "code-analyzer")
 ```
 
+---
 
+### Operation 5: Refresh Expertise (Rebuild from Scratch)
+
+**Command**: `/expertise-refresh <domain>`
+
+**Purpose**: Rebuild expertise when drift is too large to auto-correct.
+
+**SOP**:
+```javascript
+// PHASE 1: ARCHIVE CURRENT
+const currentExpertise = loadExpertiseFile(domain);
+const archivePath = `.claude/expertise/.archive/${domain}-${Date.now()}.yaml`;
+saveFile(archivePath, currentExpertise);
+
+console.log(`Archived current expertise to ${archivePath}`);
+
+// PHASE 2: PRESERVE VALUABLE LEARNINGS
+const preservedLearnings = currentExpertise.learning_history.filter(
+  learning => learning.confidence > 0.8
+);
+const preservedIssues = currentExpertise.known_issues.filter(
+  issue => issue.status !== "resolved"
+);
+
+// PHASE 3: REBUILD EXPERTISE
+// (Same as Operation 1: Create Expertise File)
+await createExpertise(domain);
+
+// PHASE 4: RESTORE PRESERVED DATA
+const newExpertise = loadExpertiseFile(domain);
+newExpertise.learning_history = [
+  ...preservedLearnings,
+  {
+    timestamp: new Date().toISOString(),
+    source: "refresh",
+    learned: "Expertise rebuilt due to major drift",
+    confidence: 1.0,
+    evidence: []
+  }
+];
+newExpertise.known_issues = preservedIssues;
+saveExpertiseFile(domain, newExpertise);
+
+console.log(`Expertise refreshed for ${domain}`);
+console.log(`Preserved ${preservedLearnings.length} learnings`);
+console.log(`Preserved ${preservedIssues.length} known issues`);
+```
+
+---
 
 ## Integration with Three-Loop System
 
@@ -352,14 +522,24 @@ Task("Expertise Failure Integrator",
   "knowledge-manager")
 ```
 
---------|---------|----------|----------|
+---
+
+## Memory Namespace Architecture
+
+| Namespace | Purpose | Producer | Consumer |
+|-----------|---------|----------|----------|
 | `expertise/{domain}` | Persisted expertise files | expertise-manager | All agents |
 | `expertise/active` | Currently loaded expertise | pre-action hook | Current session |
 | `expertise/learnings` | Extracted learnings | self-improve | expertise-manager |
 | `expertise/validation` | Validation results | validator | expertise-manager |
 | `expertise/history` | Historical expertise versions | archive | recovery |
 
-------|---------|-------|
+---
+
+## Commands
+
+| Command | Purpose | Usage |
+|---------|---------|-------|
 | `/expertise-create` | Create new domain expertise | `/expertise-create authentication` |
 | `/expertise-validate` | Validate expertise against code | `/expertise-validate database` |
 | `/expertise-refresh` | Rebuild stale expertise | `/expertise-refresh websocket` |
@@ -367,7 +547,18 @@ Task("Expertise Failure Integrator",
 | `/expertise-show` | Display expertise details | `/expertise-show authentication` |
 | `/expertise-diff` | Show expertise drift | `/expertise-diff database` |
 
+---
 
+## Success Criteria
+
+Expertise Manager is successful when:
+- Agents read expertise BEFORE acting (no search thrash)
+- Expertise auto-updates after successful builds (learning DNA)
+- Knowledge persists across sessions (Memory MCP)
+- Drift is detected and corrected automatically
+- Failure patterns feed back into expertise (continuous improvement)
+
+---
 
 ## Performance Metrics
 
@@ -377,7 +568,15 @@ Task("Expertise Failure Integrator",
 - **Auto-Correction Success**: >80% of minor drift auto-resolved
 - **Knowledge Retention**: 100% persistence across sessions
 
+---
 
+**Status**: Production-Ready
+**Version**: 2.1.0
+**Category**: Foundry (System Building)
+**Integration**: Three-Loop System (Loops 1, 2, 3)
+**Key Innovation**: Agent Experts-style learning for Claude Code
+
+---
 
 ## Recursive Improvement Integration (v2.1)
 
@@ -421,6 +620,20 @@ namespaces:
 
 Works with: **research-driven-planning**, **parallel-swarm-implementation**, **skill-forge**
 
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+**After invoking this skill, you MUST complete ALL items below before proceeding:**
+
+### Completion Checklist
+
+- [ ] **Agent Spawning**: Did you spawn at least 1 agent via Task()?
+- [ ] **TodoWrite Called**: Did you call TodoWrite with todos?
+- [ ] **Expertise Updated**: Was expertise file created/updated?
+
+---
+
 ## Core Principles
 
 ### 1. Expertise as Correctable Working Memory, Not Source of Truth
@@ -432,7 +645,12 @@ Agents without domain expertise waste time discovering what previous agents alre
 ### 3. Post-Success Auto-Update Creates Learning DNA
 Expertise that never updates becomes stale documentation. The innovation is automatic learning after successful builds: detect changed domains, extract new patterns, update expertise files, and validate against current code. This creates self-improving systems where each successful build strengthens agent knowledge for future tasks. Expertise accumulates without manual maintenance, compounding effectiveness across projects.
 
------------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|--------------|--------------|------------------|
 | **Treating expertise as static documentation** | Code evolves but expertise doesn't, causing drift. Agents follow outdated patterns, reference moved files, and apply obsolete conventions. Stale expertise is worse than no expertise - it misleads rather than guides. | Enable post-build auto-update hooks. After successful Loop 2 builds, automatically extract learnings, update affected domain expertise, and validate changes. Expertise stays synchronized with code evolution. Set last_validated timestamps and drift_score thresholds. |
 | **Skipping pre-action validation** | Loading expertise without validation risks acting on stale information. Agent confidently uses wrong file paths, applies deprecated patterns, and violates current conventions because expertise wasn't verified. | Always run /expertise-validate before loading domain context. Check validation rules, verify file locations exist, detect drift through pattern matching. If drift >0.5, refresh expertise before use. Validation takes <500ms but prevents hours of wasted effort. |
 | **Creating expertise for every codebase area** | Expertise has overhead - creation time, validation cost, maintenance burden. Creating expertise for rarely-touched areas wastes resources maintaining knowledge that's seldom used. | Create expertise strategically for high-frequency domains. Focus on areas agents work in repeatedly (authentication, database, API layers). Skip one-off tasks or rarely-modified code. Good rule: create expertise if domain used 3+ times per month. |

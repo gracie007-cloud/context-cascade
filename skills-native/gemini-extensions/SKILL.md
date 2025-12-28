@@ -1,6 +1,7 @@
 ---
 name: gemini-extensions
-description: Skill for gemini-extensions
+description: Access Geminis 70+ extensions ecosystem including Figma, Stripe, Postman, Shopify
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Gemini Extensions Skill

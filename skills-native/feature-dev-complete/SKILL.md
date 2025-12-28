@@ -1,6 +1,7 @@
 ---
 name: feature-dev-complete
 description: Complete feature development lifecycle from research to deployment. Uses Gemini Search for best practices, architecture design, Codex prototyping, comprehensive testing, and documentation generation. Full 12-stage workflow.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Feature Development Complete
@@ -498,7 +499,152 @@ $(cat "$OUTPUT_DIR/research.md" | head -10)
 - Quality Score: $(cat "$OUTPUT_DIR/style-report.json" | jq '.quality_score')/100
 - Security Issues: 0 critical
 
------------|---------|----------|
+---
+🤖 Generated with Claude Code Complete Feature Development
+EOF
+
+update_state "DOCUMENTATION" "SV:COMPLETED"
+echo "[11/12] [SV:COMPLETED] Documentation generated"
+
+# STAGE 12: Production Readiness Check [NSV:IN_PROGRESS]
+echo "[12/12] [NSV:IN_PROGRESS] Final production readiness check..."
+update_state "PRODUCTION_READY" "NSV:IN_PROGRESS"
+TESTS_PASSED=$(cat "$OUTPUT_DIR/test-results.json" | jq '.all_passed')
+QUALITY_SCORE=$(cat "$OUTPUT_DIR/style-report.json" | jq '.quality_score')
+SECURITY_OK=$([ "$SECURITY_CRITICAL" -eq 0 ] && echo "true" || echo "false")
+
+if [ "$TESTS_PASSED" = "true" ] && [ "$QUALITY_SCORE" -ge 85 ] && [ "$SECURITY_OK" = "true" ]; then
+  update_state "PRODUCTION_READY" "SV:COMPLETED"
+  echo "[12/12] [SV:COMPLETED] Production ready!"
+  echo ""
+  echo "State Summary:"
+  echo "  [SV:COMPLETED] All 12 stages completed successfully"
+  echo ""
+
+  # Create PR if requested
+  if [ "${CREATE_PR:-true}" = "true" ]; then
+    echo "Creating pull request..."
+    # Copy implementation to target directory
+    cp -r "$OUTPUT_DIR/implementation/"* "$TARGET_DIR/"
+
+    # Git operations
+    git add .
+    git commit -m "feat: $FEATURE_SPEC
+
+🤖 Generated with Claude Code Complete Feature Development
+
+## Quality Metrics
+- ✅ All tests passing
+- ✅ Code quality: $QUALITY_SCORE/100
+- ✅ Security: No critical issues
+- ✅ Test coverage: $(cat "$OUTPUT_DIR/test-results.json" | jq '.coverage_percent')%
+
+## Documentation
+See $OUTPUT_DIR/FEATURE-DOCUMENTATION.md
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+    # Create PR
+    gh pr create --title "feat: $FEATURE_SPEC" \
+      --body-file "$OUTPUT_DIR/FEATURE-DOCUMENTATION.md"
+  fi
+else
+  update_state "PRODUCTION_READY" "BLOCKED"
+  echo "[12/12] [BLOCKED] Not production ready - review issues"
+  echo ""
+  echo "Failed Quality Gates:"
+  [ "$TESTS_PASSED" != "true" ] && echo "  - Tests not passing"
+  [ "$QUALITY_SCORE" -lt 85 ] && echo "  - Quality score below threshold: $QUALITY_SCORE/100"
+  [ "$SECURITY_OK" != "true" ] && echo "  - Critical security issues present"
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "================================================================"
+echo "Feature Development Complete!"
+echo "================================================================"
+echo ""
+echo "Artifacts in: $OUTPUT_DIR/"
+echo "- Research: research.md"
+echo "- Architecture: architecture-design.md"
+echo "- Diagrams: *.png"
+echo "- Implementation: implementation/"
+echo "- Tests: test-results.json"
+echo "- Documentation: FEATURE-DOCUMENTATION.md"
+echo ""
+```
+
+## Integration Points
+
+### Cascades
+- Standalone complete workflow
+- Can be part of `/sprint-automation` cascade
+- Used by `/feature-request-handler` cascade
+
+### Commands
+- Uses: `/gemini-search`, `/gemini-megacontext`, `/gemini-media`
+- Uses: `/codex-auto`, `/functionality-audit`, `/style-audit`
+- Uses: `/theater-detect`, `/security-scan`
+- Uses: `/swarm-init`, `/auto-agent`
+
+### Other Skills
+- Invokes: `quick-quality-check`, `smart-bug-fix` (if issues found)
+- Output to: `code-review-assistant`, `documentation-generator`
+
+## Usage Example
+
+```bash
+# Develop complete feature
+feature-dev-complete "User authentication with JWT and refresh tokens"
+
+# Feature with custom target
+feature-dev-complete "Payment processing integration" src/payments/
+
+# Feature without PR
+feature-dev-complete "Dark mode toggle" --create-pr false
+```
+
+## Failure Modes
+
+- **Research insufficient**: Escalate to user for more context
+- **Tests fail after iterations**: Manual intervention required
+- **Security issues critical**: Block deployment, escalate
+- **Quality score too low**: Run additional polish iterations
+- **Architecture unclear**: Request user input on design decisions
+
+## Core Principles
+
+Feature Development Complete operates on 3 fundamental principles:
+
+### Principle 1: Research-Driven Development
+Begin every feature by researching current best practices and analyzing existing codebase patterns before writing code. Knowledge gathered upfront prevents costly refactoring later.
+
+In practice:
+- Use Gemini Search for latest 2025 best practices and framework updates
+- Analyze existing codebase patterns with MegaContext for consistency
+- Document architectural decisions in ADRs before implementation
+
+### Principle 2: Multi-Model Orchestration
+Leverage specialized AI models for their strengths - Gemini for research and diagrams, Codex for rapid prototyping, Claude for architecture and testing strategy. The right tool for each phase maximizes quality.
+
+In practice:
+- Gemini Search/MegaContext for research and large codebase analysis
+- Codex Auto for rapid prototyping with auto-fixing iterations
+- Claude for architecture design, testing strategy, and style polish
+
+### Principle 3: Quality Gates Before Deployment
+Features must pass comprehensive testing, security review, and quality checks before reaching production. No shortcuts - automated gates ensure production readiness.
+
+In practice:
+- Theater detection eliminates placeholder code before testing
+- Codex iteration loops until all tests pass (max 5 iterations)
+- Security scan blocks deployment on critical issues (zero tolerance)
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Skipping Research Phase** | Implementing outdated patterns or reinventing existing solutions | Always run Gemini Search for latest best practices before coding |
 | **Manual Quality Checks** | Inconsistent reviews, missed security issues, subjective quality assessment | Automate theater detection, security scanning, and quality scoring |
 | **Sequential Workflow** | Slow delivery from blocking dependencies (research -> design -> code -> test) | Parallelize independent phases (diagrams + prototyping, testing + security review) |

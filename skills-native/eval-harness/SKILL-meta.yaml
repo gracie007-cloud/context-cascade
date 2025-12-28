@@ -1,0 +1,18 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.1.0
+category: foundry
+tags:
+  - evaluation
+  - benchmark
+  - regression
+  - frozen
+  - gate
+  - cognitive-frames
+  - cross-lingual
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\eval-harness
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.227Z
+  version: 2.0.0

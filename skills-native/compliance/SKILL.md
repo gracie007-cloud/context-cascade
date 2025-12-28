@@ -1,6 +1,7 @@
 ---
 name: compliance
 description: Regulatory compliance validation and documentation for GDPR, HIPAA, SOC 2, PCI-DSS, and ISO 27001. Use when implementing compliance controls, conducting compliance audits, or preparing for certification. Provides automated compliance checks and evidence collection.
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill

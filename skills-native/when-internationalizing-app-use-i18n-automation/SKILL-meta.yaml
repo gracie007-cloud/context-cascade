@@ -1,0 +1,37 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user requests internationalization, localization, or multi-language support
+version: 2.0.0
+author: Base Template Generator
+category: localization
+tags:
+  - i18n
+  - localization
+  - translation
+  - multi-language
+  - automation
+agents:
+  - coder
+  - researcher
+  - reviewer
+  - tester
+coordinator: hierarchical-coordinator
+memory_patterns:
+  - swarm/i18n/source-strings
+  - swarm/i18n/translations
+  - swarm/i18n/config
+  - swarm/i18n/test-results
+success_criteria:
+  - i18n library configured and integrated
+  - Source strings extracted to translation files
+  - Translation keys generated systematically
+  - Multiple locales supported
+  - Fallback language configured
+  - Tests verify translations load correctly
+  - Documentation generated for translators
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\when-internationalizing-app-use-i18n-automation
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.330Z
+  version: 2.0.0

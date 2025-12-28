@@ -1,6 +1,7 @@
 ---
 name: github-workflow-automation
 description: Advanced GitHub Actions workflow automation with AI swarm coordination, intelligent CI/CD pipelines, and comprehensive repository management
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Workflow Automation Skill
@@ -158,6 +159,7 @@ npx ruv-swarm actions security \
 #### 1. Intelligent CI with Swarms
 ```yaml
 # .github/workflows/swarm-ci.yml
+name: Intelligent CI with Swarms
 on: [push, pull_request]
 
 jobs:
@@ -183,6 +185,7 @@ jobs:
 #### 2. Multi-Language Detection
 ```yaml
 # .github/workflows/polyglot-swarm.yml
+name: Polyglot Project Handler
 on: push
 
 jobs:
@@ -207,6 +210,7 @@ jobs:
 #### 3. Adaptive Security Scanning
 ```yaml
 # .github/workflows/security-swarm.yml
+name: Intelligent Security Scan
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -236,6 +240,7 @@ jobs:
 #### 4. Self-Healing Pipeline
 ```yaml
 # .github/workflows/self-healing.yml
+name: Self-Healing Pipeline
 on: workflow_run
 
 jobs:
@@ -254,6 +259,7 @@ jobs:
 #### 5. Progressive Deployment
 ```yaml
 # .github/workflows/smart-deployment.yml
+name: Smart Deployment
 on:
   push:
     branches: [main]
@@ -279,6 +285,7 @@ jobs:
 #### 6. Performance Regression Detection
 ```yaml
 # .github/workflows/performance-guard.yml
+name: Performance Guard
 on: pull_request
 
 jobs:
@@ -296,6 +303,7 @@ jobs:
 #### 7. PR Validation Swarm
 ```yaml
 # .github/workflows/pr-validation.yml
+name: PR Validation Swarm
 on: pull_request
 
 jobs:
@@ -318,6 +326,7 @@ jobs:
 #### 8. Intelligent Release
 ```yaml
 # .github/workflows/intelligent-release.yml
+name: Intelligent Release
 on:
   push:
     tags: ['v*']
@@ -473,7 +482,8 @@ npx ruv-swarm actions auto-optimize \
 #### Custom Swarm Action Template
 ```javascript
 // action.yml
-
+name: 'Swarm Custom Action'
+description: 'Custom swarm-powered action'
 inputs:
   task:
     description: 'Task for swarm'
@@ -581,6 +591,7 @@ npx claude-flow@alpha hooks post-task \
 #### 1. Use Reusable Workflows
 ```yaml
 # .github/workflows/reusable-swarm.yml
+name: Reusable Swarm Workflow
 on:
   workflow_call:
     inputs:
@@ -787,6 +798,7 @@ npx ruv-swarm actions analyze-logs \
 
 #### Example 1: Full-Stack Application CI/CD
 ```yaml
+name: Full-Stack CI/CD with Swarms
 on:
   push:
     branches: [main, develop]
@@ -850,6 +862,7 @@ jobs:
 
 #### Example 2: Monorepo Management
 ```yaml
+name: Monorepo Coordination
 on: push
 
 jobs:
@@ -1027,6 +1040,13 @@ echo "✅ GitHub workflow automation setup complete"
   - Enhanced with swarm coordination patterns
   - Added comprehensive examples and best practices
 
+---
+
+**Skill Status**: ✅ Production Ready
+**Last Updated**: 2025-01-19
+**Maintainer**: claude-flow team
+---
+
 ## Core Principles
 
 GitHub Workflow Automation operates on 3 fundamental principles:
@@ -1055,7 +1075,12 @@ In practice:
 - Use dynamic test matrices based on changed files (smart test selection)
 - Implement fail-fast strategies to terminate jobs early when critical checks fail
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Sequential Job Execution** | Running jobs serially when they have no dependencies wastes time and increases costs | Use matrix strategies and parallel jobs for independent tasks. Analyze dependency graph to maximize concurrency |
 | **Ignoring Workflow Caching** | Re-downloading and rebuilding dependencies on every run wastes 50-70% of workflow time | Implement comprehensive caching (actions/cache@v3) for dependencies, build artifacts, and test results |
 | **No Auto-Rollback Strategy** | Manual rollback decisions during incidents cause extended downtime and require on-call response | Configure automated rollback triggers based on error rates, latency, and health checks with grace periods |

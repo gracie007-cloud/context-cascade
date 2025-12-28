@@ -1,6 +1,7 @@
 ---
 name: codex-auto
-description: Skill for codex-auto
+description: Use Codex CLIs Full Auto mode for unattended sandboxed prototyping and scaffolding
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Codex Full Auto Skill

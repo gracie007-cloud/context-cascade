@@ -1,6 +1,7 @@
 ---
 name: github-multi-repo
 description: Multi-repository coordination, synchronization, and architecture management with AI swarm orchestration
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Multi-Repository Coordination Skill
@@ -444,6 +445,7 @@ Part of #$TRACKING_ISSUE"
 ### Multi-Repo Config File
 ```yaml
 # .swarm/multi-repo.yml
+version: 1
 organization: my-org
 
 repositories:
@@ -853,7 +855,13 @@ npx claude-flow skill run github-multi-repo cross-team \
 - Issues: https://github.com/ruvnet/claude-flow/issues
 - Examples: `.claude/examples/github-multi-repo/`
 
+---
 
+**Version:** 1.0.0
+**Last Updated:** 2025-10-19
+**Maintainer:** Claude Flow Team
+
+---
 
 ## Core Principles
 
@@ -882,12 +890,22 @@ Multi-repository systems require semantic versioning discipline to prevent depen
 
 Without semantic versioning discipline, dependency updates become risky manual processes. Automated synchronization requires confidence that minor version bumps will not break consumers.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Manual Cross-Repo Synchronization** | Manually copying code, configuration, or documentation across repositories. Leads to version skew, inconsistent updates, and missed synchronizations. Human error causes divergence over time. | **Automated Synchronization with Swarm Orchestration**: Use github-multi-repo skill with swarm coordination to automatically propagate changes across repositories. Changes to shared templates, CLAUDE.md, or common configuration should trigger automated PRs in dependent repositories with conflict detection. |
 | **Tightly Coupled Repository Dependencies** | Creating circular dependencies or tight coupling between repositories (frontend directly imports backend code). Breaks independent deployability and creates cascading failures during updates. | **Dependency Inversion with Contracts**: Define API contracts (OpenAPI schemas, TypeScript types) in shared package. Repositories depend on contracts, not implementations. Changes to implementations do not break consumers as long as contracts remain stable. Use consumer-driven contract testing. |
 | **Monolithic Change Propagation** | Attempting to update all repositories simultaneously in a single transaction. Creates coordination overhead, increases risk of cascading failures, and blocks parallel development. | **Incremental Propagation with Canary Pattern**: Roll out changes incrementally - update shared package, deploy to canary repositories (10% of consumers), monitor for breakage, then propagate to remaining repositories. Use feature flags to decouple deployment from activation. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Manual Cross-Repo Synchronization** | Manually copying code, config, or docs across repositories. Leads to version skew, inconsistent updates, missed synchronizations. Human error causes divergence over time. No audit trail of sync operations. | Automate synchronization with github-multi-repo swarm orchestration. Changes to shared templates, CLAUDE.md, or common config trigger automated PRs in dependent repos with conflict detection. Maintain sync audit log in Memory MCP. |
 | **Tightly Coupled Repository Dependencies** | Creating circular dependencies or tight coupling between repos (frontend directly imports backend code). Breaks independent deployability. Creates cascading failures during updates. Makes refactoring impossible without coordinated changes. | Dependency Inversion with Contracts: Define API contracts (OpenAPI schemas, TypeScript types) in shared package. Repos depend on contracts, not implementations. Changes to implementations don't break consumers as long as contracts stable. Use consumer-driven contract testing. |
 | **Monolithic Change Propagation** | Attempting to update all repositories simultaneously in single transaction. Creates coordination overhead, increases cascading failure risk, blocks parallel development. All-or-nothing deployment strategy. | Incremental Propagation with Canary Pattern: Roll out changes incrementally - update shared package, deploy to canary repos (10% consumers), monitor for breakage, propagate to remaining repos. Use feature flags to decouple deployment from activation. |

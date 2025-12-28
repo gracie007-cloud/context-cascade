@@ -1,6 +1,7 @@
 ---
 name: deep-research-orchestrator
-description: Meta-orchestrator for complete Deep Research SOP lifecycle managing 3 phases, 9 pipelines (A-I), and 3 quality gates. Use when starting new research projects, conducting systematic ML research, or ensuring rigorous scientific methodology from literature review through production deployment. Coordinates all SOP skills and agents for end-to-end research execution.
+description: Skill for deep-research-orchestrator
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 ## SKILL-SPECIFIC GUIDANCE
@@ -48,7 +49,25 @@ description: Meta-orchestrator for complete Deep Research SOP lifecycle managing
 - Cross-validate pipelines: ensure Pipeline D baseline feeds into Pipeline E
 - Verify agent coordination: check memory-mcp state, confirm handoffs logged
 
-
+---
+name: deep-research-orchestrator
+description: Meta-orchestrator for complete Deep Research SOP lifecycle managing 3
+  phases, 9 pipelines (A-I), and 3 quality gates. Use when starting new research projects,
+  conducting systematic ML research, or ensuring rigorous scientific methodology from
+  literature review through production deployment. Coordinates all SOP skills and
+  agents for end-to-end research execution.
+version: 1.1.0
+category: research
+tags:
+- research
+- analysis
+- planning
+author: ruv
+cognitive_frame:
+  primary: evidential
+  secondary: morphological
+  rationale: "Research requires rigorous source tracking and concept decomposition"
+---
 
 # Deep Research Orchestrator
 
@@ -150,7 +169,80 @@ Research questions follow morphological decomposition:
 
 **Agents Used**: ALL 4 P0 agents (data-steward, ethics-agent, archivist, evaluator) + system-architect, coder, tester, reviewer, researcher
 
+---
 
+## Quick Start
+
+### 1. Initialize Research Project
+```bash
+# Initialize Deep Research SOP project
+npx claude-flow@alpha hooks pre-task \
+  --description "Deep Research SOP: [Project Name]"
+
+# Create project structure
+mkdir -p deep-research-project/{phase1-foundations,phase2-development,phase3-production,gates,docs}
+
+# Store research question in memory
+npx claude-flow@alpha memory store \
+  --key "sop/project/research-question" \
+  --value "How does multi-scale attention improve long-range dependency modeling in vision transformers?"
+```
+
+### 2. Run Phase 1 (Foundations) - Quality Gate 1
+```bash
+# Literature synthesis
+claude-code invoke-skill literature-synthesis
+
+# Dataset validation
+npx claude-flow@alpha sparc run data-steward "/init-datasheet"
+
+# Baseline replication
+claude-code invoke-skill baseline-replication
+
+# Ethics review (initial)
+npx claude-flow@alpha sparc run ethics-agent "/assess-risks --component dataset --gate 1"
+
+# Gate 1 validation
+claude-code invoke-skill gate-validation --gate 1
+```
+
+### 3. Run Phase 2 (Development) - Quality Gate 2
+```bash
+# Method development
+claude-code invoke-skill method-development
+
+# Holistic evaluation
+claude-code invoke-skill holistic-evaluation
+
+# Ethics review (model)
+npx claude-flow@alpha sparc run ethics-agent "/assess-risks --component model --gate 2"
+
+# Gate 2 validation
+claude-code invoke-skill gate-validation --gate 2
+```
+
+### 4. Run Phase 3 (Production) - Quality Gate 3
+```bash
+# Reproducibility audit
+claude-code invoke-skill reproducibility-audit
+
+# Deployment readiness
+claude-code invoke-skill deployment-readiness
+
+# Archival
+npx claude-flow@alpha sparc run archivist "/init-model-card"
+
+# Gate 3 validation
+claude-code invoke-skill gate-validation --gate 3
+```
+
+### 5. Publication
+```bash
+# Research publication
+claude-code invoke-skill research-publication
+```
+
+---
 
 ## Detailed Instructions
 
@@ -184,7 +276,38 @@ claude-code invoke-skill literature-synthesis \
 
 **Agent**: researcher
 
+---
 
+#### Pipeline B: Data & Ethics Foundation
+**Objective**: Dataset validation, bias audit, ethics clearance
+
+**Execution**:
+```bash
+# Data steward: Create datasheet
+npx claude-flow@alpha sparc run data-steward \
+  "/init-datasheet --dataset ImageNet --output phase1-foundations/datasheet.md"
+
+# Data steward: Bias audit
+npx claude-flow@alpha sparc run data-steward \
+  "Run bias audit on ImageNet dataset following Gebru et al. 2021"
+
+# Ethics agent: Risk assessment
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component dataset --gate 1"
+```
+
+**Deliverables**:
+- Datasheet (Form F-P1) **[DIRECT, confidence: 100% - primary documentation]**
+- Bias audit report **[DIRECT, confidence: 95% - measured on actual data]**
+- Ethics review (Gate 1) **[INFERRED, confidence: 85% - risk assessment based on analysis]**
+- IRB approval (if human subjects) **[DIRECT, confidence: 100% - official approval]**
+
+**Evidence Chain**:
+- Data properties [DIRECT] → Bias measurements [DIRECT] → Risk assessment [INFERRED] → Ethics decision [COMPOSED]
+
+**Agents**: data-steward, ethics-agent
+
+---
 
 #### Pipeline C: PRISMA Protocol (if systematic review)
 **Objective**: PRISMA-compliant systematic literature review
@@ -203,7 +326,37 @@ npx claude-flow@alpha sparc run researcher \
 
 **Agent**: researcher
 
+---
 
+#### Pipeline D: Baseline Replication
+**Objective**: Reproduce published baseline with ±1% tolerance
+
+**Execution**:
+```bash
+claude-code invoke-skill baseline-replication \
+  --paper "Attention is All You Need" \
+  --dataset ImageNet \
+  --tolerance 0.01
+```
+
+**Deliverables**:
+- Baseline implementation (100% test coverage) **[DIRECT, confidence: 100% - code verified]**
+- Statistical comparison (±1% tolerance) **[DIRECT, confidence: 98% - measured results]**
+- Reproducibility package (Docker) **[DIRECT, confidence: 100% - tested in fresh env]**
+- Baseline evaluation report **[COMPOSED from DIRECT measurements + REPORTED paper claims]**
+
+**Evidence Chain**:
+1. Original paper claims (reported baseline) **[REPORTED]**
+2. Our replication results **[DIRECT]**
+3. Statistical comparison **[DIRECT, computed from measurements]**
+4. Reproducibility validation **[DIRECT, 3/3 fresh runs]**
+5. Final assessment **[COMPOSED, confidence: 95%]**
+
+**Confidence Threshold**: Must achieve ≥95% confidence that replication is within ±1% tolerance
+
+**Agents**: researcher, data-steward, coder, tester, archivist, evaluator
+
+---
 
 #### Quality Gate 1 Validation
 **Objective**: GO/NO-GO decision for method development
@@ -240,7 +393,41 @@ claude-code invoke-skill gate-validation --gate 1
 
 **Agent**: evaluator
 
+---
 
+### PHASE 2: DEVELOPMENT (6-12 weeks)
+
+#### Pipeline D: Method Development (continued)
+**Objective**: Develop novel method with ablation studies
+
+**Execution**:
+```bash
+claude-code invoke-skill method-development \
+  --baseline-checkpoint phase1-foundations/baseline/checkpoint.pth \
+  --novel-components "multi-scale-attention,prenorm-residual"
+```
+
+**Deliverables**:
+- Novel method implementation **[DIRECT, confidence: 100% - our code]**
+- Ablation study results (≥5 components) **[DIRECT, confidence: 95% - measured with error bars]**
+- Hyperparameter optimization results **[DIRECT, confidence: 90% - grid/random search]**
+- Performance comparison vs. baseline **[COMPOSED from DIRECT measurements]**
+- Method card (Mitchell et al. 2019 template) **[COMPOSED documentation]**
+
+**Evidence Requirements for Method Development**:
+- Each ablation must report: mean, std dev, confidence intervals (95%)
+- Statistical significance: p-values < 0.05 required
+- Effect size: Cohen's d ≥ 0.5 for meaningful improvements
+- All claims tagged [DIRECT] or [INFERRED] with confidence levels
+
+**Morphological Analysis**:
+- **ROOT method**: Core novel component (e.g., "multi-scale attention")
+- **DERIVED variations**: Ablations removing components
+- **COMPOSED system**: Full method with all components
+
+**Agents**: system-architect, coder, tester, reviewer
+
+---
 
 #### Pipeline E: Holistic Evaluation
 **Objective**: Comprehensive evaluation across 6+ dimensions
@@ -274,7 +461,30 @@ claude-code invoke-skill holistic-evaluation \
 
 **Agents**: tester, ethics-agent
 
+---
 
+#### Pipeline F: Ethics & Safety Review
+**Objective**: Ethics validation for model deployment
+
+**Execution**:
+```bash
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component model --gate 2"
+
+npx claude-flow@alpha sparc run ethics-agent \
+  "/safety-eval --model phase2-development/novel-method/checkpoint.pth"
+```
+
+**Deliverables**:
+- Ethics review form (F-F1)
+- Risk assessment across 6 domains
+- Safety evaluation report
+- Fairness audit
+- Privacy audit (membership inference)
+
+**Agent**: ethics-agent
+
+---
 
 #### Quality Gate 2 Validation
 **Objective**: GO/NO-GO decision for production deployment
@@ -311,7 +521,48 @@ claude-code invoke-skill gate-validation --gate 2
 
 **Agent**: evaluator
 
+---
 
+### PHASE 3: PRODUCTION (2-4 weeks)
+
+#### Pipeline G: Reproducibility & Archival
+**Objective**: Create production-ready reproducibility package
+
+**Execution**:
+```bash
+# Reproducibility audit
+claude-code invoke-skill reproducibility-audit \
+  --package phase2-development/novel-method/
+
+# Archival
+npx claude-flow@alpha sparc run archivist \
+  "/init-model-card --method novel-method --include-metrics"
+
+npx claude-flow@alpha sparc run archivist \
+  "Create reproducibility package with Docker, assign DOIs (Zenodo)"
+```
+
+**Deliverables**:
+- Model card (Form F-G2, ≥90% filled) **[COMPOSED from all prior DIRECT measurements]**
+- Reproducibility package (code + data + environment) **[DIRECT, confidence: 100% - tested]**
+- DOIs assigned (dataset, model, code) **[DIRECT, confidence: 100% - verified URLs]**
+- Registry URLs (HuggingFace, Zenodo) **[DIRECT, confidence: 100% - accessible]**
+- Archive (.tar.gz with manifest) **[DIRECT, confidence: 100% - checksum verified]**
+
+**Evidence Preservation**:
+- All [DIRECT] measurements archived with full provenance
+- All [INFERRED] conclusions documented with reasoning chain
+- All [REPORTED] claims linked to original sources (DOIs, URLs)
+- Model card synthesizes evidence chains from Phases 1-3
+
+**Reproducibility Evidence Requirements**:
+- Fresh environment reproduction: 3/3 successful runs **[DIRECT]**
+- Performance variance: < 1% across runs **[DIRECT]**
+- Artifact completeness: 100% checklist items **[DIRECT]**
+
+**Agent**: archivist
+
+---
 
 #### Pipeline H: Deployment Readiness
 **Objective**: Production deployment validation
@@ -333,7 +584,29 @@ claude-code invoke-skill deployment-readiness \
 
 **Agents**: tester, archivist
 
+---
 
+#### Pipeline I: Publication
+**Objective**: Academic paper with reproducibility artifacts
+
+**Execution**:
+```bash
+claude-code invoke-skill research-publication \
+  --results phase1-foundations/ phase2-development/ phase3-production/ \
+  --venue "NeurIPS" \
+  --artifact-track true
+```
+
+**Deliverables**:
+- Research paper draft
+- Reproducibility checklist (NeurIPS, ICML)
+- Supplementary materials
+- Artifact submission (ACM badges)
+- Code release (GitHub)
+
+**Agents**: researcher, archivist
+
+---
 
 #### Quality Gate 3 Validation
 **Objective**: Final GO/NO-GO for production deployment and publication
@@ -383,7 +656,49 @@ claude-code invoke-skill gate-validation --gate 3
 
 **Agent**: evaluator
 
+---
 
+## Deep Research SOP Architecture
+
+### 3 Phases
+```
+Phase 1: FOUNDATIONS (2-4 weeks)
+├── Literature Synthesis (Pipeline A)
+├── Data & Ethics Foundation (Pipeline B)
+├── PRISMA Protocol (Pipeline C, optional)
+├── Baseline Replication (Pipeline D)
+└── Quality Gate 1 → GO/NO-GO
+
+Phase 2: DEVELOPMENT (6-12 weeks)
+├── Method Development (Pipeline D continued)
+├── Holistic Evaluation (Pipeline E)
+├── Ethics & Safety Review (Pipeline F)
+└── Quality Gate 2 → GO/NO-GO
+
+Phase 3: PRODUCTION (2-4 weeks)
+├── Reproducibility & Archival (Pipeline G)
+├── Deployment Readiness (Pipeline H)
+├── Publication (Pipeline I)
+└── Quality Gate 3 → GO/NO-GO → DEPLOY
+```
+
+### 9 Pipelines (A-I)
+- **Pipeline A**: Literature Synthesis
+- **Pipeline B**: Data & Ethics Foundation
+- **Pipeline C**: PRISMA Protocol (systematic reviews)
+- **Pipeline D**: Baseline Replication → Method Development
+- **Pipeline E**: Holistic Evaluation
+- **Pipeline F**: Ethics & Safety Review
+- **Pipeline G**: Reproducibility & Archival
+- **Pipeline H**: Deployment Readiness
+- **Pipeline I**: Publication
+
+### 3 Quality Gates
+- **Gate 1**: Data & Methods Validation (end of Phase 1)
+- **Gate 2**: Model & Evaluation Validation (end of Phase 2)
+- **Gate 3**: Production & Artifacts Validation (end of Phase 3)
+
+---
 
 ## Agent Coordination Matrix
 
@@ -403,7 +718,44 @@ claude-code invoke-skill gate-validation --gate 3
 | 3 | I (Publication) | researcher | archivist |
 | 3 | Gate 3 | evaluator | archivist reviews |
 
+---
 
+## Memory Coordination
+
+### Session Persistence
+All project state stored in Memory MCP for cross-session coordination:
+
+```bash
+# Store phase progress
+npx claude-flow@alpha memory store \
+  --key "sop/project/phase1/status" \
+  --value "COMPLETE" \
+  --metadata '{"gate1": "APPROVED", "date": "2025-11-01"}'
+
+# Retrieve previous work
+npx claude-flow@alpha memory retrieve \
+  --key "sop/project/phase1/baseline-results"
+
+# Agent coordination via memory
+npx claude-flow@alpha memory store \
+  --key "sop/coordination/ethics-agent/status" \
+  --value "Awaiting Gate 2 validation" \
+  --metadata '{"blocking": ["evaluator"]}'
+```
+
+### Cross-Agent Memory Sharing
+```bash
+# data-steward stores bias audit results
+npx claude-flow@alpha memory store \
+  --key "sop/gate1/bias-audit" \
+  --value "$(cat phase1-foundations/bias-audit.json)"
+
+# ethics-agent retrieves for risk assessment
+npx claude-flow@alpha memory retrieve \
+  --key "sop/gate1/bias-audit"
+```
+
+---
 
 ## Troubleshooting
 
@@ -472,7 +824,24 @@ npx claude-flow@alpha memory retrieve --key "sop/coordination/*/status"
 # (Address specific agent requirements)
 ```
 
+---
 
+## Integration with Deep Research SOP
+
+### Comprehensive Workflow
+This orchestrator implements the complete Deep Research SOP as specified in:
+- Gap analysis document (identifying missing components)
+- 4 P0 commands (/init-datasheet, /prisma-init, /assess-risks, /init-model-card)
+- 4 P0 agents (data-steward, ethics-agent, archivist, evaluator)
+- 8 GraphViz process diagrams
+
+### Quality Assurance
+- **3 Quality Gates** ensure rigor at each phase transition
+- **9 Pipelines** provide systematic coverage of research lifecycle
+- **4 P0 Agents** enforce standards (data, ethics, archival, evaluation)
+- **Memory MCP** enables cross-session coordination and reproducibility
+
+---
 
 ## Related Skills and Commands
 
@@ -499,7 +868,30 @@ npx claude-flow@alpha memory retrieve --key "sop/coordination/*/status"
 - `/init-model-card` - Create model card
 - `/validate-gate-{1,2,3}` - Gate validation
 
+---
 
+## References
+
+### Deep Research SOP Documentation
+- Deep Research SOP Gap Analysis (docs/deep-research-sop-gap-analysis.md)
+- 8 GraphViz Process Diagrams (docs/12fa/graphviz/)
+- P0 Commands Specification (.claude/commands/research/)
+- P0 Agents Specification (agents/research/)
+
+### Academic Standards
+- Gebru et al. (2021): Datasheets for Datasets
+- Mitchell et al. (2019): Model Cards for Model Reporting
+- Page et al. (2021): PRISMA 2020 Statement
+- ACM Artifact Evaluation Badging
+- NeurIPS Reproducibility Checklist
+
+### Ethics Frameworks
+- IEEE 7010: Well-being Metrics for Ethical AI
+- NIST AI Risk Management Framework
+- EU AI Act Compliance
+- FDA Guidance on AI/ML Medical Devices
+
+---
 
 ## Appendix
 
@@ -546,7 +938,55 @@ Total: 16 weeks (4 months) for complete research lifecycle
 | Gate 1 | All requirements met, proceed to Phase 2 | Minor datasheet gaps, proceed with restrictions | Baseline >±1% or critical ethics issues |
 | Gate 2 | All requirements met, proceed to Phase 3 | Mitigation plan for fairness/robustness gaps | Performance regression or critical safety risks |
 | Gate 3 | All requirements met, DEPLOY to production | Minor documentation fixes required | Reproducibility failures or ethics violations |
+---
 
+## Core Principles
+
+Deep Research Orchestrator operates on 3 fundamental principles:
+
+### Principle 1: Systematic Rigor Over Expedience (Evidential Frame)
+Research quality cannot be compromised for speed. Every phase and pipeline follows evidence-based methodology (PRISMA, ACM badging, NeurIPS reproducibility standards) ensuring publishable results.
+
+In practice:
+- Quality Gates enforce GO/NO-GO decisions with statistical validation **[DIRECT confidence thresholds]**
+- Minimum thresholds prevent premature progression:
+  - Literature: 50+ papers **[REPORTED, avg confidence ≥80%]**
+  - Baseline: ±1% tolerance **[DIRECT, confidence ≥95%]**
+  - Reproducibility: 3/3 runs **[DIRECT, confidence 100%]**
+- Ethics reviews (data-steward + ethics-agent) occur at every gate **[INFERRED risk assessment ≥85%]**, not just final submission
+
+**Evidential Enforcement**:
+- Every claim requires source tag: [DIRECT] | [INFERRED] | [REPORTED]
+- Every measurement requires confidence level: ≥90% for production approval
+- Evidence chains must be traceable: ROOT → DERIVED → COMPOSED
+
+### Principle 2: Reproducibility as First-Class Requirement (Morphological Frame)
+Reproducibility is not an afterthought but a continuous validation requirement from Phase 1 through Phase 3. Every artifact must be independently verifiable.
+
+In practice:
+- **ROOT validation**: Baseline replication (±1% tolerance) **[DIRECT, confidence ≥95%]** validates computational environment before novel method development
+- **DERIVED verification**: Reproducibility packages tested in fresh Docker containers with zero cached dependencies **[DIRECT, 3/3 runs]**
+- **COMPOSED archival**: All code, data, hyperparameters archived with permanent DOIs (Zenodo, HuggingFace) **[DIRECT, verified URLs]** before Gate 3
+
+**Morphological Decomposition of Reproducibility**:
+- **ROOT**: Can the baseline be replicated? (atomic verification)
+- **DERIVED**: Can the novel method be replicated? (depends on ROOT)
+- **COMPOSED**: Can the full research pipeline be replicated? (end-to-end verification)
+
+**Evidence Requirements**:
+- Each level requires [DIRECT] verification with ≥95% confidence
+- Failures at ROOT level block all DERIVED work (Gate 1 enforcement)
+- COMPOSED artifacts synthesize all prior evidence chains
+
+### Principle 3: Multi-Agent Coordination for Comprehensive Coverage
+No single agent possesses complete expertise. Deep Research requires 9+ agents working in coordinated phases to ensure data integrity, methodological soundness, and production readiness.
+
+In practice:
+- data-steward validates datasets and bias before researcher conducts literature review
+- ethics-agent assesses risks at Gates 1, 2, 3 with independent reviews
+- archivist creates model cards and reproducibility packages while evaluator validates gate requirements
+
+---
 
 ## Common Anti-Patterns
 

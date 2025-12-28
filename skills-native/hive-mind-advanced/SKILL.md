@@ -1,6 +1,7 @@
 ---
 name: hive-mind-advanced
 description: Advanced Hive Mind collective intelligence system for queen-led multi-agent coordination with consensus mechanisms and persistent memory
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -545,6 +546,7 @@ npx claude-flow hive-mind spawn "..." --consensus majority
 Define specialized workers in `agents/`:
 
 ```yaml
+name: security-auditor
 type: specialist
 capabilities:
   - vulnerability-scanning
@@ -743,7 +745,48 @@ npx claude-flow hive-mind spawn "Review PR #456" \
 - [Byzantine Consensus](https://github.com/ruvnet/claude-flow/docs/consensus)
 - [Memory Optimization](https://github.com/ruvnet/claude-flow/docs/memory)
 
------------|---------|----------|
+---
+
+**Skill Version**: 1.0.0
+**Last Updated**: 2025-10-19
+**Maintained By**: Claude Flow Team
+**License**: MIT
+
+## Core Principles
+
+Hive Mind Advanced operates on 3 fundamental principles:
+
+### Principle 1: Queen-Led Hierarchical Coordination Enables Strategic Control
+A strategic queen agent orchestrates high-level objectives while specialized worker agents execute tactical implementations, combining top-down planning with bottom-up expertise.
+
+In practice:
+- Queen breaks down complex objectives into worker-assignable tasks based on specialization keywords
+- Workers report progress to queen, queen adjusts strategy dynamically based on results
+- Task auto-assignment uses keyword matching (e.g., "authentication" -> coder, "test coverage" -> tester)
+- Auto-scaling spawns/terminates workers based on task queue depth (scaleUpThreshold: 2 tasks per idle worker)
+
+### Principle 2: Byzantine Consensus Achieves Fault-Tolerant Collective Intelligence
+Requiring 2/3 supermajority for critical decisions ensures robust consensus even with faulty or adversarial agents, while weighted consensus (queen 3x weight) provides strategic guidance for non-critical choices.
+
+In practice:
+- Architecture pattern selection uses Byzantine consensus (7 agents, need 5 agreement)
+- Code review approval uses weighted consensus (queen veto power with 3x vote)
+- Technology stack decisions use Byzantine consensus (mission-critical, long-term impact)
+- Simple majority for low-risk decisions (library selection, coding style preferences)
+
+### Principle 3: Persistent Collective Memory Creates Cross-Session Intelligence
+Shared knowledge base with SQLite persistence and LRU caching enables agents to learn from past executions, avoiding repeated mistakes and accumulating expertise over time.
+
+In practice:
+- Successful patterns stored with confidence scores (e.g., "JWT auth pattern", confidence: 0.95)
+- Failed approaches logged with root cause ("Tried OAuth without refresh tokens, caused scalability issues")
+- Memory associations link related concepts (jwt-auth <-> refresh-tokens, strength: 0.9)
+- Future swarms query collective memory for similar problems, retrieve proven solutions first
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **No queen failover strategy** | Queen agent crashes, entire swarm halts because workers have no coordinator to assign tasks or aggregate results. | Implement queen health monitoring with automatic re-election. Use highest-performing worker as interim queen until new queen spawned. |
 | **Memory without garbage collection** | Collective memory grows unbounded, consuming gigabytes, slowing queries, eventually causing out-of-memory crashes. | Configure gcInterval: 300000ms (5 min) with memory pressure handling. LRU eviction at 50MB cache threshold. VACUUM database monthly. |
 | **Consensus deadlock on 50/50 split** | Byzantine consensus requires 2/3 majority but agents vote 5 Yes, 5 No on architecture decision. System hangs indefinitely. | Fallback to weighted consensus (queen breaks tie). If still deadlocked, escalate to user with options and rationale. |

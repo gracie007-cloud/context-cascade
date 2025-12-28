@@ -1,6 +1,7 @@
 ---
 name: dependencies
-description: Dependency management and analysis hub. Map project dependencies, analyze dependency graphs, identify vulnerabilities, and manage package versions. Routes to dependency-mapper and related analysis tools. --- # Dependencies Dependency management, analysis, and vulnerability detection for projects. ## Phase 0: Expertise Loading ```yaml
+description: Dependency management and analysis hub. Map project dependencies, analyze dependency graphs, identify vulnerabilities, and manage package versions. Routes to dependency-mapper and related analysis tools.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Dependencies
@@ -120,6 +121,19 @@ confidence_check:
 
 Works with: **security**, **code-review-assistant**, **deployment-readiness**
 
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+- [ ] **Agent Spawning**: Spawned agent via Task()
+- [ ] **Agent Registry Validation**: Agent from registry
+- [ ] **TodoWrite Called**: Called with 5+ todos
+- [ ] **Work Delegation**: Delegated to agents
+
+**Remember: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+---
+
 ## Core Principles
 
 ### 1. Transitive Dependency Awareness as Security Priority
@@ -131,7 +145,12 @@ Outdated dependencies accumulate security vulnerabilities and miss performance i
 ### 3. Circular Dependencies as Architectural Code Smell
 Circular dependencies (package A depends on B, B depends on A) indicate architectural coupling that prevents independent evolution, complicates testing, and signals unclear separation of concerns. While sometimes unavoidable in legacy codebases, new circular dependencies should trigger architectural review. Dependency graph analysis that only reports existence without surfacing cycles misses a critical maintainability signal.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Only auditing direct dependencies** | Ignores 80-95% of dependency graph. Transitive dependencies carry same security risks but escape review. Event-stream attack (2018) compromised via transitive dependency. False sense of security. | Audit full dependency tree: npm audit, pip-audit, cargo audit traverse transitives. Flag unmaintained packages at any depth. Review high-risk transitives (network access, filesystem writes). |
 | **Ignoring unused dependencies** | Bloats bundle size, increases attack surface, slows install times, creates maintenance burden for updates. Suggests code was deleted but package.json not cleaned up, indicating lax hygiene. | Run dependency-cruiser or depcheck to identify unused. Remove immediately. Prevent via CI check that fails on unused deps. Enforce "delete code, delete dependency" discipline. |
 | **Accepting circular dependencies as inevitable** | Circular dependencies prevent module-level testing, complicate reasoning about data flow, block parallelization, and signal architectural coupling. Treating as normal discourages refactoring. | Detect with madge or similar tools. Block new circulars in CI. Refactor existing: extract shared code to new module, apply dependency inversion, break into layers (domain/application/infrastructure). |

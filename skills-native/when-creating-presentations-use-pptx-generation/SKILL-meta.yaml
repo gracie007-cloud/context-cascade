@@ -1,0 +1,41 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+category: utilities
+tags:
+  - presentation
+  - pptx
+  - slides
+  - enterprise
+  - documentation
+agents:
+  - coder
+  - researcher
+difficulty: intermediate
+estimated_duration: 25-40min
+success_criteria:
+  - Presentation generated with proper structure
+  - All slides follow design constraints
+  - Accessibility standards met (WCAG 2.1 AA)
+  - Data visualization effective
+validation_method: accessibility_scan
+dependencies:
+  - claude-flow@alpha
+  - pptxgenjs
+  - html2pptx (optional)
+outputs:
+  - PowerPoint file (.pptx)
+  - Slide notes
+  - Accessibility report
+triggers:
+  - Need professional presentation
+  - Board deck required
+  - Report generation
+  - Data visualization needed
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\utilities\when-creating-presentations-use-pptx-generation
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.253Z
+  version: 2.0.0

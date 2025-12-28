@@ -1,6 +1,7 @@
 ---
 name: web-cli-teleport
 description: Guide users on when to use Claude Code Web vs CLI and seamlessly teleport sessions between environments
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 ## When to Use This Skill
@@ -285,6 +286,21 @@ training:
     - context_preservation_quality
 ```
 
+---
+
+**Quick Commands**:
+- Web: Go to claude.ai/code
+- Teleport: `claude --teleport <session-id>`
+- Check context: Look for context % after teleporting
+
+**Pro Tips**:
+- Use web for first pass, CLI for refinement
+- Mobile great for planning during commute
+- Always clean git state before teleporting
+- Context window shows how much history loaded
+
+---
+
 ## Core Principles
 
 ### 1. Context Preservation Over Interface Consistency
@@ -296,7 +312,12 @@ Effective development workflows separate thinking from doing. Mobile devices exc
 ### 3. Complexity-Triggered Interface Switching
 Static interface recommendations fail because task complexity reveals itself during execution, not planning. The skill designs for mid-stream transitions, providing clear signals for when to teleport and ensuring the teleportation mechanism is friction-free. This accepts that initial assessments are probabilistic and builds in escape hatches when predictions fail.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Forcing CLI for all "serious" work** | Dismisses valid web use cases like quick fixes, mobile access, and collaborative PR review. Creates unnecessary friction for tasks that don't need full local tooling. | Use decision matrix: complexity, iteration count, local testing needs, current location. Web handles 1-3 interaction tasks efficiently. |
 | **Starting fresh instead of teleporting** | Loses 50% context window worth of decisions, requirements, and exploratory work. Forces re-explanation of nuances already established. Wastes time rebuilding shared understanding. | Always use teleport command when switching. Verify context % loaded. Continue conversation rather than restart. |
 | **Teleporting with dirty git state** | Blocks teleport operation, requires cleanup, causes confusion about what changes belong to current task vs previous work. Risks accidental commits of unrelated changes. | Verify git status shows clean working directory before teleport. Stash or commit local changes first. Use branch per feature to isolate work. |

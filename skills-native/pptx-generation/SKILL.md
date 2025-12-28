@@ -1,6 +1,7 @@
 ---
 name: pptx-generation
 description: Enterprise-grade PowerPoint deck generation system using evidence-based prompting techniques, workflow enforcement, and constraint-based design. Use when creating professional presentations (board decks, reports, analyses) requiring consistent visual quality, accessibility compliance, and integration of complex data from multiple sources. Implements html2pptx workflow with spatial layout optimization, validation gates, and multi-chat architecture for 30+ slide decks.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # PowerPoint Generation Skill
@@ -252,6 +253,21 @@ Success metrics:
 - Reduced iteration cycles (get it right in first generation)
 - Scalability to complex 30+ slide decks
 - Accessibility compliance as default, not afterthought
+---
+
+## Core Principles
+
+### 1. Negative Constraints Outperform Positive Specifications
+Visual design has exponentially more failure modes than success modes. Prohibiting border boxes, outline shapes, and rounded rectangles eliminates entire categories of layout failures before generation begins. This constraint-based approach scales more reliably than descriptive guidance because it reduces the search space of possible outputs rather than attempting to guide toward a single correct solution.
+
+### 2. Workflow Enforcement Prevents Tool Degradation
+AI systems silently switch to suboptimal alternatives when primary tools encounter difficulties. For PowerPoint generation, this manifests as abandoning html2pptx for simpler but less precise methods, causing spatial layout failures. Explicit workflow enforcement with documentation review requirements creates a forcing function that prevents this silent degradation, ensuring reliable pixel-level control across all generations.
+
+### 3. Quantified Visual Specifications Enable Automated Validation
+Vague qualitative instructions like "clean margins" force AI to guess intent, leading to inconsistent results. Converting requirements to measurable parameters (4.5:1 contrast ratio, 18pt minimum font, 0.5" margins) eliminates ambiguity and enables automated validation gates. This shifts quality control from subjective review to objective measurement, dramatically improving consistency.
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Why It Fails | Correct Approach |

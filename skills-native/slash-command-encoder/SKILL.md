@@ -1,6 +1,7 @@
 ---
 name: slash-command-encoder
 description: Creates ergonomic slash commands (/command) that provide fast, unambiguous access to micro-skills, cascades, and agents. Enhanced with auto-discovery, intelligent routing, parameter validation, and command chaining. Generates comprehensive command catalogs for all installed skills with multi-model integration.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -332,6 +333,7 @@ See also:
 **Template**:
 ```yaml
 command: /process-<datatype>
+category: data
 routing:
   type: micro-skill
   target: process-<datatype>
@@ -359,6 +361,7 @@ examples:
 **Template**:
 ```yaml
 command: /code-<operation>
+category: code
 routing:
   type: micro-skill | cascade
   target: code-<operation>
@@ -387,6 +390,7 @@ examples:
 **Template**:
 ```yaml
 command: /agent-<specialty>
+category: agent
 routing:
   type: agent
   target: <specialty>-agent
@@ -416,6 +420,7 @@ examples:
 **Template**:
 ```yaml
 command: /<model>-<capability>
+category: multi-model
 routing:
   type: multi-model
   target: <model>-cli
@@ -448,6 +453,7 @@ examples:
 **Template**:
 ```yaml
 command: /<workflow-name>
+category: workflow
 routing:
   type: cascade
   target: <workflow-name>-cascade
@@ -554,7 +560,10 @@ examples:
 
 # Command file format
 .claude/commands/validate-api.md:
-
+---
+name: validate-api
+binding: micro-skill:validate-api
+---
 Validate API responses against OpenAPI schemas.
 Usage: /validate-api <file> [--schema <schema>] [--strict]
 ```
@@ -708,7 +717,52 @@ done
 - Works with **audit-pipeline** for quality commands
 - Works with **root-cause-analyzer** for debugging commands
 
------------|---------|----------|
+---
+
+**Version 2.0 Enhancements**:
+- Auto-discovery of all installed skills
+- Multi-model intelligent routing
+- Command chaining and composition patterns
+- Type-safe parameter validation
+- Auto-completion system
+- Comprehensive command catalog generation
+- Integration with Gemini/Codex CLIs
+- Enhanced help and documentation generation
+## Core Principles
+
+Slash Command Encoder operates on 3 fundamental principles:
+
+### Principle 1: Expert Efficiency Through Command Line UX
+Command-line interfaces provide power users with fast, precise, and scriptable access to complex AI operations, prioritizing muscle memory over natural language ambiguity.
+
+In practice:
+- Design commands with verb-noun patterns for immediate recognition
+- Enable command chaining for pipeline composition
+- Provide comprehensive auto-completion for parameter discovery
+- Maintain consistent naming across all command categories
+
+### Principle 2: Auto-Discovery and Intelligent Routing
+Commands are automatically generated from installed skills, with intelligent routing to optimal AI models and agents based on task requirements.
+
+In practice:
+- Scan skill directories on startup to build comprehensive command catalogs
+- Map command parameters directly to skill inputs for seamless binding
+- Route commands to appropriate models (Claude, Gemini, Codex) based on capability needs
+- Update command registry automatically when skills are added or modified
+
+### Principle 3: Type Safety and Composability
+Commands enforce type-safe parameters with validation and support compositional patterns for complex workflows.
+
+In practice:
+- Validate all parameters against defined schemas before execution
+- Enable pipeline composition with standardized input/output formats
+- Support parallel execution patterns for independent operations
+- Provide clear error messages when validation fails
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Natural Language Commands** | Commands like `/please analyze this file carefully` defeat muscle memory and scriptability, creating ambiguous interfaces that cannot be chained or automated | Use precise verb-noun patterns like `/analyze-code src/file.js --strict` with explicit parameters for fast, scriptable invocation |
 | **Manual Command Registration** | Manually writing command definitions for each skill creates maintenance burden, drift from source skills, and missing commands when skills are added | Use auto-discovery scanning skill directories on startup, generating commands from SKILL.md metadata with automatic registry updates |
 | **Stringly-Typed Parameters** | Accepting arbitrary string parameters without validation causes runtime errors, confusing failure modes, and prevents auto-completion assistance | Implement TypeScript-style schemas with enum constraints, file path validation, and type checking before execution with helpful error messages |

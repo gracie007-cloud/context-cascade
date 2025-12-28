@@ -1,6 +1,7 @@
 ---
 name: when-releasing-software-use-github-release-management
 description: Comprehensive GitHub release orchestration with AI swarm coordination for automated versioning, testing, deployment, and rollback management. Coordinates release-manager, cicd-engineer, tester, and docs-writer agents through hierarchical topology to handle semantic versioning, changelog generation, release notes, deployment validation, and post-release monitoring. Supports multiple release strategies (rolling, blue-green, canary) and automated rollback. Use when creating releases, managing deployments, or coordinating version updates.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Release Management Skill

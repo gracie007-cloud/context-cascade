@@ -1,23 +1,315 @@
 ---
 name: rapid-manuscript-drafter
-description: Generate structured research manuscript drafts in 10-15 minutes with proper academic sections (Abstract, Introduction, Methods, Results, Discussion). Creates scaffolded drafts with placeholders for data, not fabricated content. Use for quickly producing first drafts from research ideas, speeding up the writing process while maintaining academic integrity.
+description: Skill for rapid-manuscript-drafter
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
-proper academic sections (Abstract, Introduction, Methods, Results, Discussion).
+name: rapid-manuscript-drafter
+description: Generate structured research manuscript drafts in 10-15 minutes with
+  proper academic sections (Abstract, Introduction, Methods, Results, Discussion).
   Creates scaffolded drafts with placeholders for data, not fabricated content. Use
   for quickly producing first drafts from research ideas, speeding up the writing
   process while maintaining academic integrity.
+version: 1.0.0
+category: research
+tags:
 - research
 - writing
 - manuscript
 - academic
 - drafting
 - rapid
+author: ruv
 mcp_servers:
   required: [memory-mcp]
   optional: [sequential-thinking]
   auto_enable: true
------|----------|----------|-------------|
+---
+
+# Rapid Manuscript Drafter
+
+## Purpose
+
+Generate structured, scaffolded research manuscript drafts in 10-15 minutes that provide a solid foundation for academic writing. Unlike tools that fabricate content, this skill creates honest drafts with clear placeholders for user-provided data and findings.
+
+## Critical Ethical Stance
+
+**This skill NEVER fabricates research results or data.**
+
+What we DO:
+- Generate document structure and section scaffolding
+- Write introduction and background based on known literature
+- Create methodology templates based on described approach
+- Provide results section structure with [YOUR_DATA] placeholders
+- Draft discussion frameworks with logical argument structure
+
+What we DON'T DO:
+- Invent experimental results
+- Fabricate statistical findings
+- Create fake tables or figures with made-up numbers
+- Generate citations to non-existent papers
+
+## When to Use This Skill
+
+Activate this skill when:
+- Have a research idea ready to write up
+- Need to quickly produce a first draft
+- Want to overcome blank page syndrome
+- Preparing a manuscript outline for collaborators
+- Writing conference paper with tight deadline
+- Need structured template for thesis chapter
+
+**DO NOT** use this skill for:
+- Final polished manuscripts (this is a first draft tool)
+- Generating fake research (we don't do that)
+- Replacing actual research work
+
+## Manuscript Types Supported
+
+1. **Research Article** (IMRaD format)
+2. **Conference Paper** (shorter, focused)
+3. **Review Article** (literature synthesis)
+4. **Technical Report**
+5. **Thesis Chapter**
+6. **Grant Proposal Section**
+
+## Input Contract
+
+```yaml
+input:
+  manuscript_type: enum[research_article, conference_paper, review, technical_report, thesis_chapter, grant_section] (required)
+
+  research_content:
+    title: string (required)
+    abstract_points: array[string] (optional)
+    research_question: string (required)
+    hypotheses: array[string] (optional)
+    methodology_description: string (required)
+    key_findings_summary: string (optional, will use placeholders if empty)
+    contribution_claims: array[string] (required)
+
+  literature_context:
+    key_papers: array[object] (optional)
+      title: string
+      authors: string
+      year: number
+      relevance: string
+    research_gap: string (required)
+
+  target_venue:
+    name: string (optional)
+    word_limit: number (optional)
+    style: enum[ieee, acm, nature, apa, chicago] (default: apa)
+
+  output_preferences:
+    include_placeholders: boolean (default: true)
+    include_writing_tips: boolean (default: true)
+    generate_outline_first: boolean (default: true)
+```
+
+## Output Contract
+
+```yaml
+output:
+  manuscript:
+    title: string
+    sections: array[object]
+      name: string
+      content: string
+      word_count: number
+      completeness: percentage
+      placeholders: array[string]
+
+  outline:
+    structure: object (hierarchical outline)
+
+  metadata:
+    total_words: number
+    total_placeholders: number
+    sections_complete: number
+    sections_scaffolded: number
+    generation_time: number
+
+  next_steps:
+    required_additions: array[string]
+    recommended_revisions: array[string]
+```
+
+## SOP Phase 1: Outline Generation
+
+Create hierarchical document structure:
+
+```markdown
+## Manuscript Outline: [TITLE]
+
+### 1. Abstract (~250 words)
+- Background context (1-2 sentences)
+- Research gap/problem (1 sentence)
+- Methodology summary (1-2 sentences)
+- Key findings (2-3 sentences)
+- Implications (1 sentence)
+
+### 2. Introduction (~800-1000 words)
+- 2.1 Opening hook and context
+- 2.2 Background and related work
+- 2.3 Research gap identification
+- 2.4 Research questions/hypotheses
+- 2.5 Contribution statement
+- 2.6 Paper organization
+
+### 3. Related Work (~600-800 words)
+- 3.1 [Theme 1 from literature]
+- 3.2 [Theme 2 from literature]
+- 3.3 Gap analysis and positioning
+
+### 4. Methodology (~800-1200 words)
+- 4.1 Research design overview
+- 4.2 Data collection
+- 4.3 Analysis approach
+- 4.4 Validation strategy
+
+### 5. Results (~600-1000 words)
+- 5.1 [Finding 1 - placeholder]
+- 5.2 [Finding 2 - placeholder]
+- 5.3 Summary of findings
+
+### 6. Discussion (~800-1000 words)
+- 6.1 Interpretation of results
+- 6.2 Comparison with prior work
+- 6.3 Implications
+- 6.4 Limitations
+- 6.5 Future work
+
+### 7. Conclusion (~200-300 words)
+- Summary
+- Key contributions
+- Call to action
+
+### References
+- [Placeholder for bibliography]
+```
+
+## SOP Phase 2: Section Drafting
+
+### Abstract Template
+
+```markdown
+## Abstract
+
+[BACKGROUND CONTEXT - 1-2 sentences about the field and why it matters]
+
+[RESEARCH GAP - 1 sentence identifying the specific problem addressed]
+
+In this work, we [METHODOLOGY SUMMARY - brief description of approach].
+
+[KEY FINDINGS - use provided findings or placeholder]:
+- [FINDING 1: YOUR_RESULT_HERE]
+- [FINDING 2: YOUR_RESULT_HERE]
+
+Our results demonstrate [IMPLICATION - how this advances the field].
+
+**Keywords**: [keyword1], [keyword2], [keyword3], [keyword4], [keyword5]
+```
+
+### Introduction Template
+
+```markdown
+## 1. Introduction
+
+[HOOK - Opening sentence that captures attention and establishes importance]
+
+### Background and Context
+
+[BACKGROUND PARAGRAPH 1 - Establish the broader research area]
+The field of [DOMAIN] has seen significant advances in recent years,
+particularly in [SPECIFIC AREA] (Author1 et al., YEAR; Author2 et al., YEAR).
+
+[BACKGROUND PARAGRAPH 2 - Narrow to specific topic]
+Within this context, [SPECIFIC TOPIC] has emerged as a critical challenge
+because [REASON FOR IMPORTANCE].
+
+### Research Gap
+
+Despite these advances, [RESEARCH GAP STATEMENT]. Current approaches
+[LIMITATION 1] and [LIMITATION 2]. This limitation is significant because
+[WHY IT MATTERS].
+
+### Research Questions
+
+This work addresses the following research questions:
+- RQ1: [RESEARCH QUESTION 1]
+- RQ2: [RESEARCH QUESTION 2]
+
+### Contributions
+
+The main contributions of this paper are:
+1. [CONTRIBUTION 1]
+2. [CONTRIBUTION 2]
+3. [CONTRIBUTION 3]
+
+### Paper Organization
+
+The remainder of this paper is organized as follows. Section 2 reviews
+related work. Section 3 describes our methodology. Section 4 presents
+results. Section 5 discusses implications, and Section 6 concludes.
+```
+
+### Methodology Template
+
+```markdown
+## 3. Methodology
+
+### 3.1 Research Design Overview
+
+[METHODOLOGY DESCRIPTION - from user input]
+
+Figure 1 illustrates our overall approach.
+
+[FIGURE 1 PLACEHOLDER: Insert methodology flowchart here]
+
+### 3.2 Data Collection
+
+**Dataset/Participants**: [YOUR_DATA_DESCRIPTION_HERE]
+- Sample size: [N = YOUR_NUMBER]
+- Collection period: [YOUR_DATES]
+- Selection criteria: [YOUR_CRITERIA]
+
+**Data Sources**:
+- Source 1: [DESCRIPTION]
+- Source 2: [DESCRIPTION]
+
+### 3.3 Analysis Approach
+
+[ANALYSIS DESCRIPTION]
+
+The key steps in our analysis are:
+1. [STEP 1]
+2. [STEP 2]
+3. [STEP 3]
+
+### 3.4 Validation Strategy
+
+To ensure validity, we [VALIDATION APPROACH].
+
+- Internal validity: [YOUR_APPROACH]
+- External validity: [YOUR_APPROACH]
+- Reliability: [YOUR_APPROACH]
+```
+
+### Results Template
+
+```markdown
+## 4. Results
+
+### 4.1 [Finding Category 1]
+
+[YOUR RESULTS PARAGRAPH HERE]
+
+Table 1 summarizes [WHAT TABLE SHOWS].
+
+**[TABLE 1 PLACEHOLDER]**
+| Metric | Baseline | Proposed | Improvement |
+|--------|----------|----------|-------------|
 | [Metric 1] | [YOUR_DATA] | [YOUR_DATA] | [YOUR_DATA] |
 | [Metric 2] | [YOUR_DATA] | [YOUR_DATA] | [YOUR_DATA] |
 
@@ -242,6 +534,16 @@ The pharmaceutical industry faces unprecedented challenges...
 3. **Clear marking** - All placeholders clearly identifiable
 4. **Academic integrity** - Draft is a tool, not a substitute for research
 
+---
+
+**Version**: 1.0.0
+**Category**: Research / Writing
+**Time**: 10-15 minutes for full draft
+**Output**: Scaffolded manuscript with placeholders
+**Design**: Ethical scaffolding with placeholder-based content
+
+---
+
 ## Core Principles
 
 ### 1. Scaffolding Over Fabrication
@@ -274,7 +576,12 @@ Users must always know what is generated versus what requires their expertise. T
 - Generate completion checklists highlighting all areas needing user input
 - Provide "generation time" metrics so users understand the tool's contribution
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | Fabricating experimental results | Violates research integrity; creates fake data that appears legitimate but has no basis in actual experiments | Use explicit placeholders like [YOUR_RESULT: Mean accuracy = ?] instead of generating plausible-looking numbers. Add warnings that placeholders must be replaced before submission. |
 | Generic template overload | Produces formulaic writing that lacks domain-specific depth; all papers sound identical regardless of field or contribution | Customize templates based on research type (experimental, theoretical, review). Include field-specific writing tips. Generate domain-appropriate example text that researchers can adapt. |
 | Hiding AI contribution | Creates ethical ambiguity about authorship; users may unknowingly submit AI-generated text as their own work | Add metadata footer to drafts: "Generated with rapid-manuscript-drafter v1.0.0". Mark all AI-generated sections. Include ethics statement template about tool use. |

@@ -1,6 +1,7 @@
 ---
 name: general-research-workflow
-description: Systematic 6-phase research methodology for history, mythology, and literature implementing Red's (OSP) evidence-based approach. Use when researching topics outside academic ML scope that require primary/secondary source evaluation, credibility analysis, and evidence-based thesis formation. Sequential agent workflow (researcher, analyst, coordinator) over 6-10 hours with Quality Gates ensuring rigorous source validation and synthesis.
+description: Systematic 6-phase research methodology for history, mythology, and literature implementing Reds (OSP) evidence-based approach. Use when researching topics outside academic ML scope that require primary/secondary source evaluation, credibility analysis, and evidence-based thesis formation. Sequential agent workflow (researcher, analyst, coordinator) over 6-10 hours with Quality Gates ensuring rigorous source validation and synthesis.
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 # General Research Workflow
@@ -60,7 +61,31 @@ See `references/glossary.md` for complete definitions:
 - **WorldCat**: worldcat.org - Global library catalog
 - **Google Scholar**: scholar.google.com - Academic publication search
 
+---
 
+## Step-by-Step Workflow
+
+### STEP 0: Pre-Flight Check (Gate 0)
+**Agent**: researcher
+**Goal**: Verify Wikipedia article exists OR establish fallback plan
+
+**Procedure**:
+1. Search Wikipedia for research topic
+2. **IF article exists**: ✅ Proceed to Step 1
+3. **IF NO article**:
+   - Try related/broader topics, alternative spellings
+   - **FALLBACK**: Start with Google Scholar search instead
+   - Extract ≥10 citations from Scholar results
+   - Document: "No Wikipedia article, started with Google Scholar"
+4. Check language accessibility:
+   - Flag non-English sources for translation assessment
+   - Document language limitation if proceeding without translations
+
+**Deliverable**: Confirmation of viable starting point
+
+**Quality Gate 0**: STOP if no viable sources. Escalate to user for topic clarification.
+
+---
 
 ### STEP 1: Wikipedia Mining
 **Agent**: researcher
@@ -84,7 +109,36 @@ See `references/glossary.md` for complete definitions:
 
 **Quality Gate 1**: STOP if <10 citations. Expand to related Wikipedia articles.
 
+---
 
+### STEP 2: Source Discovery
+**Agent**: researcher
+**Goal**: Locate actual sources, expand beyond Wikipedia
+
+**Procedure**:
+1. For EACH citation from Step 1:
+   - Search WorldCat (worldcat.org)
+   - Search Google Books
+   - Classify as primary/secondary
+   - Note accessibility: full text, preview, physical, unavailable
+   - Note language
+2. Expand using:
+   - Google Scholar "Cited by"
+   - "Related articles" suggestions
+   - Author's other works
+3. For each source record:
+   - ✅ Title, author, year, type [REQUIRED]
+   - ✅ Accessibility + language [REQUIRED]
+   - ✅ Relevance note: "Addresses [question] via [primary evidence/analysis/context]" [REQUIRED]
+   - ✅ Relevance score 1-5 [REQUIRED]
+
+**Deliverable**: Source inventory with 20+ sources
+
+**Quality Gate 2**: STOP if <20 sources OR <50% accessible. Continue discovery.
+
+**Exception**: If obscure topic, proceed with ≥10 high-credibility sources, document limitation.
+
+---
 
 ### STEP 3: Source Classification
 **Agent**: analyst (with researcher support)
@@ -157,7 +211,42 @@ Bands:
 
 **Exception**: If NO primaries available (ancient topics), proceed with ≥10 credibility ≥4 secondaries, document.
 
+---
 
+### STEP 4: Contextual Analysis
+**Agent**: researcher (with analyst verification)
+**Goal**: Understand sources in historical/cultural/scholarly context
+
+**Procedure**:
+Start with priority 4-5 sources. For EACH:
+
+**A. Temporal Context**:
+- ✅ Publication date [REQUIRED]
+- ✅ Major events at that time [REQUIRED]
+- 💡 Time period's influence on perspective [ANALYSIS]
+
+**B. Cultural Context**:
+- ✅ Author's cultural/national background [REQUIRED]
+- ✅ Intended audience [REQUIRED]
+- 💡 Embedded cultural assumptions [ANALYSIS]
+
+**C. Historiographical Context**:
+- ✅ Position in scholarly debate [REQUIRED]
+- ⚠️ Mainstream or controversial? [IF APPLICABLE]
+- ⚠️ School of thought [IF APPLICABLE]
+
+**D. Translation Issues** (if applicable):
+- ⚠️ Translation reputation
+- ⚠️ Known issues
+- ⚠️ Multiple translations compared?
+
+Create context profile (3-5 sentences per type)
+
+**Deliverable**: Profiles for 10+ sources, 3+ time periods
+
+**Quality Gate 4**: STOP if <10 contextualized OR <3 periods. Continue.
+
+---
 
 ### STEP 5: Comprehensive Note-Taking
 **Agent**: researcher
@@ -201,7 +290,109 @@ Tag with: `#primary-source` or `#secondary-source`, `#key-claim`, `#needs-verifi
 
 **Quality Gate 5**: STOP if quotas not met. Re-read sources.
 
+---
 
+### STEP 6: Synthesis & Dot Connecting
+**Agent**: coordinator (with researcher + analyst support)
+**Goal**: Synthesize evidence into thesis and final report
+
+**Phase A - Pattern Recognition** (researcher):
+1. Review ALL Step 5 notes
+2. Identify recurring themes (≥3 sources)
+3. Find agreements (multiple sources, similar claims)
+4. Find disagreements/contradictions
+5. Map evidence chains: "Source A (p.42) → Source B (p.15) → Claim X"
+6. Identify gaps (insufficient evidence)
+
+**Phase B - Thesis Formation** (researcher):
+1. **CRITICAL**: Let thesis EMERGE from evidence (NOT imposed)
+2. Draft 1-2 sentence thesis that:
+   - ✅ Makes clear argument
+   - ✅ Supported by source evidence
+   - ✅ Acknowledges scope/limitations
+3. List supporting evidence (≥5 sources)
+4. List counter-evidence
+5. Identify limitations
+
+**SPECIAL CASE - Inconclusive**:
+IF evidence too contradictory/insufficient:
+- ✅ State "INCONCLUSIVE"
+- 💡 Explain WHY
+- 📋 Summarize competing interpretations
+- 🚨 Document what sources would resolve ambiguity
+
+**Phase C - Validation** (analyst):
+1. Check for fallacies:
+   - ❌ Circular reasoning
+   - ❌ Confirmation bias
+   - ❌ Unsupported leaps
+2. Verify EVERY claim has citation + PAGE NUMBER
+3. Flag unsupported assertions → return to researcher
+4. Confirm ≥2 primaries cited (if available)
+5. Assess strength:
+   - ✅ STRONG: ≥5 sources, ≥2 primaries, logical
+   - ⚠️ MODERATE: 3-4 sources OR 1 primary, minor gaps
+   - ❌ WEAK: <3 sources OR no primaries → return
+
+**Phase D - Final Report** (coordinator):
+Compile report using template:
+
+```markdown
+# RESEARCH REPORT: [Topic]
+
+## THESIS
+[1-2 sentence evidence-based thesis]
+OR [INCONCLUSIVE: Explanation]
+
+## SUPPORTING EVIDENCE
+1. [Claim 1]
+   - **Source 1**: [Author, Year, p.X-Y] - [Quote/paraphrase]
+   - **Source 2**: [Author, Year, p.Z] - [Quote/paraphrase]
+
+## LIMITATIONS & CAVEATS
+- **Limitation 1**: [Description]
+- **Limitation 2**: [Description]
+
+## COUNTER-EVIDENCE OR ALTERNATIVES
+- **Alternative 1**: [Description] - [Source, Year, p.X]
+
+## PRIMARY SOURCES REFERENCED [N total]
+1. [Title] - [Author], [Year] - [1-sentence significance]
+
+## SECONDARY SOURCES REFERENCED [N total]
+1. [Title] - [Author], [Year] - [1-sentence contribution]
+
+## METHODOLOGY NOTES
+- Total sources: [N]
+- Primaries: [N] | Secondaries: [N]
+- Time periods: [List]
+- Perspectives: [Regions/cultures]
+- Research duration: [X hours]
+
+## RECOMMENDATIONS FOR FURTHER RESEARCH
+- [Additional sources needed?]
+- [Unanswered questions?]
+```
+
+**Example**: See `examples/final-report-example.md`
+
+**Deliverable**: Complete research report
+
+**Quality Gate 6 (FINAL)**:
+**GO**:
+- ✅ Thesis supported by ≥5 sources OR "INCONCLUSIVE" explained
+- ✅ ≥2 primaries cited (OR exception documented)
+- ✅ NO unsupported claims
+- ✅ ≥1 limitation acknowledged
+- ✅ Analyst validation passed
+
+**NO-GO** (return to Phase B):
+- ❌ Unsupported claims
+- ❌ Logical fallacies
+- ❌ <5 sources for thesis
+- ❌ No limitations (overconfident)
+
+---
 
 ## Red's Research Principles
 
@@ -218,7 +409,31 @@ This workflow embeds Red's (OSP) methodology:
 
 See `references/red-methodology.md` for full explanation.
 
+---
 
+## Success Metrics
+
+### Quantitative
+- ✅ ≥20 sources in inventory
+- ✅ ≥5 primary sources (OR exception documented)
+- ✅ ≥80% sources credibility ≥3
+- ✅ ≥50 notes captured
+- ✅ ≥20 quotes with page numbers
+- ✅ ≥5 cross-source links
+- ✅ Thesis supported by ≥5 sources (OR "INCONCLUSIVE")
+- ✅ ≥2 primaries cited (OR exception)
+- ✅ 6-10 hours duration
+
+### Qualitative
+- ✅ Context explained for ≥10 sources
+- ✅ Biases identified in ≥3 sources
+- ✅ Thesis emerges from evidence
+- ✅ All claims have citations + pages
+- ✅ ≥1 limitation acknowledged
+- ✅ Alternatives acknowledged
+- ✅ NO logical fallacies
+
+---
 
 ## Error Handling
 
@@ -235,7 +450,15 @@ See `references/red-methodology.md` for full explanation.
 | Logical fallacies | 6C | Return to Phase B |
 | Unsupported claims | 6C | Add sources OR remove claims |
 
+---
 
+## Integration
+
+**Before**: Use `intent-analyzer` if research question vague
+**During**: Can parallel `literature-synthesis` for ML components
+**After**: Use `academic-reading-workflow` for deep reading
+
+---
 
 ## Process Visualization
 

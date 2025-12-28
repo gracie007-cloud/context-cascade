@@ -1,6 +1,7 @@
 ---
 name: cloud-platforms
 description: Multi-cloud deployment and infrastructure management across AWS, GCP, and Azure. Use when deploying applications to cloud platforms, implementing serverless architectures, or managing cloud infrastructure as code. Supports containers, serverless, and traditional compute.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Cloud Platforms - Multi-Cloud Infrastructure ⭐ GOLD TIER
@@ -198,7 +199,41 @@ See `ENHANCEMENT-SUMMARY.md` for complete Gold tier enhancement details includin
 - Performance metrics
 - Cost estimates
 - Troubleshooting guide
+---
 
+## Core Principles
+
+### 1. Infrastructure as Code (IaC) First
+All cloud resources MUST be provisioned through code (Terraform, CloudFormation, Pulumi) - never manually through web consoles. This ensures:
+- **Reproducibility**: Identical environments across dev/staging/prod
+- **Version Control**: Infrastructure changes tracked in Git with full audit trail
+- **Disaster Recovery**: Complete environment rebuild from code in minutes
+- **Code Review**: Infrastructure changes reviewed like application code
+
+Manual provisioning creates "snowflake servers" - unique, undocumented configurations that break disaster recovery and violate compliance requirements.
+
+### 2. Defense in Depth Security
+Cloud security requires multiple layers of protection, not a single perimeter:
+- **Network Layer**: VPC isolation, security groups, private subnets
+- **Identity Layer**: IAM roles with least privilege, MFA enforcement, temporary credentials
+- **Data Layer**: Encryption at rest (KMS), encryption in transit (TLS 1.3), secrets management (Vault)
+- **Application Layer**: WAF rules, API authentication, input validation
+- **Monitoring Layer**: CloudTrail auditing, anomaly detection, SIEM integration
+
+A breach in one layer should NOT compromise the entire system. Assume every boundary will be tested.
+
+### 3. Cost Optimization Through Design
+Cloud costs are a first-class architectural concern, not an afterthought:
+- **Right-Sizing**: Use instance types matching actual workload requirements (not oversized defaults)
+- **Auto-Scaling**: Scale resources to match demand (horizontal + vertical scaling)
+- **Reserved Capacity**: Purchase reserved instances for predictable workloads (40-60% savings)
+- **Spot Instances**: Use spot instances for fault-tolerant workloads (70-90% savings)
+- **Lifecycle Policies**: Automatically archive cold data to cheaper storage tiers (S3 Glacier, Azure Archive)
+- **Resource Tagging**: Tag all resources for cost allocation and showback reporting
+
+Monitor cloud spending continuously. A single misconfigured instance can cost thousands per month.
+
+---
 
 ## Anti-Patterns
 
@@ -208,7 +243,12 @@ See `ENHANCEMENT-SUMMARY.md` for complete Gold tier enhancement details includin
 | **Vendor Lock-In Without Justification** | Using cloud-specific services (AWS Lambda, GCP Cloud Functions) without architectural justification makes multi-cloud migration impossible and creates vendor dependency. | **Use portable abstractions** when multi-cloud is required (Kubernetes instead of ECS, PostgreSQL instead of DynamoDB). Accept vendor-specific services ONLY when performance/cost benefits outweigh portability. Document trade-offs explicitly. |
 | **Ignoring Multi-Region Deployment** | Single-region deployments create catastrophic failure risk. AWS region outages have lasted hours to days (us-east-1 Dec 2021: 7+ hours). | **Deploy critical services across multiple regions** with active-active or active-passive failover. Use global load balancers (Route 53, Traffic Manager) for automatic failover. Test disaster recovery procedures quarterly. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Manual Console Provisioning** | Creating cloud resources through web console GUI instead of Infrastructure as Code. Results in undocumented infrastructure that cannot be reproduced. Violates compliance requirements. No version control or code review. Breaks disaster recovery. | Always use Infrastructure as Code (Terraform/CloudFormation). All infrastructure changes must be code-reviewed, version-controlled, and reproducible. Enable CloudTrail auditing for compliance. Never manual changes - codify everything. |
 | **Single-Region Deployment** | Deploying critical services in single AWS/GCP/Azure region. Creates catastrophic failure risk. AWS region outages have lasted 7+ hours (us-east-1 Dec 2021). Single point of failure for entire application. | Deploy critical services across multiple regions with active-active or active-passive failover. Use global load balancers (Route 53, Traffic Manager) for automatic failover. Test disaster recovery procedures quarterly. Multi-region is non-negotiable for production systems. |
 | **Vendor Lock-In Without Justification** | Using cloud-specific services (AWS Lambda, GCP Cloud Functions) without architectural justification. Makes multi-cloud migration impossible. Creates vendor dependency with no escape path. | Use portable abstractions when multi-cloud required (Kubernetes vs ECS, PostgreSQL vs DynamoDB). Accept vendor-specific services ONLY when performance/cost benefits outweigh portability loss. Document trade-offs explicitly in architecture decision records. |

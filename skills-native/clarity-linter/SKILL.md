@@ -1,6 +1,7 @@
 ---
 name: clarity-linter
 description: Machine-readable code clarity auditing with cognitive load optimization. 3-phase SOP - Metrics Collection (code-analyzer) -> Rubric Evaluation (reviewer) -> Fix Generation (coder + analyst). Detects thin helpers, excessive indirection, call chain depth, poor naming, and comment issues.
+allowed-tools: Read, Glob, Grep
 ---
 
 # Clarity Linter
@@ -20,7 +21,28 @@ Before linting for clarity:
 
 **Integration**: Runs alongside connascence-analyzer in dogfooding quality detection cycles
 
+---
 
+## System Architecture
+
+```
+[Code Implementation]
+    ↓
+[Metrics Collection] (code-analyzer)
+    ↓  (func_lines, nesting_depth, call_count, name_semantic_score, etc.)
+    ↓
+[Rubric Evaluation] (reviewer)
+    ↓  (5 dimensions: indirection, size, call depth, duplication, comments)
+    ↓
+[Scoring & Verdict] (ACCEPT ≥0.8 | REFINE 0.6-0.79 | REJECT <0.6)
+    ↓
+[Fix Generation] (coder + analyst)
+    ↓  (Auto-fix PRs + Human-readable reports)
+    ↓
+[Memory-MCP Storage] (with WHO/WHEN/PROJECT/WHY tags)
+```
+
+---
 
 ## When to Use This Skill
 
@@ -39,7 +61,85 @@ Activate this skill when:
 - Performance bottlenecks (use performance-testing-agent)
 - Quick lint checks (use quick-quality-check)
 
+---
 
+## Input Contract
+
+```yaml
+input:
+  target:
+    type: enum[file, directory, workspace]
+    path: string (required)
+      # Absolute path to analyze
+
+  rubric_config:
+    rubric_path: string (default: .claude/skills/clarity-linter/.artifacts/clarity_rubric.json)
+    policy: enum[strict, standard, lenient] (default: standard)
+      # Affects threshold values in rubric
+
+  metrics:
+    collect_call_graph: boolean (default: true)
+    analyze_naming: boolean (default: true)
+    detect_duplication: boolean (default: true)
+
+  options:
+    auto_fix: boolean (default: false)
+      # Generate auto-fix PRs for high-confidence violations
+    report_format: enum[json, markdown, html] (default: markdown)
+    min_score_threshold: number (default: 0.6, range: 0-1)
+```
+
+## Output Contract
+
+```yaml
+output:
+  metrics:
+    functions_analyzed: number
+    files_analyzed: number
+    total_metrics_collected: number
+    collection_time_ms: number
+
+  evaluation:
+    overall_score: number (0-1)
+    verdict: enum[ACCEPT, REFINE, REJECT]
+    dimension_scores:
+      thin_helpers_indirection: number (0-1)
+      function_size_cohesion: number (0-1)
+      indirection_call_depth: number (0-1)
+      duplication_vs_dry: number (0-1)
+      comments_explanation: number (0-1)
+
+  violations:
+    total_count: number
+    by_severity:
+      critical: number
+      warning: number
+      info: number
+    by_check_id: object
+      THIN_HELPER_SIZE: number
+      PASS_THROUGH_WRAPPER: number
+      SOFT_TOO_LONG_FUNCTION: number
+      # ... (18 total checks from rubric)
+
+  fixes:
+    auto_fix_prs: array[object] (if auto_fix enabled)
+      file: string
+      violation_id: string
+      diff: string
+    suggested_fixes: array[object]
+      file: string
+      line: number
+      check_id: string
+      message: string
+      suggested_fix: string
+
+  reports:
+    markdown_report: path
+    json_detailed: path
+    memory_namespace: string
+```
+
+---
 
 ## SOP Phase 1: Metrics Collection (10-30 sec)
 
@@ -136,7 +236,110 @@ with open('.claude/.artifacts/clarity-metrics.json', 'w') as f:
 - No parse errors
 - All required metrics present
 
+---
 
+## SOP Phase 2: Rubric Evaluation (5-15 sec)
+
+**Objective**: Apply clarity rubric to metrics and calculate scores
+
+**Agent**: `reviewer`
+
+**Prompt**:
+```javascript
+await Task("Clarity Rubric Evaluator", `
+Evaluate code clarity using machine-readable rubric.
+
+Rubric: .claude/skills/clarity-linter/.artifacts/clarity_rubric.json
+Metrics: .claude/.artifacts/clarity-metrics-<timestamp>.json
+
+Evaluation Process:
+1. Load clarity_rubric.json
+2. Load metrics JSON
+3. For each entity (function/file/project):
+   a. Apply checks from rubric dimensions
+   b. Evaluate conditions (metric op value comparisons)
+   c. Apply score_impact for triggered checks
+   d. Aggregate dimension scores with weights
+4. Calculate overall score (weighted sum across 5 dimensions)
+5. Determine verdict:
+   - ACCEPT: score ≥ 0.8
+   - REFINE: 0.6 ≤ score < 0.8
+   - REJECT: score < 0.6
+
+Rubric Dimensions (with weights):
+1. thin_helpers_and_indirection (25%): 4 checks
+   - THIN_HELPER_SIZE: ≤3 lines + trivial + low semantic name
+   - THIN_HELPER_SINGLE_CALL: ≤3 lines + called once + low semantic name
+   - PASS_THROUGH_WRAPPER: Single call forwarder + low semantic name
+   - FILE_THIN_HELPER_DENSITY: >10 thin helpers in file
+
+2. function_size_and_cohesion (25%): 3 checks
+   - SOFT_TOO_LONG_FUNCTION: >40 lines (soft limit)
+   - HARD_TOO_LONG_FUNCTION: >50 lines (hard limit)
+   - LOW_COHESION_FUNCTION: local_domain_spread >0.6
+
+3. indirection_and_call_depth (20%): 2 checks
+   - FILE_CALL_CHAIN_DEPTH: >4 levels in file
+   - PROJECT_CALL_CHAIN_DEPTH: >6 levels in project
+
+4. duplication_vs_dry (15%): 1 check
+   - HARMFUL_DUPLICATION: Duplicated blocks with multiple occurrences
+
+5. comments_and_explanation (15%): 2 checks
+   - OVERCOMMENTED_FUNCTION: comment_density >0.35
+   - UNDEREXPLAINED_COMPLEX_FUNCTION: >40 lines + nesting ≥3 + comment_density <0.05
+
+Output Format (JSON):
+{
+  "timestamp": "ISO8601",
+  "overall_score": 0.73,
+  "verdict": "REFINE",
+  "dimension_scores": {
+    "thin_helpers_indirection": 0.85,
+    "function_size_cohesion": 0.60,
+    "indirection_call_depth": 0.75,
+    "duplication_vs_dry": 0.90,
+    "comments_explanation": 0.55
+  },
+  "violations": [
+    {
+      "check_id": "SOFT_TOO_LONG_FUNCTION",
+      "severity": "info",
+      "entity_type": "function",
+      "file": "path/to/file.py",
+      "function": "process_request",
+      "line": 42,
+      "message": "Function is longer than the soft maximum; check if it mixes multiple responsibilities.",
+      "suggested_fix": "Look for logical substeps and consider extracting them into well-named helpers if it improves clarity.",
+      "score_impact": -0.1,
+      "metrics": {
+        "func_lines": 45,
+        "threshold": 40
+      }
+    }
+  ],
+  "total_violations": 12,
+  "by_severity": {
+    "warning": 5,
+    "info": 7
+  }
+}
+
+Save to: .claude/.artifacts/clarity-evaluation-<timestamp>.json
+`, "reviewer");
+```
+
+**MCP Tools Used**:
+- None (pure rubric evaluation logic)
+
+**Success Criteria**:
+- Rubric loaded successfully
+- All dimensions evaluated
+- Overall score calculated (0-1)
+- Verdict determined (ACCEPT/REFINE/REJECT)
+- Violations list generated with suggested fixes
+
+---
 
 ## SOP Phase 3: Fix Generation & Reporting (20-60 sec)
 
@@ -315,7 +518,64 @@ Report Structure (Markdown):
 - [ ] Re-run clarity-linter after changes
 - [ ] Target score: ≥0.8 (ACCEPT threshold)
 
+---
 
+**Report Generated by**: clarity-linter skill
+**Rubric Version**: clarity_rubric_v1 (0.1.0)
+
+Save to: docs/clarity-audit-report-<timestamp>.md
+`, "analyst");
+```
+
+**MCP Tools Used**:
+- `mcp__memory-mcp__memory_store` (store results with WHO/WHEN/PROJECT/WHY tags)
+
+**Memory Storage**:
+```javascript
+// Store evaluation results
+mcp__memory-mcp__memory_store({
+  text: `Clarity Linter evaluation complete. Score: ${score}/1.0, Verdict: ${verdict}. Violations: ${totalViolations} (${violations_by_severity}). Top issues: ${top_3_violation_types}. Auto-fixes: ${auto_fix_count} generated. Target: ${target_path}`,
+  metadata: {
+    key: `clarity-linter/${project_name}/evaluation-${timestamp}`,
+    namespace: "quality/clarity-audits",
+    layer: "mid-term",  // 7-day retention
+    category: "code-quality",
+    tags: {
+      WHO: "clarity-linter",
+      WHEN: new Date().toISOString(),
+      PROJECT: project_name,
+      WHY: "clarity-audit"
+    }
+  }
+});
+
+// Store fixes for pattern learning
+if (auto_fixes.length > 0) {
+  mcp__memory-mcp__memory_store({
+    text: `Clarity Linter auto-fixes applied: ${auto_fixes.map(f => `${f.check_id} in ${f.file}`).join(', ')}. Patterns: ${fix_patterns}`,
+    metadata: {
+      key: `clarity-linter/${project_name}/fixes-${timestamp}`,
+      namespace: "quality/fix-patterns",
+      layer: "long-term",  // 30d+ retention for pattern learning
+      category: "auto-fixes",
+      tags: {
+        WHO: "clarity-linter",
+        WHEN: new Date().toISOString(),
+        PROJECT: project_name,
+        WHY: "fix-pattern-learning"
+      }
+    }
+  });
+}
+```
+
+**Success Criteria**:
+- Auto-fix PRs generated for HIGH confidence violations
+- Markdown report with executive summary, dimension scores, recommendations
+- Results stored in Memory-MCP with proper tagging
+- Report accessible at docs/clarity-audit-report-<timestamp>.md
+
+---
 
 ## Integration with Dogfooding Cycle
 
@@ -347,7 +607,12 @@ sop-dogfooding-continuous-improvement applies:
 - Clarity: Detects cognitive load (thin helpers, long functions, poor naming)
 - Together: Comprehensive code quality (coupling + clarity)
 
-----|-------------|--------|
+---
+
+## Performance Targets
+
+| Phase | Target Time | Metric |
+|-------|-------------|--------|
 | Phase 1: Metrics Collection | 10-30s | 100-500 functions/sec |
 | Phase 2: Rubric Evaluation | 5-15s | 5000 checks/sec |
 | Phase 3: Fix Generation | 20-60s | 10-30 fixes/minute |
@@ -358,7 +623,29 @@ sop-dogfooding-continuous-improvement applies:
 - Recall: ≥80% (finds most clarity problems)
 - Auto-fix safety: 100% (no breakage from HIGH confidence fixes)
 
+---
 
+## Example Usage
+
+```bash
+# Quick clarity audit (standard policy)
+npx claude-flow@alpha skills run clarity-linter \
+  --target ./src \
+  --report-format markdown
+
+# Strict audit with auto-fixes
+npx claude-flow@alpha skills run clarity-linter \
+  --target ./src \
+  --policy strict \
+  --auto-fix true
+
+# Audit specific file
+npx claude-flow@alpha skills run clarity-linter \
+  --target ./src/core/engine.py \
+  --report-format json
+```
+
+---
 
 ## Artifacts Reference
 
@@ -368,11 +655,68 @@ sop-dogfooding-continuous-improvement applies:
 4. **clarity-fixes-<timestamp>.json**: Auto-fix PRs + suggestions
 5. **clarity-audit-report-<timestamp>.md**: Human-readable report
 
+---
 
+## Success Metrics
+
+Track in Memory-MCP:
+- Total audits run
+- Average score trend (improving over time)
+- Auto-fix success rate (no regressions)
+- Time to ACCEPT (target: <5 iterations)
+- Violations by type (trend analysis)
+
+---
 
 **END OF CLARITY-LINTER SKILL SOP**
 
+---
 
+## Recursive Improvement Integration (v2.1)
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - code_path: string
+  optional:
+    - config: object
+    - expertise_file: path
+
+output_contract:
+  required:
+    - clarity_score: float
+    - violations: list
+    - fixes: list
+    - status: string
+```
+
+### Eval Harness Integration
+
+```yaml
+benchmark: clarity-linter-benchmark-v1
+  tests:
+    - cl-001: Violation Detection
+    - cl-002: Fix Quality
+  minimum_scores:
+    detection_accuracy: 0.85
+    fix_quality: 0.80
+```
+
+### Memory Namespace
+
+```yaml
+namespaces:
+  - clarity-linter/reports/{id}: Lint reports
+  - clarity-linter/patterns: Clarity patterns
+```
+
+### Cross-Skill Coordination
+
+Works with: **style-audit**, **code-review-assistant**, **skill-forge**
+
+---
 
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
@@ -421,6 +765,12 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
+---
+
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+---
+
 ## Core Principles
 
 ### 1. Cognitive Load is Measurable
@@ -456,7 +806,12 @@ Auto-fixes should only apply to high-confidence, mechanical transformations. Com
 - Suggested fixes include rationale and expected improvement
 - Track auto-fix success rate (no regressions allowed)
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Creating thin helpers for "clean code"** | Adds useless indirection, hides complexity instead of reducing it, increases call depth | Inline helpers <=3 lines with trivial logic. Only extract if semantic value added (meaningful name, reusable abstraction). |
 | **Over-abstracting for "DRY"** | Creates God Objects, parameter bombs, excessive indirection to avoid 2 lines of duplication | Allow intentional duplication for clarity. Extract only when pattern is genuine, reusable, and semantically cohesive. |
 | **Ignoring cognitive load metrics** | Code "looks clean" but has 8-level nesting, 72-line functions, 14-parameter methods | Enforce NASA coding standards: max 4 nesting levels, 50 lines per function, 6 parameters per method. Measure objectively. |

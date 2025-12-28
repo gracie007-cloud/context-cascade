@@ -1,6 +1,7 @@
 ---
 name: testing-quality
-description: Testing quality assessment for test suite health, coverage analysis, and test effectiveness. Use when auditing test quality, improving test coverage, or assessing test reliability and maintainability. --- # Testing Quality Assessment and improvement of test suite quality, coverage, and effectiveness. ## Phase 0: Expertise Loading ```yaml
+description: Testing quality assessment for test suite health, coverage analysis, and test effectiveness. Use when auditing test quality, improving test coverage, or assessing test reliability and maintainability.
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 # Testing Quality
@@ -118,7 +119,52 @@ confidence_check:
 
 Works with: **testing**, **code-review-assistant**, **functionality-audit**
 
------------|---------|----------|
+---
+
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+- [ ] **Agent Spawning**: Spawned agent via Task()
+- [ ] **Agent Registry Validation**: Agent from registry
+- [ ] **TodoWrite Called**: Called with 5+ todos
+- [ ] **Work Delegation**: Delegated to agents
+
+**Remember: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+## Core Principles
+
+Testing Quality operates on 3 fundamental principles:
+
+### Principle 1: Comprehensive Coverage Across Multiple Dimensions
+Test quality is not just about line coverage percentage but about effectiveness across coverage, reliability, speed, and maintainability dimensions.
+
+In practice:
+- Line coverage measures which code is executed, but branch coverage ensures all decision paths are tested
+- Function coverage validates all callable units are invoked, while critical path coverage ensures 100% validation of essential workflows
+- Coverage metrics combined with assertion density ensure tests actually validate behavior, not just execute code
+- Test-to-code ratio (>= 1:1) ensures adequate test investment relative to implementation complexity
+
+### Principle 2: Test Reliability Through Determinism
+Flaky tests that pass or fail non-deterministically erode confidence in the entire test suite and mask real failures.
+
+In practice:
+- Flaky test rate must be <1% with any non-deterministic tests immediately investigated and fixed
+- Test isolation prevents interdependence where one test's side effects affect another's results
+- Reproducible test environments (seeded random data, controlled timing) eliminate environmental variability
+- Test execution monitoring tracks consistency over multiple runs to identify emerging flakiness
+
+### Principle 3: Fast Feedback Through Optimized Execution
+Test suites that take too long to run get skipped, defeating their purpose of catching bugs early.
+
+In practice:
+- Test execution time target <5 minutes enables running full suite before every commit
+- Parallelization distributes tests across multiple cores to reduce wall-clock time
+- Test prioritization runs fast unit tests before slow integration tests for quick failure detection
+- Slow test identification and optimization ensures test suite speed improves over time rather than degrading
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Coverage Theater** | High coverage percentage from tests that execute code but don't validate behavior (missing assertions) | Measure assertion density (>= 2 per test); review tests for meaningful validations; require tests to fail when code is broken |
 | **Flaky Test Tolerance** | Accepting non-deterministic tests and re-running until they pass rather than fixing root causes | Enforce <1% flaky rate; investigate any flakiness immediately; isolate tests to eliminate interdependence |
 | **Over-Mocking** | Tests that mock everything and validate only that mocks are called, not actual behavior | Use mocks sparingly for external dependencies only; test real integrations in sandboxes; validate outputs not just call counts |

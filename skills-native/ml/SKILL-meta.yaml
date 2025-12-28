@@ -1,0 +1,36 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+tier: gold
+version: 2.0.0
+category: specialized-development
+tags:
+  - machine-learning
+  - mlops
+  - experiment-tracking
+  - hyperparameter-tuning
+  - model-registry
+agents:
+  - ml-developer
+  - data-scientist
+  - mlops-engineer
+tools:
+  - experiment-tracker
+  - hyperparameter-tuner
+  - model-registry
+  - ml-ops-pipeline
+dependencies:
+  - python-specialist
+  - testing-quality
+  - functionality-audit
+prerequisites:
+  - Python 3.8+
+  - ML frameworks (TensorFlow/PyTorch/scikit-learn)
+  - Docker (for MLOps)
+  - Git LFS (for model versioning)
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\ml
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.164Z
+  version: 2.0.0

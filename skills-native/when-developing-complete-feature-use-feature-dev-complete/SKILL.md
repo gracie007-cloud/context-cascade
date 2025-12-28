@@ -1,40 +1,7 @@
-# When Developing Complete Feature Use Feature Dev Complete
-
 ---
 name: when-developing-complete-feature-use-feature-dev-complete
-trigger: "when user requests complete feature development from research to deployment"
-description: "Comprehensive end-to-end feature development using multi-agent coordination with research, architecture, implementation, testing, and documentation phases"
-version: 2.0.0
-author: Base Template Generator
-category: development
-tags:
-  - feature-development
-  - multi-agent
-  - end-to-end
-  - tdd
-  - documentation
-agents:
-  - researcher
-  - system-architect
-  - coder
-  - tester
-  - reviewer
-  - api-docs
-  - cicd-engineer
-coordinator: hierarchical-coordinator
-memory_patterns:
-  - swarm/feature-dev/requirements
-  - swarm/feature-dev/architecture
-  - swarm/feature-dev/implementation
-  - swarm/feature-dev/test-results
-  - swarm/feature-dev/review-findings
-success_criteria:
-  - All requirements captured and validated
-  - Architecture design approved
-  - Code implementation complete with 90%+ coverage
-  - All tests passing
-  - Documentation generated
-  - Deployment pipeline configured
+description: Comprehensive end-to-end feature development using multi-agent coordination with research, architecture, implementation, testing, and documentation phases
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 ## Assigned Agents

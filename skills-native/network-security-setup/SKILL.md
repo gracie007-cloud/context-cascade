@@ -1,6 +1,7 @@
 ---
 name: network-security-setup
 description: Configure Claude Code sandbox network isolation with trusted domains, custom access policies, and environment variables
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -85,7 +86,7 @@ I am a network security specialist with expertise in:
 **Mode 1: Trusted Network Access (Recommended Default)**
 ```yaml
 mode: trusted
-
+description: Claude can only access pre-approved, known-safe domains
 use_case: General development, open-source projects
 trusted_domains:
   - "*.npmjs.org"
@@ -428,6 +429,17 @@ training:
     - false_positive_rate_low
 ```
 
+---
+
+**Quick Reference**:
+- Config location: `.claude/settings.local.json`
+- Default mode: Trusted network access
+- Wildcard syntax: `*.domain.com`
+- Secrets: NEVER in sandbox config, use .env.local
+
+**Security Principle**: Deny by default, allow explicitly, verify continuously
+---
+
 ## Core Principles
 
 Network Security Setup operates on 3 fundamental principles:
@@ -459,7 +471,12 @@ In practice:
 - Document required secrets without exposing values (API_KEY required, see .env.local)
 - Implement secret scanning to catch accidental commits of credentials
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Using wildcard *.com patterns** | Allows access to entire internet, defeats purpose of network isolation | Use specific subdomains: *.npmjs.org, *.github.com, NOT *.com |
 | **Storing secrets in settings.json** | Credentials committed to version control, shared across team insecurely | Store secrets in .env.local (gitignored), reference in config with documentation |
 | **Disabling network isolation without review** | Prompt injection can exfiltrate code/data to attacker domains | NEVER set mode: unrestricted, always use whitelist approach |

@@ -1,6 +1,7 @@
 ---
 name: security
 description: Security specialists hub for application security, vulnerability assessment, and secure coding. Routes to specialists for OWASP, penetration testing, and security hardening. Use for security audits, vulnerability fixes, and secure architecture.
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 # Security
@@ -265,7 +266,18 @@ confidence_check:
 
 Works with: **code-review-assistant**, **compliance**, **deployment-readiness**
 
+---
 
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+- [ ] **Agent Spawning**: Spawned agent via Task()
+- [ ] **Agent Registry Validation**: Agent from registry
+- [ ] **TodoWrite Called**: Called with 5+ todos
+- [ ] **Work Delegation**: Delegated to agents
+
+**Remember: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+---
 
 ## Core Principles
 
@@ -297,7 +309,12 @@ Security controls integrated during design are more effective and less costly th
 - Automated security testing runs in CI/CD pipeline before deployment
 - Security is a success criterion, not a post-launch audit
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Trusting user input** (using unsanitized data in queries, commands, or eval) | Enables injection attacks (SQL, XSS, command injection). User input is adversarial by default. | Validate all inputs against allowlists, parameterize queries, encode outputs, never use eval or dynamic code execution with user data. |
 | **Hardcoded secrets** (API keys, passwords in source code) | Secrets in version control are public. Anyone with repo access gains credentials. | Use environment variables, secret management systems (HashiCorp Vault, AWS Secrets Manager), never commit secrets. |
 | **Weak cryptography** (MD5, SHA1, DES, custom algorithms) | Broken algorithms provide false sense of security. Data appears protected but is trivially compromised. | Use modern algorithms: bcrypt/argon2 for passwords, AES-256-GCM for encryption, SHA-256+ for hashing. |
@@ -305,12 +322,28 @@ Security controls integrated during design are more effective and less costly th
 | **Ignoring dependency vulnerabilities** (never updating packages, ignoring npm audit warnings) | Known CVEs in dependencies are low-hanging fruit for attackers. Exploits are public and automated. | Regular dependency updates, automated vulnerability scanning (npm audit, Snyk, Dependabot), patch critical CVEs immediately. |
 | **Overly broad CORS policies** (`Access-Control-Allow-Origin: *`) | Allows any website to make authenticated requests to your API, enabling CSRF and data exfiltration. | Use specific origin allowlists, never use wildcard with credentials, validate Origin header. |
 
------------|---------|----------|
+---
+
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Trusting user input** (using unsanitized data in queries, commands, or eval) | Enables injection attacks (SQL, XSS, command injection). User input is adversarial by default. | Validate all inputs against allowlists, parameterize queries, encode outputs, never use eval or dynamic code execution with user data. |
 | **Hardcoded secrets** (API keys, passwords in source code) | Secrets in version control are public. Anyone with repo access gains credentials. | Use environment variables, secret management systems (HashiCorp Vault, AWS Secrets Manager), never commit secrets. |
 | **Weak cryptography** (MD5, SHA1, DES, custom algorithms) | Broken algorithms provide false sense of security. Data appears protected but is trivially compromised. | Use modern algorithms: bcrypt/argon2 for passwords, AES-256-GCM for encryption, SHA-256+ for hashing. |
 
+---
 
+## Conclusion
+
+Application security is a continuous practice, not a one-time implementation. The security landscape evolves constantly as new vulnerabilities emerge, attack techniques advance, and systems grow in complexity. The principles of defense in depth, least privilege, and security by design provide a foundation that remains effective regardless of specific threats.
+
+Security is fundamentally about reducing risk, not eliminating it. Perfect security is impossible - the goal is to make successful attacks so costly and time-consuming that attackers move to softer targets. Each security control raises the bar incrementally. A well-designed security posture combines technical controls, process discipline, and human awareness to create layered defenses that degrade gracefully under attack.
+
+The skills and tools outlined in this document provide a starting point for building secure systems. However, security expertise is specialized and deep. When facing complex security challenges, high-value systems, or compliance requirements, consult security specialists. The cost of security incidents - in reputation, customer trust, legal liability, and recovery effort - vastly exceeds the investment in proper security architecture and implementation.
+
+---
 
 ## CHANGELOG
 
@@ -356,3 +389,97 @@ Security auditing requires:
 - Initial security skill with OWASP Top 10, secure coding patterns, authentication patterns
 - Added defense in depth, least privilege, security by design principles
 - Added anti-patterns table with solutions
+
+---
+
+## System Design Integration (Dr. Synthara Methodology)
+
+### Authentication Decision Tree
+
+```
+Need simple internal tool auth?
++-- Basic auth (only over HTTPS) or SSO
+
+Public app / APIs?
++-- Bearer tokens (often JWT) + refresh token rotation
++-- Store tokens securely (httpOnly cookies or secure storage)
+
+Need login via Google/GitHub?
++-- OAuth2 + OIDC (identity claims) + secure callback flows
++-- Validate state parameter to prevent CSRF
+
+Machine-to-machine auth?
++-- API keys (hashed, rotatable) or
++-- OAuth2 client credentials flow
+```
+
+**What I'm Thinking**: Revocation + token rotation + compromise response.
+If tokens are "stateless forever," you can't cleanly recover from theft.
+
+### Authorization Model Decision Tree
+
+```
+How complex are permissions?
+|
++-- Few roles, straightforward (admin/editor/viewer)?
+|   +-- RBAC (Role-Based Access Control)
+|   +-- Implement at middleware level
+|
++-- Policies depend on attributes (dept, region, device, time)?
+|   +-- ABAC (Attribute-Based Access Control)
+|   +-- Use policy engine (OPA, Cedar)
+|
++-- Per-object sharing (docs, folders, repos)?
+    +-- ACL (Access Control Lists)
+    +-- Often combined with roles
+    +-- Store permissions per-resource in database
+```
+
+### Security Hardening Checklist (Interview Gold)
+
+| Defense | Purpose | Implementation |
+|---------|---------|----------------|
+| **Rate limiting** | Prevent brute force and cost attacks | Per user/IP + global limits, 429 response |
+| **CORS** | Browser constraint (not full security) | Specific origin allowlist, never `*` with credentials |
+| **Injection defense** | Prevent SQLi, XSS, command injection | Parameterized queries + validation + output encoding |
+| **WAF/firewalls** | Block known bad patterns | Layer 7 filtering, reduce blast radius |
+| **VPN/private endpoints** | Keep internal APIs private | Zero-trust network, service mesh mTLS |
+| **CSRF** | Prevent cross-site request forgery | CSRF tokens for cookie-based auth |
+| **XSS** | Prevent script injection | Sanitize, escape, CSP headers, safe templating |
+
+**What I'm Thinking**: "If attacked, what fails closed vs fails open?"
+- Rate limiting should DENY when uncertain
+- Auth should DENY when token invalid
+- Firewalls should BLOCK unknown traffic
+
+### SPOF Identification for Security Systems
+
+| Component | SPOF Risk | Mitigation |
+|-----------|-----------|------------|
+| **Auth service** | Single auth failure = all users locked out | HA deployment, cached tokens, graceful degradation |
+| **Secrets vault** | Vault down = no credentials | HA Vault cluster, cached secrets with TTL |
+| **API keys** | Single key compromise = full access | Scoped keys, rotation, per-client keys |
+| **TLS certificates** | Expired cert = HTTPS failure | Auto-renewal (cert-manager), monitoring |
+
+### Phase 0 Security Constraint Extraction
+
+Before designing security architecture, answer:
+
+| Constraint | Questions |
+|------------|-----------|
+| **Auth Model** | Who authenticates? Users? Services? Both? |
+| **AuthZ Complexity** | Simple roles? Resource-level permissions? |
+| **Threat Surface** | Public internet? Internal only? Mobile? |
+| **Compliance** | SOC2? HIPAA? PCI-DSS? GDPR? |
+| **Secrets** | How many secrets? How often rotated? |
+
+### The 90-Second Interview Narrative for Security Design
+
+1. **Clarify** threat model, compliance requirements
+2. **Authentication** JWT vs sessions, OAuth for external
+3. **Authorization** RBAC vs ABAC vs ACL (use decision tree)
+4. **Transport** TLS everywhere, mTLS for service-to-service
+5. **Secrets** Vault/KMS, never in code, rotation policy
+6. **Defense layers** Rate limiting, WAF, input validation
+7. **Audit** Logging all auth events, immutable audit trail
+8. **Incident response** Revocation plan, compromise recovery

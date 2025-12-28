@@ -1,0 +1,41 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user requests SPARC methodology, systematic development, or TDD workflow
+version: 2.0.0
+author: Base Template Generator
+category: methodology
+tags:
+  - sparc
+  - methodology
+  - tdd
+  - systematic-development
+  - multi-phase
+agents:
+  - researcher (specification)
+  - planner (pseudocode)
+  - system-architect (architecture)
+  - coder (refinement)
+  - tester (validation)
+  - reviewer (quality)
+  - api-docs (documentation)
+coordinator: hierarchical-coordinator
+memory_patterns:
+  - swarm/sparc/specification
+  - swarm/sparc/pseudocode
+  - swarm/sparc/architecture
+  - swarm/sparc/refinement
+  - swarm/sparc/completion
+success_criteria:
+  - Detailed specification documented
+  - Pseudocode algorithm designed
+  - System architecture defined
+  - Implementation refined through TDD
+  - All tests passing with ≥90% coverage
+  - Integration complete and validated
+  - Comprehensive documentation generated
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\when-using-sparc-methodology-use-sparc-workflow
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.732Z
+  version: 2.0.0

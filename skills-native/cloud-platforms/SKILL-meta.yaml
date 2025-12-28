@@ -1,0 +1,17 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+tier: gold
+version: 2.0.0
+last_updated: 2025-11-02
+category: operations
+tags:
+  - operations
+  - deployment
+  - infrastructure
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\operations\cloud-platforms
+  category: operations
+  migrated_at: 2025-12-28T15:56:24.512Z
+  version: 2.0.0

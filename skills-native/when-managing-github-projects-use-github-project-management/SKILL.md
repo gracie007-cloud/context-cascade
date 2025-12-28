@@ -1,6 +1,7 @@
 ---
 name: when-managing-github-projects-use-github-project-management
 description: Comprehensive GitHub project management with swarm-coordinated issue tracking, project board automation, and sprint planning. Coordinates planner, issue-tracker, and project-board-sync agents to automate issue triage, sprint planning, milestone tracking, and project board updates. Integrates with GitHub Projects v2 API for advanced automation, custom fields, and workflow orchestration. Use when managing development projects, coordinating team workflows, or automating project management tasks.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Project Management Skill

@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 /**
  * Migrate Context Cascade Skills to Claude Code Native Format
+ * Version: 2.0.0
  *
  * This script:
- * 1. Flattens nested skills/{category}/{skill-name}/ to skills-native/{skill-name}/
- * 2. Fixes YAML frontmatter to put name/description at the top
- * 3. Preserves all other content
+ * 1. Converts skills to official Claude Code format (name, description, allowed-tools)
+ * 2. Preserves custom metadata in SKILL-meta.yaml
+ * 3. Handles deeply nested skill directories
+ * 4. Maps skill categories to appropriate allowed-tools
+ * 5. Validates output format
+ * 6. Generates migration report
  */
 
 const fs = require('fs');
@@ -14,139 +18,283 @@ const path = require('path');
 const SKILLS_SOURCE = path.join(__dirname, '..', 'skills');
 const SKILLS_TARGET = path.join(__dirname, '..', 'skills-native');
 
-// Categories to scan (subdirectories of skills/)
-const CATEGORIES = [
-  'delivery', 'foundry', 'operations', 'orchestration',
-  'platforms', 'quality', 'research', 'security',
-  'specialists', 'tooling'
-];
+// Tool mappings by category - what tools each skill type typically needs
+const CATEGORY_TOOLS = {
+  delivery: 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep',
+  foundry: 'Read, Write, Edit, Task, TodoWrite, Glob, Grep',
+  operations: 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep',
+  orchestration: 'Read, Task, TodoWrite, Glob, Grep',
+  platforms: 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch',
+  quality: 'Read, Glob, Grep, Task, TodoWrite',
+  research: 'Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite',
+  security: 'Read, Glob, Grep, Bash, Task, TodoWrite',
+  specialists: 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep',
+  tooling: 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep'
+};
 
-function extractFrontmatter(content) {
-  let name = null;
-  let description = null;
+// Special tool overrides for specific skills
+const SKILL_TOOL_OVERRIDES = {
+  'code-review-assistant': 'Read, Glob, Grep',
+  'deep-research-orchestrator': 'Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite',
+  'clarity-linter': 'Read, Glob, Grep',
+  'theater-detection-audit': 'Read, Glob, Grep, Bash',
+  'functionality-audit': 'Read, Glob, Grep, Bash, Task',
+  'smart-bug-fix': 'Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite',
+  'feature-dev-complete': 'Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep'
+};
 
-  // Extract name from anywhere in the content
-  const nameMatch = content.match(/^name:\s*(.+)$/m);
-  if (nameMatch) {
-    name = nameMatch[1].trim();
+function parseYamlFrontmatter(content) {
+  // Try standard format first (starts with ---)
+  let frontmatterMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+
+  // If no match, try to find frontmatter after markdown header
+  // Pattern: # Title\n\n---\nyaml...\n---
+  if (!frontmatterMatch) {
+    frontmatterMatch = content.match(/^#[^\n]*[\r\n]+---\r?\n([\s\S]*?)\r?\n---/);
+    if (frontmatterMatch) {
+      // Extract body after the frontmatter
+      const afterFrontmatter = content.slice(content.indexOf(frontmatterMatch[0]) + frontmatterMatch[0].length).trim();
+      return {
+        metadata: parseYamlContent(frontmatterMatch[1]),
+        body: afterFrontmatter
+      };
+    }
   }
 
-  // Extract description (can be multiline with indentation)
-  // Match until we hit another YAML key (word at start of line followed by colon)
-  const descMatch = content.match(/^description:\s*([\s\S]*?)(?=\n[a-z][a-z0-9_-]*:\s)/m);
-  if (descMatch) {
-    description = descMatch[1]
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line.length > 0)
-      .join(' ')
-      .trim();
-  }
+  if (!frontmatterMatch) return { metadata: {}, body: content };
 
-  // Remove ALL YAML blocks (between --- markers)
-  let markdownContent = content.replace(/^---[\s\S]*?---\n*/gm, '');
+  const yamlContent = frontmatterMatch[1];
+  const body = content.slice(frontmatterMatch[0].length).trim();
 
-  // Remove free-floating YAML fields that might be outside blocks
-  markdownContent = markdownContent.replace(/^name:\s*[^\n]*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^description:\s*[\s\S]*?(?=\n[a-z_]+:|\n\n|\n#|$)/m, '');
-  markdownContent = markdownContent.replace(/^version:\s*[^\n]*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^category:\s*[^\n]*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^tags:\s*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^author:\s*[^\n]*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^license:\s*[^\n]*\n?/gm, '');
-  markdownContent = markdownContent.replace(/^- [a-z]+\n/gm, ''); // Remove tag list items
-
-  // Clean up leading whitespace/newlines
-  markdownContent = markdownContent.replace(/^\s*\n+/, '').trim();
-
-  return { name, description, markdownContent };
+  return { metadata: parseYamlContent(yamlContent), body };
 }
 
-function createNativeSkillMd(name, description, markdownContent) {
-  // Truncate description to 1024 chars if needed
-  const truncatedDesc = description && description.length > 1024
-    ? description.substring(0, 1021) + '...'
-    : description;
+function parseYamlContent(yamlContent) {
+  // Simple YAML parser for our use case
+  const metadata = {};
+  let currentKey = null;
+  let currentValue = [];
+  let inArray = false;
 
-  return `---
-name: ${name}
-description: ${truncatedDesc || 'No description provided'}
----
+  // Normalize line endings
+  const lines = yamlContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 
-${markdownContent}`;
-}
+  for (const line of lines) {
+    const keyMatch = line.match(/^([a-z_-]+):\s*(.*)$/i);
 
-function migrateSkill(sourcePath, targetDir) {
-  const skillMdPath = path.join(sourcePath, 'SKILL.md');
+    if (keyMatch && !line.startsWith('  ') && !line.startsWith('\t')) {
+      // Save previous key if exists
+      if (currentKey) {
+        metadata[currentKey] = inArray ? currentValue : currentValue.join(' ').trim();
+      }
 
-  if (!fs.existsSync(skillMdPath)) {
-    return { success: false, error: 'No SKILL.md found' };
-  }
+      currentKey = keyMatch[1];
+      const value = keyMatch[2].trim();
 
-  const content = fs.readFileSync(skillMdPath, 'utf8');
-  const { name, description, markdownContent } = extractFrontmatter(content);
-
-  // Check if name is missing or is a placeholder template
-  const isPlaceholder = !name || name.includes('{') || name.includes('}') || name.includes('"') || name.includes('<');
-  if (isPlaceholder) {
-    // Try to infer name from directory
-    const inferredName = path.basename(sourcePath);
-    return migrateSkillWithInferredName(sourcePath, targetDir, inferredName, content);
-  }
-
-  const newContent = createNativeSkillMd(name, description, markdownContent);
-
-  // Create target directory
-  const skillTargetDir = path.join(targetDir, name);
-  if (!fs.existsSync(skillTargetDir)) {
-    fs.mkdirSync(skillTargetDir, { recursive: true });
-  }
-
-  // Write new SKILL.md
-  fs.writeFileSync(path.join(skillTargetDir, 'SKILL.md'), newContent);
-
-  // Copy any other files (scripts, examples, etc.)
-  const files = fs.readdirSync(sourcePath);
-  for (const file of files) {
-    if (file !== 'SKILL.md') {
-      const srcFile = path.join(sourcePath, file);
-      const destFile = path.join(skillTargetDir, file);
-      const stat = fs.statSync(srcFile);
-      if (stat.isDirectory()) {
-        copyDirRecursive(srcFile, destFile);
+      if (value === '' || value === '|' || value === '>') {
+        currentValue = [];
+        inArray = false;
+      } else if (value.startsWith('[')) {
+        // Inline array
+        metadata[currentKey] = value.slice(1, -1).split(',').map(s => s.trim().replace(/['"]/g, ''));
+        currentKey = null;
       } else {
-        fs.copyFileSync(srcFile, destFile);
+        currentValue = [value.replace(/['"]/g, '')];
+        inArray = false;
+      }
+    } else if (line.match(/^\s*-\s+(.+)$/)) {
+      // Array item
+      const itemMatch = line.match(/^\s*-\s+(.+)$/);
+      if (itemMatch) {
+        if (!inArray) {
+          currentValue = [];
+          inArray = true;
+        }
+        currentValue.push(itemMatch[1].trim().replace(/['"]/g, ''));
+      }
+    } else if (line.match(/^\s+\S/)) {
+      // Continuation of multiline value
+      currentValue.push(line.trim());
+    }
+  }
+
+  // Save last key
+  if (currentKey) {
+    metadata[currentKey] = inArray ? currentValue : currentValue.join(' ').trim();
+  }
+
+  return metadata;
+}
+
+function createOfficialSkillMd(name, description, allowedTools, body) {
+  // Truncate description to 1024 chars (official limit)
+  let desc = description || `Skill for ${name}`;
+  if (desc.length > 1024) {
+    desc = desc.substring(0, 1021) + '...';
+  }
+
+  // Clean description - single line, no special chars
+  desc = desc.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+  let frontmatter = `---
+name: ${name}
+description: ${desc}`;
+
+  if (allowedTools) {
+    frontmatter += `\nallowed-tools: ${allowedTools}`;
+  }
+
+  frontmatter += '\n---\n\n';
+
+  return frontmatter + body;
+}
+
+function createMetadataYaml(metadata, category, sourcePath) {
+  const meta = {
+    // Preserve original metadata
+    ...metadata,
+    // Add migration info
+    _migration: {
+      source_path: sourcePath,
+      category: category,
+      migrated_at: new Date().toISOString(),
+      version: '2.0.0'
+    }
+  };
+
+  // Convert to YAML string
+  let yaml = '# Custom metadata preserved from original skill\n';
+  yaml += '# This file is used by Context Cascade hooks for extended functionality\n\n';
+
+  for (const [key, value] of Object.entries(meta)) {
+    if (Array.isArray(value)) {
+      yaml += `${key}:\n`;
+      for (const item of value) {
+        yaml += `  - ${item}\n`;
+      }
+    } else if (typeof value === 'object' && value !== null) {
+      yaml += `${key}:\n`;
+      for (const [subKey, subValue] of Object.entries(value)) {
+        yaml += `  ${subKey}: ${subValue}\n`;
+      }
+    } else {
+      yaml += `${key}: ${value}\n`;
+    }
+  }
+
+  return yaml;
+}
+
+function findAllSkills(dir, category = '', results = []) {
+  if (!fs.existsSync(dir)) return results;
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      // Check if this directory contains SKILL.md
+      const skillMdPath = path.join(fullPath, 'SKILL.md');
+      if (fs.existsSync(skillMdPath)) {
+        results.push({
+          path: fullPath,
+          name: entry.name,
+          category: category || path.basename(dir)
+        });
+      } else {
+        // Recurse into subdirectory
+        findAllSkills(fullPath, category || entry.name, results);
       }
     }
   }
 
-  return { success: true, name, description: description?.substring(0, 50) + '...' };
+  return results;
 }
 
-function migrateSkillWithInferredName(sourcePath, targetDir, inferredName, content) {
-  // Clean up content - just use the markdown part
-  let markdownContent = content;
+function migrateSkill(skillInfo, targetDir) {
+  const { path: sourcePath, name: dirName, category } = skillInfo;
+  const skillMdPath = path.join(sourcePath, 'SKILL.md');
 
-  // Remove any existing frontmatter blocks
-  markdownContent = markdownContent.replace(/^---[\s\S]*?---\n*/gm, '');
-  markdownContent = markdownContent.trim();
+  try {
+    const content = fs.readFileSync(skillMdPath, 'utf8');
+    const { metadata, body } = parseYamlFrontmatter(content);
 
-  // Extract first paragraph as description
-  const firstParagraph = markdownContent.match(/^#.*?\n\n(.*?)(?:\n\n|$)/s);
-  const description = firstParagraph
-    ? firstParagraph[1].replace(/\n/g, ' ').substring(0, 200)
-    : `Skill for ${inferredName}`;
+    // Determine skill name
+    const skillName = metadata.name || dirName;
 
-  const newContent = createNativeSkillMd(inferredName, description, markdownContent);
+    // Clean skill name (lowercase, hyphens only)
+    const cleanName = skillName
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .substring(0, 64);
 
-  const skillTargetDir = path.join(targetDir, inferredName);
-  if (!fs.existsSync(skillTargetDir)) {
-    fs.mkdirSync(skillTargetDir, { recursive: true });
+    // Get description
+    let description = metadata.description;
+    if (!description) {
+      // Try to extract from first paragraph
+      const firstPara = body.match(/^#.*?\n\n([^#\n].*?)(?:\n\n|$)/s);
+      description = firstPara ? firstPara[1].replace(/\n/g, ' ').trim() : `Skill for ${cleanName}`;
+    }
+
+    // Determine allowed tools
+    const allowedTools = SKILL_TOOL_OVERRIDES[cleanName] || CATEGORY_TOOLS[category] || CATEGORY_TOOLS.delivery;
+
+    // Create target directory
+    const skillTargetDir = path.join(targetDir, cleanName);
+    if (!fs.existsSync(skillTargetDir)) {
+      fs.mkdirSync(skillTargetDir, { recursive: true });
+    }
+
+    // Create official SKILL.md
+    const officialContent = createOfficialSkillMd(cleanName, description, allowedTools, body);
+    fs.writeFileSync(path.join(skillTargetDir, 'SKILL.md'), officialContent);
+
+    // Create SKILL-meta.yaml with preserved custom fields
+    const customFields = { ...metadata };
+    delete customFields.name;
+    delete customFields.description;
+
+    if (Object.keys(customFields).length > 0 || category) {
+      const metaContent = createMetadataYaml(customFields, category, sourcePath);
+      fs.writeFileSync(path.join(skillTargetDir, 'SKILL-meta.yaml'), metaContent);
+    }
+
+    // Copy other files (case-insensitive check for SKILL.md on Windows)
+    const files = fs.readdirSync(sourcePath);
+    for (const file of files) {
+      if (file.toLowerCase() !== 'skill.md') {
+        const srcFile = path.join(sourcePath, file);
+        const destFile = path.join(skillTargetDir, file);
+        const stat = fs.statSync(srcFile);
+
+        if (stat.isDirectory()) {
+          copyDirRecursive(srcFile, destFile);
+        } else {
+          fs.copyFileSync(srcFile, destFile);
+        }
+      }
+    }
+
+    return {
+      success: true,
+      originalName: skillName,
+      name: cleanName,
+      category,
+      description: description.substring(0, 80) + '...',
+      allowedTools
+    };
+
+  } catch (error) {
+    return {
+      success: false,
+      originalName: dirName,
+      category,
+      error: error.message
+    };
   }
-
-  fs.writeFileSync(path.join(skillTargetDir, 'SKILL.md'), newContent);
-
-  return { success: true, name: inferredName, description: description.substring(0, 50) + '...' };
 }
 
 function copyDirRecursive(src, dest) {
@@ -165,60 +313,150 @@ function copyDirRecursive(src, dest) {
   }
 }
 
+function validateSkill(skillDir) {
+  const skillMdPath = path.join(skillDir, 'SKILL.md');
+  if (!fs.existsSync(skillMdPath)) {
+    return { valid: false, error: 'Missing SKILL.md' };
+  }
+
+  const content = fs.readFileSync(skillMdPath, 'utf8');
+
+  // Check frontmatter
+  if (!content.startsWith('---\n')) {
+    return { valid: false, error: 'Missing YAML frontmatter' };
+  }
+
+  // Check required fields
+  if (!content.includes('name:')) {
+    return { valid: false, error: 'Missing name field' };
+  }
+  if (!content.includes('description:')) {
+    return { valid: false, error: 'Missing description field' };
+  }
+
+  // Check name format
+  const nameMatch = content.match(/^name:\s*(.+)$/m);
+  if (nameMatch) {
+    const name = nameMatch[1].trim();
+    if (!/^[a-z0-9-]+$/.test(name)) {
+      return { valid: false, error: `Invalid name format: ${name}` };
+    }
+    if (name.length > 64) {
+      return { valid: false, error: `Name too long: ${name.length} chars (max 64)` };
+    }
+  }
+
+  // Check description length
+  const descMatch = content.match(/^description:\s*(.+)$/m);
+  if (descMatch && descMatch[1].length > 1024) {
+    return { valid: false, error: `Description too long: ${descMatch[1].length} chars (max 1024)` };
+  }
+
+  return { valid: true };
+}
+
 function main() {
-  console.log('=== Context Cascade Skill Migration ===\n');
+  console.log('========================================');
+  console.log('Context Cascade Skill Migration v2.0.0');
+  console.log('========================================\n');
 
   // Create target directory
   if (!fs.existsSync(SKILLS_TARGET)) {
     fs.mkdirSync(SKILLS_TARGET, { recursive: true });
   }
 
-  let totalMigrated = 0;
-  let totalFailed = 0;
-  const results = [];
+  // Find all skills recursively
+  console.log('Scanning for skills...\n');
+  const skills = findAllSkills(SKILLS_SOURCE);
+  console.log(`Found ${skills.length} skills to migrate\n`);
 
-  for (const category of CATEGORIES) {
-    const categoryPath = path.join(SKILLS_SOURCE, category);
+  const results = {
+    migrated: [],
+    failed: [],
+    validated: [],
+    invalid: []
+  };
 
-    if (!fs.existsSync(categoryPath)) {
-      console.log(`Category ${category}/ not found, skipping...`);
-      continue;
-    }
+  // Migrate each skill
+  for (const skillInfo of skills) {
+    const result = migrateSkill(skillInfo, SKILLS_TARGET);
 
-    const skills = fs.readdirSync(categoryPath, { withFileTypes: true })
-      .filter(d => d.isDirectory())
-      .map(d => d.name);
+    if (result.success) {
+      console.log(`[OK] ${result.category}/${result.originalName} -> ${result.name}`);
+      results.migrated.push(result);
 
-    console.log(`\nProcessing ${category}/ (${skills.length} skills):`);
-
-    for (const skill of skills) {
-      const skillPath = path.join(categoryPath, skill);
-      const result = migrateSkill(skillPath, SKILLS_TARGET);
-
-      if (result.success) {
-        console.log(`  [OK] ${skill} -> ${result.name}`);
-        totalMigrated++;
-        results.push({ category, skill, status: 'migrated', name: result.name });
+      // Validate the migrated skill
+      const validation = validateSkill(path.join(SKILLS_TARGET, result.name));
+      if (validation.valid) {
+        results.validated.push(result.name);
       } else {
-        console.log(`  [FAIL] ${skill}: ${result.error}`);
-        totalFailed++;
-        results.push({ category, skill, status: 'failed', error: result.error });
+        console.log(`  [WARN] Validation: ${validation.error}`);
+        results.invalid.push({ name: result.name, error: validation.error });
       }
+    } else {
+      console.log(`[FAIL] ${result.category}/${result.originalName}: ${result.error}`);
+      results.failed.push(result);
     }
   }
 
-  console.log('\n=== Migration Summary ===');
-  console.log(`Total migrated: ${totalMigrated}`);
-  console.log(`Total failed: ${totalFailed}`);
-  console.log(`Output directory: ${SKILLS_TARGET}`);
+  // Generate summary
+  console.log('\n========================================');
+  console.log('Migration Summary');
+  console.log('========================================');
+  console.log(`Total skills found:    ${skills.length}`);
+  console.log(`Successfully migrated: ${results.migrated.length}`);
+  console.log(`Failed:                ${results.failed.length}`);
+  console.log(`Validated:             ${results.validated.length}`);
+  console.log(`Invalid:               ${results.invalid.length}`);
+  console.log(`Output directory:      ${SKILLS_TARGET}`);
 
-  // Write results to JSON
+  // Write detailed report
+  const report = {
+    timestamp: new Date().toISOString(),
+    source: SKILLS_SOURCE,
+    target: SKILLS_TARGET,
+    summary: {
+      total: skills.length,
+      migrated: results.migrated.length,
+      failed: results.failed.length,
+      validated: results.validated.length,
+      invalid: results.invalid.length
+    },
+    migrated: results.migrated,
+    failed: results.failed,
+    invalid: results.invalid
+  };
+
   fs.writeFileSync(
-    path.join(SKILLS_TARGET, 'migration-results.json'),
-    JSON.stringify(results, null, 2)
+    path.join(SKILLS_TARGET, 'migration-report.json'),
+    JSON.stringify(report, null, 2)
   );
 
-  return { migrated: totalMigrated, failed: totalFailed };
+  console.log(`\nDetailed report: ${path.join(SKILLS_TARGET, 'migration-report.json')}`);
+
+  // Create index file
+  const indexContent = `# Skills Native Index
+
+Generated: ${new Date().toISOString()}
+
+## Migrated Skills (${results.migrated.length})
+
+| Name | Category | Description |
+|------|----------|-------------|
+${results.migrated.map(s => `| ${s.name} | ${s.category} | ${s.description.substring(0, 50)}... |`).join('\n')}
+
+## Failed Migrations (${results.failed.length})
+
+${results.failed.map(f => `- **${f.category}/${f.originalName}**: ${f.error}`).join('\n')}
+
+## Validation Issues (${results.invalid.length})
+
+${results.invalid.map(i => `- **${i.name}**: ${i.error}`).join('\n')}
+`;
+
+  fs.writeFileSync(path.join(SKILLS_TARGET, 'INDEX.md'), indexContent);
+
+  return results;
 }
 
 // Run if called directly
@@ -226,4 +464,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, migrateSkill, extractFrontmatter };
+module.exports = { main, migrateSkill, parseYamlFrontmatter, validateSkill };

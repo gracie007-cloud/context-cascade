@@ -1,6 +1,7 @@
 ---
 name: prompt-forge
 description: Meta-prompt that generates improved prompts and templates. Can improve other prompts including Skill Forge and even itself. All improvements are gated by frozen eval harness. Use when optimizing prompts, creating prompt diffs, or running the recursive improvement loop.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 # Prompt Forge (Meta-Prompt)
@@ -33,7 +34,213 @@ Generate improved prompts and templates with:
 claude mcp add memory-mcp npx @modelcontextprotocol/server-memory
 ```
 
- a/skills/skill-forge/SKILL.md
+---
+
+## Core Operations
+
+### Operation 1: Analyze Prompt
+
+Before improving, deeply understand the target prompt.
+
+```yaml
+analysis:
+  target: "{prompt_path}"
+
+  structural_analysis:
+    sections: [list of sections]
+    flow: "How sections connect"
+    dependencies: "What inputs/outputs exist"
+
+  quality_assessment:
+    clarity:
+      score: 0.0-1.0
+      issues: ["Ambiguous instruction in section X"]
+    completeness:
+      score: 0.0-1.0
+      issues: ["Missing failure handling for case Y"]
+    precision:
+      score: 0.0-1.0
+      issues: ["Vague success criteria in section Z"]
+
+  pattern_detection:
+    evidence_based_techniques:
+      self_consistency: present|missing|partial
+      program_of_thought: present|missing|partial
+      plan_and_solve: present|missing|partial
+    failure_handling:
+      explicit_errors: present|missing|partial
+      edge_cases: present|missing|partial
+      uncertainty: present|missing|partial
+
+  improvement_opportunities:
+    - area: "Section X"
+      issue: "Lacks explicit timeout handling"
+      priority: high|medium|low
+      predicted_impact: "+X% reliability"
+```
+
+### Operation 2: Generate Improvement Proposal
+
+Create concrete, testable improvement proposals.
+
+```yaml
+proposal:
+  id: "prop-{timestamp}"
+  target: "{prompt_path}"
+  type: "prompt_improvement"
+
+  summary: "One-line description of improvement"
+
+  changes:
+    - section: "Section name"
+      location: "Line X-Y"
+      before: |
+        Original text...
+      after: |
+        Improved text...
+      rationale: "Why this change improves the prompt"
+      technique: "Which evidence-based technique applied"
+
+  predicted_improvement:
+    primary_metric: "success_rate"
+    expected_delta: "+5%"
+    confidence: 0.8
+    reasoning: "Based on similar improvements in prompt X"
+
+  risk_assessment:
+    regression_risk: low|medium|high
+    affected_components:
+      - "Component 1"
+      - "Component 2"
+    rollback_complexity: simple|moderate|complex
+
+  test_plan:
+    - test: "Run on benchmark task A"
+      expected: "Improvement in clarity score"
+    - test: "Check for regressions in task B"
+      expected: "No degradation"
+```
+
+### Operation 3: Apply Evidence-Based Techniques
+
+Systematically apply research-validated prompting patterns.
+
+#### Self-Consistency Enhancement
+
+```markdown
+BEFORE:
+"Analyze the code and report issues"
+
+AFTER:
+"Analyze the code from three perspectives:
+1. Security perspective: What vulnerabilities exist?
+2. Performance perspective: What bottlenecks exist?
+3. Maintainability perspective: What code smells exist?
+
+Cross-reference findings. Flag any inconsistencies between perspectives.
+Provide confidence scores for each finding.
+Return only findings that appear in 2+ perspectives OR have >80% confidence."
+```
+
+#### Program-of-Thought Enhancement
+
+```markdown
+BEFORE:
+"Calculate the optimal configuration"
+
+AFTER:
+"Calculate the optimal configuration step by step:
+
+Step 1: Identify all configuration parameters
+  - List each parameter
+  - Document valid ranges
+  - Note dependencies between parameters
+
+Step 2: Define optimization criteria
+  - Primary metric: [what to maximize/minimize]
+  - Constraints: [hard limits]
+  - Trade-offs: [acceptable compromises]
+
+Step 3: Evaluate options
+  - For each viable configuration:
+    - Calculate primary metric value
+    - Verify all constraints met
+    - Document trade-offs accepted
+
+Step 4: Select and validate
+  - Choose configuration with best metric
+  - Verify against constraints
+  - Document reasoning
+
+Show your work at each step."
+```
+
+#### Plan-and-Solve Enhancement
+
+```markdown
+BEFORE:
+"Implement the feature"
+
+AFTER:
+"Implement the feature using plan-and-solve:
+
+PLANNING PHASE:
+1. Create detailed implementation plan
+2. Identify all subtasks
+3. Map dependencies between subtasks
+4. Estimate complexity per subtask
+5. Identify risks and mitigations
+
+VALIDATION GATE: Review plan before proceeding
+
+EXECUTION PHASE:
+1. Execute subtasks in dependency order
+2. Validate completion of each subtask
+3. Run tests after each significant change
+4. Document any deviations from plan
+
+VERIFICATION PHASE:
+1. Verify all requirements met
+2. Run full test suite
+3. Check for regressions
+4. Document final state"
+```
+
+#### Uncertainty Handling Enhancement
+
+```markdown
+BEFORE:
+"Determine the best approach"
+
+AFTER:
+"Determine the best approach:
+
+If confidence > 0.80:
+  - State your recommendation clearly
+  - Provide supporting evidence
+  - Note any caveats
+
+If confidence 0.50-0.80:
+  - Present top 2-3 options
+  - Compare trade-offs explicitly
+  - Recommend with stated uncertainty
+  - Suggest what additional information would increase confidence
+
+If confidence < 0.50:
+  - Explicitly state uncertainty
+  - List what you don't know
+  - Propose information-gathering steps
+  - Do NOT guess or fabricate
+
+Never present uncertain conclusions as certain."
+```
+
+### Operation 4: Generate Prompt Diff
+
+Create clear, reviewable diffs for any prompt change.
+
+```diff
+--- a/skills/skill-forge/SKILL.md
 +++ b/skills/skill-forge/SKILL.md
 @@ -45,7 +45,15 @@ Phase 2: Use Case Crystallization
 
@@ -192,7 +399,43 @@ enhancement_output:
 - Prompts analyzing concepts/terminology -> Morphological
 - Prompts comparing/categorizing objects -> Classifier
 
+---
 
+## Improvement Checklist
+
+When generating prompt improvements, verify:
+
+### Clarity
+- [ ] Each instruction has a single clear action
+- [ ] Ambiguous terms are defined
+- [ ] Success criteria are explicit
+- [ ] Examples illustrate expected behavior
+
+### Completeness
+- [ ] All inputs are specified
+- [ ] All outputs are defined
+- [ ] Edge cases are addressed
+- [ ] Failure modes have handlers
+
+### Precision
+- [ ] Quantifiable where possible
+- [ ] Ranges specified for parameters
+- [ ] Constraints explicitly stated
+- [ ] Trade-offs documented
+
+### Evidence-Based Techniques
+- [ ] Self-consistency for factual tasks
+- [ ] Program-of-thought for analytical tasks
+- [ ] Plan-and-solve for complex workflows
+- [ ] Uncertainty handling for ambiguous cases
+
+### Safety
+- [ ] Refuse/uncertainty pathway exists
+- [ ] No forced coherence
+- [ ] Rollback instructions included
+- [ ] Validation gates present
+
+---
 
 ## Integration with Recursive Loop
 
@@ -242,7 +485,34 @@ Task("Eval Runner",
   "eval-runner")
 ```
 
+---
 
+## Output Format
+
+All Prompt Forge outputs follow this structure:
+
+```yaml
+prompt_forge_output:
+  operation: "analyze|propose|improve|diff"
+  target: "{prompt_path}"
+  timestamp: "ISO-8601"
+
+  analysis: {...}    # If analyze operation
+  proposal: {...}    # If propose operation
+  diff: "..."        # If diff operation
+
+  next_steps:
+    - "Step 1"
+    - "Step 2"
+
+  warnings:
+    - "Any concerns about this change"
+
+  requires_human_review: true|false
+  reason_for_human_review: "If true, why"
+```
+
+---
 
 ## Version History
 
@@ -257,7 +527,13 @@ prompt-forge/
   METRICS.md         # Performance over time
 ```
 
+---
 
+**Status**: Production-Ready
+**Version**: 2.0.0
+**Key Constraint**: All self-improvements gated by frozen eval harness
+
+---
 
 ## Version History
 
@@ -285,7 +561,53 @@ prompt-forge/
 - Recursive improvement loop with safeguards
 - Integration with Skill Forge
 
+---
 
+## Core Principles
+
+Prompt Forge operates on 4 fundamental principles that ensure systematic improvement without regression:
+
+### Principle 1: Explicit Reasoning Over Implicit Changes
+
+Every modification requires documented rationale, predicted impact, and risk assessment. Changes without reasoning are rejected by design.
+
+In practice:
+- Generate improvement proposals with explicit rationale fields explaining why each change enhances the prompt
+- Document predicted improvement metrics (e.g., "+5% success rate") with confidence scores before applying changes
+- Create actionable diffs that map each change to a specific evidence-based technique (self-consistency, plan-and-solve, etc.)
+- Maintain bidirectional traceability between changes and their underlying research-validated patterns
+
+### Principle 2: Progressive Enhancement Through Evidence-Based Techniques
+
+Improvements derive from research-validated prompting patterns (self-consistency, program-of-thought, plan-and-solve) rather than ad-hoc modifications.
+
+In practice:
+- Apply self-consistency when factual accuracy is critical - require multiple perspectives and cross-reference findings
+- Use program-of-thought for analytical tasks requiring step-by-step reasoning with visible work at each stage
+- Implement plan-and-solve for complex workflows with explicit planning, validation gates, and verification phases
+- Add uncertainty handling that scales response confidence to evidence quality, explicitly stating unknowns
+
+### Principle 3: Safety Through Frozen Evaluation
+
+All improvements must pass frozen eval harness before deployment. No exceptions for self-improvement scenarios.
+
+In practice:
+- Gate every prompt change with benchmark suite execution before accepting modifications
+- Require 2+ auditor approval for self-improvement proposals targeting Prompt Forge itself
+- Archive previous versions with 30-day rollback window before committing new versions
+- Forbid changes that remove safeguards, bypass eval harness, modify benchmarks, or disable rollback
+
+### Principle 4: Cognitive Frame Enhancement [NEW in v2.0]
+
+Multi-lingual activation phrases can shift AI reasoning patterns. By embedding native language sections (Turkish for evidential, Russian for aspectual, Japanese for hierarchical), prompts activate different cognitive modes.
+
+In practice:
+- Analyze prompt for cognitive demands (completion tracking, source verification, etc.)
+- Select appropriate frame based on dominant demand
+- Embed native language activation phrase at prompt start
+- Add English markers that map to frame concepts
+
+---
 
 ## Common Anti-Patterns
 
@@ -295,7 +617,25 @@ prompt-forge/
 | **Skipping Risk Assessment** | Applying changes without evaluating regression risk, affected components, or rollback complexity leads to production failures | Require risk_assessment section with regression_risk level (low/medium/high), affected_components list, and rollback_complexity rating before any change |
 | **Forced Certainty Under Uncertainty** | Presenting uncertain conclusions as certain creates false confidence and poor decisions when evidence is weak | Implement confidence thresholds - if confidence <0.50 explicitly state uncertainty, list unknowns, propose information-gathering steps, and never guess or fabricate |
 
+---
 
+## Cross-Skill Coordination
+
+Prompt Forge works with:
+- **cognitive-lensing**: Analyze prompts for cognitive frame enhancement (Operation 6)
+- **skill-forge**: Meta-improvement loop - Skill Forge improves Prompt Forge, Prompt Forge optimizes Skill Forge
+- **agent-creator**: Optimize agent system prompts using evidence-based techniques
+- **eval-harness**: Validate prompt improvements against frozen benchmarks
+
+**Integration Points**:
+- **cognitive-lensing** provides frame analysis for prompts needing cognitive precision
+- **skill-forge** uses recursive loop where both skills improve each other (bounded by eval harness)
+- **agent-creator** invokes Prompt Forge to optimize agent prompts after Phase 3 design
+- **eval-harness** gates all improvements - must pass benchmarks before acceptance
+
+See: `.claude/skills/META-SKILLS-COORDINATION.md` for full coordination matrix.
+
+---
 
 ## Conclusion
 

@@ -1,6 +1,7 @@
 ---
 name: coordination
 description: Advanced multi-agent coordination patterns including mesh, hierarchical, and adaptive topologies with state synchronization, consensus mechanisms, and distributed task execution. Use when orchestrating complex multi-agent workflows requiring sophisticated coordination, consensus building, or distributed decision-making.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 ## Orchestration Skill Guidelines
@@ -446,6 +447,21 @@ node resources/scripts/load-balancer.js \
 - Byzantine Fault Tolerance in Practice (Castro & Liskov)
 - Raft Consensus Algorithm (Ongaro & Ousterhout)
 - Multi-Agent Systems: A Modern Approach (Wooldridge)
+---
+
+## Core Principles
+
+### 1. CAP Theorem Applies to Agent Coordination
+In distributed agent systems, you cannot simultaneously guarantee Consistency (all agents see the same state), Availability (every request receives a response), and Partition tolerance (system functions despite network splits). Choose based on requirements: Strong consistency (Raft consensus, higher latency) for financial transactions. Eventual consistency (gossip protocols, lower latency) for analytics dashboards. Partition tolerance is non-negotiable in distributed systems - network failures are inevitable.
+
+### 2. Topology Encodes Coordination Strategy
+Topology is not cosmetic - it defines communication patterns and failure modes. Mesh topology (all-to-all) enables Byzantine fault tolerance but requires O(N^2) messages. Hierarchical topology (tree structure) enables efficient delegation but creates single points of failure at coordinator nodes. Star topology (hub-and-spoke) centralizes coordination but bottlenecks at the hub. Ring topology (circular chain) enables pipeline processing but suffers from head-of-line blocking. Select topology to match your coordination requirements, then accept the inherent tradeoffs.
+
+### 3. State Synchronization Frequency is a Tradeoff
+High-frequency sync (every 1-2 seconds) provides near-real-time consistency but generates massive coordination traffic (hundreds of messages per minute in large swarms). Low-frequency sync (every 30-60 seconds) reduces traffic but increases divergence windows where agents operate on stale state. Optimal frequency depends on task characteristics: Real-time collaboration (high frequency), batch processing (low frequency), mixed workloads (adaptive frequency based on phase).
+
+---
+
 ## Anti-Patterns
 
 | Anti-Pattern | Why It Fails | Correct Approach |
@@ -453,6 +469,20 @@ node resources/scripts/load-balancer.js \
 | **Synchronous Consensus for Every Decision** | Agent A blocks 10 seconds waiting for consensus on variable naming. Agent B blocks 10 seconds on file organization. 80% of execution time spent in consensus protocols for non-critical decisions. | Reserve consensus for critical decisions only (deployment, architecture, security). Use leader-decides pattern (coordinator makes unilateral decision) for routine choices. Async notification (inform agents of decision, don't block) for non-blocking updates. |
 | **Ignoring Network Partitions** | Agent 5 disconnects due to network split. Coordination assumes all agents reachable. System deadlocks waiting for Agent 5's consensus vote that never arrives. | Implement partition detection (heartbeat + timeout), partition handling (quorum with majority), and partition recovery (state reconciliation when agent reconnects). Partitions are inevitable - design for them, don't ignore them. |
 | **Static Topology for Dynamic Workloads** | Initialize 10-agent hierarchical swarm for research task (needs peer collaboration). Coordinator becomes bottleneck as agents attempt peer-to-peer discussions. Workflow stalls on coordination overhead. | Dynamic topology reconfiguration: Start with topology matching initial phase (hierarchical for planning), reconfigure mid-execution when requirements change (mesh for brainstorming), restore original topology for later phases (hierarchical for integration). |
+
+---
+
+## Enhanced Conclusion
+
+Agent coordination is distributed systems engineering applied to AI workflows. The patterns documented here (mesh, hierarchical, star, ring topologies; Byzantine, Raft, gossip consensus; state synchronization protocols) are not novel inventions - they are proven distributed systems techniques adapted for multi-agent orchestration.
+
+The fundamental insight: coordination is overhead, not value. Every consensus round, state sync, and topology reconfiguration consumes time that could be spent on productive work. Effective coordination minimizes this overhead while preserving correctness guarantees. This means selecting appropriate topology (mesh for small collaborative swarms <8 agents, hierarchical for large coordinated swarms >8 agents), using consensus sparingly (only for critical decisions), and synchronizing state at task-appropriate frequencies (high for real-time collaboration, low for batch processing).
+
+The workflow documented here (topology selection, agent spawning, task orchestration, consensus decision-making, state synchronization, performance optimization) provides a systematic approach to distributed agent coordination. Follow this workflow for complex multi-agent tasks (6+ agents, sophisticated dependencies, fault tolerance requirements). For simpler scenarios (2-5 agents, loose coupling, no consensus requirements), direct agent spawning without formal coordination infrastructure is sufficient.
+
+Coordination patterns scale agent capabilities from isolated execution to distributed collaboration. The cost is coordination overhead. The benefit is parallelized execution across specialized agents. The art is balancing these tradeoffs to match task requirements.
+
+---
 
 ## Common Anti-Patterns
 

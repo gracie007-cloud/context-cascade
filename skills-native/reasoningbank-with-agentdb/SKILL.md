@@ -1,6 +1,7 @@
 ---
 name: reasoningbank-with-agentdb
-description: Implement ReasoningBank adaptive learning with AgentDB's 150x faster vector database. Includes trajectory tracking, verdict judgment, memory distillation, and pattern recognition. Use when building self-learning agents, optimizing decision-making, or implementing experience replay systems.
+description: Implement ReasoningBank adaptive learning with AgentDBs 150x faster vector database. Includes trajectory tracking, verdict judgment, memory distillation, and pattern recognition. Use when building self-learning agents, optimizing decision-making, or implementing experience replay systems.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 ## When NOT to Use This Skill
@@ -60,7 +61,32 @@ Provides ReasoningBank adaptive learning patterns using AgentDB's high-performan
 - AgentDB v1.0.7+ (via agentic-flow)
 - Understanding of reinforcement learning concepts (optional)
 
+---
 
+## Quick Start with CLI
+
+### Initialize ReasoningBank Database
+
+```bash
+# Initialize AgentDB for ReasoningBank
+npx agentdb@latest init ./.agentdb/reasoningbank.db --dimension 1536
+
+# Start MCP server for Claude Code integration
+npx agentdb@latest mcp
+claude mcp add agentdb npx agentdb@latest mcp
+```
+
+### Migrate from Legacy ReasoningBank
+
+```bash
+# Automatic migration with validation
+npx agentdb@latest migrate --source .swarm/memory.db
+
+# Verify migration
+npx agentdb@latest stats ./.agentdb/reasoningbank.db
+```
+
+---
 
 ## Quick Start with API
 
@@ -112,7 +138,101 @@ console.log('Context:', result.context);
 console.log('Patterns:', result.patterns);
 ```
 
+---
 
+## Core ReasoningBank Concepts
+
+### 1. Trajectory Tracking
+
+Track agent execution paths and outcomes:
+
+```typescript
+// Record trajectory (sequence of actions)
+const trajectory = {
+  task: 'optimize-api-endpoint',
+  steps: [
+    { action: 'analyze-bottleneck', result: 'found N+1 query' },
+    { action: 'add-eager-loading', result: 'reduced queries' },
+    { action: 'add-caching', result: 'improved latency' }
+  ],
+  outcome: 'success',
+  metrics: { latency_before: 2500, latency_after: 150 }
+};
+
+const embedding = await computeEmbedding(JSON.stringify(trajectory));
+
+await rb.insertPattern({
+  id: '',
+  type: 'trajectory',
+  domain: 'api-optimization',
+  pattern_data: JSON.stringify({ embedding, pattern: trajectory }),
+  confidence: 0.9,
+  usage_count: 1,
+  success_count: 1,
+  created_at: Date.now(),
+  last_used: Date.now(),
+});
+```
+
+### 2. Verdict Judgment
+
+Judge whether a trajectory was successful:
+
+```typescript
+// Retrieve similar past trajectories
+const similar = await rb.retrieveWithReasoning(queryEmbedding, {
+  domain: 'api-optimization',
+  k: 10,
+});
+
+// Judge based on similarity to successful patterns
+const verdict = similar.memories.filter(m =>
+  m.pattern.outcome === 'success' &&
+  m.similarity > 0.8
+).length > 5 ? 'likely_success' : 'needs_review';
+
+console.log('Verdict:', verdict);
+console.log('Confidence:', similar.memories[0]?.similarity || 0);
+```
+
+### 3. Memory Distillation
+
+Consolidate similar experiences into patterns:
+
+```typescript
+// Get all experiences in domain
+const experiences = await rb.retrieveWithReasoning(embedding, {
+  domain: 'api-optimization',
+  k: 100,
+  optimizeMemory: true,  // Automatic consolidation
+});
+
+// Distill into high-level pattern
+const distilledPattern = {
+  domain: 'api-optimization',
+  pattern: 'For N+1 queries: add eager loading, then cache',
+  success_rate: 0.92,
+  sample_size: experiences.memories.length,
+  confidence: 0.95
+};
+
+await rb.insertPattern({
+  id: '',
+  type: 'distilled-pattern',
+  domain: 'api-optimization',
+  pattern_data: JSON.stringify({
+    embedding: await computeEmbedding(JSON.stringify(distilledPattern)),
+    pattern: distilledPattern
+  }),
+  confidence: 0.95,
+  usage_count: 0,
+  success_count: 0,
+  created_at: Date.now(),
+  last_used: Date.now(),
+});
+```
+
+---
 
 ## Integration with Reasoning Agents
 
@@ -188,7 +308,36 @@ result.memories.forEach(mem => {
 });
 ```
 
+---
 
+## Legacy API Compatibility
+
+AgentDB maintains 100% backward compatibility with legacy ReasoningBank:
+
+```typescript
+import {
+  retrieveMemories,
+  judgeTrajectory,
+  distillMemories
+} from 'agentic-flow/reasoningbank';
+
+// Legacy API works unchanged (uses AgentDB backend automatically)
+const memories = await retrieveMemories(query, {
+  domain: 'code-generation',
+  agent: 'coder'
+});
+
+const verdict = await judgeTrajectory(trajectory, query);
+
+const newMemories = await distillMemories(
+  trajectory,
+  verdict,
+  query,
+  { domain: 'code-generation' }
+);
+```
+
+---
 
 ## Performance Characteristics
 
@@ -198,7 +347,72 @@ result.memories.forEach(mem => {
 - **Trajectory Judgment**: <5ms (including retrieval + analysis)
 - **Memory Distillation**: <50ms (consolidate 100 patterns)
 
+---
 
+## Advanced Patterns
+
+### Hierarchical Memory
+
+Organize memories by abstraction level:
+
+```typescript
+// Low-level: Specific implementation
+await rb.insertPattern({
+  type: 'concrete',
+  domain: 'debugging/null-pointer',
+  pattern_data: JSON.stringify({
+    embedding,
+    pattern: { bug: 'NPE in UserService.getUser()', fix: 'Add null check' }
+  }),
+  confidence: 0.9,
+  // ...
+});
+
+// Mid-level: Pattern across similar cases
+await rb.insertPattern({
+  type: 'pattern',
+  domain: 'debugging',
+  pattern_data: JSON.stringify({
+    embedding,
+    pattern: { category: 'null-pointer', approach: 'defensive-checks' }
+  }),
+  confidence: 0.85,
+  // ...
+});
+
+// High-level: General principle
+await rb.insertPattern({
+  type: 'principle',
+  domain: 'software-engineering',
+  pattern_data: JSON.stringify({
+    embedding,
+    pattern: { principle: 'fail-fast with clear errors' }
+  }),
+  confidence: 0.95,
+  // ...
+});
+```
+
+### Multi-Domain Learning
+
+Transfer learning across domains:
+
+```typescript
+// Learn from backend optimization
+const backendExperience = await rb.retrieveWithReasoning(embedding, {
+  domain: 'backend-optimization',
+  k: 10,
+});
+
+// Apply to frontend optimization
+const transferredKnowledge = backendExperience.memories.map(mem => ({
+  ...mem,
+  domain: 'frontend-optimization',
+  adapted: true,
+}));
+```
+
+---
 
 ## CLI Operations
 
@@ -226,7 +440,41 @@ npx agentdb@latest migrate --source .swarm/memory.db --target .agentdb/reasoning
 npx agentdb@latest stats .agentdb/reasoningbank.db
 ```
 
+---
 
+## Troubleshooting
+
+### Issue: Migration fails
+```bash
+# Check source database exists
+ls -la .swarm/memory.db
+
+# Run with verbose logging
+DEBUG=agentdb:* npx agentdb@latest migrate --source .swarm/memory.db
+```
+
+### Issue: Low confidence scores
+```typescript
+// Enable context synthesis for better quality
+const result = await rb.retrieveWithReasoning(embedding, {
+  synthesizeContext: true,
+  useMMR: true,
+  k: 10,
+});
+```
+
+### Issue: Memory growing too large
+```typescript
+// Enable automatic optimization
+const result = await rb.retrieveWithReasoning(embedding, {
+  optimizeMemory: true,  // Consolidates similar patterns
+});
+
+// Or manually optimize
+await rb.optimize();
+```
+
+---
 
 ## Learn More
 
@@ -235,7 +483,23 @@ npx agentdb@latest stats .agentdb/reasoningbank.db
 - **MCP Integration**: `npx agentdb@latest mcp`
 - **Website**: https://agentdb.ruv.io
 
------------|--------------|------------------|
+---
+
+**Category**: Machine Learning / Reinforcement Learning
+**Difficulty**: Intermediate
+**Estimated Time**: 20-30 minutes
+## Core Principles
+
+1. **Vector Semantic Retrieval Over Exact Matching**: ReasoningBank with AgentDB leverages 150x faster vector search (100us vs 15ms) through semantic embeddings, retrieving similar trajectories even when keywords differ, enabling agents to learn from experiences described differently but contextually identical.
+
+2. **Adaptive Memory Consolidation**: Memory distillation consolidates 100+ granular experiences (e.g., "fixed NPE in UserService", "added null check to AuthService") into higher-level patterns ("defensive null checks prevent pointer exceptions"), reducing memory footprint while preserving learned knowledge and avoiding pattern redundancy.
+
+3. **Confidence-Weighted Experience Replay**: Verdict judgment retrieves patterns filtered by confidence (>0.8) and success rate, prioritizing proven trajectories over experimental ones, preventing agents from repeating failed approaches while still allowing exploration of medium-confidence strategies (0.5-0.8) when explicitly needed.
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|--------------|--------------|------------------|
 | Storing raw text without embeddings | Pattern retrieval becomes keyword search, missing semantically similar experiences ("optimize query" vs "speed up database") | Always compute embeddings via computeEmbedding() before insertion, enabling semantic similarity matching |
 | Skipping memory distillation | 10,000+ micro-experiences (every bug fix stored separately) bloat database to >2GB, slowing retrieval to >500ms | Run automatic consolidation (optimizeMemory: true) or manual distillation after 100+ experiences in same domain |
 | Using trajectory outcomes without confidence scores | Agent treats single successful case (confidence 0.6) as proven pattern, repeating approaches that succeeded by luck | Only apply patterns with confidence >0.8 and usage_count >3, mark experimental patterns as "needs validation" |

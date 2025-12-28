@@ -1,6 +1,7 @@
 ---
 name: multi-model
-description: Skill for multi-model
+description: Intelligent multi-model orchestrator that routes tasks to Gemini or Codex based on their strengths
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Multi-Model Orchestrator Skill

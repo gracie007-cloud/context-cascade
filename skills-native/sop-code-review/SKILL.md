@@ -1,6 +1,7 @@
 ---
 name: sop-code-review
 description: Comprehensive code review workflow coordinating quality, security, performance, and documentation reviewers. 4-hour timeline for thorough multi-agent review.
+allowed-tools: Read, Glob, Grep, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -81,6 +82,151 @@ Comprehensive code review using specialized reviewers for different quality aspe
 2. Specialized Reviews (2 hours)
 3. Integration Review (1 hour)
 4. Final Approval (30 min)
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Phase 1: Automated Checks (30 minutes)
+
+### Quick Quality Checks
+
+**Parallel Automated Testing**:
+
+```javascript
+// Initialize review swarm
+await mcp__ruv-swarm__swarm_init({
+  topology: 'star',  // Coordinator pattern for reviews
+  maxAgents: 6,
+  strategy: 'specialized'
+});
+
+// Run all automated checks in parallel
+const [lint, tests, coverage, build] = await Promise.all([
+  Task("Linter", `
+Run linting checks:
+- ESLint for JavaScript/TypeScript
+- Pylint for Python
+- RuboCop for Ruby
+- Check for code style violations
+
+Store results: code-review/${prId}/lint-results
+`, "reviewer"),
+
+  Task("Test Runner", `
+Run test suite:
+- Unit tests
+- Integration tests
+- E2E tests (if applicable)
+- All tests must pass
+
+Store results: code-review/${prId}/test-results
+`, "tester"),
+
+  Task("Coverage Analyzer", `
+Check code coverage:
+- Overall coverage > 80%
+- New code coverage > 90%
+- No critical paths uncovered
+
+Generate coverage report
+Store: code-review/${prId}/coverage-report
+`, "reviewer"),
+
+  Task("Build Validator", `
+Validate build:
+- Clean build (no warnings)
+- Type checking passes
+- No broken dependencies
+- Bundle size within limits
+
+Store build results: code-review/${prId}/build-status
+`, "reviewer")
+]);
+
+// If any automated check fails, stop and request fixes
+if (hasFailures([lint, tests, coverage, build])) {
+  await Task("Review Coordinator", `
+Automated checks failed. Request fixes from author:
+${summarizeFailures([lint, tests, coverage, build])}
+
+Store feedback: code-review/${prId}/automated-feedback
+`, "pr-manager");
+  return; // Stop review until fixed
+}
+```
+
+**Deliverables**:
+- All automated checks passing
+- Test results documented
+- Coverage report generated
+
+---
 
 ## When to Use This Skill
 
@@ -307,6 +453,139 @@ Store: code-review/${prId}/aggregated-review
 - Issues categorized by severity
 - Aggregated review summary
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Phase 3: Integration Review (1 hour)
+
+### End-to-End Impact Assessment
+
+**Sequential Analysis**:
+
+```javascript
+// Step 1: Integration Testing
+await Task("Integration Tester", `
+Test integration with existing system:
+- Does this change break any existing functionality?
+- Are all integration tests passing?
+- Does it play well with related modules?
+- Any unexpected side effects?
+
+Run integration test suite
+Store results: code-review/${prId}/integration-tests
+`, "tester");
+
+// Step 2: Deployment Impact
+await Task("DevOps Reviewer", `
+Assess deployment impact:
+- Infrastructure changes needed?
+- Database migrations required?
+- Configuration updates needed?
+- Backward compatibility maintained?
+- Rollback plan clear?
+
+Store assessment: code-review/${prId}/deployment-impact
+`, "cicd-engineer");
+
+// Step 3: User Impact
+await Task("Product Reviewer", `
+Assess user impact:
+- Does this change improve user experience?
+- Are there any user-facing changes?
+- Is UX/UI consistent with design system?
+- Are analytics/tracking updated?
+
+Store assessment: code-review/${prId}/user-impact
+`, "planner");
+
+// Step 4: Risk Assessment
+await Task("Risk Analyzer", `
+Overall risk assessment:
+- What's the blast radius of this change?
+- What's the worst-case failure scenario?
+- Do we have rollback procedures?
+- Should this be feature-flagged?
+- Monitoring and alerting adequate?
+
+Store risk assessment: code-review/${prId}/risk-analysis
+Recommendation: Approve/Conditional/Reject
+`, "reviewer");
+```
+
+**Deliverables**:
+- Integration test results
+- Deployment impact assessment
+- User impact assessment
+- Risk analysis
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -458,6 +737,98 @@ Store: code-review/${prId}/rejection
 - Author notification
 - Decision and next steps
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Success Criteria
+
+### Review Quality
+- **Coverage**: All aspects reviewed (quality, security, performance, architecture, docs)
+- **Consistency**: Reviews follow established guidelines
+- **Actionability**: All feedback is specific and actionable
+- **Timeliness**: Reviews completed within 4 hours
+
+### Code Quality Gates
+- **Automated Tests**: 100% passing
+- **Code Coverage**: > 80% overall, > 90% for new code
+- **Linting**: 0 violations
+- **Security**: 0 critical issues, 0 high-severity issues
+- **Performance**: No high-impact performance regressions
+- **Documentation**: 100% of public APIs documented
+
+### Process Metrics
+- **Review Turnaround**: < 4 hours (business hours)
+- **Author Satisfaction**: > 4/5 (feedback is helpful)
+- **Defect Escape Rate**: < 1% (issues found in production that should have been caught)
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -564,6 +935,96 @@ This skill integrates with:
 - Ask questions rather than make demands
 - Suggest, don't dictate (unless security/critical issue)
 
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+## Agent Coordination Summary
+
+**Total Agents Used**: 12-15
+**Execution Pattern**: Star topology (coordinator with specialists)
+**Timeline**: 4 hours
+**Memory Namespaces**: code-review/{pr-id}/*
+
+**Key Agents**:
+1. reviewer - Lint, build, coordination
+2. tester - Test execution, integration testing
+3. code-analyzer - Code quality review
+4. security-manager - Security review
+5. perf-analyzer - Performance review
+6. system-architect - Architecture review
+7. api-docs - Documentation review
+8. cicd-engineer - Deployment impact
+9. planner - Product/user impact
+10. pr-manager - Review coordination, notifications
+
+---
+
 ## When to Use This Skill
 
 Use this skill when:
@@ -645,6 +1106,80 @@ Author: ${authorName}
 Changes: ${changesSummary}
 `, "pr-manager")
 ```
+
+---
+
+## When to Use This Skill
+
+Use this skill when:
+- Code quality issues are detected (violations, smells, anti-patterns)
+- Audit requirements mandate systematic review (compliance, release gates)
+- Review needs arise (pre-merge, production hardening, refactoring preparation)
+- Quality metrics indicate degradation (test coverage drop, complexity increase)
+- Theater detection is needed (mock data, stubs, incomplete implementations)
+
+## When NOT to Use This Skill
+
+Do NOT use this skill for:
+- Simple formatting fixes (use linter/prettier directly)
+- Non-code files (documentation, configuration without logic)
+- Trivial changes (typo fixes, comment updates)
+- Generated code (build artifacts, vendor dependencies)
+- Third-party libraries (focus on application code)
+
+## Success Criteria
+
+This skill succeeds when:
+- **Violations Detected**: All quality issues found with ZERO false negatives
+- **False Positive Rate**: <5% (95%+ findings are genuine issues)
+- **Actionable Feedback**: Every finding includes file path, line number, and fix guidance
+- **Root Cause Identified**: Issues traced to underlying causes, not just symptoms
+- **Fix Verification**: Proposed fixes validated against codebase constraints
+
+## Edge Cases and Limitations
+
+Handle these edge cases carefully:
+- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
+- **Generated Code**: Skip or flag as low priority (auto-generated files)
+- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
+- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
+- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
+
+## Quality Analysis Guardrails
+
+CRITICAL RULES - ALWAYS FOLLOW:
+- **NEVER approve code without evidence**: Require actual execution, not assumptions
+- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
+- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
+- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
+- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
+- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
+- **TRACK false positives**: Learn from mistakes to improve detection accuracy
+
+## Evidence-Based Validation
+
+Use multiple validation perspectives:
+1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
+2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
+3. **Historical Analysis**: Git history, past bug patterns, change frequency
+4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
+5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
+
+**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
+
+## Integration with Quality Pipeline
+
+This skill integrates with:
+- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
+- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
+- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
+
+
+**Status**: Production-ready SOP
+**Complexity**: Medium (12-15 agents, 4 hours)
+**Pattern**: Star topology with specialized reviewers
+---
 
 ## Core Principles
 

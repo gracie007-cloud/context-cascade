@@ -1,6 +1,7 @@
 ---
 name: sop-api-development
 description: Complete REST API development workflow coordinating backend, database, testing, documentation, and DevOps agents. 2-week timeline with TDD approach.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # SOP: REST API Development
@@ -70,7 +71,98 @@ Complete REST API development using Test-Driven Development and multi-agent coor
 3. Testing & Documentation (Days 9-11)
 4. Deployment (Days 12-14)
 
+---
 
+## Phase 1: Planning & Design (Days 1-2)
+
+### Day 1: Requirements & Architecture
+
+**Sequential Workflow**:
+
+```javascript
+// Step 1: Gather Requirements
+await Task("Product Manager", `
+Define API requirements:
+- List all endpoints needed
+- Define data models and relationships
+- Specify authentication/authorization
+- Define rate limiting and quotas
+- Identify third-party integrations
+
+Store requirements: api-dev/rest-api-v2/requirements
+`, "planner");
+
+// Step 2: API Design
+await Task("System Architect", `
+Using requirements: api-dev/rest-api-v2/requirements
+
+Design:
+- RESTful API structure (resources, HTTP methods)
+- URL patterns and versioning strategy
+- Request/response formats (JSON schemas)
+- Error handling patterns
+- API security architecture
+
+Generate OpenAPI 3.0 specification
+Store: api-dev/rest-api-v2/openapi-spec
+`, "system-architect");
+
+// Step 3: Database Design
+await Task("Database Architect", `
+Using API spec: api-dev/rest-api-v2/openapi-spec
+
+Design database:
+- Schema design (tables, columns, types)
+- Relationships and foreign keys
+- Indexes for performance
+- Migration strategy
+- Backup and recovery plan
+
+Generate SQL schema
+Store: api-dev/rest-api-v2/db-schema
+`, "code-analyzer");
+```
+
+### Day 2: Test Planning
+
+```javascript
+// Step 4: Test Strategy
+await Task("QA Engineer", `
+Using:
+- API spec: api-dev/rest-api-v2/openapi-spec
+- DB schema: api-dev/rest-api-v2/db-schema
+
+Create test plan:
+- Unit test strategy (per endpoint)
+- Integration test scenarios
+- E2E test workflows
+- Performance test targets
+- Security test cases
+
+Store test plan: api-dev/rest-api-v2/test-plan
+`, "tester");
+
+// Step 5: DevOps Planning
+await Task("DevOps Engineer", `
+Plan infrastructure:
+- Environment setup (dev, staging, prod)
+- CI/CD pipeline design
+- Monitoring and logging strategy
+- Deployment strategy (blue-green)
+- Rollback procedures
+
+Store DevOps plan: api-dev/rest-api-v2/devops-plan
+`, "cicd-engineer");
+```
+
+**Deliverables**:
+- API requirements document
+- OpenAPI 3.0 specification
+- Database schema
+- Test plan
+- DevOps plan
+
+---
 
 ## Phase 2: Development (Days 3-8)
 
@@ -236,7 +328,102 @@ Store: api-dev/rest-api-v2/src/webhooks/
 - All tests passing (unit + integration)
 - Code reviewed and optimized
 
+---
 
+## Phase 3: Testing & Documentation (Days 9-11)
+
+### Day 9: Comprehensive Testing
+
+**Parallel Testing**:
+
+```javascript
+const [e2eTests, perfTests, securityTests] = await Promise.all([
+  Task("E2E Test Engineer", `
+End-to-end testing:
+- Complete user workflows (register → login → CRUD → logout)
+- Error scenarios (invalid input, unauthorized access)
+- Edge cases (rate limiting, concurrent requests)
+
+Run E2E test suite
+Store results: api-dev/rest-api-v2/test-results/e2e
+`, "tester"),
+
+  Task("Performance Tester", `
+Performance testing:
+- Load testing (1000 req/sec target)
+- Stress testing (find breaking point)
+- Endurance testing (24-hour sustained load)
+- API response time < 200ms (p95)
+
+Run benchmarks
+Store metrics: api-dev/rest-api-v2/test-results/performance
+`, "perf-analyzer"),
+
+  Task("Security Tester", `
+Security testing:
+- OWASP API Security Top 10 checks
+- SQL injection testing
+- XSS vulnerability testing
+- Authentication/authorization bypass attempts
+- Rate limiting validation
+
+Run security scan
+Store audit: api-dev/rest-api-v2/test-results/security
+`, "security-manager")
+]);
+```
+
+### Day 10-11: Documentation
+
+**Parallel Documentation**:
+
+```javascript
+const [apiDocs, devDocs, runbook] = await Promise.all([
+  Task("API Documentation Writer", `
+Create API documentation:
+- OpenAPI/Swagger interactive docs
+- Authentication guide
+- Endpoint reference (all endpoints)
+- Code examples (cURL, JavaScript, Python)
+- Rate limiting and quotas
+- Error codes and handling
+
+Host Swagger UI
+Store: api-dev/rest-api-v2/docs/api-reference
+`, "api-docs"),
+
+  Task("Developer Documentation", `
+Create developer guide:
+- Getting started (setup, authentication)
+- Tutorial (common workflows)
+- Best practices
+- SDKs and libraries
+- Changelog and versioning
+
+Store: api-dev/rest-api-v2/docs/developer-guide
+`, "api-docs"),
+
+  Task("Operations Runbook", `
+Create operational docs:
+- Deployment procedures
+- Monitoring and alerting setup
+- Troubleshooting guide
+- Performance tuning
+- Backup and recovery procedures
+- Incident response plan
+
+Store: api-dev/rest-api-v2/docs/operations
+`, "cicd-engineer")
+]);
+```
+
+**Deliverables**:
+- All tests passing (unit, integration, E2E, performance, security)
+- Complete API documentation
+- Developer guide
+- Operations runbook
+
+---
 
 ## Phase 4: Deployment (Days 12-14)
 
@@ -347,7 +534,30 @@ Store: api-dev/rest-api-v2/knowledge-transfer
 - Monitoring dashboards (active)
 - Support team trained
 
+---
 
+## Success Metrics
+
+### Technical Metrics
+- **Test Coverage**: > 90%
+- **API Response Time**: < 200ms (p95)
+- **Uptime**: 99.9%+
+- **Error Rate**: < 0.1%
+- **Code Quality Score**: A rating
+
+### Performance Metrics
+- **Throughput**: > 1000 req/sec
+- **Database Query Time**: < 50ms (p95)
+- **Memory Usage**: < 512MB
+- **CPU Usage**: < 70%
+
+### Quality Metrics
+- **Security Audit**: Passed
+- **Documentation Coverage**: 100%
+- **API Compliance**: OpenAPI 3.0 valid
+- **Code Review Approval**: 100%
+
+---
 
 ## Agent Coordination Summary
 
@@ -370,13 +580,60 @@ Store: api-dev/rest-api-v2/knowledge-transfer
 11. performance-monitor - Production monitoring
 12. api-docs - Documentation
 
+---
 
+## Usage
+
+```javascript
+// Invoke this SOP skill
+Skill("sop-api-development")
+
+// Or execute with specific parameters
+Task("API Development Orchestrator", `
+Execute REST API development SOP for: User Management API
+Requirements: {requirements}
+Timeline: 2 weeks
+`, "planner")
+```
+
+---
 
 **Status**: Production-ready SOP
 **Complexity**: Medium (8-12 agents, 2 weeks)
 **Pattern**: Test-Driven Development with parallel optimization
 
+---
 
+## Core Principles
+
+### 1. Test-Driven Development (TDD) as Non-Negotiable
+Write tests BEFORE implementation, not after. TDD is not a productivity drag - it prevents rework:
+- **Red-Green-Refactor Cycle**: Write failing test (red), implement minimal code to pass (green), refactor for clarity (refactor)
+- **Regression Safety**: Tests prevent breaking existing functionality during refactoring or feature additions
+- **Design Validation**: Tests force API design decisions before implementation locks them in
+- **Documentation Through Tests**: Tests document expected behavior more accurately than comments
+
+APIs developed without TDD accumulate technical debt through untested edge cases, brittle code, and breaking changes. The cost of writing tests after implementation is 3-5x higher than writing tests first due to refactoring required for testability.
+
+### 2. API Contract-First Design
+Define OpenAPI specification BEFORE writing code. API contracts are the interface between frontend and backend:
+- **Frontend-Backend Parallelization**: Teams can work in parallel using mock servers from OpenAPI spec
+- **Breaking Change Detection**: Schema validation detects breaking changes before deployment
+- **Documentation Generation**: Interactive API docs (Swagger UI) generated automatically from spec
+- **Client SDK Generation**: Client libraries generated automatically for multiple languages
+
+Code-first API development leads to undocumented endpoints, inconsistent naming, and breaking changes discovered in production. Contract-first development treats the API as a product with versioned specifications and automated validation.
+
+### 3. Progressive Deployment Through Canary Releases
+Deploy new API versions incrementally to detect issues before full rollout:
+- **Traffic Splitting**: Route 1-5% traffic to new version, monitor error rates and latency before full rollout
+- **Rollback Capability**: Instant rollback to previous version if error rates exceed thresholds
+- **Feature Flags**: Decouple deployment from feature activation, enable features per user cohort or API key
+- **Blue-Green Strategy**: Run new version alongside old version, switch traffic atomically
+
+Direct deployment to 100% of traffic converts minor bugs into major incidents. Canary releases limit blast radius - a bug affecting 5% of users is recoverable, the same bug affecting all users requires crisis management and customer notifications.
+
+---
 
 ## Anti-Patterns
 
@@ -386,7 +643,12 @@ Store: api-dev/rest-api-v2/knowledge-transfer
 | **Implicit API Contracts Through Code** | Defining API through code without formal specification (OpenAPI/Swagger). Leads to undocumented endpoints, inconsistent naming conventions, and breaking changes discovered in production when clients fail. | **OpenAPI-First API Design**: Write OpenAPI 3.0 specification BEFORE implementing endpoints. Use specification to generate mock servers for frontend development, validate requests/responses in middleware, and auto-generate interactive documentation (Swagger UI). Version specifications alongside code. |
 | **Direct Production Deployment** | Deploying new API version directly to 100% of production traffic without gradual rollout. Minor bugs become major incidents affecting all users. Rollback requires full redeployment under pressure. | **Canary Release with Progressive Rollout**: Deploy to 1-5% of traffic (canary), monitor error rates and latency for 1 hour. If metrics within thresholds, roll out to 25%, then 50%, then 100% with automated rollback on threshold violations. Use feature flags to decouple deployment from activation. |
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Code-First API Development** | Writing implementation before defining API specification. Results in inconsistent endpoints, undocumented breaking changes, and frontend-backend coordination failures. Changing API after implementation is 10x more expensive. | **Contract-First with OpenAPI**: Define OpenAPI 3.0 specification BEFORE implementation. Use spec to generate mock servers for parallel frontend dev, validate requests/responses in middleware, and auto-generate documentation. Implementation becomes spec fulfillment, not exploration. |
 | **Testing After Implementation** | Writing tests after code is complete. Creates biased tests that document existing behavior rather than validate requirements. Misses edge cases discovered during implementation. Encourages untestable code architecture. | **Test-Driven Development**: Write failing test first (red), implement minimal code to pass (green), refactor (refactor). Tests drive API design decisions and catch regressions. Aim 90%+ branch coverage, not just line coverage. |
 | **Direct Production Deployment** | Deploying API changes directly to 100% production traffic. Minor bugs become major incidents affecting all users. Rollback requires full redeployment under pressure. No validation against real traffic patterns. | **Canary Deployment with Progressive Rollout**: Deploy to 1-5% traffic canary first. Monitor error rates and latency for 1 hour. If metrics within thresholds, roll out to 25%, 50%, 100% with automated rollback on violations. Use feature flags to decouple deployment from activation. |
@@ -404,3 +666,86 @@ Contract-First API Design treats the API specification as a versioned product, n
 Progressive Deployment through Canary Releases limits blast radius by incrementally rolling out new API versions to small traffic percentages before full production deployment. Direct deployment to 100% of traffic converts minor bugs into major incidents. Canary releases (1-5% traffic) with automated monitoring detect issues affecting a small user cohort before they impact the entire user base. Blue-green deployment provides instant rollback capability, while feature flags decouple deployment from feature activation. The incremental cost of progressive deployment is trivial compared to the cost of a production incident affecting all users.
 
 This SOP provides a systematic 4-phase workflow (Planning & Design, Development, Testing & Documentation, Deployment) with clear agent assignments, memory namespace conventions, and success metrics. Use this as a template for API development projects, adapting timeline and agent allocation to project complexity. REST API mastery is not about memorizing HTTP status codes - it is about applying consistent principles that guarantee quality, maintainability, and reliability through systematic testing, contract-driven design, and progressive deployment.
+
+---
+
+## System Design Integration (Dr. Synthara Methodology)
+
+### API Style Decision Tree
+
+```
+Who consumes it and what do they need?
+|
++-- Public API, broad compatibility, caching & simplicity matter?
+|   +-- REST (this skill's focus)
+|
++-- Complex UI needing shaped responses, reducing round trips?
+|   +-- GraphQL (control query cost + N+1)
+|
++-- Internal service-to-service, performance + typed contracts?
+    +-- gRPC (protobuf, streaming, strong typing)
+```
+
+**What I'm Thinking**: GraphQL trades "fewer requests" for "harder caching + expensive resolvers." Plan for that up front.
+
+### Protocol Decision Tree
+
+```
+What interaction pattern do you need?
+|
++-- Simple request/response?
+|   +-- HTTPS (default for REST)
+|
++-- Real-time push, bidirectional updates (chat, live presence)?
+|   +-- WebSockets (plan for sticky connections & backpressure)
+|
++-- Async work, decoupling, smoothing spikes (orders, emails)?
+|   +-- Queue (AMQP/Kafka/etc.)
+|
++-- Microservices needing speed/streaming contracts?
+    +-- gRPC over HTTP/2
+```
+
+### REST API Checklist (Interview Gold)
+
+- [ ] Resources are NOUNS: `/users`, `/orders/{id}`
+- [ ] Proper verbs via HTTP methods (GET/POST/PATCH/DELETE)
+- [ ] PAGINATION always for lists (limit/offset or cursor)
+- [ ] IDEMPOTENCY where needed (especially POST for payments/orders)
+- [ ] Correct status codes (201 Created, 204 No Content, 400/401/403/404/409/429, 5xx)
+- [ ] Versioning strategy (URL or headers), deprecation plan
+
+### GraphQL Checklist
+
+- [ ] Schema mirrors domain, modular types
+- [ ] Depth/complexity limits configured
+- [ ] N+1 avoided (batching, dataloaders)
+- [ ] Caching strategy defined (often app-level)
+- [ ] Explicit error shape (don't hide failures behind 200-only)
+
+### Phase 0 Constraint Extraction
+
+Before designing ANY API, extract these constraints:
+
+| Constraint | Questions |
+|------------|-----------|
+| **Users & Usage** | DAU/MAU? Peak QPS? Read/write ratio? Payload sizes? |
+| **Latency Target** | p50/p95/p99? Mobile vs desktop? Global vs local? |
+| **Consistency** | Strong vs eventual? Where does correctness matter? |
+| **Security** | Auth model? Threat surface? Compliance? |
+
+**What I'm Thinking**: "What are the non-negotiable invariants?"
+- "No double-charging" (payments)
+- "Messages never delivered out of order per conversation" (chat)
+- "Inventory can't go negative" (e-commerce)
+
+### The 90-Second Interview Narrative for API Design
+
+1. **Clarify** requirements + scale + SLOs
+2. **Choose** API style (REST/GraphQL/gRPC)
+3. **Design** resources, methods, pagination
+4. **Security** authn/authz + rate limiting
+5. **Documentation** OpenAPI spec
+6. **Testing** contract tests + integration
+7. **Deployment** canary rollout
+8. **Trade-offs** explain choices made

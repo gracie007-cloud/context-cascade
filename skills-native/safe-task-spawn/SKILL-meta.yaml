@@ -1,0 +1,19 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill: safe-task-spawn
+tags:
+  - orchestration
+  - validation
+  - safety
+  - task-spawning
+  - audit
+  - registry
+version: 1.0.0
+category: orchestration
+tier: gold
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\safe-task-spawn
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.705Z
+  version: 2.0.0

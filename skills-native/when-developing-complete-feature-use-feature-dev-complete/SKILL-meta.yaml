@@ -1,0 +1,40 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user requests complete feature development from research to deployment
+version: 2.0.0
+author: Base Template Generator
+category: development
+tags:
+  - feature-development
+  - multi-agent
+  - end-to-end
+  - tdd
+  - documentation
+agents:
+  - researcher
+  - system-architect
+  - coder
+  - tester
+  - reviewer
+  - api-docs
+  - cicd-engineer
+coordinator: hierarchical-coordinator
+memory_patterns:
+  - swarm/feature-dev/requirements
+  - swarm/feature-dev/architecture
+  - swarm/feature-dev/implementation
+  - swarm/feature-dev/test-results
+  - swarm/feature-dev/review-findings
+success_criteria:
+  - All requirements captured and validated
+  - Architecture design approved
+  - Code implementation complete with 90%+ coverage
+  - All tests passing
+  - Documentation generated
+  - Deployment pipeline configured
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\when-developing-complete-feature-use-feature-dev-complete
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.327Z
+  version: 2.0.0

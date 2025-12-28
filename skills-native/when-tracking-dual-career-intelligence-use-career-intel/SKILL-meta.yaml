@@ -1,0 +1,42 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill_name: when-tracking-dual-career-intelligence-use-career-intel
+version: 1.0.0
+tier: critical
+category: career-orchestration
+auto_trigger:
+  - job search
+  - career opportunities
+  - track positions
+  - EU visa
+  - policy changes
+  - career intel
+created: 2025-01-06
+agents:
+  - researcher (Scout + RegWatch roles)
+  - analyst (Ranker role)
+  - coder (PitchPrep role)
+coordinator: hierarchical-coordinator
+topology: hierarchical
+memory_patterns:
+  - life-os/career/opportunities/{YYYY-WW}
+  - life-os/career/policy-changes/{YYYY-WW}
+  - life-os/career/pitches/{org}
+mcp_integration:
+  - memory-mcp (WHO/WHEN/PROJECT/WHY tagging required)
+  - claude-flow (hooks + coordination)
+data_sources:
+  - data/sources/job_boards.yml
+  - data/sources/biotech_watch.yml
+  - data/profiles/cv_core.md
+outputs:
+  - outputs/reports/career_intel_{YYYY-WW}.md
+  - outputs/briefs/career_pitch_{org}.md
+cadence: 2x per week
+estimated_time: 45 min per run
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\specialists\when-tracking-dual-career-intelligence-use-career-intel
+  category: specialists
+  migrated_at: 2025-12-28T15:56:25.206Z
+  version: 2.0.0

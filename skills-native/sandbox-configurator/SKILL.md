@@ -1,6 +1,7 @@
 ---
 name: sandbox-configurator
 description: Configure Claude Code sandbox security with file system and network isolation boundaries
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -230,6 +231,13 @@ training:
     - minimal_permission_escalation
 ```
 
+---
+
+**Quick Reference**: `/sandbox` command shows current configuration
+**Documentation**: Settings stored in `.claude/settings.local.json`
+**Security**: Always prefer stricter settings and add exclusions only when necessary
+---
+
 ## Core Principles
 
 ### 1. Defense in Depth Through Network Isolation
@@ -241,12 +249,23 @@ Start with maximum security (Level 1) and escalate only when workflows require i
 ### 3. Validation Through Positive and Negative Testing
 Configuration correctness requires two-sided validation: positive tests verify approved operations succeed (npm install, git clone from trusted repos); negative tests verify untrusted operations fail (curl to random external domains). Security is only as good as its verification. Untested configurations may inadvertently allow dangerous operations or block legitimate workflows. Both test types are mandatory for production security configurations.
 
------------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|--------------|--------------|------------------|
 | **Disabling sandbox entirely for convenience** | Removes all security boundaries. Malicious code from prompt injection or compromised dependencies gains direct system access, enabling data exfiltration, credential theft, and system compromise. Convenience over security creates unacceptable risk. | Use Level 2 (Balanced Security) with explicit exclusions for required operations. Enable allowLocalBinding for dev servers, exclude git/docker if needed, but maintain network isolation. Security boundaries prevent worst-case outcomes even when malicious code executes. |
 | **Wildcard domain patterns without justification** (e.g., *.com, *) | Defeats network isolation by allowing any domain. Malicious code can exfiltrate to attacker-controlled *.com domains. Wildcards should be narrowly scoped to specific services (*.npmjs.org for npm registry CDN). | Use specific domain whitelist: "registry.npmjs.org", "api.github.com", "*.mycompany.com". Each wildcard requires documented justification. Prefer full domains over wildcards. Reject overly broad patterns like *.com or * entirely. |
 | **Storing secrets (API keys, passwords) in configuration files** | Configuration files are often committed to version control or shared, exposing secrets. Hardcoded credentials in sandbox config create security vulnerability and violate secret management best practices. | Use environment variable references in sandbox config: NPM_TOKEN="${NPM_TOKEN}". Actual secrets stored in secure credential management (CI/CD secrets, local env files in .gitignore). Configuration references secrets, never contains them. |
 
------------|---------|----------|
+---
+
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Allowing symlink traversal outside workspace** (following ../../../etc/passwd symlinks) | Symlinks bypass file path restrictions. Attacker creates symlink in workspace pointing to sensitive system files. | Set `symlink_resolution: deny` or validate symlink targets stay within allowed boundaries. Resolve symlinks and check canonicalized paths. |
 | **Overly permissive temp directory** (/tmp shared with host, no size limits) | Shared temp directories leak information between sandbox and host. No size limits enable DoS via disk exhaustion. | Use isolated temp directory (/tmp/sandbox) with size quotas. Auto-cleanup old files. Prevent cross-user access. |
 | **Storing secrets in sandbox configuration** (API keys, passwords in JSON files) | Configuration files are readable by sandbox processes. Secrets in config files expose credentials to untrusted code. | Use environment variable references (${SECRET_NAME}), fetch from secret management systems, never hardcode secrets in config. |

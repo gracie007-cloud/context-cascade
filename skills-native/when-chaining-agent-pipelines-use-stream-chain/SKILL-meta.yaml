@@ -1,0 +1,31 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+tags:
+  - pipeline
+  - streaming
+  - data-flow
+  - chaining
+  - orchestration
+category: workflow
+agents:
+  - task-orchestrator
+  - memory-coordinator
+complexity: intermediate
+estimated_duration: 30-60 minutes
+prerequisites:
+  - Claude Flow installed
+  - Understanding of pipeline concepts
+  - Agent coordination experience
+outputs:
+  - Pipeline configuration
+  - Streaming data flows
+  - Chained results
+  - Performance metrics
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\workflow\when-chaining-agent-pipelines-use-stream-chain
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.737Z
+  version: 2.0.0

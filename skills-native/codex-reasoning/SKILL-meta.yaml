@@ -1,0 +1,16 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+skill: codex-reasoning
+tags:
+  - codex
+  - openai
+  - gpt-5-codex
+  - reasoning
+  - alternative-solutions
+version: 1.0.0
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\platforms\codex-reasoning
+  category: platforms
+  migrated_at: 2025-12-28T15:56:24.815Z
+  version: 2.0.0

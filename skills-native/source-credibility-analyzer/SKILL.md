@@ -1,6 +1,7 @@
 ---
 name: source-credibility-analyzer
 description: Standalone tool for automated source evaluation using program-of-thought scoring rubrics. Outputs credibility (1-5), bias (1-5), and priority (1-5) scores with transparent explanations. Use when evaluating research sources, automating general-research-workflow Step 3, or scoring large batches consistently. Single analyst agent workflow (5-15 min per source).
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 # Source Credibility Analyzer
@@ -36,7 +37,53 @@ Automate evaluation of research sources using transparent program-of-thought rub
 | 4 | Resolve conflicts | Final recommendation | 1 min | Logic correct |
 | 5 | Generate output | JSON + storage | 1 min | Complete + stored |
 
+---
 
+## Agent Coordination Protocol
+
+### Single Agent Execution
+- **Agent**: analyst
+- **Role**: Evaluate source using program-of-thought rubrics
+- **Workflow**: Sequential steps 0 → 0.5 → 1 → 2 → 3 → 4 → 5
+
+### Input Format
+```json
+{
+  "title": "[Required]",
+  "author": "[Required]",
+  "year": [Required, 1500-2025],
+  "venue": "[Required]",
+  "type": "[Required]",
+  "citations": [Optional],
+  "doi": "[Optional]",
+  "url": "[Optional]",
+  "institution": "[Optional]",
+  "credentials": "[Optional]"
+}
+```
+
+### Output Format
+```json
+{
+  "source": { ... },
+  "scores": {
+    "credibility": {"score": [1-5], "explanation": "..."},
+    "bias": {"score": [1-5], "explanation": "..."},
+    "priority": {"score": [1-5], "explanation": "..."}
+  },
+  "recommendation": {
+    "action": "[READ_FIRST | READ_LATER | VERIFY_CLAIMS | SKIP]",
+    "reason": "...",
+    "conflicts": "..."
+  },
+  "metadata": { ... }
+}
+```
+
+### Memory MCP Tags
+Store with: `WHO=analyst`, `WHEN=[timestamp]`, `PROJECT=[topic]`, `WHY=source-scoring`, `CREDIBILITY=[score]`, `BIAS=[score]`, `PRIORITY=[score]`, `RECOMMENDATION=[action]`
+
+---
 
 ## Step-by-Step Workflow
 
@@ -71,7 +118,38 @@ Automate evaluation of research sources using transparent program-of-thought rub
 - **GO**: All required fields present, year valid (1500-2025)
 - **NO-GO**: Missing/invalid field → Return error to user
 
--------|---------------------|-------|----------|
+---
+
+### STEP 0.5: Classify Source Type (Edge Case Handling)
+**Agent**: analyst
+**Objective**: Assign source to appropriate category for rubric baseline
+
+**Edge Case Decision Tree**:
+
+```
+Is source peer-reviewed? (Check venue: journal, academic press, conference proceedings)
+├─ ✅ Yes → ACADEMIC
+│   Examples: Nature, Cambridge University Press, ICML proceedings
+│
+├─ ❌ No → Is source from recognized institution?
+    ├─ ✅ Yes → INSTITUTIONAL
+    │   Examples: US Census Bureau, Brookings Institution, university press (non-peer-reviewed)
+    │
+    └─ ❌ No → Is source verifiable/documented?
+        ├─ ✅ Yes → GENERAL
+        │   Examples: Wikipedia, NYT, expert blogs (Gwern, SSC)
+        │
+        ├─ ⚠️ Preprint? → PREPRINTS
+        │   Examples: arXiv, bioRxiv, SSRN
+        │
+        └─ ❌ No → UNVERIFIED
+            Examples: Personal blogs, social media, unknown sites
+```
+
+**Category Baseline Scores**:
+
+| Category | Credibility Baseline | Notes | Examples |
+|----------|---------------------|-------|----------|
 | **ACADEMIC** | 4 | Peer-reviewed, standard rubric | Journals, academic books, conference papers |
 | **INSTITUTIONAL** | 3 | Check funding source | Government reports, white papers |
 | **GENERAL** | 3 | Verify against other sources | Wikipedia, reputable news, expert blogs |
@@ -110,7 +188,72 @@ Automate evaluation of research sources using transparent program-of-thought rub
 - **GO**: Category assigned based on decision tree
 - **NO-GO**: Unable to classify → Default to GENERAL, flag uncertainty
 
+---
 
+### STEP 1: Calculate Credibility Score (1-5)
+**Agent**: analyst
+**Objective**: Assess source trustworthiness using program-of-thought rubric
+
+**Program-of-Thought Rubric**:
+
+**Baseline Score** (from Step 0.5):
+- ACADEMIC: Start at 4
+- INSTITUTIONAL / GENERAL / PREPRINTS: Start at 3
+- UNVERIFIED: Start at 2
+
+**Add +1 for EACH** (max +3):
+- ✅ Peer-reviewed publication (journal, academic press)
+- ✅ Author has PhD or recognized expertise
+- ✅ Cites primary sources + extensive references (≥20 citations)
+- ✅ Published by top-tier institution (Ivy League, top publisher)
+- ✅ High citation count (≥100 for papers, ≥500 for books)
+- ✅ Has DOI or persistent identifier
+
+**Subtract -1 for EACH** (max -3):
+- ❌ Self-published or vanity press
+- ❌ No author credentials or anonymous
+- ❌ No citations/references provided
+- ❌ Known conflicts of interest (industry-funded study on own product)
+- ❌ Published on unmoderated platform (personal blog, social media)
+- ❌ Retracted or corrected after publication
+
+**🚨 Borderline Score Policy**:
+- If final score = 2.5 or 3.5 → **Round DOWN** (conservative for credibility)
+- Example: 2.5 → 2, 3.5 → 3
+
+**Final Credibility Score**: [1-5, capped at boundaries]
+
+**Calculation Procedure**:
+1. Determine baseline from Step 0.5
+2. Apply each applicable rule (+1 or -1)
+3. Sum: Baseline + Adjustments
+4. Apply borderline rounding if score ends in .5
+5. Cap at 1 (minimum) and 5 (maximum)
+6. Generate explanation: "Baseline [X], [list rules applied] = [sum] → [final]"
+
+**Example**:
+```
+Source: "Machine Learning: A Probabilistic Perspective" by Kevin Murphy (MIT Press, 2012)
+Category: ACADEMIC
+
+Calculation:
+Baseline: 4 (Academic source)
++1 (Published by MIT Press - top-tier university press)
++1 (Author: PhD, Google Research - recognized expertise)
++1 (15,000 citations - highly influential)
+= 7 → capped at 5
+
+Final Credibility: 5/5
+Explanation: "Academic baseline 4, +1 MIT Press top-tier, +1 PhD author expertise, +1 15k citations = 7 capped at 5. Authoritative textbook."
+```
+
+**Deliverable**: Credibility score (1-5) + explanation showing baseline + rules + final
+
+**Quality Gate 1**:
+- **GO**: Score 1-5, explanation lists baseline and applied rules
+- **NO-GO**: Score outside 1-5 or no explanation → Recalculate
+
+---
 
 ### STEP 2: Calculate Bias Score (1-5)
 **Agent**: analyst
@@ -176,7 +319,75 @@ Explanation: "Institutional baseline 3, -1 advocacy org, -1 industry funding, -1
 - **GO**: Score 1-5, explanation lists baseline and applied rules
 - **NO-GO**: Score outside 1-5 or no explanation → Recalculate
 
+---
 
+### STEP 3: Calculate Priority Score (1-5)
+**Agent**: analyst
+**Objective**: Assess reading priority for research project
+
+**Program-of-Thought Rubric**:
+
+**Baseline Score**:
+- Start at 3 (Neutral)
+
+**Add +1 for EACH** (max +3):
+- ✅ **Recent** publication (≤5 years for empirical, ≤10 years for historical)
+- ✅ **Directly relevant** to research question (core topic)
+- ✅ **Highly cited** (≥50 for papers, ≥100 for books)
+- ✅ **Primary source** or seminal work (foundational to field)
+- ✅ **Recommended** by expert or cited in key papers
+- ✅ **Comprehensive** coverage (textbook, review, meta-analysis)
+
+**Subtract -1 for EACH** (max -3):
+- ❌ **Outdated** (>20 years for empirical, unless seminal)
+- ❌ **Tangentially relevant** (mentions topic in passing only)
+- ❌ **Low credibility** (<3 from Step 1)
+- ❌ **High bias** (<3 from Step 2)
+- ❌ **Redundant** (duplicates already-read source)
+- ❌ **Too narrow** (hyper-specialized, not useful for overview)
+
+**💡 Special Considerations**:
+- **Classic works**: Even if old (>50 years), retain high priority if seminal (e.g., Darwin's *Origin* for evolution)
+- **Breadth vs depth**: Intros = lower priority than specialized deep dives (unless building foundation)
+
+**🚨 Borderline Score Policy**:
+- If final score = 2.5 or 3.5 → **Round UP** (favor reading when uncertain)
+- Example: 2.5 → 3, 3.5 → 4
+
+**Calculation Procedure**:
+1. Start at 3
+2. Apply each applicable rule (+1 or -1)
+3. **Auto-check**: If Credibility <3 OR Bias <3 → Subtract -1
+4. Sum: Baseline + Adjustments
+5. Apply borderline rounding if score ends in .5
+6. Cap at 1 (minimum) and 5 (maximum)
+7. Generate explanation (must reference credibility/bias from Steps 1-2)
+
+**Example**:
+```
+Source: "Byzantium and the Renaissance" by N.G. Wilson (Cambridge, 1992)
+Category: ACADEMIC
+Research: Byzantine influence on Renaissance
+
+Calculation:
+Baseline: 3
+-1 (Published 33 years ago - outdated BUT historical analysis, offset)
++1 (Directly addresses research question)
++1 (250+ citations - highly influential)
++1 (Primary scholarship - seminal work)
+= 5
+
+Final Priority: 5/5 (read first)
+Explanation: "Baseline 3, -1 age (offset by seminal status), +1 directly relevant, +1 highly cited, +1 primary scholarship = 5. Essential reading despite age."
+```
+
+**Deliverable**: Priority score (1-5) + explanation showing baseline + rules + credibility/bias check + final
+
+**Quality Gate 3**:
+- **GO**: Score 1-5, explanation references credibility/bias from Steps 1-2
+- **NO-GO**: Score ignores credibility/bias → Recalculate with penalty
+
+---
 
 ### STEP 4: Resolve Conflicting Scores
 **Agent**: analyst
@@ -221,7 +432,69 @@ Explanation: "Institutional baseline 3, -1 advocacy org, -1 industry funding, -1
 - **GO**: Recommendation matches matrix, conflicts explained
 - **NO-GO**: Recommendation doesn't match scores → Reapply matrix logic
 
+---
 
+### STEP 5: Generate Structured Output
+**Agent**: analyst
+**Objective**: Create complete scoring report in standardized JSON + store in Memory MCP
+
+**Output JSON Template**:
+
+```json
+{
+  "source": {
+    "title": "[Title]",
+    "author": "[Author]",
+    "year": [YYYY],
+    "venue": "[Venue]",
+    "type": "[Type]",
+    "category": "[ACADEMIC | INSTITUTIONAL | GENERAL | PREPRINTS | UNVERIFIED]",
+    "doi": "[DOI if available]",
+    "url": "[URL if available]"
+  },
+  "scores": {
+    "credibility": {
+      "score": [1-5],
+      "explanation": "[Baseline + rules + final]"
+    },
+    "bias": {
+      "score": [1-5],
+      "explanation": "[Baseline + rules + final]"
+    },
+    "priority": {
+      "score": [1-5],
+      "explanation": "[Baseline + rules + credibility/bias check + final]"
+    }
+  },
+  "recommendation": {
+    "action": "[READ_FIRST | READ_LATER | VERIFY_CLAIMS | SKIP]",
+    "reason": "[1-2 sentences justifying based on scores]",
+    "conflicts": "[If conflicts exist, explain resolution]"
+  },
+  "metadata": {
+    "analyzed_by": "source-credibility-analyzer",
+    "timestamp": "[ISO8601]",
+    "version": "2.0"
+  }
+}
+```
+
+**Storage in Memory MCP**:
+
+```bash
+npx claude-flow@alpha memory store \
+  --key "source-analysis/[project]/[source-id]" \
+  --value "[JSON output]" \
+  --tags "WHO=analyst,WHEN=[timestamp],PROJECT=[topic],WHY=source-scoring,CREDIBILITY=[score],BIAS=[score],PRIORITY=[score],RECOMMENDATION=[action]"
+```
+
+**Deliverable**: Complete JSON report + Memory MCP storage confirmation
+
+**Quality Gate 5**:
+- **GO**: All scores present (1-5), explanations complete, recommendation matches matrix, stored successfully
+- **NO-GO**: Missing field or storage failed → Regenerate JSON and retry storage (max 3 attempts)
+
+---
 
 ## Success Metrics
 
@@ -240,7 +513,12 @@ Explanation: "Institutional baseline 3, -1 advocacy org, -1 industry funding, -1
 - ✅ Edge cases handled (Wikipedia, preprints, gray literature)
 - ✅ Conflicts resolved transparently
 
------------|------|------------|
+---
+
+## Error Handling
+
+| Failure Mode | Gate | Resolution |
+|--------------|------|------------|
 | **Missing required metadata** | 0 | Return error with field name |
 | **Invalid year** | 0 | Reject, request correction |
 | **Score outside 1-5** | 1-3 | Recalculate with capping |
@@ -251,12 +529,51 @@ Explanation: "Institutional baseline 3, -1 advocacy org, -1 industry funding, -1
 | **Recommendation mismatch** | 4 | Reapply matrix, document conflict |
 | **Memory MCP storage fails** | 5 | Retry 3x, fallback to local JSON |
 
+---
 
+## Integration
+
+**Standalone Usage**:
+```bash
+Skill("source-credibility-analyzer") + {
+  "title": "...",
+  "author": "...",
+  "year": 2020,
+  "venue": "...",
+  "type": "journal article"
+}
+```
+
+**Within general-research-workflow**:
+- Called during Step 3 (Source Classification)
+- Automates manual scoring
+- Reduces time: 30-60 min → 5-15 min per source
+- Outputs feed into Step 4 (Reading Plan)
+
+**Output Feeds To**:
+- general-research-workflow Step 4 (reading prioritization)
+- academic-reading-workflow (decide which sources to annotate deeply)
+- Memory MCP (persistent scoring for future reference)
+
+---
 
 ## Process Visualization
 
 See `source-credibility-analyzer-process.dot` for complete workflow diagram showing all steps, gates, and decision points.
 
+---
 
+## Complete Examples
+
+See `examples/scoring-examples.md` for 5 complete end-to-end examples:
+1. ✅ Academic paper (Credibility 5, Bias 5, Priority 4) → READ_FIRST
+2. ✅ Think tank report (Credibility 3, Bias 1, Priority 3) → VERIFY_CLAIMS
+3. ⚠️ Preprint (Credibility 3, Bias 4, Priority 5) → READ_FIRST (verify)
+4. ⚠️ Wikipedia (Credibility 3, Bias 4, Priority 2) → READ_LATER (background)
+5. ❌ Blog post (Credibility 2, Bias 2, Priority 1) → SKIP
+
+Each example: Input → Calculations → Output JSON → Explanation
+
+---
 
 **Program-of-Thought Principle**: "Make scoring transparent, auditable, and reproducible through explicit calculations"

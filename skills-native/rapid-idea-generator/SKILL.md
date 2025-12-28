@@ -1,22 +1,193 @@
 ---
 name: rapid-idea-generator
-description: Generate research ideas from any topic in under 5 minutes using 5-Whys causal analysis, component decomposition, and root cause identification. Features transparent reasoning and evidence-based methodology. Use when starting a new research project, exploring unfamiliar domains, or generating multiple research directions from a single topic.
+description: Skill for rapid-idea-generator
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
-causal analysis, component decomposition, and root cause identification. Features
+name: rapid-idea-generator
+description: Generate research ideas from any topic in under 5 minutes using 5-Whys
+  causal analysis, component decomposition, and root cause identification. Features
   transparent reasoning and evidence-based methodology. Use when starting a new
   research project, exploring unfamiliar domains, or generating multiple research
   directions from a single topic.
+version: 1.0.0
+category: research
+tags:
 - research
 - ideation
 - analysis
 - planning
 - rapid
+author: ruv
 mcp_servers:
   required: [memory-mcp]
   optional: [sequential-thinking]
   auto_enable: true
---------|------------|-------------------|-------|
+---
+
+# Rapid Idea Generator
+
+## Purpose
+
+Generate 5-10 actionable research ideas from any topic in under 5 minutes using structured causal analysis, while maintaining full transparency about reasoning (unlike black-box tools).
+
+## When to Use This Skill
+
+Activate this skill when:
+- Starting a new research project and need direction
+- Exploring an unfamiliar research domain
+- Need multiple research directions from a single topic
+- Want to quickly identify research gaps before deep literature review
+- Brainstorming for grant proposals or thesis topics
+- Need to pivot research direction rapidly
+
+**DO NOT** use this skill for:
+- Deep literature review (use literature-synthesis instead)
+- Validating existing ideas (use baseline-replication instead)
+- Writing manuscripts (use rapid-manuscript-drafter instead)
+
+## Time Investment
+
+- **Quick Mode**: 2-3 minutes (3-5 ideas)
+- **Standard Mode**: 5 minutes (5-8 ideas)
+- **Comprehensive Mode**: 10-15 minutes (10-15 ideas with expanded details)
+
+## Specialist Agent
+
+I am a Research Ideation Specialist combining 5-Whys methodology with MECE decomposition.
+
+**Methodology (Plan-and-Solve + Self-Consistency)**:
+1. Parse topic and identify core domain
+2. Conduct Primary Analysis (situational assessment)
+3. Perform Component Analysis (MECE decomposition)
+4. Apply Causal Analysis (5-Whys for each component)
+5. Identify Root Causes and research opportunities
+6. Generate ranked ideas with confidence scores
+7. Cross-validate ideas for novelty and feasibility
+
+**Failure Modes & Mitigations**:
+- Topic too broad: Request narrowing or suggest sub-domains
+- Topic too niche: Expand scope with related areas
+- Low-quality ideas: Apply novelty and feasibility filters
+- Missing domain knowledge: Flag for researcher validation
+
+## Input Contract
+
+```yaml
+input:
+  topic: string (required)
+    # Research topic or area of interest
+    # Examples: "machine learning in healthcare", "sustainable energy storage"
+
+  mode: enum[quick, standard, comprehensive] (default: standard)
+    # Controls depth and number of ideas
+
+  constraints:
+    domain: string (optional)
+      # Limit to specific field: "computer science", "biology", etc.
+    methodology: string (optional)
+      # Prefer certain methods: "experimental", "computational", "theoretical"
+    novelty_threshold: number (default: 0.7)
+      # 0-1 scale for idea novelty requirement
+
+  output_preferences:
+    expand_top_n: number (default: 3)
+      # How many ideas to expand with full details
+    include_literature_pointers: boolean (default: true)
+      # Include suggested search terms for each idea
+```
+
+## Output Contract
+
+```yaml
+output:
+  primary_analysis:
+    domain: string
+    current_state: string
+    main_challenges: array[string]
+    key_players: array[string]
+
+  component_analysis:
+    components: array[object]
+      component: string
+      importance: high | medium | low
+      research_potential: string
+
+  causal_analysis:
+    chains: array[object]
+      problem: string
+      why_1: string
+      why_2: string
+      why_3: string
+      why_4: string
+      why_5: string
+      root_cause: string
+
+  ideas:
+    ranked_ideas: array[object]
+      id: number
+      title: string
+      description: string (2-3 sentences)
+      research_type: experimental | computational | theoretical | mixed
+      novelty_score: number (0-1)
+      feasibility_score: number (0-1)
+      impact_potential: high | medium | low
+      suggested_methods: array[string]
+      literature_pointers: array[string]
+
+  expanded_ideas:
+    ideas: array[object]
+      id: number
+      title: string
+      detailed_description: string (paragraph)
+      research_questions: array[string]
+      hypotheses: array[string]
+      required_resources: array[string]
+      potential_challenges: array[string]
+      related_work_keywords: array[string]
+      estimated_timeline: string
+
+  metadata:
+    generation_time: number (seconds)
+    mode_used: string
+    total_ideas: number
+    ideas_above_novelty_threshold: number
+```
+
+## SOP Phase 1: Primary Analysis
+
+**Objective**: Understand the research landscape in 60 seconds.
+
+```markdown
+## Primary Analysis for [TOPIC]
+
+### Domain Assessment
+- **Field**: [Identify primary research field]
+- **Sub-fields**: [List 2-3 relevant sub-fields]
+- **Maturity**: [emerging | growing | mature | declining]
+
+### Current State of Research
+[2-3 sentences on where the field stands today]
+
+### Main Challenges
+1. [Challenge 1 - most pressing]
+2. [Challenge 2]
+3. [Challenge 3]
+
+### Key Research Questions Being Asked
+1. [Active question 1]
+2. [Active question 2]
+```
+
+## SOP Phase 2: Component Analysis (MECE)
+
+**Objective**: Decompose the topic into mutually exclusive, collectively exhaustive components.
+
+```markdown
+## Component Analysis
+
+| Component | Importance | Research Potential | Notes |
+|-----------|------------|-------------------|-------|
 | [Component 1] | High | [Potential] | [Notes] |
 | [Component 2] | Medium | [Potential] | [Notes] |
 | [Component 3] | Low | [Potential] | [Notes] |
@@ -201,7 +372,46 @@ ideas:
 - **intent-analyzer** - Clarify research intent
 - **interactive-planner** - Gather preferences
 
------------|---------|----------|
+---
+
+**Version**: 1.0.0
+**Category**: Research / Ideation
+**Time**: 2-15 minutes depending on mode
+**Design**: Evidence-based ideation with full transparency
+
+## Core Principles
+
+### 1. Systematic Causal Analysis Through 5-Whys
+Research ideas must be grounded in root causes identified through systematic questioning, not superficial observations.
+
+**In practice:**
+- Apply 5-Whys methodology to each major challenge, drilling down from symptoms to root causes
+- Validate that final "why" represents an actionable research opportunity, not an unsolvable constraint
+- Document complete causal chains showing reasoning from problem to root cause to research idea
+- Cross-validate root causes against existing literature to ensure genuine gaps exist
+
+### 2. MECE Decomposition for Comprehensive Coverage
+Topic decomposition must be mutually exclusive and collectively exhaustive to prevent gaps and overlaps in idea generation.
+
+**In practice:**
+- Break down topics into components that don't overlap (mutually exclusive)
+- Ensure components cover the entire topic space (collectively exhaustive)
+- Validate MECE criteria before proceeding to causal analysis
+- Assign importance ratings to prioritize components with highest research potential
+
+### 3. Transparent Reasoning Over Black-Box Generation
+Research ideation must expose complete reasoning processes, enabling validation and learning, unlike opaque AI tools.
+
+**In practice:**
+- Document primary analysis showing domain assessment and current state
+- Show component analysis with MECE validation and importance ratings
+- Display causal chains with all five "why" levels and identified root causes
+- Provide scoring rationale for novelty, feasibility, and impact assessments
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | Surface-Level Ideation | Generating ideas from first impressions without root cause analysis leads to shallow, derivative research | Apply full 5-Whys methodology to each component, validate that ideas address root causes not symptoms |
 | Novelty Claims Without Verification | Assuming ideas are novel without checking literature creates wasted effort replicating existing work | Include literature pointers with each idea, cross-check against related work keywords, flag for validation |
 | Infeasibility Blindness | Proposing ambitious ideas without resource assessment leads to abandoned projects | Score feasibility explicitly (0-1 scale), estimate required resources, flag long-term vs quick-win ideas |

@@ -1,0 +1,19 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+tags:
+  - debugging
+  - rca
+  - codex
+  - testing
+  - essential
+  - tier-1
+version: 1.1.0
+category: delivery
+author: ruv
+cognitive_frame: primary: evidential secondary: morphological rationale: "Bug fixing requires evidence-backed root cause analysis (Turkish evidential) and systematic symptom decomposition to root causes (Arabic morphological)"
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\delivery\smart-bug-fix
+  category: delivery
+  migrated_at: 2025-12-28T15:56:24.304Z
+  version: 2.0.0

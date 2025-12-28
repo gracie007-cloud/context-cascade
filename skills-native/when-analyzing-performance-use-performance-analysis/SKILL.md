@@ -1,6 +1,7 @@
 ---
 name: when-analyzing-performance-use-performance-analysis
 description: Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Performance Analysis SOP

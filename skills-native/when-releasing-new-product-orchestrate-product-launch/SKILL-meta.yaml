@@ -1,0 +1,29 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+type: sop-workflow
+agents:
+  - market-researcher
+  - business-analyst
+  - product-manager
+  - backend-developer
+  - frontend-developer
+  - mobile-developer
+  - database-architect
+  - security-specialist
+  - qa-engineer
+  - marketing-specialist
+  - sales-specialist
+  - content-creator
+  - seo-specialist
+  - devops-engineer
+  - production-validator
+  - performance-monitor
+  - customer-support-specialist
+phases: 5
+memory_pattern: product-launch/{launch-id}/phase-{N}/{agent}/{deliverable}
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\when-releasing-new-product-orchestrate-product-launch
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.728Z
+  version: 2.0.0

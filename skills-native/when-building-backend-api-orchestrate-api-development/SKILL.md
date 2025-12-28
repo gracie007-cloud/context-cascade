@@ -1,6 +1,7 @@
 ---
 name: when-building-backend-api-orchestrate-api-development
-description: | Use when building a production-ready REST API from requirements through deployment. Orchestrates 8-12 specialist agents across 5 phases using Test-Driven Development methodology. Covers planning, architecture, TDD implementation, comprehensive testing, documentation, and blue-green deployment over a 2-week timeline with emphasis on quality and reliability.
+description: Use when building a production-ready REST API from requirements through deployment. Orchestrates 8-12 specialist agents across 5 phases using Test-Driven Development methodology. Covers planning, architecture, TDD implementation, comprehensive testing, documentation, and blue-green deployment over a 2-week timeline with emphasis on quality and reliability.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # API Development Orchestration Workflow
@@ -165,7 +166,89 @@ Use this workflow when:
 - [ ] Architecture approved by technical stakeholders
 - [ ] Phase 1 deliverables stored in memory
 
+---
 
+### Phase 2: Foundation Setup (Days 3-4, Parallel)
+
+**Duration**: 2 days
+**Execution Mode**: Parallel infrastructure setup
+**Agents**: `backend-developer`, `database-architect`, `devops-engineer`
+
+**Process**:
+
+1. **Initialize Development Environment**
+   ```bash
+   npx claude-flow swarm init --topology mesh --max-agents 3 --strategy adaptive
+   npx claude-flow task orchestrate --strategy parallel
+   ```
+
+2. **Parallel Setup Execution**
+
+   Spawn all setup agents concurrently:
+   ```bash
+   # Backend project setup
+   npx claude-flow agent spawn --type backend-dev --capabilities "nodejs,typescript,express"
+
+   # Database setup
+   npx claude-flow agent spawn --type code-analyzer --capabilities "postgresql,prisma,migrations"
+
+   # CI/CD setup
+   npx claude-flow agent spawn --type cicd-engineer --capabilities "github-actions,docker,testing"
+   ```
+
+   **Backend Developer** initializes:
+   - Node.js/Express (or FastAPI/Flask/Spring Boot) project
+   - TypeScript configuration (strict mode, path aliases)
+   - ESLint + Prettier (code quality and formatting)
+   - Environment variable management (dotenv, validation)
+   - Dependency installation (express, prisma, jest, supertest, etc.)
+   - Project structure (controllers, services, models, middleware)
+   - Logging framework (Winston, Pino) with structured logging
+   - Error handling middleware (global error handler)
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-2/backend-developer/project-setup`
+
+   **Database Architect** sets up:
+   - PostgreSQL database (or MySQL/MongoDB)
+   - Connection pooling configuration (pg-pool, connection limits)
+   - Initial migration execution (create tables, indexes)
+   - Seed data for development and testing
+   - Database backup scripts (pg_dump automation)
+   - Performance monitoring queries (slow query log)
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-2/database-architect/db-config`
+
+   **DevOps Engineer** configures:
+   - GitHub Actions workflow (or GitLab CI/Jenkins)
+   - Docker containers (multi-stage builds for optimization)
+   - Docker Compose for local development
+   - Environment secrets management (GitHub Secrets, Vault)
+   - Automated testing pipeline (run tests on PR)
+   - Code quality checks (linting, type checking)
+   - Build artifact generation and storage
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-2/devops-engineer/ci-config`
+
+   **Coordination Script**:
+   ```bash
+   npx claude-flow hooks post-edit --file "package.json" \
+     --memory-key "api-development/${API_ID}/phase-2/setup-complete"
+   npx claude-flow hooks notify --message "Development environment ready"
+   ```
+
+**Outputs**:
+- Initialized project with all dependencies
+- Database with schema and seed data
+- CI/CD pipeline operational
+- Development environment fully functional
+
+**Success Criteria**:
+- [ ] Project builds without errors
+- [ ] Database connections established and tested
+- [ ] CI/CD pipeline runs successfully
+- [ ] Local development environment documented
+
+---
 
 ### Phase 3: TDD Implementation (Days 5-10, Red-Green-Refactor Cycle)
 
@@ -393,7 +476,123 @@ This phase follows strict Test-Driven Development:
 - [ ] Code review approved for all endpoints
 - [ ] TDD cycle completed for entire API surface
 
+---
 
+### Phase 4: Testing & Documentation (Days 11-12, Parallel)
+
+**Duration**: 2 days
+**Execution Mode**: Parallel validation across multiple dimensions
+**Agents**: `qa-engineer`, `security-specialist`, `performance-analyst`, `api-documentation-specialist`
+
+**Process**:
+
+1. **Initialize Testing Swarm**
+   ```bash
+   npx claude-flow swarm init --topology star --max-agents 4 --strategy specialized
+   npx claude-flow task orchestrate --strategy parallel --priority high
+   ```
+
+2. **Parallel Testing Execution**
+
+   Spawn all testing agents concurrently:
+   ```bash
+   # E2E testing
+   npx claude-flow agent spawn --type tester --focus "end-to-end"
+
+   # Performance testing
+   npx claude-flow agent spawn --type perf-analyzer --focus "load-stress-endurance"
+
+   # Security testing
+   npx claude-flow agent spawn --type security-manager --focus "owasp-penetration"
+
+   # Documentation
+   npx claude-flow agent spawn --type api-docs --focus "openapi-developer-guide"
+   ```
+
+   **QA Engineer** conducts:
+   - **End-to-End Testing**: Complete user workflows (register → login → CRUD → logout)
+   - **Error Scenario Testing**: Invalid inputs, unauthorized access, rate limiting
+   - **Edge Case Testing**: Boundary conditions, null values, concurrent requests
+   - **Smoke Testing**: Basic functionality across all endpoints
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-4/qa-engineer/e2e-results`
+
+   **Performance Analyst** tests:
+   - **Load Testing**: 1000 req/sec sustained for 10 minutes (target)
+   - **Stress Testing**: Find breaking point (max throughput)
+   - **Endurance Testing**: 24-hour sustained load for memory leaks
+   - **Spike Testing**: Sudden traffic spikes (10x normal load)
+   - **Bottleneck Identification**: Database queries, API calls, CPU/memory usage
+
+   Tools: k6, Apache JMeter, Gatling
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-4/performance-analyst/benchmarks`
+
+   **Security Specialist** validates:
+   - **OWASP API Security Top 10**:
+     1. Broken Object Level Authorization (BOLA)
+     2. Broken Authentication
+     3. Broken Object Property Level Authorization
+     4. Unrestricted Resource Consumption
+     5. Broken Function Level Authorization (BFLA)
+     6. Unrestricted Access to Sensitive Business Flows
+     7. Server Side Request Forgery (SSRF)
+     8. Security Misconfiguration
+     9. Improper Inventory Management
+     10. Unsafe Consumption of APIs
+   - SQL injection testing (automated + manual)
+   - XSS vulnerability scanning
+   - Authentication bypass attempts
+   - Rate limiting validation
+   - Secrets scanning (no hardcoded credentials)
+
+   Tools: OWASP ZAP, Burp Suite, Snyk
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-4/security-specialist/audit-report`
+
+   **API Documentation Specialist** creates:
+   - **OpenAPI/Swagger UI**: Interactive API documentation
+   - **Authentication Guide**: How to obtain and use tokens
+   - **Endpoint Reference**: All endpoints with parameters, responses, errors
+   - **Code Examples**: cURL, JavaScript, Python, Java SDK examples
+   - **Rate Limiting Guide**: Quota limits and header interpretations
+   - **Error Handling Guide**: Error codes, messages, troubleshooting
+   - **Developer Getting Started**: Quick start tutorial
+   - **Changelog**: Versioning and breaking changes
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-4/api-documentation-specialist/docs`
+
+3. **DevOps Runbook** (Parallel with documentation)
+   ```bash
+   npx claude-flow agent spawn --type cicd-engineer --focus "operations"
+   ```
+
+   **DevOps Engineer** documents:
+   - Deployment procedures (step-by-step)
+   - Monitoring and alerting setup (Grafana, Prometheus)
+   - Troubleshooting guide (common issues, solutions)
+   - Performance tuning (database, caching, scaling)
+   - Backup and recovery procedures
+   - Incident response plan (runbook)
+   - Rollback procedures
+
+   **Memory Pattern**: `api-development/${API_ID}/phase-4/devops-engineer/runbook`
+
+**Outputs**:
+- E2E test results (all passing)
+- Performance benchmark report (meets targets)
+- Security audit report (no critical issues)
+- Complete API documentation (developer-ready)
+- Operations runbook (deployment-ready)
+
+**Success Criteria**:
+- [ ] All E2E tests passing
+- [ ] Performance targets met (API < 200ms, throughput > 1000 req/sec)
+- [ ] Security audit passed (zero critical, zero high issues)
+- [ ] Documentation complete and published
+- [ ] Operations runbook approved
+
+---
 
 ### Phase 5: Deployment & Monitoring (Days 13-14, Sequential → Continuous)
 
@@ -584,7 +783,55 @@ This phase follows strict Test-Driven Development:
 - [ ] Support team trained and ready
 - [ ] Post-deployment validation complete
 
+---
 
+## Memory Coordination
+
+### Namespace Convention
+
+All workflow data follows this hierarchical pattern:
+
+```
+api-development/{api-id}/phase-{N}/{agent-type}/{deliverable-type}
+```
+
+**Examples**:
+- `api-development/user-api-v1/phase-1/product-manager/requirements`
+- `api-development/user-api-v1/phase-1/system-architect/openapi-spec`
+- `api-development/user-api-v1/phase-2/backend-developer/project-setup`
+- `api-development/user-api-v1/phase-3/tester/auth/register-tests`
+- `api-development/user-api-v1/phase-4/security-specialist/audit-report`
+- `api-development/user-api-v1/phase-5/devops-engineer/production-deploy`
+
+### Cross-Phase Data Flow
+
+**Phase 1 → Phase 2**:
+```bash
+# Phase 2 retrieves design specifications
+npx claude-flow memory retrieve --key "api-development/${API_ID}/phase-1/system-architect/openapi-spec"
+npx claude-flow memory retrieve --key "api-development/${API_ID}/phase-1/database-architect/schema"
+```
+
+**Phase 2 → Phase 3**:
+```bash
+# Phase 3 retrieves project structure and test plan
+npx claude-flow memory retrieve --key "api-development/${API_ID}/phase-2/backend-developer/project-setup"
+npx claude-flow memory retrieve --key "api-development/${API_ID}/phase-1/qa-engineer/test-plan"
+```
+
+**Phase 3 → Phase 4**:
+```bash
+# Phase 4 retrieves implementation for testing
+npx claude-flow memory retrieve --pattern "api-development/${API_ID}/phase-3/backend-developer/*"
+```
+
+**Phase 4 → Phase 5**:
+```bash
+# Phase 5 retrieves test results and documentation
+npx claude-flow memory retrieve --pattern "api-development/${API_ID}/phase-4/*/results"
+```
+
+---
 
 ## Scripts & Automation
 
@@ -693,7 +940,31 @@ echo "✅ Deployment complete: ${VERSION}"
 npx claude-flow hooks post-task --task-id "production-deployment" --export-metrics true
 ```
 
+---
 
+## Success Metrics
+
+### Technical Metrics
+- **Test Coverage**: > 90% (code coverage report)
+- **API Response Time**: < 200ms (p95)
+- **Uptime**: 99.9%+ (production SLA)
+- **Error Rate**: < 0.1% (4xx + 5xx errors)
+- **Code Quality Score**: A rating (SonarQube/CodeClimate)
+- **Security Audit**: Zero critical, zero high issues
+
+### Performance Metrics
+- **Throughput**: > 1000 req/sec sustained
+- **Database Query Time**: < 50ms (p95)
+- **Memory Usage**: < 512MB per instance
+- **CPU Usage**: < 70% under normal load
+
+### Quality Metrics
+- **TDD Adherence**: 100% (all endpoints test-first)
+- **Documentation Coverage**: 100% of endpoints documented
+- **API Compliance**: OpenAPI 3.0 valid (no errors)
+- **Code Review Approval**: 100% (all code reviewed)
+
+---
 
 ## Usage Examples
 
@@ -751,7 +1022,18 @@ npx claude-flow agent spawn --type backend-dev --capabilities "rabbitmq,events"
 # Output: Synchronous API + asynchronous event processing
 ```
 
+---
 
+## GraphViz Process Diagram
+
+See `when-building-backend-api-orchestrate-api-development-process.dot` for visual workflow representation showing:
+- 5 phases with TDD cycle details
+- 12 agent interactions and coordination
+- Memory flow between phases
+- Blue-green deployment strategy
+- Validation gates and decision points
+
+---
 
 ## Quality Checklist
 
@@ -770,7 +1052,14 @@ Before considering API development complete, verify:
 - [ ] `api-development/${API_ID}/phase-4/*` - Test results + documentation
 - [ ] `api-development/${API_ID}/phase-5/*` - Deployment logs + metrics
 
+---
 
+**Workflow Complexity**: Medium (12 agents, 14 days, 5 phases)
+**Coordination Pattern**: Hierarchical with TDD cycle iteration
+**Memory Footprint**: ~30-50 memory entries per API
+**Typical Use Case**: Production-ready REST API with comprehensive testing and quality gates
+
+---
 
 ## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
 
@@ -819,7 +1108,45 @@ Skill("<skill-name>")
 
 **The skill is NOT complete until all checklist items are checked.**
 
------------|---------|----------|
+---
+
+**Remember the pattern: Skill() -> Task() -> TodoWrite() - ALWAYS**
+
+## Core Principles
+
+API Development Orchestration operates on 3 fundamental principles:
+
+### Principle 1: Test-Driven Development (TDD) as Quality Foundation
+All API endpoints are developed using strict RED-GREEN-REFACTOR cycles ensuring high test coverage and well-designed, maintainable code.
+
+In practice:
+- Write failing tests first (RED phase) defining expected behavior before implementation
+- Implement minimal code to pass tests (GREEN phase) ensuring functional correctness
+- Refactor for quality (REFACTOR phase) improving code structure while maintaining test coverage
+- Achieve greater than 90% test coverage across all endpoints with comprehensive unit, integration, and E2E tests
+
+### Principle 2: Parallel Execution for Development Acceleration
+Independent tasks execute concurrently through specialized agents while maintaining strict phase dependencies for sequential validation gates.
+
+In practice:
+- Phase 1 planning executes sequentially to establish solid foundation (requirements, architecture, database design)
+- Phase 2 foundation setup runs backend, database, and CI/CD configuration in parallel
+- Phase 3 TDD implementation parallelizes endpoint development across multiple agents with RED-GREEN-REFACTOR cycles
+- Phase 4 testing executes security, performance, E2E, and documentation agents concurrently before sequential deployment
+
+### Principle 3: Quality Gates with Go/No-Go Validation
+Production deployment only proceeds after comprehensive validation across all quality dimensions with explicit approval checkpoints.
+
+In practice:
+- Phase 1 gate: Requirements documented, OpenAPI spec complete, database schema validated
+- Phase 4 gate: All tests passing, security audit passed with zero critical issues, performance benchmarks met
+- Phase 5 gate: Pre-production validation with 100% test suite passing before blue-green deployment
+- Each gate includes specific checklist items that must be verified before proceeding to next phase
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Implementation-First Development** | Writing API endpoint code before defining tests leads to 40-60% test coverage, untested edge cases, and production bugs discovered by users instead of CI/CD pipeline | Follow strict TDD RED-GREEN-REFACTOR cycles by writing failing tests first that define expected behavior, then implement minimal code to pass, achieving greater than 90% coverage |
 | **Sequential Phase Execution** | Running backend, database, and CI/CD setup sequentially in Phase 2 causes 6-hour setup time when each takes 2 hours, creating unnecessary bottleneck before development starts | Parallelize independent Phase 2 tasks using mesh topology with backend-dev, database-architect, and devops-engineer agents executing concurrently, reducing setup to 2 hours |
 | **Weak Quality Gates** | Deploying to production with 70% test coverage, unresolved security warnings, and missing performance benchmarks causes production incidents, rollbacks, and customer-impacting bugs | Enforce strict Go/No-Go gates requiring 100% test suite passing, zero critical security issues, and performance benchmarks met before blue-green deployment proceeds |

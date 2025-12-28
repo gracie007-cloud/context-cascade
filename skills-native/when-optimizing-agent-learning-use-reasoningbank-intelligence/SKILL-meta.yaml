@@ -1,0 +1,41 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+version: 1.0.0
+category: utilities
+tags:
+  - machine-learning
+  - adaptive-learning
+  - pattern-recognition
+  - optimization
+agents:
+  - safla-neural
+  - ml-developer
+  - performance-analyzer
+difficulty: advanced
+estimated_duration: 30-45min
+success_criteria:
+  - Learning system initialized
+  - Patterns captured and analyzed
+  - Performance improvement > 15%
+  - Strategies optimized
+validation_method: performance_benchmark
+dependencies:
+  - claude-flow@alpha
+  - reasoningbank
+  - agentdb (optional for 150x faster vector ops)
+outputs:
+  - Trained learning model
+  - Pattern library
+  - Performance metrics
+  - Optimization recommendations
+triggers:
+  - Need for agent improvement
+  - Repetitive task optimization
+  - Strategy refinement required
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\tooling\utilities\when-optimizing-agent-learning-use-reasoningbank-intelligence
+  category: tooling
+  migrated_at: 2025-12-28T15:56:25.257Z
+  version: 2.0.0

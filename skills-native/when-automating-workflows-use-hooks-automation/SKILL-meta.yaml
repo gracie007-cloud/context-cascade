@@ -1,0 +1,39 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+trigger: when user requests workflow automation, Git integration, or Claude Code operation hooks
+version: 2.0.0
+author: Base Template Generator
+category: automation
+tags:
+  - hooks
+  - automation
+  - workflow
+  - git-integration
+  - memory-coordination
+  - neural-training
+agents:
+  - coder
+  - reviewer
+  - system-architect
+  - swarm-memory-manager
+  - smart-agent
+coordinator: adaptive-coordinator
+memory_patterns:
+  - swarm/hooks/pre-task-state
+  - swarm/hooks/post-task-results
+  - swarm/hooks/session-metrics
+  - swarm/hooks/neural-patterns
+  - swarm/hooks/automation-rules
+success_criteria:
+  - Hooks configured and active for all operations
+  - Pre-task automation executing successfully
+  - Post-task coordination working correctly
+  - Session state persisted and restorable
+  - Neural patterns training from operations
+  - Git integration working seamlessly
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\when-automating-workflows-use-hooks-automation
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.716Z
+  version: 2.0.0

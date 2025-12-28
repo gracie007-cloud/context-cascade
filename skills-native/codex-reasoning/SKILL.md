@@ -1,6 +1,7 @@
 ---
 name: codex-reasoning
-description: Skill for codex-reasoning
+description: Use GPT-5-Codexs specialized reasoning for alternative approaches and second opinions
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Codex Reasoning Skill

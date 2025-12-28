@@ -1,0 +1,29 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+type: testing-quality
+agents:
+  - code-analyzer
+  - reviewer
+  - tester
+phases: 5
+memory_pattern: testing/theater-detection/phase-{N}/{agent}/{deliverable}
+scripts:
+  - pre-task
+  - codebase-scan
+  - pattern-analysis
+  - execution-validation
+  - post-task
+hooks: pre: npx claude-flow hooks pre-task --description "Theater code detection scan" post: npx claude-flow hooks post-task --task-id "theater-detection"
+version: 1.0.0
+category: quality
+tags:
+  - quality
+  - testing
+  - validation
+author: ruv
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\quality\testing-quality\when-detecting-fake-code-use-theater-detection
+  category: quality
+  migrated_at: 2025-12-28T15:56:24.964Z
+  version: 2.0.0

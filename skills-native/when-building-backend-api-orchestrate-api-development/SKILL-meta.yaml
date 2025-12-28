@@ -1,0 +1,24 @@
+# Custom metadata preserved from original skill
+# This file is used by Context Cascade hooks for extended functionality
+
+type: sop-workflow
+agents:
+  - product-manager
+  - system-architect
+  - database-architect
+  - qa-engineer
+  - backend-developer
+  - security-specialist
+  - performance-analyst
+  - api-documentation-specialist
+  - devops-engineer
+  - production-validator
+  - performance-monitor
+  - code-reviewer
+phases: 5
+memory_pattern: api-development/{api-id}/phase-{N}/{agent}/{deliverable}
+_migration:
+  source_path: C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\skills\orchestration\when-building-backend-api-orchestrate-api-development
+  category: orchestration
+  migrated_at: 2025-12-28T15:56:24.717Z
+  version: 2.0.0

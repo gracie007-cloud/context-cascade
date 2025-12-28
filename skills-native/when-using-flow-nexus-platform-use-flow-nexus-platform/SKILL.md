@@ -1,6 +1,7 @@
 ---
 name: when-using-flow-nexus-platform-use-flow-nexus-platform
-description: ## Core Principles
+description: **In practice:** - Always check auth status before workflow execution - Store user IDs in memory for session persistence - Implement auto-refresh for token expiration - Never commit credentials to version control
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Flow Nexus Platform Management SOP

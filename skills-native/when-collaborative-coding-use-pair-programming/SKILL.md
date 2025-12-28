@@ -1,36 +1,7 @@
-# When Collaborative Coding Use Pair Programming
-
 ---
 name: when-collaborative-coding-use-pair-programming
-trigger: "when user requests collaborative coding, real-time code review, or paired development session"
-description: "AI-assisted pair programming with multiple modes (driver/navigator/switch), real-time verification, quality monitoring, and comprehensive testing support"
-version: 2.0.0
-author: Base Template Generator
-category: development
-tags:
-  - pair-programming
-  - collaborative
-  - tdd
-  - code-review
-  - quality-assurance
-agents:
-  - coder (driver)
-  - reviewer (navigator)
-  - tester
-  - performance-analyzer
-coordinator: adaptive-coordinator
-memory_patterns:
-  - swarm/pair-programming/session-state
-  - swarm/pair-programming/code-changes
-  - swarm/pair-programming/review-feedback
-  - swarm/pair-programming/test-results
-  - swarm/pair-programming/metrics
-success_criteria:
-  - Code changes reviewed in real-time
-  - All tests passing after each change
-  - Code quality maintained above threshold
-  - Performance metrics within acceptable range
-  - No security vulnerabilities introduced
+description: AI-assisted pair programming with multiple modes (driver/navigator/switch), real-time verification, quality monitoring, and comprehensive testing support
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 ## Trigger Conditions

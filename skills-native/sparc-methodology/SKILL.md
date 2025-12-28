@@ -1,6 +1,7 @@
 ---
 name: sparc-methodology
 description: SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) comprehensive development methodology with multi-agent orchestration
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # SPARC Methodology - Comprehensive Development Framework
@@ -76,6 +77,29 @@ SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) is a sys
 8. [Integration Examples](#integration-examples)
 9. [Common Workflows](#common-workflows)
 
+---
+
+## Core Philosophy
+
+SPARC methodology emphasizes:
+
+- **Systematic Approach**: Structured phases from specification to completion
+- **Test-Driven Development**: Tests written before implementation
+- **Parallel Execution**: Concurrent agent coordination for 2.8-4.4x speed improvements
+- **Memory Integration**: Persistent knowledge sharing across agents and sessions
+- **Quality First**: Comprehensive reviews, testing, and validation
+- **Modular Design**: Clean separation of concerns with clear interfaces
+
+### Key Principles
+
+1. **Specification Before Code**: Define requirements and constraints clearly
+2. **Design Before Implementation**: Plan architecture and components
+3. **Tests Before Features**: Write failing tests, then make them pass
+4. **Review Everything**: Code quality, security, and performance checks
+5. **Document Continuously**: Maintain current documentation throughout
+
+---
+
 ## Development Phases
 
 ### Phase 1: Specification
@@ -132,6 +156,63 @@ SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) is a sys
 - Knowledge capture
 
 **Key Modes**: `workflow-manager`, `documenter`, `memory-manager`
+
+---
+
+## Available Modes
+
+### Core Orchestration Modes
+
+#### `orchestrator`
+Multi-agent task orchestration with TodoWrite/Task/Memory coordination.
+
+**Capabilities**:
+- Task decomposition into manageable units
+- Agent coordination and resource allocation
+- Progress tracking and result synthesis
+- Adaptive strategy selection
+- Cross-agent communication
+
+**Usage**:
+```javascript
+mcp__claude-flow__sparc_mode {
+  mode: "orchestrator",
+  task_description: "coordinate feature development",
+  options: { parallel: true, monitor: true }
+}
+```
+
+#### `swarm-coordinator`
+Specialized swarm management for complex multi-agent workflows.
+
+**Capabilities**:
+- Topology optimization (mesh, hierarchical, ring, star)
+- Agent lifecycle management
+- Dynamic scaling based on workload
+- Fault tolerance and recovery
+- Performance monitoring
+
+#### `workflow-manager`
+Process automation and workflow orchestration.
+
+**Capabilities**:
+- Workflow definition and execution
+- Event-driven triggers
+- Sequential and parallel pipelines
+- State management
+- Error handling and retry logic
+
+#### `batch-executor`
+Parallel task execution for high-throughput operations.
+
+**Capabilities**:
+- Concurrent file operations
+- Batch processing optimization
+- Resource pooling
+- Load balancing
+- Progress aggregation
+
+---
 
 ### Development Modes
 
@@ -277,6 +358,69 @@ mcp__claude-flow__sparc_mode {
 }
 ```
 
+---
+
+### Analysis and Research Modes
+
+#### `researcher`
+Deep research with parallel WebSearch/WebFetch and Memory coordination.
+
+**Capabilities**:
+- Comprehensive information gathering
+- Source credibility evaluation
+- Trend analysis and forecasting
+- Competitive research
+- Technology assessment
+
+**Research Methods**:
+- Parallel web searches
+- Academic paper analysis
+- Industry report synthesis
+- Expert opinion gathering
+- Statistical data compilation
+
+**Memory Integration**:
+- Store research findings with citations
+- Build knowledge graphs
+- Track information sources
+- Cross-reference insights
+- Maintain research history
+
+**Usage**:
+```javascript
+mcp__claude-flow__sparc_mode {
+  mode: "researcher",
+  task_description: "research microservices best practices 2024",
+  options: {
+    depth: "comprehensive",
+    sources: ["academic", "industry", "news"],
+    citations: true
+  }
+}
+```
+
+#### `analyzer`
+Code and data analysis with pattern recognition.
+
+**Capabilities**:
+- Static code analysis
+- Dependency analysis
+- Performance profiling
+- Security scanning
+- Data pattern recognition
+
+#### `optimizer`
+Performance optimization and bottleneck resolution.
+
+**Capabilities**:
+- Algorithm optimization
+- Database query tuning
+- Caching strategy design
+- Bundle size reduction
+- Memory leak detection
+
+---
+
 ### Creative and Support Modes
 
 #### `designer`
@@ -338,6 +482,85 @@ Knowledge management and context preservation.
 - Context restoration
 - Learning pattern extraction
 - Decision tracking
+
+---
+
+## Activation Methods
+
+### Method 1: MCP Tools (Preferred in Claude Code)
+
+**Best for**: Integrated Claude Code workflows with full orchestration capabilities
+
+```javascript
+// Basic mode execution
+mcp__claude-flow__sparc_mode {
+  mode: "<mode-name>",
+  task_description: "<task description>",
+  options: {
+    // mode-specific options
+  }
+}
+
+// Initialize swarm for complex tasks
+mcp__claude-flow__swarm_init {
+  topology: "hierarchical",  // or "mesh", "ring", "star"
+  strategy: "auto",           // or "balanced", "specialized", "adaptive"
+  maxAgents: 8
+}
+
+// Spawn specialized agents
+mcp__claude-flow__agent_spawn {
+  type: "<agent-type>",
+  capabilities: ["<capability1>", "<capability2>"]
+}
+
+// Monitor execution
+mcp__claude-flow__swarm_monitor {
+  swarmId: "current",
+  interval: 5000
+}
+```
+
+### Method 2: NPX CLI (Fallback)
+
+**Best for**: Terminal usage or when MCP tools unavailable
+
+```bash
+# Execute specific mode
+npx claude-flow sparc run <mode> "task description"
+
+# Use alpha features
+npx claude-flow@alpha sparc run <mode> "task description"
+
+# List all available modes
+npx claude-flow sparc modes
+
+# Get help for specific mode
+npx claude-flow sparc help <mode>
+
+# Run with options
+npx claude-flow sparc run <mode> "task" --parallel --monitor
+
+# Execute TDD workflow
+npx claude-flow sparc tdd "feature description"
+
+# Batch execution
+npx claude-flow sparc batch <mode1,mode2,mode3> "task"
+
+# Pipeline execution
+npx claude-flow sparc pipeline "task description"
+```
+
+### Method 3: Local Installation
+
+**Best for**: Projects with local claude-flow installation
+
+```bash
+# If claude-flow is installed locally
+./claude-flow sparc run <mode> "task description"
+```
+
+---
 
 ## Orchestration Patterns
 
@@ -423,6 +646,86 @@ mcp__claude-flow__swarm_init {
   maxAgents: 20
 }
 ```
+
+---
+
+## TDD Workflows
+
+### Complete TDD Workflow
+
+```javascript
+// Step 1: Initialize TDD swarm
+mcp__claude-flow__swarm_init {
+  topology: "hierarchical",
+  maxAgents: 8
+}
+
+// Step 2: Research and planning
+mcp__claude-flow__sparc_mode {
+  mode: "researcher",
+  task_description: "research testing best practices for feature X"
+}
+
+// Step 3: Architecture design
+mcp__claude-flow__sparc_mode {
+  mode: "architect",
+  task_description: "design testable architecture for feature X"
+}
+
+// Step 4: TDD implementation
+mcp__claude-flow__sparc_mode {
+  mode: "tdd",
+  task_description: "implement feature X with 90% coverage",
+  options: {
+    coverage_target: 90,
+    test_framework: "jest",
+    parallel_tests: true
+  }
+}
+
+// Step 5: Code review
+mcp__claude-flow__sparc_mode {
+  mode: "reviewer",
+  task_description: "review feature X implementation",
+  options: {
+    test_coverage_check: true,
+    security_check: true
+  }
+}
+
+// Step 6: Optimization
+mcp__claude-flow__sparc_mode {
+  mode: "optimizer",
+  task_description: "optimize feature X performance"
+}
+```
+
+### Red-Green-Refactor Cycle
+
+```javascript
+// RED: Write failing test
+mcp__claude-flow__sparc_mode {
+  mode: "tester",
+  task_description: "create failing test for shopping cart add item",
+  options: { expect_failure: true }
+}
+
+// GREEN: Minimal implementation
+mcp__claude-flow__sparc_mode {
+  mode: "coder",
+  task_description: "implement minimal code to pass test",
+  options: { minimal: true }
+}
+
+// REFACTOR: Improve code quality
+mcp__claude-flow__sparc_mode {
+  mode: "coder",
+  task_description: "refactor shopping cart implementation",
+  options: { maintain_tests: true }
+}
+```
+
+---
 
 ## Best Practices
 
@@ -515,6 +818,148 @@ project/
 └── examples/      # Example code
 ```
 
+---
+
+## Integration Examples
+
+### Example 1: Full-Stack Development
+
+```javascript
+[Single Message - Parallel Agent Execution]:
+
+// Initialize swarm
+mcp__claude-flow__swarm_init {
+  topology: "hierarchical",
+  maxAgents: 10
+}
+
+// Architecture phase
+mcp__claude-flow__sparc_mode {
+  mode: "architect",
+  task_description: "design REST API with authentication",
+  options: { memory_enabled: true }
+}
+
+// Research phase
+mcp__claude-flow__sparc_mode {
+  mode: "researcher",
+  task_description: "research authentication best practices"
+}
+
+// Implementation phase
+mcp__claude-flow__sparc_mode {
+  mode: "coder",
+  task_description: "implement Express API with JWT auth",
+  options: { test_driven: true }
+}
+
+// Testing phase
+mcp__claude-flow__sparc_mode {
+  mode: "tdd",
+  task_description: "comprehensive API tests",
+  options: { coverage_target: 90 }
+}
+
+// Review phase
+mcp__claude-flow__sparc_mode {
+  mode: "reviewer",
+  task_description: "security and performance review",
+  options: { security_check: true }
+}
+
+// Batch todos
+TodoWrite {
+  todos: [
+    {content: "Design API schema", status: "completed"},
+    {content: "Research JWT implementation", status: "completed"},
+    {content: "Implement authentication", status: "in_progress"},
+    {content: "Write API tests", status: "pending"},
+    {content: "Security review", status: "pending"},
+    {content: "Performance optimization", status: "pending"},
+    {content: "API documentation", status: "pending"},
+    {content: "Deployment setup", status: "pending"}
+  ]
+}
+```
+
+### Example 2: Research-Driven Innovation
+
+```javascript
+// Research phase
+mcp__claude-flow__sparc_mode {
+  mode: "researcher",
+  task_description: "research AI-powered search implementations",
+  options: {
+    depth: "comprehensive",
+    sources: ["academic", "industry"]
+  }
+}
+
+// Innovation phase
+mcp__claude-flow__sparc_mode {
+  mode: "innovator",
+  task_description: "propose novel search algorithm",
+  options: { memory_enabled: true }
+}
+
+// Architecture phase
+mcp__claude-flow__sparc_mode {
+  mode: "architect",
+  task_description: "design scalable search system"
+}
+
+// Implementation phase
+mcp__claude-flow__sparc_mode {
+  mode: "coder",
+  task_description: "implement search algorithm",
+  options: { test_driven: true }
+}
+
+// Documentation phase
+mcp__claude-flow__sparc_mode {
+  mode: "documenter",
+  task_description: "document search system architecture and API"
+}
+```
+
+### Example 3: Legacy Code Refactoring
+
+```javascript
+// Analysis phase
+mcp__claude-flow__sparc_mode {
+  mode: "analyzer",
+  task_description: "analyze legacy codebase dependencies"
+}
+
+// Planning phase
+mcp__claude-flow__sparc_mode {
+  mode: "orchestrator",
+  task_description: "plan incremental refactoring strategy"
+}
+
+// Testing phase (create safety net)
+mcp__claude-flow__sparc_mode {
+  mode: "tester",
+  task_description: "create comprehensive test suite for legacy code",
+  options: { coverage_target: 80 }
+}
+
+// Refactoring phase
+mcp__claude-flow__sparc_mode {
+  mode: "coder",
+  task_description: "refactor module X with modern patterns",
+  options: { maintain_tests: true }
+}
+
+// Review phase
+mcp__claude-flow__sparc_mode {
+  mode: "reviewer",
+  task_description: "validate refactoring maintains functionality"
+}
+```
+
+---
+
 ## Common Workflows
 
 ### Workflow 1: Feature Development
@@ -584,6 +1029,76 @@ npx claude-flow sparc pipeline "e-commerce checkout feature"
 # 7. documenter - Documentation
 ```
 
+---
+
+## Advanced Features
+
+### Neural Pattern Training
+
+```javascript
+// Train patterns from successful workflows
+mcp__claude-flow__neural_train {
+  pattern_type: "coordination",
+  training_data: "successful_tdd_workflow.json",
+  epochs: 50
+}
+```
+
+### Cross-Session Memory
+
+```javascript
+// Save session state
+mcp__claude-flow__memory_persist {
+  sessionId: "feature-auth-v1"
+}
+
+// Restore in new session
+mcp__claude-flow__context_restore {
+  snapshotId: "feature-auth-v1"
+}
+```
+
+### GitHub Integration
+
+```javascript
+// Analyze repository
+mcp__claude-flow__github_repo_analyze {
+  repo: "owner/repo",
+  analysis_type: "code_quality"
+}
+
+// Manage pull requests
+mcp__claude-flow__github_pr_manage {
+  repo: "owner/repo",
+  pr_number: 123,
+  action: "review"
+}
+```
+
+### Performance Monitoring
+
+```javascript
+// Real-time swarm monitoring
+mcp__claude-flow__swarm_monitor {
+  swarmId: "current",
+  interval: 5000
+}
+
+// Bottleneck analysis
+mcp__claude-flow__bottleneck_analyze {
+  component: "api-layer",
+  metrics: ["latency", "throughput", "errors"]
+}
+
+// Token usage tracking
+mcp__claude-flow__token_usage {
+  operation: "feature-development",
+  timeframe: "24h"
+}
+```
+
+---
+
 ## Performance Benefits
 
 **Proven Results**:
@@ -592,6 +1107,17 @@ npx claude-flow sparc pipeline "e-commerce checkout feature"
 - **2.8-4.4x** speed improvement with parallel execution
 - **27+** neural models for pattern learning
 - **90%+** test coverage standard
+
+---
+
+## Support and Resources
+
+- **Documentation**: https://github.com/ruvnet/claude-flow
+- **Issues**: https://github.com/ruvnet/claude-flow/issues
+- **NPM Package**: https://www.npmjs.com/package/claude-flow
+- **Community**: Discord server (link in repository)
+
+---
 
 ## Quick Reference
 
@@ -630,7 +1156,42 @@ mcp__claude-flow__swarm_monitor { interval: 5000 }
 mcp__claude-flow__memory_usage { action: "store", key: "...", value: "..." }
 ```
 
------------|---------|----------|
+---
+
+Remember: **SPARC = Systematic, Parallel, Agile, Refined, Complete**
+
+## Core Principles
+
+SPARC Methodology operates on 3 fundamental principles:
+
+### Principle 1: Specification Before Implementation
+Define requirements, constraints, and architecture before writing code. Clear specifications prevent rework from misunderstood requirements and enable accurate estimation.
+
+In practice:
+- Use researcher mode for requirements gathering and best practices
+- Use architect mode for system design with Memory-based coordination
+- Document architectural decisions (ADRs) before implementation begins
+
+### Principle 2: Test-Driven Development as Foundation
+Write tests before implementation (red-green-refactor cycle) to ensure correctness from first principles. Tests become executable specifications that prevent regressions.
+
+In practice:
+- Use tdd mode for red-green-refactor cycle with 90%+ coverage targets
+- Write failing tests first, implement minimal code to pass, then refactor
+- Maintain test suite as living documentation of system behavior
+
+### Principle 3: Parallel Agent Orchestration
+Decompose work into independent tasks executed concurrently by specialized agents. Parallelization delivers 2.8-4.4x speed improvements over sequential workflows.
+
+In practice:
+- Use swarm-coordinator for mesh/hierarchical topologies based on task dependencies
+- Spawn all independent agents in single message (Golden Rule)
+- Use Memory MCP for cross-agent state coordination and knowledge sharing
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Code-First Development** | Skipping specification and jumping straight to implementation creates rework | Always run researcher + architect modes before coder mode |
 | **Sequential Agent Execution** | Spawning agents one-by-one loses 2.8-4.4x parallelization speedup | Batch all independent Task() calls in single message |
 | **Skipping TDD** | Implementing features without tests allows bugs to accumulate | Use tdd mode for red-green-refactor cycle, enforce 90%+ coverage |

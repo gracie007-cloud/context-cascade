@@ -1,6 +1,7 @@
 ---
 name: when-automating-github-actions-use-workflow-automation
 description: Advanced GitHub Actions workflow automation with AI swarm coordination, intelligent CI/CD pipelines, and comprehensive repository management. Coordinates cicd-engineer, workflow-automation, tester, and security-auditor agents through mesh topology to create, optimize, and maintain GitHub Actions workflows. Handles workflow generation, performance optimization, security hardening, matrix testing strategies, and workflow debugging. Use when building CI/CD pipelines, optimizing existing workflows, or establishing automation standards.
+allowed-tools: Read, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Actions Workflow Automation Skill
@@ -518,6 +519,7 @@ jobs:
 
 ```yaml
 # .github/workflows/reusable-build.yml
+name: Reusable Build Workflow
 on:
   workflow_call:
     inputs:
@@ -554,7 +556,8 @@ Create reusable action compositions:
 
 ```yaml
 # .github/actions/setup-project/action.yml
-
+name: 'Setup Project'
+description: 'Set up Node.js and install dependencies with caching'
 inputs:
   node-version:
     description: 'Node.js version'

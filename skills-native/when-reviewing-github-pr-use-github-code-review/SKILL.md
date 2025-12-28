@@ -1,6 +1,7 @@
 ---
 name: when-reviewing-github-pr-use-github-code-review
 description: Comprehensive GitHub pull request code review using multi-agent swarm with specialized reviewers for security, performance, style, tests, and documentation. Coordinates security-auditor, perf-analyzer, code-analyzer, tester, and reviewer agents through mesh topology for parallel analysis. Provides detailed feedback with auto-fix suggestions and merge readiness assessment. Use when reviewing PRs, conducting code audits, or ensuring code quality standards before merge.
+allowed-tools: Read, Glob, Grep, Task, TodoWrite
 ---
 
 # GitHub Code Review Skill

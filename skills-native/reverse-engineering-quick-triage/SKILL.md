@@ -1,6 +1,7 @@
 ---
 name: reverse-engineering-quick-triage
-description: "Fast binary analysis with string reconnaissance and static disassembly\ \ (RE Levels 1-2). Use when triaging suspicious binaries, extracting IOCs quickly,\ \ or performing initial malware analysis. Completes in \u22642 hours with automated\ \ decision gates."
+description: Fast binary analysis with string reconnaissance and static disassembly\ \ (RE Levels 1-2). Use when triaging suspicious binaries, extracting IOCs quickly,\ \ or performing initial malware analysis. Completes in \u22642 hours with automated\ \ decision gates."
+allowed-tools: Read, Glob, Grep, Bash, Task, TodoWrite
 ---
 
 ## When to Use This Skill
@@ -70,6 +71,29 @@ Performs rapid reverse engineering triage through two progressive levels:
 
 **Timebox**: ≤2 hours total
 
+---
+
+## Prerequisites
+
+### Required Tools
+- **strings** - GNU binutils (pre-installed on most Linux/macOS)
+- **file** - File type identification
+- **sha256sum** - Hashing utility
+- **xxd** - Hex dump utility
+
+### Required for Level 2
+- **Ghidra** - Headless analysis capability OR
+- **radare2** - Alternative disassembler
+- **graphviz** - For callgraph visualization (`dot` command)
+
+### MCP Servers (Auto-Configured)
+- `memory-mcp` - Store findings across sessions
+- `filesystem` - Access binaries and create outputs
+- `connascence-analyzer` - Analyze decompiled code quality
+- `sequential-thinking` - Decision gate reasoning
+
+---
+
 ## ⚠️ CRITICAL SECURITY WARNING
 
 **NEVER execute unknown binaries on your host system!**
@@ -92,6 +116,25 @@ All dynamic analysis and binary execution MUST be performed in:
 - Monitor network traffic during execution
 - Never use your primary development machine
 - Assume all unknown binaries are malicious until proven otherwise
+
+---
+
+## Quick Start (3 commands)
+
+```bash
+# 1. Analyze suspicious binary (fastest path)
+/re:quick malware.exe
+
+# 2. String analysis only (Level 1, ≤30 min)
+/re:quick suspicious.bin --level 1
+
+# 3. Static analysis only (Level 2, 1-2 hrs)
+/re:quick crackme.exe --level 2 --output ./analysis/
+```
+
+**Auto-Decision**: Skill will ask after Level 1: "Suspicious IOCs found. Proceed to Level 2?" (Yes/No/Auto)
+
+---
 
 ## Step-by-Step Guide
 
@@ -153,6 +196,108 @@ DECISION: ESCALATE TO LEVEL 2
 - Type `continue` to force Level 2 (even if not recommended)
 - Type `auto` (default) to follow recommendation
 
+---
+
+### Level 2: Static Analysis (1-2 hours)
+
+#### Step 1: Launch Disassembly
+
+```bash
+# Invoke RE-Disassembly-Expert agent via slash command
+/re:static binary.exe --tool ghidra --decompile true --callgraph true
+```
+
+**What Happens**:
+1. Detects binary architecture (x86/x64/ARM/MIPS)
+2. Loads into Ghidra headless analyzer
+3. Performs auto-analysis (function discovery, CFG)
+4. Decompiles key functions to pseudo-C
+5. Generates callgraph visualization
+6. Runs connascence-analyzer on decompiled code
+
+**Timeline**:
+- Small binary (<1MB): 30-45 minutes
+- Medium binary (1-10MB): 1-1.5 hours
+- Large binary (>10MB): 1.5-2 hours
+
+#### Step 2: Review Disassembly Results
+
+**Output Structure**:
+```
+re-project/
+├── ghidra/
+│   ├── binary.gpr                 # Ghidra project
+│   ├── decompiled/
+│   │   ├── main.c                 # Decompiled entry point
+│   │   ├── check_auth.c           # Authentication function
+│   │   └── encrypt_data.c         # Crypto function
+│   ├── callgraphs/
+│   │   └── main-callgraph.png     # Call graph visualization
+│   └── cfg/
+│       └── main-cfg.dot           # Control flow graph
+├── notes/
+│   ├── 001-strings-l1.md          # Level 1 findings
+│   └── 002-static-l2.md           # Level 2 findings
+└── artifacts/
+    ├── strings.json               # From Level 1
+    ├── imports.txt                # External library calls
+    └── suspicious-functions.txt   # Flagged vulnerabilities
+```
+
+#### Step 3: Code Quality Analysis
+
+Automatically applies connascence-analyzer to decompiled C code:
+
+**Detects**:
+- God Objects (functions > 500 lines)
+- Parameter Bombs (functions > 7 parameters)
+- Deep Nesting (> 4 levels)
+- Complexity Issues
+- NASA Power of 10 violations
+
+**Sample Output**:
+```
+CONNASCENCE VIOLATIONS:
+- check_auth.c:45 - God Object (723 lines)
+- encrypt_data.c:12 - Parameter Bomb (11 parameters)
+- network_handler.c:89 - Deep Nesting (6 levels)
+```
+
+#### Step 4: Store Findings in Memory
+
+```javascript
+// Automatically stored by RE-Disassembly-Expert agent
+mcp__memory-mcp__memory_store({
+  content: {
+    binary_hash: "sha256:abc123...",
+    level_completed: 2,
+    entry_point: "0x401000",
+    critical_functions: [
+      {name: "check_auth", address: "0x401234", decompiled: "check_auth.c"},
+      {name: "encrypt_data", address: "0x401567", decompiled: "encrypt_data.c"}
+    ],
+    vulnerabilities: [
+      {type: "buffer_overflow", function: "read_input", severity: "HIGH"},
+      {type: "format_string", function: "log_message", severity: "MEDIUM"}
+    ],
+    callgraph: "callgraphs/main-callgraph.png",
+    connascence_violations: 12
+  },
+  metadata: {
+    agent: "RE-Disassembly-Expert",
+    category: "reverse-engineering",
+    intent: "static-analysis",
+    layer: "long_term",
+    project: `binary-analysis-${date}`,
+    keywords: ["disassembly", "decompilation", "ghidra", "static"],
+    re_level: 2,
+    binary_hash: "sha256:abc123..."
+  }
+})
+```
+
+---
+
 ## Advanced Options
 
 ### Custom String Extraction
@@ -196,6 +341,52 @@ mcp__memory-mcp__vector_search({
   filter: {category: "reverse-engineering", re_level: 1}
 })
 ```
+
+---
+
+## Integration with Other Tools
+
+### Handoff to Dynamic Analysis
+
+If static analysis reveals interesting runtime behavior:
+
+```bash
+# After Level 2 completes, check recommendations
+cat re-project/notes/002-static-l2.md
+
+# If recommended: "Proceed to dynamic analysis"
+/re:deep binary.exe --breakpoints 0x401234,0x401567
+```
+
+**Automatic Handoff**:
+The skill stores handoff data in memory-mcp:
+```javascript
+{
+  key: "re-handoff/static-to-dynamic/${binary_hash}",
+  value: {
+    decision: "ESCALATE_TO_LEVEL_3",
+    entry_point: "0x401000",
+    critical_functions: ["check_password@0x401234"],
+    breakpoint_suggestions: ["0x401234", "0x401567"],
+    findings: {...}
+  }
+}
+```
+
+### Export Findings
+
+```bash
+# Export to JSON for threat intel platform
+cat re-project/artifacts/strings.json | jq '.iocs[]' > iocs-export.txt
+
+# Export decompiled code
+tar -czf decompiled-code.tar.gz re-project/ghidra/decompiled/
+
+# Generate executive summary
+cat re-project/notes/002-static-l2.md
+```
+
+---
 
 ## Troubleshooting
 
@@ -271,6 +462,51 @@ upx -d binary.exe -o unpacked.exe
 /re:static binary.exe --tool ida-pro  # If IDA Pro available
 ```
 
+---
+
+## Performance Optimization
+
+### Speed Up Level 1 (String Analysis)
+
+```bash
+# Parallel string extraction for multiple encodings
+strings -n 10 -e s binary.exe > ascii.txt &
+strings -n 10 -e l binary.exe > unicode.txt &
+wait
+
+# Grep in parallel
+grep -oE 'http[s]?://[^\s]*' ascii.txt > urls.txt &
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' ascii.txt > ips.txt &
+wait
+```
+
+### Speed Up Level 2 (Static Analysis)
+
+```bash
+# Use radare2 for speed (sacrifice accuracy)
+/re:static binary.exe --tool radare2  # 3-5x faster than Ghidra
+
+# Skip decompilation if only need CFG
+/re:static binary.exe --decompile false --callgraph true
+
+# Analyze only critical functions (from Level 1 findings)
+/re:static binary.exe --functions check_password,validate_license
+```
+
+### Memory-MCP Caching Strategy
+
+```bash
+# Store Level 1 results immediately (fast, always cacheable)
+# Level 1 completes in 10-15 min, cache for 30 days
+
+# Store Level 2 results after completion
+# Level 2 completes in 1-2 hrs, cache for 30 days
+
+# Benefit: Second analysis of same binary takes <1 second
+```
+
+---
+
 ## Agents & Commands Used
 
 ### Agents Invoked
@@ -305,6 +541,17 @@ upx -d binary.exe -o unpacked.exe
 - **connascence-analyzer**: Code quality analysis
 - **sequential-thinking**: Decision gate logic
 
+---
+
+## Related Skills
+
+- [Reverse Engineering: Deep Analysis](../reverse-engineering-deep/) - Levels 3-4 (dynamic + symbolic)
+- [Reverse Engineering: Firmware](../reverse-engineering-firmware/) - Level 5 (firmware extraction)
+- [Code Review Assistant](../code-review-assistant/) - Review decompiled code
+- [Functionality Audit](../functionality-audit/) - Validate reverse-engineered logic
+
+---
+
 ## Resources
 
 ### External Tools
@@ -321,6 +568,16 @@ upx -d binary.exe -o unpacked.exe
 ### Community
 - [r/ReverseEngineering](https://reddit.com/r/ReverseEngineering) - Subreddit
 - [Reverse Engineering Stack Exchange](https://reverseengineering.stackexchange.com/)
+
+---
+
+**Created**: 2025-11-01
+**RE Levels**: 1-2 (String Reconnaissance + Static Analysis)
+**Timebox**: ≤2 hours
+**Agents**: RE-String-Analyst, RE-Disassembly-Expert
+**Category**: Security, Malware Analysis, Binary Analysis
+**Difficulty**: Intermediate
+---
 
 ## Core Principles
 
@@ -353,7 +610,12 @@ In practice:
 - Generate callgraphs to visualize function relationships
 - Focus on critical functions (auth, crypto, network) identified in Level 1
 
------------|---------|----------|
+---
+
+## Common Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Immediately running Level 2 without Level 1** | Waste 1-2 hours on disassembly when strings would have answered question | ALWAYS run Level 1 first, check decision gate before escalating |
 | **Analyzing same binary multiple times** | Redundant work, wasted analysis hours, inconsistent findings | Check memory-mcp for SHA256 hash before starting analysis |
 | **Using min-length=4 on large binaries** | 50,000+ strings with massive noise, impossible to analyze | Use adaptive min-length (10-15 for normal, 20+ for firmware), enable --ioc-only filter |

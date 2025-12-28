@@ -1,6 +1,7 @@
 ---
 name: academic-reading-workflow
-description: Systematic reading methodology for academic papers and complex texts implementing Blue's (OSP) 3-phase approach. Use when reading papers/books that require deep understanding, searchable annotation system with keyword tagging ("command-F in real life"), and evidence-based writing with citations. Sequential workflow (researcher, analyst) over 2-6 hours with annotation quality validation.
+description: Systematic reading methodology for academic papers and complex texts implementing Blues (OSP) 3-phase approach. Use when reading papers/books that require deep understanding, searchable annotation system with keyword tagging (command-F in real life), and evidence-based writing with citations. Sequential workflow (researcher, analyst) over 2-6 hours with annotation quality validation.
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
 # Academic Reading Workflow
@@ -36,14 +37,43 @@ Execute systematic reading of academic papers, books, and complex texts using Bl
 
 **Optional**: Use `evidence-based-writing` skill separately when ready to write (not part of this workflow)
 
+---
 
+## Agent Coordination Protocol
+
+### Sequential Execution
+Each step passes deliverables to next step. Do NOT proceed if Quality Gate fails.
+
+### Agent Roles
+- **researcher**: Roadmap creation, reading, annotation (Steps 0, 1, 2)
+- **analyst**: Validation, quality checks, keyword standardization (Step 3)
+
+### Annotation Storage Format
+All annotations stored as **Markdown with YAML frontmatter**:
+
+```yaml
+---
 source: "[Title] - [Author] ([Year])"
 page: [number]
 keywords: [keyword1, keyword2, keyword3]
 date_annotated: [YYYY-MM-DD]
 project: [research-topic-slug]
 annotation_id: [unique-id]
+---
 
+**Summary**: [Your paraphrase in own words]
+
+**Quote** (if applicable): "[Exact text]" (p. [X])
+
+**Why This Matters**: [Connection to research question]
+
+**Links**: See also [Page Y], Conflicts with [Source B]
+```
+
+### Memory MCP Tags
+Store with: `WHO=[agent]`, `WHEN=[timestamp]`, `PROJECT=[topic]`, `WHY=annotation`, `SOURCE=[title]`, `PAGE=[number]`
+
+---
 
 ## Blue's Core Principles
 
@@ -60,7 +90,56 @@ This workflow embeds Blue's (OSP) methodology:
 
 See `references/blue-methodology.md` for full explanation.
 
+---
 
+## Step-by-Step Workflow
+
+### STEP 0: Initialize Master Keyword List (Multi-Source Projects)
+**Agent**: researcher
+**Goal**: Define consistent keyword vocabulary across all sources in project
+
+**When to Use**:
+- ✅ Reading 3+ sources for same research project
+- ✅ Building cross-source knowledge base
+- ❌ Skip if reading single source
+
+**Procedure**:
+1. List main topics/concepts in your research project
+2. Define standard keywords for each:
+   - Use domain-standard terms when possible
+   - Be specific (#methodology, not #method)
+   - Use consistent formatting (#snake-case)
+3. Create master keyword list:
+
+```markdown
+# MASTER KEYWORD LIST: [Project Name]
+
+## Core Concepts
+- #[concept-1] - Definition/scope
+- #[concept-2] - Definition/scope
+
+## Methodology
+- #methodology - Research methods discussed
+- #data-collection - Data gathering approaches
+- #analysis - Analytical techniques
+
+## Key Themes
+- #[theme-1]
+- #[theme-2]
+
+## Authors/Schools
+- #[author-name] - When referencing this scholar
+- #[school-of-thought] - When discussing this approach
+```
+
+4. Store in Memory MCP with PROJECT tag
+5. **Use SAME keywords** across ALL sources in this project
+
+**Deliverable**: Master keyword list (10-20 keywords)
+
+**Quality Gate 0**: Keyword vocabulary defined, specific (not vague)
+
+---
 
 ### STEP 1: Summary-First Reading (Roadmap Phase)
 **Agent**: researcher
@@ -118,14 +197,119 @@ See `references/blue-methodology.md` for full explanation.
 - **GO**: Main argument OR key questions identified, critical sections listed with page ranges
 - **NO-GO**: Vague roadmap → Re-read intro/conclusion for clarity
 
+---
 
+### STEP 2: Deep Reading + Active Annotation
+**Agent**: researcher
+**Objective**: Read with searchable margin notes using keyword tagging system
+
+**Procedure**:
+
+**A. Read Actively (Not Passively)**
+- Follow reading plan from Step 1
+- Read with annotation tools ready
+- Pause after each paragraph: "What's the point?"
+- Don't just highlight—ANNOTATE with your thoughts
+
+**B. Create Searchable Annotations**
+
+Use this template for EVERY annotation:
+
+```markdown
+---
 source: "[Title] - [Author] ([Year])"
 page: [X]
 keywords: [keyword1, keyword2, keyword3]
 date_annotated: [YYYY-MM-DD]
 project: [project-slug]
 annotation_id: [source-slug]-p[page]
+---
 
+## ✅ SUMMARY [REQUIRED - Min 1 sentence]
+[Your paraphrase in YOUR words - force yourself to rephrase, not just reword]
+
+## ⚠️ QUOTE [OPTIONAL - Only if exact wording matters]
+"[Exact text]" (p. [X])
+
+## ✅ KEYWORDS [REQUIRED - Min 2, use master list if multi-source]
+#keyword1 #keyword2 #keyword3
+
+## ⚠️ WHY THIS MATTERS [OPTIONAL BUT RECOMMENDED]
+**Research Question**: How does this address my focus?
+**Argument Structure**: Is this claim/evidence/counter-evidence?
+**Cross-Reference**: Links to [Page Y], [Source B, p. Z]
+
+## ⚠️ DEFINE TERMS [IF UNFAMILIAR DOMAIN]
+- **Term 1**: [Definition]
+- **Term 2**: [Definition]
+```
+
+**Example**: See `examples/annotation-example.md`
+
+**C. Annotation Principles (Blue's Rules)**
+
+**✅ DO**:
+- **Force paraphrase** in YOUR words (if you can't paraphrase, you don't understand—re-read)
+- **Tag with 2-5 keywords** for searchability
+- **Include page numbers** for ALL quotes and claims
+- **Link related passages** ("See also page 42", "Conflicts with Source B, p. 15")
+- **Write for future you** (enough context to understand 6 months later)
+
+**❌ DON'T** (Anti-Patterns):
+- ❌ **"Important!"** (too vague, not searchable)
+- ❌ **Copy-paste with slight rewording** (not genuine paraphrase)
+- ❌ **Keywords like "#page15"** (not conceptually searchable)
+- ❌ **Highlighting without notes** (doesn't create understanding)
+
+**Example**: See `examples/good-vs-bad-paraphrase.md`
+
+**D. Annotation Levels by Section**
+
+**Critical Sections** (from Step 1):
+- Annotate EVERY major claim
+- Extract 2-5 direct quotes
+- Create 5-10 annotations per section
+- Heavy keyword tagging
+
+**Supplementary Sections**:
+- Annotate key points only
+- 1-2 quotes if notable
+- 2-3 annotations per section
+- Light keyword tagging
+
+**E. Handle Special Cases**
+
+**Long Books (100+ pages)**:
+- Create "Summary Note" every 50 pages
+- Recap main themes so far
+- Prevent annotation overflow
+
+**Unfamiliar Domain**:
+- Define ALL technical terms inline
+- Build glossary section as you read
+- Only paraphrase AFTER understanding terms
+
+**No Clear Thesis** (exploratory papers):
+- Focus on "key questions" from Step 1
+- Tag with question numbers: #question1, #question2
+
+**F. Store Annotations**
+
+Store each annotation in Memory MCP with tags:
+```bash
+npx claude-flow@alpha memory store \
+  --key "annotations/[project]/[source-slug]/p[page]" \
+  --value "[Markdown annotation with YAML frontmatter]" \
+  --tags "WHO=researcher,WHEN=[timestamp],PROJECT=[topic],WHY=annotation,SOURCE=[title],PAGE=[page],KEYWORDS=[keyword1,keyword2]"
+```
+
+**Deliverable**: 20-50 searchable annotations (depending on source length)
+
+**Quality Gate 2**:
+- **GO**: ≥20 annotations for full paper/chapter, ≥5 keywords used, page numbers present
+- **NO-GO**: <20 annotations → Extend reading time, annotate more thoroughly
+
+---
 
 ### STEP 3: Annotation Quality Check
 **Agent**: analyst
@@ -200,7 +384,27 @@ Sample 5-10 annotations randomly. For each:
 - Keyword index
 - Quality assessment report
 
+---
 
+## Success Metrics
+
+### Quantitative
+- ✅ Reading roadmap created (Step 1)
+- ✅ ≥20 annotations for full paper/chapter
+- ✅ ≥5 consistent keywords used
+- ✅ ≥2 keywords per annotation
+- ✅ Page numbers for ALL quotes and claims
+- ✅ <30% quote-paraphrases (genuine paraphrasing)
+- ✅ Keyword index searchable
+
+### Qualitative
+- ✅ Can find passages using keyword search
+- ✅ Paraphrases understandable without source
+- ✅ Annotations useful 6 months later
+- ✅ Links between passages documented
+- ✅ If multi-source: keywords consistent across all sources
+
+---
 
 ## Error Handling
 
@@ -218,13 +422,55 @@ Sample 5-10 annotations randomly. For each:
 | **Annotation overflow (100+)** | 2 | Create summary notes every 50 pages |
 | **Keyword drift (multi-source)** | 3 | Update master keyword list, standardize |
 
+---
 
+## Integration
+
+**Before This Skill**:
+- Use `general-research-workflow` Steps 2-3 to find and classify sources first
+- Prioritize which sources to read deeply using credibility/priority scores
+
+**During This Skill**:
+- Can annotate multiple sources in parallel
+- Use SAME keyword vocabulary across all sources (Step 0 master list)
+- Annotations feed into `general-research-workflow` Step 5 (note-taking)
+
+**After This Skill**:
+- Use `evidence-based-writing` skill when ready to write essay (separate invocation)
+- Export keyword index to build personal knowledge base
+- Search annotations across ALL sources using shared keywords
+
+**Companion Skill**:
+- `evidence-based-writing` (Step 4 from original SOP, now separate skill)
+  - Use when: Ready to write essay/analysis based on annotations
+  - Input: Validated annotations from Step 3
+  - Output: Draft with citations, relativist language, evidence-based claims
+
+---
 
 ## Process Visualization
 
 See `academic-reading-process.dot` for complete workflow diagram showing all steps, gates, and decision points.
 
+---
 
+## Storage Format Specification
+
+**Annotation File Structure**:
+```
+annotations/
+  [project-slug]/
+    [source-slug]/
+      p001.md (annotation for page 1)
+      p015.md (annotation for page 15)
+      p042.md (annotation for page 42)
+      keyword-index.md
+      summary.md (if book >100 pages)
+```
+
+**YAML Frontmatter Format**:
+```yaml
+---
 source: "Byzantium and Renaissance - Wilson 1992"
 page: 45
 keywords: [greek-migration, manuscripts, bessarion]
@@ -232,6 +478,16 @@ date_annotated: 2025-01-06
 project: byzantine-renaissance-italy
 annotation_id: wilson1992-p45
 type: annotation
+---
+```
 
+**Memory MCP Storage**:
+```bash
+Key: annotations/[project]/[source]/p[page]
+Value: [Full Markdown with YAML frontmatter]
+Tags: WHO=researcher,WHEN=[ISO8601],PROJECT=[slug],WHY=annotation,SOURCE=[title],PAGE=[page],KEYWORDS=[csv]
+```
+
+---
 
 **Blue's Annotation Principles**: "Read the Roadmap, Command-F in Real Life, Paraphrase > Highlighting, Write for Future You"

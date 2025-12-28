@@ -1,6 +1,7 @@
 ---
 name: skill-forge
 description: Advanced skill creation system for Claude Code that combines deep intent analysis, evidence-based prompting principles, and systematic skill engineering. Use when creating new skills or refining existing skills to ensure they are well-structured, follow best practices, and incorporate sophisticated prompt engineering techniques. This skill transforms skill creation from template filling into a strategic design process.
+allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->
@@ -970,6 +971,23 @@ Skill Forge itself improves through practice and reflection. Each skill creation
 When creating new skills with Skill Forge, use this template structure:
 
 ```yaml
+---
+name: "{skill-name}"
+description: "{concise description of what skill does and when to use it}"
+version: 1.0.0
+category: "{category}"
+tags:
+- "{tag1}"
+- "{tag2}"
+author: "{author}"
+cognitive_frame:
+  primary: evidential|aspectual|hierarchical|morphological|classifier|none
+  goal_analysis:
+    first_order: "Immediate goal the skill accomplishes"
+    second_order: "Why this goal matters (deeper purpose)"
+    third_order: "Ultimate value delivered to user"
+---
+
 ## Overview
 [Skill overview and purpose]
 

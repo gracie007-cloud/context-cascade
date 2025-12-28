@@ -1,6 +1,7 @@
 ---
 name: pair-programming
 description: AI-assisted pair programming with multiple modes (driver/navigator/switch), real-time verification, quality monitoring, and comprehensive testing. Supports TDD, debugging, refactoring, and learning sessions. Features automatic role switching, continuous code review, security scanning, and performance optimization with truth-score verification.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Pair Programming
@@ -103,7 +104,357 @@ claude-flow pair --start \
   --coverage 90
 ```
 
-----|-------------|
+---
+
+## Complete Guide
+
+### Session Control Commands
+
+#### Starting Sessions
+```bash
+# Basic start
+claude-flow pair --start
+
+# Expert refactoring session
+claude-flow pair --start \
+  --agent senior-dev \
+  --focus refactor \
+  --verify \
+  --threshold 0.98
+
+# Debugging session
+claude-flow pair --start \
+  --agent debugger-expert \
+  --focus debug \
+  --review
+
+# Learning session
+claude-flow pair --start \
+  --mode mentor \
+  --pace slow \
+  --examples
+```
+
+#### Session Management
+```bash
+# Check status
+claude-flow pair --status
+
+# View history
+claude-flow pair --history
+
+# Pause session
+/pause [--reason <reason>]
+
+# Resume session
+/resume
+
+# End session
+claude-flow pair --end [--save] [--report]
+```
+
+### Available Modes
+
+#### Driver Mode
+You write code while AI provides guidance.
+
+```bash
+claude-flow pair --start --mode driver
+```
+
+**Your Responsibilities:**
+- Write actual code
+- Implement solutions
+- Make immediate decisions
+- Handle syntax and structure
+
+**AI Navigator:**
+- Strategic guidance
+- Spot potential issues
+- Suggest improvements
+- Real-time review
+- Track overall direction
+
+**Best For:**
+- Learning new patterns
+- Implementing familiar features
+- Quick iterations
+- Hands-on debugging
+
+**Commands:**
+```
+/suggest     - Get implementation suggestions
+/review      - Request code review
+/explain     - Ask for explanations
+/optimize    - Request optimization ideas
+/patterns    - Get pattern recommendations
+```
+
+#### Navigator Mode
+AI writes code while you provide direction.
+
+```bash
+claude-flow pair --start --mode navigator
+```
+
+**Your Responsibilities:**
+- Provide high-level direction
+- Review generated code
+- Make architectural decisions
+- Ensure business requirements
+
+**AI Driver:**
+- Write implementation code
+- Handle syntax details
+- Implement your guidance
+- Manage boilerplate
+- Execute refactoring
+
+**Best For:**
+- Rapid prototyping
+- Boilerplate generation
+- Learning from AI patterns
+- Exploring solutions
+
+**Commands:**
+```
+/implement   - Direct implementation
+/refactor    - Request refactoring
+/test        - Generate tests
+/document    - Add documentation
+/alternate   - See alternative approaches
+```
+
+#### Switch Mode
+Automatically alternates roles at intervals.
+
+```bash
+# Default 10-minute intervals
+claude-flow pair --start --mode switch
+
+# 5-minute intervals (rapid)
+claude-flow pair --start --mode switch --interval 5m
+
+# 15-minute intervals (deep focus)
+claude-flow pair --start --mode switch --interval 15m
+```
+
+**Handoff Process:**
+1. 30-second warning before switch
+2. Current driver completes thought
+3. Context summary generated
+4. Roles swap smoothly
+5. New driver continues
+
+**Best For:**
+- Balanced collaboration
+- Knowledge sharing
+- Complex features
+- Extended sessions
+
+#### Specialized Modes
+
+**TDD Mode** - Test-Driven Development:
+```bash
+claude-flow pair --start \
+  --mode tdd \
+  --test-first \
+  --coverage 100
+```
+Workflow: Write failing test → Implement → Refactor → Repeat
+
+**Review Mode** - Continuous code review:
+```bash
+claude-flow pair --start \
+  --mode review \
+  --strict \
+  --security
+```
+Features: Real-time feedback, security scanning, performance analysis
+
+**Mentor Mode** - Learning-focused:
+```bash
+claude-flow pair --start \
+  --mode mentor \
+  --explain-all \
+  --pace slow
+```
+Features: Detailed explanations, step-by-step guidance, pattern teaching
+
+**Debug Mode** - Problem-solving:
+```bash
+claude-flow pair --start \
+  --mode debug \
+  --verbose \
+  --trace
+```
+Features: Issue identification, root cause analysis, fix suggestions
+
+### In-Session Commands
+
+#### Code Commands
+```
+/explain [--level basic|detailed|expert]
+  Explain the current code or selection
+
+/suggest [--type refactor|optimize|security|style]
+  Get improvement suggestions
+
+/implement <description>
+  Request implementation (navigator mode)
+
+/refactor [--pattern <pattern>] [--scope function|file|module]
+  Refactor selected code
+
+/optimize [--target speed|memory|both]
+  Optimize code for performance
+
+/document [--format jsdoc|markdown|inline]
+  Add documentation to code
+
+/comment [--verbose]
+  Add inline comments
+
+/pattern <pattern-name> [--example]
+  Apply a design pattern
+```
+
+#### Testing Commands
+```
+/test [--watch] [--coverage] [--only <pattern>]
+  Run test suite
+
+/test-gen [--type unit|integration|e2e]
+  Generate tests for current code
+
+/coverage [--report html|json|terminal]
+  Check test coverage
+
+/mock <target> [--realistic]
+  Generate mock data or functions
+
+/test-watch [--on-save]
+  Enable test watching
+
+/snapshot [--update]
+  Create test snapshots
+```
+
+#### Review Commands
+```
+/review [--scope current|file|changes] [--strict]
+  Perform code review
+
+/security [--deep] [--fix]
+  Security analysis
+
+/perf [--profile] [--suggestions]
+  Performance analysis
+
+/quality [--detailed]
+  Check code quality metrics
+
+/lint [--fix] [--config <config>]
+  Run linters
+
+/complexity [--threshold <value>]
+  Analyze code complexity
+```
+
+#### Navigation Commands
+```
+/goto <file>[:line[:column]]
+  Navigate to file or location
+
+/find <pattern> [--regex] [--case-sensitive]
+  Search in project
+
+/recent [--limit <n>]
+  Show recent files
+
+/bookmark [add|list|goto|remove] [<name>]
+  Manage bookmarks
+
+/history [--limit <n>] [--filter <pattern>]
+  Show command history
+
+/tree [--depth <n>] [--filter <pattern>]
+  Show project structure
+```
+
+#### Git Commands
+```
+/diff [--staged] [--file <file>]
+  Show git diff
+
+/commit [--message <msg>] [--amend]
+  Commit with verification
+
+/branch [create|switch|delete|list] [<name>]
+  Branch operations
+
+/stash [save|pop|list|apply] [<message>]
+  Stash operations
+
+/log [--oneline] [--limit <n>]
+  View git log
+
+/blame [<file>]
+  Show git blame
+```
+
+#### AI Partner Commands
+```
+/agent [switch|info|config] [<agent-name>]
+  Manage AI agent
+
+/teach <preference>
+  Teach the AI your preferences
+
+/feedback [positive|negative] <message>
+  Provide feedback to AI
+
+/personality [professional|friendly|concise|verbose]
+  Adjust AI personality
+
+/expertise [add|remove|list] [<domain>]
+  Set AI expertise focus
+```
+
+#### Metrics Commands
+```
+/metrics [--period today|session|week|all]
+  Show session metrics
+
+/score [--breakdown]
+  Show quality scores
+
+/productivity [--chart]
+  Show productivity metrics
+
+/leaderboard [--personal|team]
+  Show improvement leaderboard
+```
+
+#### Role & Mode Commands
+```
+/switch [--immediate]
+  Switch driver/navigator roles
+
+/mode <type>
+  Change mode (driver|navigator|switch|tdd|review|mentor|debug)
+
+/role
+  Show current role
+
+/handoff
+  Prepare role handoff
+```
+
+### Command Shortcuts
+
+| Alias | Full Command |
+|-------|-------------|
 | `/s` | `/suggest` |
 | `/e` | `/explain` |
 | `/t` | `/test` |

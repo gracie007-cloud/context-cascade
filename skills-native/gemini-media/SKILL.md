@@ -1,6 +1,7 @@
 ---
 name: gemini-media
-description: Skill for gemini-media
+description: Generate images and videos using Geminis Imagen and Veo integration
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
 # Gemini Media Generation Skill

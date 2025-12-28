@@ -1,6 +1,7 @@
 ---
 name: debugging
 description: Systematic debugging methodology using a 5-phase protocol. Use when troubleshooting code failures, investigating bugs, or analyzing unexpected behavior. Applies 10 proven debugging techniques including binary search, rubber duck, hypothesis-driven, and differential debugging.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Debugging - Systematic Code Investigation

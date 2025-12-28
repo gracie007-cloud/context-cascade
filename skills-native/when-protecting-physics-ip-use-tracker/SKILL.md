@@ -1,6 +1,7 @@
 ---
 name: when-protecting-physics-ip-use-tracker
-description: Timestamped protection for unpublished physics research (vector equilibrium, mass gap, CKM unification) with arXiv prior art monitoring.
+description: Timestamped IP protection for physics research claims with arXiv monitoring and priority detection
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Physics IP Tracker
@@ -40,6 +41,56 @@ Phase 2: PriorityWatch (researcher) → Monitor arXiv
 All claims stored in Memory MCP with cryptographic proof
 ```
 
+---
+
+## Phase 1: Claim Timestamping
+
+```bash
+#!/bin/bash
+# Phase 1: Timestamp Physics Claims with Cryptographic Proof
+
+# PRE-TASK HOOK
+npx claude-flow@alpha hooks pre-task \
+  --description "Physics IP: claim timestamping" \
+  --agent "coder" \
+  --role "ClaimPackager" \
+  --skill "physics-ip-tracker"
+
+# SETUP
+TODAY=$(date +%Y-%m-%d)
+TIMESTAMP=$(date -Iseconds)
+mkdir -p outputs/ip raw_data/ip
+
+# READ CLAIMS
+CLAIMS_FILE="research/physics/claims.md"
+
+if [[ ! -f "$CLAIMS_FILE" ]]; then
+  echo "[ClaimPackager] No claims file found. Creating template..."
+  mkdir -p research/physics
+  cat > "$CLAIMS_FILE" <<'CLAIMS_TEMPLATE'
+# Physics Research Claims - Priority Record
+
+## Claim 1: Vector Equilibrium & Mass Emergence
+
+**Date**: 2025-01-06
+**Status**: Unpublished (developing proof)
+
+**Core Thesis**:
+Mass emerges from vector equilibrium (VE) topology in 4D spacetime. The 12-vector VE configuration creates quantized stress-energy distributions that manifest as particle masses.
+
+**Falsifiable Predictions**:
+1. Electron mass ratio prediction: me/mp = [specific formula involving VE geometry]
+2. Higgs coupling constants derivable from VE vertex angles
+3. Mass gap in Yang-Mills theory connected to VE instability threshold
+
+**Supporting Mathematics**:
+- [Equations relating VE topology to stress-energy tensor]
+- [Derivation of mass quantization from VE symmetry breaking]
+
+**Prior Art Searched**: [ArXiv hep-th, gr-qc through 2025-01-06]
+
+---
+
 ## Claim 2: CKM Matrix Unification via Geometric Phase
 
 **Date**: 2025-01-06
@@ -59,6 +110,24 @@ The CKM matrix elements derive from Berry phase accumulation in flavor space, co
 
 **Prior Art Searched**: [ArXiv hep-ph through 2025-01-06]
 
+---
+
+## Claim 3: [Additional Claims]
+
+[Template for future claims...]
+CLAIMS_TEMPLATE
+fi
+
+# GENERATE TIMESTAMPED PACKAGE
+cat > outputs/ip/physics_claims_timestamped.md <<PACKAGE_HEADER
+# Timestamped Physics IP Claims
+
+**Timestamp**: $TIMESTAMP
+**Priority Date**: $TODAY
+**Claimant**: David Youssef (DNYoussef.com)
+
+---
+
 ## Cryptographic Proof
 
 **SHA-256 Hash of Claims**:
@@ -75,6 +144,29 @@ $(cd research/physics && git log -1 --format="%H%n%ai%n%s" "$CLAIMS_FILE" 2>/dev
 - Ethereum timestamp service
 - IPFS CID for claims document
 - Proof-of-Existence (proofofexistence.com)
+
+---
+
+## Claims Record
+
+PACKAGE_HEADER
+
+# APPEND CLAIMS WITH HASHES
+cat "$CLAIMS_FILE" | while IFS= read -r line; do
+  if [[ "$line" == "## Claim"* ]]; then
+    # New claim section - calculate hash of this claim
+    echo "$line" >> outputs/ip/physics_claims_timestamped.md
+    echo "" >> outputs/ip/physics_claims_timestamped.md
+    echo "**Hash**: \`$(echo "$line" | sha256sum | awk '{print $1}' | head -c 16)\`..." >> outputs/ip/physics_claims_timestamped.md
+  else
+    echo "$line" >> outputs/ip/physics_claims_timestamped.md
+  fi
+done
+
+# APPEND INSTRUCTIONS
+cat >> outputs/ip/physics_claims_timestamped.md <<'INSTRUCTIONS'
+
+---
 
 ## How to Use This Timestamp
 
@@ -99,6 +191,49 @@ $(cd research/physics && git log -1 --format="%H%n%ai%n%s" "$CLAIMS_FILE" 2>/dev
 2. **Attach this timestamp** as evidence of invention date
 3. **Include all supporting math** and falsifiable predictions
 4. **Cite this document** in patent claims
+
+---
+
+## Next Steps
+
+- [ ] Review claims for completeness and clarity
+- [ ] Develop mathematical proofs for each prediction
+- [ ] Run arXiv similarity check (Phase 2)
+- [ ] Consider provisional patent if commercial potential
+- [ ] Prepare journal submission when proofs complete
+
+**Recommendation**: Update this document **every 2 weeks** as research progresses.
+
+INSTRUCTIONS
+
+# GIT COMMIT (if in repo)
+if [[ -d research/physics/.git ]]; then
+  cd research/physics
+  git add claims.md
+  git commit -m "Physics IP: Timestamped claims as of $TODAY" || echo "[ClaimPackager] No changes to commit"
+  cd -
+fi
+
+# MEMORY STORE
+npx claude-flow@alpha memory store \
+  --key "life-os/ip/physics/claims/${TODAY}" \
+  --value "$(cat outputs/ip/physics_claims_timestamped.md)" \
+  --metadata "{
+    \"WHO\": {\"agent\": \"coder\", \"role\": \"ClaimPackager\", \"capabilities\": [\"cryptographic-hashing\", \"documentation\", \"ip-protection\"]},
+    \"WHEN\": {\"iso\": \"$TIMESTAMP\", \"unix\": $(date +%s)},
+    \"PROJECT\": \"life-os-ip-protection\",
+    \"WHY\": {\"intent\": \"implementation\", \"task_type\": \"ip-timestamping\", \"outcome\": \"priority-proof\", \"phase\": \"claim-packaging\"}
+  }"
+
+# POST-TASK HOOK
+npx claude-flow@alpha hooks post-task \
+  --task-id "physics-ip-phase1-timestamp" \
+  --metrics "claims_timestamped=$(grep -c '^## Claim' $CLAIMS_FILE)"
+
+echo "[ClaimPackager] Claims timestamped: outputs/ip/physics_claims_timestamped.md"
+```
+
+---
 
 ## Phase 2: ArXiv Prior Art Monitoring
 
@@ -179,6 +314,51 @@ cat > outputs/ip/prior_art_watch.md <<REPORT
 **Search Keywords**: $KEYWORDS
 **Categories Monitored**: hep-th (theory), gr-qc (gravity), hep-ph (phenomenology)
 
+---
+
+## Recent Papers (Last 7 Days)
+
+$(python3 <<'REPORTER'
+import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta
+
+with open(f'raw_data/ip/arxiv/results_{datetime.now().strftime("%Y-%W")}.xml', 'r') as f:
+    content = '<root>' + f.read() + '</root>'
+
+root = ET.fromstring(content)
+
+papers = []
+current = {}
+
+for elem in root:
+    if elem.tag.endswith('title'):
+        current['title'] = elem.text
+    elif elem.tag.endswith('id'):
+        current['id'] = elem.text
+    elif elem.tag.endswith('published'):
+        current['published'] = elem.text
+    elif elem.tag.endswith('summary'):
+        current['summary'] = elem.text
+        papers.append(current.copy())
+        current = {}
+
+cutoff = datetime.now() - timedelta(days=7)
+recent = [p for p in papers if datetime.fromisoformat(p['published'].replace('Z', '+00:00')) > cutoff]
+
+if not recent:
+    print("*No papers found matching search criteria in last 7 days*")
+else:
+    for p in recent:
+        print(f"### {p['title']}")
+        print(f"- **arXiv**: {p['id'].split('/')[-1]}")
+        print(f"- **Date**: {p['published'][:10]}")
+        print(f"- **Relevance**: PENDING REVIEW")
+        print()
+REPORTER
+)
+
+---
+
 ## Conflict Detection
 
 **Status**: $(if [[ $(grep -c "### " outputs/ip/prior_art_watch.md 2>/dev/null || echo 0) -gt 0 ]]; then echo "⚠️ REVIEW REQUIRED"; else echo "✅ No conflicts detected"; fi)
@@ -189,6 +369,17 @@ cat > outputs/ip/prior_art_watch.md <<REPORT
 - [ ] Compare mathematical approaches (VE topology, Berry phase)
 - [ ] If overlap detected: Document differences, assert priority
 - [ ] If identical work found: **IMMEDIATE ACTION** - publish or file
+
+---
+
+## Alert Thresholds
+
+- **🔴 CRITICAL**: Identical claim published → Publish immediately or file patent
+- **🟠 HIGH**: Similar approach but different conclusions → Monitor closely
+- **🟡 MEDIUM**: Related topic but orthogonal → Document in literature review
+- **🟢 LOW**: Keyword match but unrelated → No action needed
+
+---
 
 **Next Review**: $(date -d '+7 days' +%Y-%m-%d)
 **Automated**: Runs every Sunday 8:00 PM
@@ -215,6 +406,35 @@ npx claude-flow@alpha hooks post-task \
 echo "[PriorityWatch] Prior art report: outputs/ip/prior_art_watch.md ($PAPERS_FOUND papers)"
 ```
 
+---
+
+## Setup
+
+```bash
+# Create directories
+mkdir -p research/physics outputs/ip raw_data/ip/arxiv prompts
+
+# Create initial claims template
+# (Auto-generated on first run if not exists)
+
+# Create scheduled prompt
+cat > prompts/physics_ip_check.txt <<PROMPT
+Run the physics-ip-tracker skill.
+
+Execute:
+1. Timestamp current claims in research/physics/claims.md
+2. Search arXiv for overlapping work (last 7 days)
+3. Generate prior art watch report
+
+If any HIGH or CRITICAL conflicts detected, alert me immediately.
+Otherwise, show summary of papers found.
+PROMPT
+
+echo "✓ Setup complete!"
+```
+
+---
+
 ## Usage
 
 **Initial timestamping**:
@@ -231,6 +451,24 @@ bash physics_ip_timestamp.sh
 1. Edit `research/physics/claims.md`
 2. Run timestamp script
 3. New hash proves updated date
+
+---
+
+## Expected Outcomes
+
+### Week 1
+- **All claims timestamped** with cryptographic proof
+- **Git history** establishes priority
+- **ArXiv baseline** scanned for prior art
+- **Monitoring active** for future conflicts
+
+### Ongoing
+- **Weekly scans** (automated)
+- **Early warning** if someone publishes similar work
+- **Priority proof** ready for publication or patent
+- **Peace of mind** knowing IP is protected
+
+---
 
 ## Success Metrics
 

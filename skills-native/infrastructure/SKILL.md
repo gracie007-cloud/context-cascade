@@ -1,6 +1,7 @@
 ---
 name: infrastructure
-description: '- **Skill ID**: infrastructure-orchestration'
+description: - **Skill ID**: infrastructure-orchestration
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Infrastructure Orchestration Skill
@@ -320,7 +321,13 @@ File: examples/terraform-infrastructure-example.md
 - Use multi-region deployments for critical systems
 - Implement cost allocation and optimization strategies
 
+---
 
+**Status**: Gold Tier - Production Ready with Comprehensive Resources
+**Maintainer**: Infrastructure & DevOps Team
+**Support**: Refer to sub-skills for specialized guidance
+
+---
 
 ## Core Principles
 
@@ -350,12 +357,42 @@ Deploying directly to 100% of production traffic is a failure mode. Use incremen
 
 Progressive deployment limits blast radius. A bug affecting 5% of users (canary) is recoverable; the same bug affecting 100% of users (direct deployment) is a crisis.
 
-----------|--------------|------------------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|-------------|--------------|------------------|
 | **Configuration Drift Through Manual Changes** | SSH into servers and manually modify configuration. This creates "snowflake servers" - unique, undocumented configurations that break when scaled or replaced. Disaster recovery fails because configuration is not reproducible. | **Immutable Infrastructure**: Never modify running servers. Use configuration management (Ansible/Chef) for pre-deployment setup, then replace entire instances on configuration changes. Configuration must be version-controlled and code-reviewed. |
 | **Monitoring as an Afterthought** | Deploy infrastructure without instrumentation, add monitoring only after production incidents occur. Results in blind spots during outages and prolonged incident resolution times. | **Observability-First Design**: Instrument metrics, logs, and traces BEFORE deploying. Define SLIs (Service Level Indicators) and SLOs (Service Level Objectives) during architecture phase. Deploy monitoring stack (Prometheus/Grafana) before application services. |
 | **Single-Environment Testing** | Test only in development environment, then deploy directly to production. Results in "works on dev" failures in production due to configuration differences, data volume differences, or network topology differences. | **Multi-Stage Pipeline with Production Parity**: Maintain staging environment with production-like data volume, network topology, and resource constraints. Run full test suite (integration + E2E + load) on staging before production deployment. Use infrastructure-as-code to guarantee environment consistency. |
 
-----------|--------------|-----------------|
+---
+
+## Conclusion
+
+Infrastructure orchestration is the foundation of reliable software delivery. The patterns and tools in this skill enable automated provisioning, deployment, and monitoring across cloud platforms, container orchestrators, and on-premises data centers. However, tools alone do not guarantee success - systematic adherence to core principles separates resilient production systems from brittle ones.
+
+The principle of immutable infrastructure eliminates configuration drift by treating servers as disposable units that are replaced, not modified. This requires upfront investment in automation (Terraform, Packer, Docker) but eliminates entire categories of production failures caused by "snowflake servers" - servers with unique, undocumented configurations that break disaster recovery and scaling. When every deployment is a clean slate, reproducibility becomes automatic.
+
+Observable systems expose the three pillars of instrumentation: metrics for performance monitoring, logs for debugging, and traces for distributed request tracking. Without observability, production debugging is guesswork. Instrument BEFORE deploying, not after incidents occur. Define Service Level Objectives (SLOs) during architecture design, not after availability targets are missed. The incremental cost of instrumentation is trivial compared to the cost of prolonged outages caused by blind spots.
+
+Progressive deployment strategies (canary, blue-green, feature flags) limit blast radius by incrementally rolling out changes to small user cohorts before full production traffic. Deploying directly to 100% of traffic converts minor bugs into major incidents. A canary deployment catching a bug affecting 5% of users is a Tuesday; the same bug affecting 100% of users is a crisis requiring executive escalation and customer notifications.
+
+The specialized sub-skills (Docker containerization, Terraform IaC) provide deep expertise in specific domains, but this parent skill provides the orchestration framework that coordinates their execution. Use the workflows and agent assignments in this skill to systematically provision infrastructure, deploy applications, and maintain production systems with confidence. Infrastructure mastery is not about memorizing tool syntax - it is about applying consistent principles that guarantee reliability, observability, and repeatability across all environments.
+
+## Core Principles
+
+1. **Infrastructure as Code (IaC)** - All infrastructure changes must be codified, version-controlled, and reproducible. Never make manual changes that cannot be recreated through code execution.
+
+2. **Defense in Depth** - Implement multiple layers of security, reliability, and observability. Single points of failure are unacceptable for production systems.
+
+3. **Immutable Infrastructure** - Treat infrastructure as disposable and replaceable. Deploy new instances rather than modifying existing ones to ensure consistency and enable rapid rollback.
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Better Approach |
+|-------------|--------------|-----------------|
 | **Manual Configuration** - Making infrastructure changes directly through cloud console or SSH | Creates undocumented drift, prevents reproducibility, breaks disaster recovery | Use IaC tools (Terraform, CloudFormation), codify all changes, apply through CI/CD pipelines |
 | **Skipping Multi-Environment Testing** - Deploying directly to production without staging validation | Production incidents from untested changes, no safe rollback path, user impact | Implement dev -> staging -> production pipeline, validate infrastructure changes in staging first |
 | **Ignoring State Management** - Not locking or backing up Terraform/IaC state files | State conflicts between team members, lost infrastructure state, inability to manage resources | Use remote state backends (S3 + DynamoDB, Terraform Cloud), enable state locking, automated backups |
@@ -375,3 +412,108 @@ Progressive deployment limits blast radius. A bug affecting 5% of users (canary)
 The infrastructure orchestration skill enables teams to build robust, scalable, and secure cloud infrastructure through systematic automation and best practices. By treating infrastructure as code, implementing proper monitoring and observability, and following defense-in-depth principles, organizations can achieve high availability, rapid deployment, and operational excellence. The skill coordinates specialized sub-skills for Docker containerization and Terraform IaC while providing comprehensive workflows for provisioning, deployment, monitoring, and configuration management.
 
 Success in infrastructure orchestration requires commitment to automation, security-first thinking, and operational discipline. Avoiding anti-patterns like manual configuration changes or skipping multi-environment testing prevents costly production incidents and technical debt. The integration of CI/CD pipelines, comprehensive monitoring, and disaster recovery procedures ensures infrastructure can scale reliably while maintaining security compliance. By following the workflows and best practices outlined in this skill, teams can deliver production-ready infrastructure that meets modern cloud-native standards while remaining maintainable and cost-effective over time.
+
+---
+
+## System Design Integration (Dr. Synthara Methodology)
+
+### Scaling Decision Tree
+
+```
+Need to handle more load?
+|
++-- Mostly CPU/RAM bound + small scale + OK if brief downtime?
+|   +-- Vertical scale (scale up) as short-term patch
+|
++-- Need high availability OR growth beyond one machine?
+    +-- Horizontal scale (scale out)
+        +-- Add load balancer
+        +-- Make app tier stateless
+        +-- Move state to shared systems (DB/cache/object storage)
+```
+
+**System-Designer Thought**: Vertical scaling is a DELAY TACTIC; horizontal scaling is an ARCHITECTURE CHOICE.
+
+### Load Balancer Algorithm Selector
+
+```
+Are servers identical + requests similar?
++-- Round robin
+
+Are sessions variable length (long polls, uploads)?
++-- Least connections
+
+Do servers have different capacity?
++-- Weighted RR / Weighted least-connections
+
+Need stickiness without shared session store?
++-- IP hash (but beware NAT skew) / consistent hashing
+
+Global users?
++-- Geo routing + regional LBs
+```
+
+**What I'm Thinking**:
+- Health checks AREN'T optional
+- The LB forces the real question: "Where do sessions live?"
+- If you need stickiness, say why
+- If you can avoid it, you should
+
+### SPOF Identification & Mitigation Table
+
+| Component | SPOF Risk | Mitigation Strategy |
+|-----------|-----------|---------------------|
+| **Load Balancer** | Single LB failure | Redundancy, failover, managed LB, multi-AZ |
+| **Database** | Single DB failure | Replication + automated failover + backups |
+| **Cache** | Cache failure melts DB | Degrade gracefully (cache miss shouldn't melt DB) |
+| **Queue** | Message loss | Durable broker, replay strategy, idempotent consumers |
+| **DNS** | DNS failure | Multiple DNS providers, low TTL |
+| **Secrets** | Vault unavailability | HA Vault cluster, cached secrets with expiry |
+
+**What I'm Thinking**: "How does this fail at 2am under traffic?"
+If the answer is "everything stops," you haven't finished.
+
+### Master Design Flow for Infrastructure
+
+```
+DESIGN FLOW
+1) Define invariants + SLOs
+   +-- Uptime target (99.9%? 99.99%?)
+   +-- RTO/RPO requirements
+2) Model traffic (QPS, burstiness, geo)
+3) Scale plan
+   +-- vertical (short-term)
+   +-- horizontal (LB + stateless)
+4) Reliability plan
+   +-- remove SPOFs
+   +-- replication/failover
+   +-- graceful degradation
+5) Security plan
+   +-- network segmentation
+   +-- secrets management
+   +-- least privilege
+6) Observability + ops
+   +-- metrics/logs/traces
+   +-- deploy strategy + rollback
+```
+
+### Phase 0 Infrastructure Constraint Extraction
+
+| Constraint | Questions |
+|------------|-----------|
+| **Availability** | SLO (99.9%? 99.99%)? RTO/RPO? |
+| **Latency Target** | p50/p95/p99? Global vs regional? |
+| **Traffic Model** | QPS now? Growth rate? Burst patterns? |
+| **Compliance** | SOC2? HIPAA? PCI-DSS? Data residency? |
+| **Cost** | Budget constraints? Cost per request target? |
+
+### The 90-Second Interview Narrative for Infrastructure
+
+1. **Clarify** SLOs, traffic model, compliance
+2. **Baseline** single-server and request flow
+3. **Identify SPOFs** (compute, DB, network, cache)
+4. **Evolve** split tiers -> LB -> stateless app -> DB replication
+5. **Reliability** failover, multi-AZ, graceful degradation
+6. **Security** network segmentation, secrets, IAM
+7. **Observability** logs/metrics/traces, alerting
+8. **Trade-offs** cost vs latency vs complexity

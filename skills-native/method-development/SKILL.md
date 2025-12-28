@@ -1,17 +1,70 @@
 ---
 name: method-development
-description: Develop novel machine learning methods with rigorous ablation studies for Deep Research SOP Pipeline D. Use after baseline replication passes Quality Gate 1, when creating new algorithms, proposing modifications to existing methods, or conducting systematic experimental validation. Includes architectural innovation, hyperparameter optimization, and component-wise ablation analysis leading to Quality Gate 2.
+description: Skill for method-development
+allowed-tools: Read, Glob, Grep, WebSearch, WebFetch, Task, TodoWrite
 ---
 
-for Deep Research SOP Pipeline D. Use after baseline replication passes Quality
+name: method-development
+description: Develop novel machine learning methods with rigorous ablation studies
+  for Deep Research SOP Pipeline D. Use after baseline replication passes Quality
   Gate 1, when creating new algorithms, proposing modifications to existing methods,
   or conducting systematic experimental validation. Includes architectural innovation,
   hyperparameter optimization, and component-wise ablation analysis leading to Quality
   Gate 2.
+version: 1.0.0
+category: research
+tags:
 - research
 - analysis
 - planning
+author: ruv
+---
 
+# Method Development
+
+Systematically develop and validate novel machine learning methods through controlled experimentation, ablation studies, and architectural innovation following Deep Research SOP Pipeline D.
+
+## Overview
+
+**Purpose**: Develop novel ML methods with rigorous experimental validation after baseline replication
+
+**When to Use**:
+- Quality Gate 1 (baseline replication) has APPROVED status
+- Proposing architectural modifications to baseline methods
+- Developing new training algorithms or optimization strategies
+- Creating novel model components or attention mechanisms
+- Systematic hyperparameter optimization required
+- Ablation studies needed to validate design choices
+
+**Quality Gate**: Leads to Quality Gate 2 (Model & Evaluation Validation)
+
+**Prerequisites**:
+- Baseline replication completed with ±1% tolerance (Quality Gate 1 passed)
+- Baseline reproducibility package available
+- Statistical analysis framework in place
+- Docker environment configured
+- GPU resources allocated (4-8 GPUs recommended)
+
+**Outputs**:
+- Novel method implementation with complete codebase
+- Ablation study results (minimum 5 components tested)
+- Performance comparison vs. baseline (statistical significance)
+- Architectural diagrams and design documentation
+- Hyperparameter sensitivity analysis
+- Quality Gate 2 checklist (model validation requirements)
+
+**Time Estimate**: 3-7 days (varies by complexity)
+- Phase 1 (Architecture Design): 4-8 hours
+- Phase 2 (Prototype Implementation): 1-2 days
+- Phase 3 (Ablation Studies): 2-3 days
+- Phase 4 (Optimization): 1-2 days
+- Phase 5 (Comparative Evaluation): 4-8 hours
+- Phase 6 (Documentation): 2-4 hours
+- Phase 7 (Gate 2 Validation): 2-4 hours
+
+**Agents Used**: system-architect, coder, tester, ethics-agent, reviewer, archivist, evaluator
+
+---
 
 ## Quick Start
 
@@ -73,7 +126,95 @@ npx claude-flow@alpha sparc run evaluator \
   "/validate-gate-2 --pipeline E --method novel-method"
 ```
 
+---
 
+## Detailed Instructions
+
+### Phase 1: Architecture Design (4-8 hours)
+
+**Agent**: system-architect
+
+**Objectives**:
+1. Analyze baseline architecture and identify improvement opportunities
+2. Design novel components with theoretical justification
+3. Create architectural diagrams showing modifications
+4. Document design decisions and hypotheses
+
+**Steps**:
+
+#### 1.1 Baseline Architecture Analysis
+```bash
+# Load baseline architecture
+python scripts/analyze_baseline_architecture.py \
+  --checkpoint baseline-weights.pth \
+  --output docs/baseline-architecture.md
+
+# Identify bottlenecks
+python scripts/profile_baseline.py \
+  --mode training \
+  --output profiling/baseline-profile.json
+```
+
+**Deliverable**: Baseline architecture analysis document
+
+#### 1.2 Novel Architecture Design
+Invoke system-architect agent with:
+```
+Design a novel architecture that improves upon the baseline by:
+1. Addressing identified bottlenecks
+2. Incorporating recent advances (Transformers, efficient attention, etc.)
+3. Maintaining computational feasibility
+4. Providing theoretical justification
+
+Output:
+- Architectural diagram (draw.io or GraphViz)
+- Component specifications
+- Computational complexity analysis (O(n) notation)
+- Expected performance improvements with justification
+```
+
+**Deliverable**: Novel architecture specification document
+
+#### 1.3 Hypothesis Formulation
+Document testable hypotheses:
+```markdown
+## Hypotheses
+
+### H1: Novel Attention Mechanism
+**Claim**: Multi-scale attention improves long-range dependency modeling
+**Baseline**: Standard scaled dot-product attention
+**Expected**: +2-5% accuracy on sequence tasks
+**Ablation**: Compare with/without multi-scale component
+
+### H2: Residual Normalization
+**Claim**: Pre-norm residual blocks stabilize training
+**Baseline**: Post-norm residual blocks
+**Expected**: 1.5x faster convergence
+**Ablation**: Pre-norm vs. post-norm vs. no-norm
+
+[Continue for each novel component...]
+```
+
+**Deliverable**: Hypotheses document with testable predictions
+
+#### 1.4 Design Review
+Coordinate with reviewer agent:
+```bash
+npx claude-flow@alpha hooks notify \
+  --message "Architecture design complete, requesting review" \
+  --recipients "reviewer"
+```
+
+**Review Checklist**:
+- [ ] Theoretical justification sound
+- [ ] Computational complexity acceptable
+- [ ] Hypotheses testable with ablation studies
+- [ ] Design maintains reproducibility (deterministic operations)
+- [ ] Novel components well-documented
+
+**Deliverable**: Approved architecture design
+
+---
 
 ### Phase 2: Prototype Implementation (1-2 days)
 
@@ -196,7 +337,101 @@ Target: 100% code coverage
 
 **Deliverable**: Complete test suite with coverage report
 
+---
 
+### Phase 3: Ablation Studies (2-3 days)
+
+**Agent**: tester
+
+**Objectives**:
+1. Systematically ablate each novel component
+2. Measure performance impact with statistical significance
+3. Identify critical vs. non-critical components
+4. Validate architectural hypotheses
+
+**Steps**:
+
+#### 3.1 Ablation Configuration
+Create ablation matrix in `experiments/ablation_matrix.yaml`:
+```yaml
+ablation_matrix:
+  # Baseline: All novel components enabled
+  - name: "baseline"
+    ablations: []
+    expected_metric: 0.850
+
+  # Ablation 1: Disable multi-scale attention
+  - name: "ablate_multiscale_attn"
+    ablations: ["multiscale_attention"]
+    hypothesis: "Should drop 2-5% accuracy"
+
+  # Ablation 2: Disable pre-norm residual
+  - name: "ablate_prenorm"
+    ablations: ["prenorm_residual"]
+    hypothesis: "Should converge 1.5x slower"
+
+  # Ablation 3: Disable both (check interaction effects)
+  - name: "ablate_attn_and_prenorm"
+    ablations: ["multiscale_attention", "prenorm_residual"]
+    hypothesis: "Should show super-additive degradation if components synergize"
+
+  # [Continue for all 2^n combinations where n=number of novel components]
+  # Minimum 5 components tested individually
+```
+
+#### 3.2 Run Ablation Experiments
+```bash
+# Run ablation suite with 3 seeds for statistical validity
+python experiments/scripts/run_ablations.py \
+  --config experiments/ablation_matrix.yaml \
+  --seeds 42,123,456 \
+  --gpus 4 \
+  --output experiments/results/ablations/
+
+# Expected runtime: 2-3 days depending on model complexity
+```
+
+**Monitoring**:
+```bash
+# Monitor progress in real-time
+watch -n 60 'python scripts/check_ablation_progress.py'
+
+# Alert on failures
+python scripts/monitor_ablations.py \
+  --alert-on-failure \
+  --email your-email@example.com
+```
+
+#### 3.3 Statistical Analysis
+```bash
+# Analyze ablation results
+python scripts/analyze_ablations.py \
+  --results experiments/results/ablations/ \
+  --baseline experiments/results/ablations/baseline/ \
+  --test paired-ttest \
+  --significance 0.05 \
+  --bonferroni-correction \
+  --output experiments/results/ablation_analysis.pdf
+```
+
+**Deliverable**: Ablation study report with statistical significance
+
+#### 3.4 Component Importance Ranking
+```python
+# Generate component importance scores
+from sklearn.ensemble import RandomForestRegressor
+
+# Train meta-model: ablations -> performance
+# Rank components by feature importance
+python scripts/rank_component_importance.py \
+  --ablations experiments/results/ablations/ \
+  --method random-forest \
+  --output docs/component_importance.md
+```
+
+**Deliverable**: Component importance ranking
+
+---
 
 ### Phase 4: Hyperparameter Optimization (1-2 days)
 
@@ -258,7 +493,82 @@ python scripts/sensitivity_analysis.py \
 
 **Deliverable**: Optimal hyperparameter configuration
 
+---
 
+### Phase 5: Comparative Evaluation (4-8 hours)
+
+**Agent**: tester
+
+**Objectives**:
+1. Compare novel method vs. baseline with statistical rigor
+2. Evaluate on multiple metrics (accuracy, speed, memory)
+3. Test generalization across datasets/splits
+4. Document performance improvements
+
+**Steps**:
+
+#### 5.1 Benchmark Suite
+```bash
+# Run comprehensive benchmarks
+python experiments/scripts/benchmark_comparison.py \
+  --novel-method src/models/novel_model.py \
+  --novel-checkpoint experiments/results/best_checkpoint.pth \
+  --baseline ../baseline-replication-package/baseline.pth \
+  --datasets "train,val,test" \
+  --metrics "accuracy,f1,precision,recall,latency,memory" \
+  --runs 5 \
+  --output experiments/results/comparison/
+```
+
+#### 5.2 Statistical Comparison
+```bash
+# Paired t-test with Bonferroni correction
+python scripts/statistical_comparison.py \
+  --novel experiments/results/comparison/novel_*.json \
+  --baseline experiments/results/comparison/baseline_*.json \
+  --test paired-ttest \
+  --correction bonferroni \
+  --significance 0.05
+```
+
+**Expected Output**:
+```
+Novel Method vs. Baseline Comparison
+====================================
+Metric: Accuracy
+  Novel:    0.875 ± 0.003
+  Baseline: 0.850 ± 0.002
+  Δ:        +2.5% (p=0.001, significant)
+
+Metric: Latency (ms)
+  Novel:    45.2 ± 1.1
+  Baseline: 42.8 ± 0.9
+  Δ:        +5.6% (p=0.01, significant)
+
+Metric: Memory (GB)
+  Novel:    8.4 ± 0.1
+  Baseline: 7.2 ± 0.1
+  Δ:        +16.7% (p<0.001, significant)
+
+Conclusion: Novel method achieves significant accuracy improvement (+2.5%)
+at the cost of increased latency (+5.6%) and memory (+16.7%).
+Pareto-optimal for accuracy-critical applications.
+```
+
+**Deliverable**: Comparative evaluation report
+
+#### 5.3 Generalization Testing
+```bash
+# Test on held-out datasets
+python scripts/test_generalization.py \
+  --model experiments/results/best_checkpoint.pth \
+  --datasets "dataset2,dataset3,dataset4" \
+  --output experiments/results/generalization/
+```
+
+**Deliverable**: Generalization analysis
+
+---
 
 ### Phase 6: Documentation (2-4 hours)
 
@@ -328,7 +638,71 @@ python train.py \
 
 **Deliverable**: Complete documentation package
 
+---
 
+### Phase 7: Quality Gate 2 Validation (2-4 hours)
+
+**Agent**: evaluator
+
+**Objectives**:
+1. Validate all Gate 2 requirements
+2. Coordinate ethics review with ethics-agent
+3. Generate Gate 2 checklist
+4. Obtain APPROVED, CONDITIONAL, or REJECTED status
+
+**Steps**:
+
+#### 7.1 Gate 2 Requirements Check
+Run evaluator agent:
+```bash
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-2 --pipeline E --method novel-method --include-ethics"
+```
+
+**Gate 2 Requirements** (from Deep Research SOP):
+- [ ] Novel method implemented with full codebase
+- [ ] Ablation studies completed (minimum 5 components)
+- [ ] Statistical comparison vs. baseline (p < 0.05 for improvements)
+- [ ] Method card completed (≥90% sections filled)
+- [ ] Ethics review APPROVED (from ethics-agent)
+- [ ] Reproducibility tested (3/3 successful runs)
+- [ ] Performance meets or exceeds baseline
+- [ ] Code quality: 100% test coverage, linting passed
+- [ ] Documentation: README with ≤5 steps to reproduce
+
+#### 7.2 Ethics Review Coordination
+Coordinate with ethics-agent:
+```bash
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component model --gate 2"
+```
+
+**Ethics Review Domains** (Gate 2):
+1. Safety Risks: Harmful outputs, adversarial robustness
+2. Fairness Risks: Model bias, demographic parity
+3. Privacy Risks: Data leakage, membership inference
+
+**Deliverable**: Ethics review approval
+
+#### 7.3 Gate 2 Decision
+Based on evaluator agent's assessment:
+
+**APPROVED**: All critical requirements met, proceed to holistic evaluation
+**CONDITIONAL**: Minor gaps, mitigations in progress, proceed with restrictions
+**REJECTED**: Unmitigated critical issues, return to method development
+
+#### 7.4 Memory Storage
+Store Gate 2 results:
+```bash
+npx claude-flow@alpha memory store \
+  --key "sop/gate-2/status" \
+  --value "APPROVED" \
+  --metadata '{"method": "novel-method", "accuracy": 0.875, "date": "2025-11-01"}'
+```
+
+**Deliverable**: Gate 2 checklist and decision
+
+---
 
 ## Integration with Deep Research SOP
 
@@ -368,7 +742,79 @@ npx claude-flow@alpha memory retrieve \
   --key "sop/baseline-replication/results"
 ```
 
+---
 
+## Troubleshooting
+
+### Issue: Novel method underperforms baseline
+**Symptoms**: Novel method achieves lower accuracy than baseline
+**Diagnosis**:
+1. Check ablation study results - which components hurt performance?
+2. Verify hyperparameter optimization converged
+3. Test on validation set (not just training set)
+
+**Solutions**:
+```bash
+# Re-run ablation studies with finer granularity
+python experiments/scripts/run_ablations.py --fine-grained
+
+# Extend hyperparameter search
+python experiments/scripts/optimize_hyperparameters.py --n-trials 500
+
+# Check for implementation bugs
+python tests/integration/test_gradient_flow.py
+python tests/integration/test_numerical_stability.py
+```
+
+### Issue: Ablation studies show no significant differences
+**Symptoms**: All ablations yield similar performance (p > 0.05)
+**Diagnosis**: Novel components may not be contributing meaningfully
+**Solutions**:
+1. Increase ablation granularity (test sub-components)
+2. Verify components are actually being used (check forward pass)
+3. Increase number of runs for statistical power
+4. Consider larger effect sizes (stronger architectural changes)
+
+### Issue: Gate 2 validation rejected
+**Symptoms**: evaluator agent returns REJECTED status
+**Common Causes**:
+- Ethics review flagged critical risks
+- Reproducibility tests failed (non-deterministic behavior)
+- Performance regression vs. baseline
+- Incomplete documentation
+
+**Solutions**:
+```bash
+# Check Gate 2 requirements
+npx claude-flow@alpha sparc run evaluator \
+  "/validate-gate-2 --pipeline E --method novel-method --verbose"
+
+# Address ethics concerns
+npx claude-flow@alpha sparc run ethics-agent \
+  "/assess-risks --component model --gate 2 --mitigation-plan"
+
+# Fix reproducibility
+python scripts/test_determinism.py --runs 10 --strict
+```
+
+### Issue: Computational resource exhaustion
+**Symptoms**: OOM errors, extremely slow training
+**Solutions**:
+```bash
+# Enable gradient checkpointing
+python train.py --gradient-checkpointing
+
+# Reduce batch size
+python train.py --batch-size 16  # Instead of 32
+
+# Use mixed precision training
+python train.py --fp16
+
+# Profile memory usage
+python scripts/profile_memory.py --model novel-method
+```
+
+---
 
 ## Related Skills and Commands
 
@@ -387,7 +833,26 @@ npx claude-flow@alpha memory retrieve \
 ### Parallel Skills
 - `literature-synthesis` - Can run in parallel to gather SOTA comparisons
 
+---
 
+## References
+
+### Academic Standards
+- Mitchell et al. (2019): Model Cards for Model Reporting
+- Sculley et al. (2015): Hidden Technical Debt in Machine Learning Systems
+- Lipton & Steinhardt (2019): Troubling Trends in Machine Learning Scholarship
+
+### Reproducibility Standards
+- NeurIPS Reproducibility Checklist
+- ACM Artifact Evaluation Badging
+- Papers with Code Reproducibility Guidelines
+
+### Statistical Methods
+- Dror et al. (2018): The Hitchhiker's Guide to Testing Statistical Significance in NLP
+- Bonferroni Correction for Multiple Comparisons
+- Paired T-Tests for Method Comparison
+
+---
 
 ## Appendix
 

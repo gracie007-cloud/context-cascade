@@ -1,37 +1,7 @@
-# When Internationalizing App Use i18n Automation
-
 ---
 name: when-internationalizing-app-use-i18n-automation
-trigger: "when user requests internationalization, localization, or multi-language support"
-description: "Automate internationalization and localization workflows for web applications with translation, key generation, and i18n library setup"
-version: 2.0.0
-author: Base Template Generator
-category: localization
-tags:
-  - i18n
-  - localization
-  - translation
-  - multi-language
-  - automation
-agents:
-  - coder
-  - researcher
-  - reviewer
-  - tester
-coordinator: hierarchical-coordinator
-memory_patterns:
-  - swarm/i18n/source-strings
-  - swarm/i18n/translations
-  - swarm/i18n/config
-  - swarm/i18n/test-results
-success_criteria:
-  - i18n library configured and integrated
-  - Source strings extracted to translation files
-  - Translation keys generated systematically
-  - Multiple locales supported
-  - Fallback language configured
-  - Tests verify translations load correctly
-  - Documentation generated for translators
+description: Automate internationalization and localization workflows for web applications with translation, key generation, and i18n library setup
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 ## Trigger Conditions

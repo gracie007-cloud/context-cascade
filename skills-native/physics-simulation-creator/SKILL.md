@@ -1,6 +1,7 @@
 ---
 name: physics-simulation-creator
-description: > Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter tuning. Use for ANY physics simulation to maximize accuracy and minimize computational complexity. The k parameter optimizes numerical behavior - works for smooth problems AND singularities. Automatically detects if singularities exist and handles them appropriately.
+description: Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter tuning. Use for ANY physics simulation to maximize accuracy and minimize computational complexity. The k parameter optimizes numerical behavior - works for smooth problems AND singularities. Automatically detects if singularities exist and handles them appropriately.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Physics Simulation Creator
@@ -60,7 +61,16 @@ The skill automatically checks: **"Does this problem have a singularity I need t
 - If YES: k is tuned to handle it (e.g., k=-1 for 1/r)
 - If NO: k is still optimized for accuracy/complexity (often k != 0)
 
-----|-----------|---------------|----------------|----------------|
+---
+
+## When k != 0 Provides Meaningful Gains
+
+### Understanding the k(L) Formula
+
+The k(L) formula from multi-objective optimization shows optimal k varies by scale:
+
+| Scale | Optimal k | Accuracy Gain | Step Reduction | Recommendation |
+|-------|-----------|---------------|----------------|----------------|
 | Planck (1e-35 m) | 0.64 | 50%+ | 50-100x | **ALWAYS use NNC** |
 | Atomic (1e-10 m) | 0.30 | 15-30% | 7-22x | **Use NNC** - significant |
 | Micro (1e-6 m) | 0.24 | 10-20% | 5-10x | Use NNC for large sims |
@@ -89,7 +99,55 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
 - Optimal k improves accuracy by 10-40,000x (for singularities) or 10-30% (for smooth microscale)
 - These gains apply to BOTH singular and smooth problems (but magnitude differs)
 
+---
 
+## Bundled Script: ai_simulation_helper.py
+
+**Location**: `skills/specialists/physics-simulation-creator/ai_simulation_helper.py`
+
+### For ANY Physics Problem
+
+```bash
+# Get optimal k from length scale (works for ALL problems)
+python ai_simulation_helper.py --length-scale 1e-10 --json
+
+# Check if problem has singularity AND get optimal k
+python ai_simulation_helper.py --problem "molecular dynamics" --json
+
+# Generate optimized code
+python ai_simulation_helper.py --length-scale 1e-10 --generate python --json
+
+# Lookup k across all scales
+python ai_simulation_helper.py --lookup all --json
+```
+
+### Script Output Structure
+
+```json
+{
+  "k": 0.2963,
+  "source": "length_scale",
+  "length_scale": 1e-10,
+  "has_singularity": false,
+  "singularity_type": "none",
+  "expected_accuracy_gain": "15-30% over classical",
+  "expected_speedup": "1.5-3x fewer steps"
+}
+```
+
+Or with singularity:
+```json
+{
+  "k": -1.0,
+  "source": "singularity_type",
+  "singularity_type": "1/r",
+  "has_singularity": true,
+  "expected_accuracy_gain": "10,000x+ over classical",
+  "expected_speedup": "7-22x fewer steps"
+}
+```
+
+---
 
 ## Core Formula
 
@@ -115,7 +173,52 @@ This works for ALL problems - singular or smooth.
 - If smooth/unknown: use k(L) formula based on length scale
 - NEVER assume k=0 without checking
 
+---
 
+## Workflow Phases
+
+### Phase 1: Problem Analysis (Researcher Agent)
+
+**Questions to answer**:
+1. What is the characteristic length scale?
+2. Does the problem have any singularities? (1/r, 1/r^2, etc.)
+3. What are the accuracy requirements?
+4. What are the performance requirements?
+
+**Output**:
+```yaml
+problem_analysis:
+  length_scale: 1e-10  # meters
+  has_singularity: false
+  singularity_type: null
+  accuracy_target: 1e-6
+  performance_target: real-time
+```
+
+### Phase 2: k-Value Selection (CLI Script)
+
+```bash
+# Always run this - it works for ALL problems
+python ai_simulation_helper.py --length-scale {L} --json
+```
+
+**If singularity detected**:
+```bash
+python ai_simulation_helper.py --singularity "1/r" --json
+```
+
+### Phase 3: Code Generation (Coder Agent)
+
+Generate simulation with optimal k, whether singular or smooth.
+
+### Phase 4: Validation (Tester Agent)
+
+Compare against classical (k=0) to verify improvement:
+- Accuracy comparison
+- Step count comparison
+- Convergence rate comparison
+
+---
 
 ## Sub-Agents (From 206-Agent Registry)
 
@@ -151,7 +254,40 @@ This works for ALL problems - singular or smooth.
 - Identifies numerical issues (NaN, overflow, divergence)
 - Maps to ERROR-DETECTION.md patterns
 
+---
 
+## Input/Output Contracts
+
+### Input Contract
+
+```yaml
+input_contract:
+  required:
+    - problem_description: string
+  optional:
+    - length_scale: float  # If known
+    - singularity_type: string  # If known ("none" for smooth)
+    - accuracy_target: float
+    - performance_target: string
+    - target_language: string  # "python" or "typescript"
+```
+
+### Output Contract
+
+```yaml
+output_contract:
+  required:
+    - optimal_k: float
+    - k_source: string  # "length_scale" or "singularity_type"
+    - has_singularity: boolean
+    - simulation_code: string
+  optional:
+    - accuracy_comparison: object  # vs k=0
+    - performance_comparison: object  # vs k=0
+    - validation_report: object
+```
+
+---
 
 ## Examples
 
@@ -213,13 +349,40 @@ python ai_simulation_helper.py --length-scale 1e21 --json
 
 **Result**: At galactic scales, k goes slightly negative but is still not exactly 0.
 
---------|--------|
+---
+
+## Key Mindset Shift
+
+### OLD (Incomplete) Thinking:
+> "Use NNC only for singularities. Otherwise use classical (k=0)."
+
+### NEW (Complete) Thinking:
+> "NNC with optimal k provides significant gains for singularities and microscale problems. For smooth human-scale problems, k=0 remains optimal. Always CHECK rather than ASSUME."
+
+### Decision Summary:
+| Condition | Action |
+|-----------|--------|
 | Singularity present | Use k from singularity table (k=-1 for 1/r, etc.) |
 | L < 1e-6 m, smooth | Use k from k(L) formula (gains > 10%) |
 | Human scale, smooth | k=0 is optimal (gains < 5%) |
 | Need ultra-precision | Consider k(L) even for smooth problems |
 
+---
 
+## Guardrails
+
+### ALWAYS
+- Run the CLI script to get optimal k (even for smooth problems)
+- Check if singularities exist (but don't ONLY use skill for singularities)
+- Compare results against k=0 baseline
+- Document the k value and why it was chosen
+
+### NEVER
+- Assume k=0 is optimal without checking
+- Skip k optimization because "there's no singularity"
+- Use this skill ONLY for singular problems
+
+---
 
 ## Success Metrics
 
@@ -230,7 +393,16 @@ python ai_simulation_helper.py --length-scale 1e21 --json
 | Performance vs k=0 | Document step reduction |
 | Singularity detection | Correctly identify if present |
 
+---
 
+## References
+
+- Meta-Calculus Portfolio: https://meta-calculus-portfolio-production.up.railway.app/
+- k(L) Formula: https://meta-calculus-portfolio-production.up.railway.app/results/multiscale
+- CASCADE Results: https://meta-calculus-portfolio-production.up.railway.app/cascade
+- GUD Benchmarks: https://meta-calculus-portfolio-production.up.railway.app/proof/gud-benchmarks
+
+---
 
 ## Memory Namespace
 
@@ -242,7 +414,170 @@ namespaces:
   - improvement/audits/physics-simulation-creator: Skill audits
 ```
 
-----|--------------|
+---
+
+## Recursive Improvement Integration (v2.0)
+
+### Role in the Loop
+
+Physics-simulation-creator is part of the recursive self-improvement loop:
+
+```
+physics-simulation-creator (SPECIALIST SKILL)
+    |
+    +--> Creates optimized physics simulations with NNC
+    +--> Can be improved BY prompt-forge
+    +--> Audited BY skill-auditor
+```
+
+### Phase 0: Expertise Loading
+
+Before generating simulations, check for domain expertise:
+
+```yaml
+expertise_check:
+  domain: physics-simulation
+  path: .claude/expertise/physics-simulation.yaml
+
+  if_exists:
+    - Load: Known singularity patterns
+    - Load: Proven k-value mappings
+    - Load: Common simulation pitfalls
+    - Apply: Use expertise to guide k-selection
+
+  if_missing:
+    - Flag: Discovery mode
+    - Plan: Generate expertise learnings after successful simulations
+    - Capture: New problem types, k-values, improvement metrics
+```
+
+### Input/Output Contracts
+
+```yaml
+input_contract:
+  required:
+    - problem_description: string  # Physics problem to simulate
+  optional:
+    - length_scale: float  # Characteristic scale in meters
+    - singularity_type: string  # "1/r", "1/r^2", "1/sqrt(r)", "none"
+    - accuracy_target: float  # Desired accuracy (e.g., 1e-6)
+    - performance_target: string  # "real-time", "batch", "consumer-hardware"
+    - target_language: string  # "python" or "typescript"
+
+output_contract:
+  required:
+    - optimal_k: float  # Selected k value
+    - k_source: string  # "length_scale" or "singularity_type"
+    - has_singularity: boolean  # Whether singularity detected
+    - simulation_code: string  # Generated code
+  optional:
+    - accuracy_comparison: object  # vs k=0 baseline
+    - step_reduction: object  # vs k=0 baseline
+    - validation_report: object  # Verification results
+    - expertise_delta: object  # New learnings for expertise update
+```
+
+### Quality Scoring System
+
+```yaml
+scoring_dimensions:
+  k_selection_accuracy:
+    score: 0.0-1.0
+    weight: 0.30
+    checks:
+      - "k matches singularity type (if present)"
+      - "k from CLI script (not hardcoded)"
+      - "k validated against expected range [-6, 1]"
+
+  transform_correctness:
+    score: 0.0-1.0
+    weight: 0.25
+    checks:
+      - "Forward transform implemented"
+      - "Inverse transform implemented"
+      - "Roundtrip error < 1e-10"
+      - "k=1 special case handled"
+
+  physics_accuracy:
+    score: 0.0-1.0
+    weight: 0.25
+    checks:
+      - "Solution bounded at singularity"
+      - "Matches analytical solution (if available)"
+      - "Energy conservation (for dynamics)"
+      - "Improvement over k=0 documented"
+
+  documentation_quality:
+    score: 0.0-1.0
+    weight: 0.20
+    checks:
+      - "k value and source documented"
+      - "Comparison vs k=0 included"
+      - "Expected improvement stated"
+      - "Assumptions explicit"
+
+  overall_score: weighted_average
+  minimum_passing: 0.7
+```
+
+### Eval Harness Integration
+
+Physics-simulation-creator improvements are tested against:
+
+```yaml
+benchmark: physics-simulation-benchmark-v1
+  tests:
+    - ps-001: Molecular dynamics with Lennard-Jones
+    - ps-002: Crack tip stress field
+    - ps-003: Vortex core velocity
+    - ps-004: Radiation intensity
+    - ps-005: Smooth quantum harmonic oscillator
+    - ps-006: N-body computational efficiency
+  minimum_scores:
+    k_selection_accuracy: 0.8
+    transform_correctness: 0.9
+    physics_accuracy: 0.7
+
+regression: physics-simulation-regression-v1
+  tests:
+    - psr-001: k sign correct for singularities (must_pass)
+    - psr-002: Transform roundtrip preserves values (must_pass)
+    - psr-003: NNC improves over k=0 for singularities (must_pass)
+    - psr-004: CLI script produces valid k (must_pass)
+  failure_threshold: 0
+```
+
+### Uncertainty Handling
+
+When problem type is unclear:
+
+```yaml
+confidence_check:
+  if confidence >= 0.8:
+    - Proceed with k-selection
+    - Document assumptions about singularity type
+    - Generate simulation code
+
+  if confidence 0.5-0.8:
+    - Present 2-3 k-value options
+    - Ask user: "Does this problem have a singularity?"
+    - Ask user: "What is the characteristic length scale?"
+    - Document uncertainty areas
+
+  if confidence < 0.5:
+    - DO NOT proceed with simulation
+    - List what is unclear about the physics
+    - Ask specific clarifying questions
+    - Request physics equations or reference materials
+    - NEVER guess at singularity type
+```
+
+### Cross-Skill Coordination
+
+Physics-simulation-creator works with:
+
+| Skill | Coordination |
+|-------|--------------|
 | **prompt-forge** | Can improve this skill's documentation |
 | **skill-auditor** | Audits this skill for improvement opportunities |
 | **functionality-audit** | Validates simulation correctness |
@@ -265,7 +600,21 @@ namespaces:
 - Support auditing with clear metrics
 - Capture learnings for expertise update
 
+---
 
+## !! SKILL COMPLETION VERIFICATION (MANDATORY) !!
+
+After invoking this skill, verify:
+
+- [ ] **CLI Script Used**: Did you run ai_simulation_helper.py?
+- [ ] **k Value Justified**: Is the k value from CLI output (not hardcoded)?
+- [ ] **Comparison Documented**: Did you compare vs k=0 baseline?
+- [ ] **Transforms Correct**: Forward AND inverse transforms present?
+- [ ] **Physics Verified**: Does solution behave correctly at singularity?
+
+**Remember**: Skill() -> Task() -> TodoWrite() - ALWAYS
+
+---
 
 ## Core Principles
 
@@ -304,7 +653,12 @@ Simulations must be independently verifiable. The k-selection process, transform
 - Include roundtrip error tests (transform -> inverse -> verify < 1e-10 error)
 - Archive simulation code, k-selection rationale, and validation results
 
------------|---------|----------|
+---
+
+## Anti-Patterns
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
 | **Assuming k=0 is optimal** | Misses 10-30% accuracy gains at microscales and 10,000x+ gains for singularities by defaulting to classical calculus | Always run ai_simulation_helper.py. Use k(L) formula for scale-based optimization. Only use k=0 if empirically validated. |
 | **Using NNC only for singularities** | Limits NNC to singularity handling, ignores computational efficiency gains for smooth problems | Recognize NNC optimizes BOTH accuracy (singularities) AND complexity (step reduction). Use for any simulation where speed matters. |
 | **Skipping k=0 comparison** | Cannot prove improvement, lacks evidence for k-selection, wastes effort if classical methods work fine | Always benchmark k=optimal vs k=0. Document accuracy and step count differences. Use model-evaluation-agent for statistical validation. |
@@ -314,7 +668,18 @@ Simulations must be independently verifiable. The k-selection process, transform
 | **Hardcoded speedup values (THEATER)** | Fake metrics like `speedupFactor: 2.0` without measurement deceive users and prevent real optimization | ALWAYS measure speedups with real timing (performance.now()). Never hardcode multipliers. Use PerformanceTracker class. |
 | **Lookup tables for Math.*functions** | Modern JS engines compile Math.sqrt/exp/log to CPU instructions. Lookup tables with interpolation are SLOWER (0.18x measured). | Use native Math.* functions. Lookup tables only help on very old browsers. Benchmark before assuming optimization works. |
 
-----------|------------------|--------|
+---
+
+## Lessons Learned: Meta-Calculus Portfolio Project (2025-12)
+
+### CRITICAL FINDINGS FROM PRODUCTION IMPLEMENTATION
+
+These findings come from implementing NNC optimizations in a real 12-simulator portfolio site with honest benchmarking.
+
+### 1. What Actually Speeds Up Simulations
+
+| Optimization | Measured Speedup | Status |
+|-------------|------------------|--------|
 | **Object Pooling (ArrayPool)** | **6.62x** | REAL WIN - eliminates GC pauses |
 | **Fast Math Lookup Tables** | **0.18x (SLOWER)** | REMOVED - native Math.* is faster |
 | **In-place Operations** | ~1x (neutral) | JS JIT optimizes allocations well |

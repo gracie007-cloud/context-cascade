@@ -1,6 +1,7 @@
 ---
 name: language-specialists
 description: Unified language specialists for Python and TypeScript development, providing expert guidance for modern backend APIs, type-safe development, async optimization, and framework integration (Django/Flask/FastAPI for Python, Express/Nest.js for TypeScript). Includes comprehensive resources, testing tools, and production-ready examples.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # Language Specialists - Gold Tier
@@ -543,6 +544,15 @@ if (!user) {
 - Script execution time: <5 seconds each
 - Template adoption rate: ≥90%
 - Example project boot time: <2 minutes
+
+---
+
+**Skill Version**: 2.0.0 (Gold Tier)
+**Last Updated**: 2025-11-02
+**Maintained By**: language-specialists coordination
+**Tier**: Gold (Parent + Nested Specialists + Resources + Tests + Examples)
+
+---
 
 ## Core Principles
 

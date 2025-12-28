@@ -1,6 +1,7 @@
 ---
 name: when-managing-multiple-repos-use-github-multi-repo
 description: Multi-repository coordination, synchronization, and architecture management with AI swarm orchestration. Coordinates repo-architect, code-analyzer, and coordinator agents across multiple repositories to maintain consistency, propagate changes, manage dependencies, and ensure architectural alignment. Handles monorepo-to-multi-repo migrations, cross-repo refactoring, and synchronized releases. Use when managing microservices, multi-package ecosystems, or coordinating changes across related repositories.
+allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep
 ---
 
 # GitHub Multi-Repository Management Skill
