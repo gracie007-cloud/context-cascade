@@ -30,9 +30,47 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional, Tuple
 from enum import Enum
 import sys
+import logging
+from functools import wraps
 
 # Add parent for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+logger = logging.getLogger(__name__)
+
+
+def retry_with_backoff(max_attempts: int = 3, base_delay: float = 1.0, max_delay: float = 30.0):
+    """
+    Decorator for retrying API calls with exponential backoff.
+    
+    Args:
+        max_attempts: Maximum number of retry attempts
+        base_delay: Initial delay in seconds
+        max_delay: Maximum delay between retries
+    
+    FIX: Added to prevent GlobalMOO API failures from breaking optimization.
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exception = e
+                    if attempt < max_attempts - 1:
+                        delay = min(base_delay * (2 ** attempt), max_delay)
+                        logger.warning(
+                            f"API call failed (attempt {attempt + 1}/{max_attempts}): {e}. "
+                            f"Retrying in {delay:.1f}s..."
+                        )
+                        time.sleep(delay)
+                    else:
+                        logger.error(f"API call failed after {max_attempts} attempts: {e}")
+            raise last_exception
+        return wrapper
+    return decorator
 
 try:
     import httpx
@@ -221,6 +259,7 @@ class GlobalMOOClient:
             print(f"  Connection test exception: {e}")
             return False
 
+    @retry_with_backoff(max_attempts=3, base_delay=1.0)
     def list_models(self) -> List[Dict[str, Any]]:
         """
         List all models in the account.
@@ -235,6 +274,7 @@ class GlobalMOOClient:
         response.raise_for_status()
         return response.json()
 
+    @retry_with_backoff(max_attempts=3, base_delay=1.0)
     def get_model(self, model_id: int) -> Dict[str, Any]:
         """
         Get model details including projects.
