@@ -305,3 +305,155 @@ class TestEndToEnd:
         result = pareto_command("distill")
         assert result["success"]
         assert len(result["data"]["modes"]) > 0
+
+
+# =============================================================================
+# FULL PIPELINE INTEGRATION TESTS (Added Phase 5)
+# =============================================================================
+
+class TestFullPipelineIntegration:
+    """Integration tests for the complete optimization pipeline."""
+
+    def test_config_to_prompt_to_score_pipeline(self):
+        """
+        Test: config -> prompt -> mock response -> score
+
+        Verifies the complete flow from configuration to scoring works.
+        """
+        from core.config import FullConfig, FrameworkConfig, PromptConfig, VerixStrictness
+        from core.verilingua import score_all_frames, aggregate_frame_score
+        from core.prompt_builder import PromptBuilder
+
+        # Step 1: Create a config with some frames active
+        config = FullConfig(
+            framework=FrameworkConfig(
+                evidential=True,
+                aspectual=True,
+                morphological=False,
+            ),
+            prompt=PromptConfig(
+                verix_strictness=VerixStrictness.MODERATE,
+            ),
+        )
+
+        # Step 2: Build a prompt using the config
+        builder = PromptBuilder(config)
+        prompt = builder.build(
+            task="Explain how authentication works",
+            task_type="explanation",
+        )
+
+        # Verify prompt is non-trivial
+        prompt_str = prompt[0] if isinstance(prompt, tuple) else prompt
+        assert len(prompt_str) > 100
+
+        # Step 3: Mock response with VERIX markers
+        mock_response = """
+        [witnessed] I examined the authentication code directly.
+        [complete] The login flow works as follows:
+        [inferred] Based on the JWT implementation, tokens expire after 1 hour.
+        """
+
+        # Step 4: Score the response against active frames
+        scores = score_all_frames(mock_response, config.framework)
+
+        # Should have scores for active frames
+        assert "evidential" in scores
+        assert 0.0 <= scores["evidential"] <= 1.0
+
+    def test_config_vector_roundtrip(self):
+        """Test: config -> vector -> config (should be equivalent)."""
+        from core.config import FullConfig, FrameworkConfig, PromptConfig, VerixStrictness, VectorCodec
+
+        original = FullConfig(
+            framework=FrameworkConfig(
+                evidential=True,
+                aspectual=False,
+                morphological=True,
+            ),
+            prompt=PromptConfig(
+                verix_strictness=VerixStrictness.STRICT,
+                require_ground=True,
+            ),
+        )
+
+        # Encode to vector
+        vector = VectorCodec.encode(original)
+        assert len(vector) == VectorCodec.VECTOR_SIZE
+
+        # Decode back
+        decoded = VectorCodec.decode(vector)
+
+        # Verify equivalence
+        assert decoded.framework.evidential == original.framework.evidential
+        assert decoded.prompt.verix_strictness == original.prompt.verix_strictness
+
+    def test_optimization_objective_evaluation(self):
+        """Test: config vector -> objective scores."""
+        import numpy as np
+        from optimization.two_stage_optimizer import evaluate_config_5dim
+
+        # 5-dimensional vector
+        x5 = np.array([0.8, 0.6, 1.5, 1.0, 0.9])
+
+        objectives = evaluate_config_5dim(x5)
+
+        # Should return 4 objectives (negated for minimization)
+        assert len(objectives) == 4
+        assert all(obj <= 0 for obj in objectives)
+
+    def test_globalmoo_mock_mode_integration(self):
+        """Test: GlobalMOO client in mock mode for testing."""
+        from optimization.globalmoo_client import GlobalMOOClient
+
+        client = GlobalMOOClient(use_mock=True)
+
+        # Should be available in mock mode
+        assert client.is_available
+        assert client.test_connection()
+
+        # Context manager should work
+        with GlobalMOOClient(use_mock=True) as c:
+            assert c.is_available
+
+
+class TestRetryMechanismIntegration:
+    """Test the retry mechanism works correctly."""
+
+    def test_retry_decorator_exists(self):
+        """Verify retry decorator was added."""
+        from optimization.globalmoo_client import retry_with_backoff
+
+        assert callable(retry_with_backoff)
+
+
+class TestVERIXIntegration:
+    """Test VERIX parsing and validation pipeline."""
+
+    def test_verix_parse_and_validate(self):
+        """Test: text -> parse claims -> validate."""
+        from core.config import PromptConfig, VerixStrictness
+        from core.verix import VerixParser, VerixValidator
+
+        config = PromptConfig(
+            verix_strictness=VerixStrictness.MODERATE,
+            require_ground=False,
+        )
+
+        # Text with VERIX L1 format
+        text = "[assert|neutral] The cache TTL is 3600 seconds [conf:0.95] [state:confirmed]"
+
+        # Parse
+        parser = VerixParser(config)
+        claims = parser.parse(text)
+
+        # Should find claims
+        assert len(claims) >= 1
+
+        # Validate
+        validator = VerixValidator(config)
+        is_valid, violations = validator.validate(claims)
+
+        # Score
+        score = validator.compliance_score(claims)
+        assert 0.0 <= score <= 1.0
