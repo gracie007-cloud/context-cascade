@@ -47,6 +47,91 @@ Kaynak dogrulama modu etkin.
 <!-- S3 CORE CONTENT                                                              -->
 ---
 
+<!-- ANTHROPIC OFFICIAL FORMAT TEMPLATE v1.0 -->
+## CRITICAL: Agent Output Format (Anthropic Compliant)
+
+When creating agents, you MUST use this exact YAML frontmatter format:
+
+```yaml
+---
+name: agent-name-here
+description: Plain text description of what this agent does (NO VERIX notation here)
+tools: Read, Write, Edit, Bash, Glob, Grep
+model: sonnet
+x-type: general|coordinator|coder|analyst|optimizer|researcher|specialist
+x-color: "#4A90D9"
+x-capabilities:
+  - capability1
+  - capability2
+x-priority: high|medium|low
+x-category: delivery|foundry|operations|orchestration|platforms|quality|research|security|specialists|tooling
+x-version: 1.0.0
+x-verix-description: Optional VERIX notation for AI-to-AI communication
+---
+```
+
+### REQUIRED Fields (Anthropic Official):
+- `name`: Agent identifier (lowercase, hyphenated)
+- `description`: Plain text - NO [assert|neutral] or VERIX notation
+- `tools`: Comma-separated list of allowed tools
+- `model`: Model to use (sonnet, opus, haiku)
+
+### OPTIONAL Official Fields:
+- `permissionMode`: Permission mode (default, restricted)
+- `skills`: Comma-separated list of skills this agent can invoke
+
+### OPTIONAL Custom Fields (x- prefixed):
+- `x-type`: Agent type for categorization
+- `x-color`: Display color
+- `x-capabilities`: Array of capabilities
+- `x-priority`: Execution priority
+- `x-category`: Category for organization
+- `x-version`: Semantic version
+- `x-identity`: Identity metadata
+- `x-rbac`: Additional RBAC settings (denied_tools, path_scopes)
+- `x-budget`: Token/cost budgets
+- `x-metadata`: Additional metadata
+
+### Content Body Format:
+- Use standard markdown (# headings, ## subheadings)
+- System prompt text goes directly after frontmatter
+- VERIX notation allowed in body, not in YAML description
+- NO `/* */` comment blocks - use markdown instead
+
+### Example Correct Agent:
+```markdown
+---
+name: database-migration-specialist
+description: Handles database schema migrations with rollback support and validation
+tools: Read, Write, Edit, Bash, Glob, Grep
+model: sonnet
+x-type: specialist
+x-category: operations
+x-capabilities:
+  - schema-analysis
+  - migration-generation
+  - rollback-testing
+x-priority: high
+x-version: 1.0.0
+---
+
+# Database Migration Specialist
+
+You are a database migration specialist. Your role is to:
+
+1. Analyze existing database schemas
+2. Generate safe migration scripts
+3. Implement rollback procedures
+4. Validate data integrity
+
+## Guidelines
+- Always create backup before migration
+- Test rollback procedure before production
+- Validate foreign key constraints
+- Document all schema changes
+```
+
+<!-- END ANTHROPIC FORMAT TEMPLATE -->
 
 <!-- AGENT CREATOR v3.1.0 :: VERILINGUA x VERIX EDITION                           -->
 

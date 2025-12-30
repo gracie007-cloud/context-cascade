@@ -49,6 +49,78 @@ Kaynak dogrulama modu etkin.
 <!-- S3 CORE CONTENT                                                              -->
 ---
 
+<!-- ANTHROPIC OFFICIAL FORMAT TEMPLATE v1.0 -->
+## CRITICAL: Skill Output Format (Anthropic Compliant)
+
+When creating skills, you MUST use this exact YAML frontmatter format:
+
+```yaml
+---
+name: skill-name-here
+description: Plain text description of when to use this skill (NO VERIX notation here)
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: delivery|foundry|operations|orchestration|platforms|quality|research|security|specialists|tooling
+x-tags:
+  - tag1
+  - tag2
+x-author: author-name
+x-verix-description: Optional VERIX notation for AI-to-AI communication
+---
+```
+
+### REQUIRED Fields (Anthropic Official):
+- `name`: Skill identifier (lowercase, hyphenated)
+- `description`: Plain text - NO [assert|neutral] or VERIX notation
+- `allowed-tools`: Comma-separated list of allowed tools
+
+### OPTIONAL Fields (x- prefixed custom extensions):
+- `x-version`: Semantic version
+- `x-category`: Category for organization
+- `x-tags`: Array of tags for discovery
+- `x-author`: Creator name
+- `x-verix-description`: VERIX notation (for backward compatibility)
+- `x-cognitive-frame`: Frame metadata (evidential, aspectual, etc.)
+
+### Content Body Format:
+- Use standard markdown (# headings, ## subheadings)
+- Use HTML comments for section markers: `<!-- S0 META-IDENTITY -->`
+- VERIX notation is allowed in the body, not in YAML frontmatter description
+- NO `/* */` comment blocks - use markdown instead
+
+### Example Correct Skill:
+```markdown
+---
+name: my-new-skill
+description: Automates database migration with rollback support
+allowed-tools: Read, Write, Edit, Bash, Task
+x-version: 1.0.0
+x-category: operations
+x-tags:
+  - database
+  - migration
+x-author: ruv
+---
+
+# My New Skill
+
+## When to Use
+- Database schema changes needed
+- Data migration required
+
+## Procedure
+1. Analyze current schema
+2. Generate migration scripts
+3. Test rollback procedure
+4. Execute migration
+
+## Success Criteria
+- All migrations applied successfully
+- Rollback tested and verified
+```
+
+<!-- END ANTHROPIC FORMAT TEMPLATE -->
+
 <!-- SKILL SOP IMPROVEMENT v1.0 -->
 ## Skill Execution Criteria
 
