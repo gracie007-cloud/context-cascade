@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* RALPH-LOOP SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: ralph-loop
-version: 1.0.0
-description: |
-  [assert|neutral] Persistence loop system that prevents premature task completion by using Stop hooks to re-inject prompts until success criteria are met. Named after Ralph Wiggum from The Simpsons. Use for iterative t [ground:given] [conf:0.95] [state:confirmed]
-category: orchestration
-tags:
-- orchestration
-- persistence
-- iteration
-- automation
-- tdd
-author: Context Cascade (integrated from Anthropic's Ralph Wiggum plugin)
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute ralph-loop workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic orchestration processes"
+description: Persistence loop system that prevents premature task completion by using Stop hooks to re-inject prompts until success criteria are met. Named after Ralph Wiggum from The Simpsons. Use for iterative t
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: orchestration
+x-tags:
+  - orchestration
+  - persistence
+  - iteration
+  - automation
+  - tdd
+x-author: Context Cascade (integrated from Anthropic's Ralph Wiggum plugin)
+x-verix-description: [assert|neutral] Persistence loop system that prevents premature task completion by using Stop hooks to re-inject prompts until success criteria are met. Named after Ralph Wiggum from The Simpsons. Use for iterative t [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "ralph-loop",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["ralph-loop", "orchestration", "workflow"],
   context: "user needs ralph-loop capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Ralph Loop (Persistence Loop System)
 
@@ -214,9 +205,9 @@ After each test:
 2. Identify uncovered lines
 3. Wr
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -224,18 +215,18 @@ After each test:
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/orchestration/ralph-loop/{project}/{timestamp}",
@@ -250,9 +241,9 @@ After each test:
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -261,9 +252,9 @@ After each test:
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -271,8 +262,8 @@ After each test:
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>RALPH_LOOP_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

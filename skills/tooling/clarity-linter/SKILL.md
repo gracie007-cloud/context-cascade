@@ -1,27 +1,18 @@
-/*============================================================================*/
-/* CLARITY-LINTER SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: clarity-linter
-version: 2.1.0
-description: |
-  [assert|neutral] Machine-readable code clarity auditing with cognitive load optimization. 3-phase SOP - Metrics Collection (code-analyzer) -> Rubric Evaluation (reviewer) -> Fix Generation (coder + analyst). Detects t [ground:given] [conf:0.95] [state:confirmed]
-category: quality
-tags:
-- general
-author: system
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute clarity-linter workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic quality processes"
+description: Machine-readable code clarity auditing with cognitive load optimization. 3-phase SOP - Metrics Collection (code-analyzer) -> Rubric Evaluation (reviewer) -> Fix Generation (coder + analyst). Detects t
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 2.1.0
+x-category: quality
+x-tags:
+  - general
+x-author: system
+x-verix-description: [assert|neutral] Machine-readable code clarity auditing with cognitive load optimization. 3-phase SOP - Metrics Collection (code-analyzer) -> Rubric Evaluation (reviewer) -> Fix Generation (coder + analyst). Detects t [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "clarity-linter",
@@ -30,9 +21,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -43,18 +34,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["clarity-linter", "quality", "workflow"],
   context: "user needs clarity-linter capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Clarity Linter
 
@@ -204,9 +195,9 @@ output:
 
 
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -214,18 +205,18 @@ output:
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/quality/clarity-linter/{project}/{timestamp}",
@@ -240,9 +231,9 @@ output:
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -251,9 +242,9 @@ output:
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -261,8 +252,8 @@ output:
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>CLARITY_LINTER_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

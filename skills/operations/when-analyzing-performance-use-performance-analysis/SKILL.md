@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* WHEN-ANALYZING-PERFORMANCE-USE-PERFORMANCE-ANALYSIS SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: when-analyzing-performance-use-performance-analysis
-version: 1.0.0
-description: |
-  [assert|neutral] Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms [ground:given] [conf:0.95] [state:confirmed]
-category: performance
-tags:
-- performance
-- analysis
-- bottleneck
-- optimization
-- profiling
-author: system
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute when-analyzing-performance-use-performance-analysis workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic performance processes"
+description: Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: performance
+x-tags:
+  - performance
+  - analysis
+  - bottleneck
+  - optimization
+  - profiling
+x-author: system
+x-verix-description: [assert|neutral] Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "when-analyzing-performance-use-performance-analysis",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["when-analyzing-performance-use-performance-analysis", "performance", "workflow"],
   context: "user needs when-analyzing-performance-use-performance-analysis capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Performance Analysis SOP
 
@@ -235,9 +226,9 @@ SLOW_FUNCTIONS=$(jq '[.profile[] | select(.time > 100)]' swarm-profile.json)
 # Identify memory hogs
 MEMORY_HOGS=$(jq '[.memory[] | sele
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -245,18 +236,18 @@ MEMORY_HOGS=$(jq '[.memory[] | sele
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/performance/when-analyzing-performance-use-performance-analysis/{project}/{timestamp}",
@@ -271,9 +262,9 @@ MEMORY_HOGS=$(jq '[.memory[] | sele
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -282,9 +273,9 @@ MEMORY_HOGS=$(jq '[.memory[] | sele
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -292,8 +283,8 @@ MEMORY_HOGS=$(jq '[.memory[] | sele
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>WHEN_ANALYZING_PERFORMANCE_USE_PERFORMANCE_ANALYSIS_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

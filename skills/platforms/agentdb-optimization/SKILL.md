@@ -1,29 +1,20 @@
-/*============================================================================*/
-/* AGENTDB-PERFORMANCE-OPTIMIZATION SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: agentdb-performance-optimization
-version: 1.0.0
-description: |
-  [assert|neutral] Apply quantization to reduce memory by 4-32x. Enable HNSW indexing for 150x faster search. Configure caching strategies and implement batch operations. Use when optimizing memory usage, improving sear [ground:given] [conf:0.95] [state:confirmed]
-category: platforms
-tags:
-- platforms
-- integration
-- tools
-author: ruv
-cognitive_frame:
-  primary: aspectual
-  goal_analysis:
-    first_order: "Execute agentdb-performance-optimization workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic platforms processes"
+description: Apply quantization to reduce memory by 4-32x. Enable HNSW indexing for 150x faster search. Configure caching strategies and implement batch operations. Use when optimizing memory usage, improving sear
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: platforms
+x-tags:
+  - platforms
+  - integration
+  - tools
+x-author: ruv
+x-verix-description: [assert|neutral] Apply quantization to reduce memory by 4-32x. Enable HNSW indexing for 150x faster search. Configure caching strategies and implement batch operations. Use when optimizing memory usage, improving sear [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "agentdb-performance-optimization",
@@ -32,9 +23,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Aspectual",
@@ -45,18 +36,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["agentdb-performance-optimization", "platforms", "workflow"],
   context: "user needs agentdb-performance-optimization capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 ## When NOT to Use This Skill
 
@@ -135,9 +126,9 @@ npx agentdb@latest benchmark
 # ✅ Batch Insert: 500x faster (2ms vs 1s for 100 vectors)
 # ✅ Large-scale Query: 12,500x faster (8ms vs 100s at 1M v
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -145,18 +136,18 @@ npx agentdb@latest benchmark
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/platforms/agentdb-performance-optimization/{project}/{timestamp}",
@@ -171,9 +162,9 @@ npx agentdb@latest benchmark
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -182,9 +173,9 @@ npx agentdb@latest benchmark
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -192,8 +183,8 @@ npx agentdb@latest benchmark
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>AGENTDB_PERFORMANCE_OPTIMIZATION_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* SKILL SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: SKILL
-version: 1.0.0
-description: |
-  [assert|neutral] Analyze entire codebases with Gemini's 1 million token context window - process 30K lines at once [ground:given] [conf:0.95] [state:confirmed]
-category: platforms
-tags:
-- gemini
-- codebase-analysis
-- architecture
-- large-context
-- multi-file
-author: system
-cognitive_frame:
-  primary: compositional
-  goal_analysis:
-    first_order: "Execute SKILL workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic platforms processes"
+description: Analyze entire codebases with Gemini's 1 million token context window - process 30K lines at once
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: platforms
+x-tags:
+  - gemini
+  - codebase-analysis
+  - architecture
+  - large-context
+  - multi-file
+x-author: system
+x-verix-description: [assert|neutral] Analyze entire codebases with Gemini's 1 million token context window - process 30K lines at once [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "SKILL",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Compositional",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["SKILL", "platforms", "workflow"],
   context: "user needs SKILL capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Gemini Mega-Context Skill
 
@@ -184,9 +175,9 @@ Agent reviews full codebase and reports:
 - Logging statements that might leak secrets
 - File upload ha
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -194,18 +185,18 @@ Agent reviews full codebase and reports:
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/platforms/SKILL/{project}/{timestamp}",
@@ -220,9 +211,9 @@ Agent reviews full codebase and reports:
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -231,9 +222,9 @@ Agent reviews full codebase and reports:
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -241,8 +232,8 @@ Agent reviews full codebase and reports:
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

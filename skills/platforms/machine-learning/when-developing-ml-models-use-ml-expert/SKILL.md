@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* WHEN-DEVELOPING-ML-MODELS-USE-ML-EXPERT SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: when-developing-ml-models-use-ml-expert
-version: 1.0.0
-description: |
-  [assert|neutral] Specialized ML model development, training, and deployment workflow [ground:given] [conf:0.95] [state:confirmed]
-category: machine-learning
-tags:
-- ml
-- training
-- deployment
-- model-development
-- neural-networks
-author: ruv
-cognitive_frame:
-  primary: aspectual
-  goal_analysis:
-    first_order: "Execute when-developing-ml-models-use-ml-expert workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic machine-learning processes"
+description: Specialized ML model development, training, and deployment workflow
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: machine-learning
+x-tags:
+  - ml
+  - training
+  - deployment
+  - model-development
+  - neural-networks
+x-author: ruv
+x-verix-description: [assert|neutral] Specialized ML model development, training, and deployment workflow [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "when-developing-ml-models-use-ml-expert",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Aspectual",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["when-developing-ml-models-use-ml-expert", "machine-learning", "workflow"],
   context: "user needs when-developing-ml-models-use-ml-expert capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 ## When NOT to Use This Skill
 
@@ -162,9 +153,9 @@ data = data.drop_duplicates()
 from scipy import stats
 z_scores = np.abs(stats.zscore(data.select_dtypes(include=
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -172,18 +163,18 @@ z_scores = np.abs(stats.zscore(data.select_dtypes(include=
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/machine-learning/when-developing-ml-models-use-ml-expert/{project}/{timestamp}",
@@ -198,9 +189,9 @@ z_scores = np.abs(stats.zscore(data.select_dtypes(include=
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -209,9 +200,9 @@ z_scores = np.abs(stats.zscore(data.select_dtypes(include=
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -219,8 +210,8 @@ z_scores = np.abs(stats.zscore(data.select_dtypes(include=
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>WHEN_DEVELOPING_ML_MODELS_USE_ML_EXPERT_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

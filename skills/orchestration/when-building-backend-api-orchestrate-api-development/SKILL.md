@@ -1,27 +1,18 @@
-/*============================================================================*/
-/* WHEN-BUILDING-BACKEND-API-ORCHESTRATE-API-DEVELOPMENT SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: when-building-backend-api-orchestrate-api-development
-version: 1.0.0
-description: |
-  [assert|neutral] Use when building a production-ready REST API from requirements through deployment. Orchestrates 8-12 specialist agents across 5 phases using Test-Driven Development methodology. Covers planning, arch [ground:given] [conf:0.95] [state:confirmed]
-category: orchestration
-tags:
-- general
-author: system
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute when-building-backend-api-orchestrate-api-development workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic orchestration processes"
+description: Use when building a production-ready REST API from requirements through deployment. Orchestrates 8-12 specialist agents across 5 phases using Test-Driven Development methodology. Covers planning, arch
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: orchestration
+x-tags:
+  - general
+x-author: system
+x-verix-description: [assert|neutral] Use when building a production-ready REST API from requirements through deployment. Orchestrates 8-12 specialist agents across 5 phases using Test-Driven Development methodology. Covers planning, arch [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "when-building-backend-api-orchestrate-api-development",
@@ -30,9 +21,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -43,18 +34,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["when-building-backend-api-orchestrate-api-development", "orchestration", "workflow"],
   context: "user needs when-building-backend-api-orchestrate-api-development capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # API Development Orchestration Workflow
 
@@ -132,9 +123,9 @@ Use this workflow when:
    - Complete endpoint list with HTTP methods (GET, POST, PUT, DELETE, PATCH)
    - Data models and relationships (entities
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -142,18 +133,18 @@ Use this workflow when:
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/orchestration/when-building-backend-api-orchestrate-api-development/{project}/{timestamp}",
@@ -168,9 +159,9 @@ Use this workflow when:
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -179,9 +170,9 @@ Use this workflow when:
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -189,8 +180,8 @@ Use this workflow when:
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>WHEN_BUILDING_BACKEND_API_ORCHESTRATE_API_DEVELOPMENT_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

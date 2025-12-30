@@ -1,27 +1,18 @@
-/*============================================================================*/
-/* UI-UX-EXCELLENCE SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: ui-ux-excellence
-version: 1.0.0
-description: |
-  [assert|neutral] Comprehensive UI/UX enhancement cascade that transforms generic websites into polished, accessible, brand-differentiated experiences. Combines constraint-based design, WCAG accessibility, micro-intera [ground:given] [conf:0.95] [state:confirmed]
-category: Frontend Development
-tags:
-- general
-author: system
-cognitive_frame:
-  primary: compositional
-  goal_analysis:
-    first_order: "Execute ui-ux-excellence workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic Frontend Development processes"
+description: Comprehensive UI/UX enhancement cascade that transforms generic websites into polished, accessible, brand-differentiated experiences. Combines constraint-based design, WCAG accessibility, micro-intera
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: Frontend Development
+x-tags:
+  - general
+x-author: system
+x-verix-description: [assert|neutral] Comprehensive UI/UX enhancement cascade that transforms generic websites into polished, accessible, brand-differentiated experiences. Combines constraint-based design, WCAG accessibility, micro-intera [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "ui-ux-excellence",
@@ -30,9 +21,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Compositional",
@@ -43,18 +34,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["ui-ux-excellence", "Frontend Development", "workflow"],
   context: "user needs ui-ux-excellence capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # UI/UX Excellence Cascade
 
@@ -132,27 +123,27 @@ Extract brand patterns and codify them into CSS custom properties for consistenc
 2. **Define Color Palette**
    ```css
    :root {
-     /* Primary - Brand identity color */
+     <!-- Primary - Brand identity color  -->
      --color-primary: #2563EB;
      --color-primary-dark: #1D4ED8;
      --color-primary-light: #3B82F6;
 
-     /* Accent - Call-to-action, highlights */
+     <!-- Accent - Call-to-action, highlights  -->
      --color-accent: #F59E0B;
      --color-accent-dark: #D97706;
 
-     /* Semantic - Success, warning, error */
+     <!-- Semantic - Success, warning, error  -->
      --color-success: #10B981;
      --color-warning: #F59E0B;
      --color-error: #EF4444;
 
-     /* Backgrounds */
+     <!-- Backgrounds  -->
      --color-bg: #FFFFFF;
      --color-bg-dark: #0C0C0C;
      --color-surface: #F9FAFB;
      --color-surface-dark: #171717;
 
-     /* Text - Ensure 4.5:1 contrast ratio */
+     <!-- Text - Ensure 4.5:1 contrast ratio  -->
      --color-text: #1F2937;
      --color-text-dark: #FAFAF9;
      --color-text-muted: #6B7280;
@@ -162,15 +153,15 @@ Extract brand patterns and codify them into CSS custom properties for consistenc
 3. **Define Spacing Scale** (8px base)
    ```css
    :root {
-     --space-1: 0.25rem;   /* 4px */
-     --space-2: 0.5rem;    /* 8px */
-     --space-3: 0.75rem;   /* 12px */
-     --space-4: 1rem;      /* 16px */
-     --space-6: 1.5rem;    /* 24px */
-     --space-8: 2rem;      /* 32px */
-     --space-12: 3rem;     /* 48px */
-     --space-16: 4rem;     /* 64px */
-     --space-24: 6rem;     /* 96px */
+     --space-1: 0.25rem;   <!-- 4px  -->
+     --space-2: 0.5rem;    <!-- 8px  -->
+     --space-3: 0.75rem;   <!-- 12px  -->
+     --space-4: 1rem;      <!-- 16px  -->
+     --space-6: 1.5rem;    <!-- 24px  -->
+     --space-8: 2rem;      <!-- 32px  -->
+     --space-12: 3rem;     <!-- 48px  -->
+     --space-16: 4rem;     <!-- 64px  -->
+     --space-24: 6rem;     <!-- 96px  -->
    }
    ```
 
@@ -212,9 +203,9 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
      padding: 0.75rem 1.5rem;
      background: v
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -222,18 +213,18 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/Frontend Development/ui-ux-excellence/{project}/{timestamp}",
@@ -248,9 +239,9 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -259,9 +250,9 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -269,8 +260,8 @@ Ensure WCAG 2.1 AA compliance for legal requirements and inclusive design.
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>UI_UX_EXCELLENCE_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* PHYSICS-SIMULATION-CREATOR SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: physics-simulation-creator
-version: 1.1.0
-description: |
-  [assert|neutral] Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter tuning. Use for ANY physics simulation to maximize accuracy and minimize computational complexity. The k parameter optim [ground:given] [conf:0.95] [state:confirmed]
-category: specialists
-tags:
-- physics
-- simulation
-- numerical-methods
-- optimization
-- NNC
-author: meta-calculus-toolkit
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute physics-simulation-creator workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic specialists processes"
+description: Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter tuning. Use for ANY physics simulation to maximize accuracy and minimize computational complexity. The k parameter optim
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.1.0
+x-category: specialists
+x-tags:
+  - physics
+  - simulation
+  - numerical-methods
+  - optimization
+  - NNC
+x-author: meta-calculus-toolkit
+x-verix-description: [assert|neutral] Create optimal physics simulations using Non-Newtonian Calculus (NNC) parameter tuning. Use for ANY physics simulation to maximize accuracy and minimize computational complexity. The k parameter optim [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "physics-simulation-creator",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["physics-simulation-creator", "specialists", "workflow"],
   context: "user needs physics-simulation-creator capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Physics Simulation Creator
 
@@ -160,9 +151,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
 - Optimal k improves accuracy by 10-40,000x (for singularities) or 10-30% (for smooth microscale)
 -
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -170,9 +161,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
@@ -185,9 +176,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
   ]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5a WOLFRAM ALPHA INTEGRATION                                               */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5a WOLFRAM ALPHA INTEGRATION                                                -->
+---
 
 [define|neutral] WOLFRAM_CAPABILITIES := {
   purpose: "Verify physics calculations and constants",
@@ -220,9 +211,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
   ]
 } [ground:best-practice] [conf:0.92] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/specialists/physics-simulation-creator/{project}/{timestamp}",
@@ -237,9 +228,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -248,9 +239,9 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -258,8 +249,8 @@ The CASCADE algorithm (61.9% win rate vs classical) proves that:
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>PHYSICS_SIMULATION_CREATOR_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

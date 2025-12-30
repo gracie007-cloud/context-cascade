@@ -1,29 +1,20 @@
-/*============================================================================*/
-/* HOLISTIC-EVALUATION SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: holistic-evaluation
-version: 1.0.0
-description: |
-  [assert|neutral] Comprehensive multi-dimensional model evaluation across accuracy, fairness, robustness, efficiency, interpretability, and safety for Deep Research SOP Pipeline E. Use after method development when Qua [ground:given] [conf:0.95] [state:confirmed]
-category: quality
-tags:
-- quality
-- testing
-- validation
-author: ruv
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute holistic-evaluation workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic quality processes"
+description: Comprehensive multi-dimensional model evaluation across accuracy, fairness, robustness, efficiency, interpretability, and safety for Deep Research SOP Pipeline E. Use after method development when Qua
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: quality
+x-tags:
+  - quality
+  - testing
+  - validation
+x-author: ruv
+x-verix-description: [assert|neutral] Comprehensive multi-dimensional model evaluation across accuracy, fairness, robustness, efficiency, interpretability, and safety for Deep Research SOP Pipeline E. Use after method development when Qua [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "holistic-evaluation",
@@ -32,9 +23,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -45,18 +36,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["holistic-evaluation", "quality", "workflow"],
   context: "user needs holistic-evaluation capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 ## When to Use This Skill
 
@@ -133,9 +124,9 @@ Kaynak dogrulama modu etkin.
 
 Systematically evaluate machine learning models across 6+ critical dimensions following Deep Research SOP Pipeline E, ensu
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -143,18 +134,18 @@ Systematically evaluate machine learning models across 6+ critical dimensions fo
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/quality/holistic-evaluation/{project}/{timestamp}",
@@ -169,9 +160,9 @@ Systematically evaluate machine learning models across 6+ critical dimensions fo
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -180,9 +171,9 @@ Systematically evaluate machine learning models across 6+ critical dimensions fo
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -190,8 +181,8 @@ Systematically evaluate machine learning models across 6+ critical dimensions fo
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>HOLISTIC_EVALUATION_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

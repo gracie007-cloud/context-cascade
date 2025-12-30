@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* WHEN-CHAINING-WORKFLOWS-USE-CASCADE-ORCHESTRATOR SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: when-chaining-workflows-use-cascade-orchestrator
-version: 1.0.0
-description: |
-  [assert|neutral] Create sophisticated workflow cascades with sequential pipelines, parallel execution, and conditional branching [ground:given] [conf:0.95] [state:confirmed]
-category: coordination
-tags:
-- cascade
-- workflows
-- orchestration
-- conditional
-- branching
-author: system
-cognitive_frame:
-  primary: aspectual
-  goal_analysis:
-    first_order: "Execute when-chaining-workflows-use-cascade-orchestrator workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic coordination processes"
+description: Create sophisticated workflow cascades with sequential pipelines, parallel execution, and conditional branching
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: coordination
+x-tags:
+  - cascade
+  - workflows
+  - orchestration
+  - conditional
+  - branching
+x-author: system
+x-verix-description: [assert|neutral] Create sophisticated workflow cascades with sequential pipelines, parallel execution, and conditional branching [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "when-chaining-workflows-use-cascade-orchestrator",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Aspectual",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["when-chaining-workflows-use-cascade-orchestrator", "coordination", "workflow"],
   context: "user needs when-chaining-workflows-use-cascade-orchestrator capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 # Cascade Orchestrator SOP
 
@@ -241,9 +232,9 @@ Execute cascading workflows with proper sequencing and error handling.
 npx claude-flow@alpha cascade execute \
   --definition cascade-definition.
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -251,18 +242,18 @@ npx claude-flow@alpha cascade execute \
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/coordination/when-chaining-workflows-use-cascade-orchestrator/{project}/{timestamp}",
@@ -277,9 +268,9 @@ npx claude-flow@alpha cascade execute \
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -288,9 +279,9 @@ npx claude-flow@alpha cascade execute \
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -298,8 +289,8 @@ npx claude-flow@alpha cascade execute \
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>WHEN_CHAINING_WORKFLOWS_USE_CASCADE_ORCHESTRATOR_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]

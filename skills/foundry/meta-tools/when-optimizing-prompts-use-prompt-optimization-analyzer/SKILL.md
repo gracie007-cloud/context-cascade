@@ -1,31 +1,22 @@
-/*============================================================================*/
-/* WHEN-OPTIMIZING-PROMPTS-USE-PROMPT-OPTIMIZATION-ANALYZER SKILL :: VERILINGUA x VERIX EDITION                      */
-/*============================================================================*/
-
 ---
 name: when-optimizing-prompts-use-prompt-optimization-analyzer
-version: 1.0.0
-description: |
-  [assert|neutral] Active diagnostic tool for analyzing prompt quality, detecting anti-patterns, identifying token waste, and providing optimization recommendations [ground:given] [conf:0.95] [state:confirmed]
-category: foundry
-tags:
-- meta-tool
-- prompt-engineering
-- optimization
-- analysis
-- diagnostics
-author: ruv
-cognitive_frame:
-  primary: evidential
-  goal_analysis:
-    first_order: "Execute when-optimizing-prompts-use-prompt-optimization-analyzer workflow"
-    second_order: "Ensure quality and consistency"
-    third_order: "Enable systematic foundry processes"
+description: Active diagnostic tool for analyzing prompt quality, detecting anti-patterns, identifying token waste, and providing optimization recommendations
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+x-version: 1.0.0
+x-category: foundry
+x-tags:
+  - meta-tool
+  - prompt-engineering
+  - optimization
+  - analysis
+  - diagnostics
+x-author: ruv
+x-verix-description: [assert|neutral] Active diagnostic tool for analyzing prompt quality, detecting anti-patterns, identifying token waste, and providing optimization recommendations [ground:given] [conf:0.95] [state:confirmed]
 ---
 
-/*----------------------------------------------------------------------------*/
-/* S0 META-IDENTITY                                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S0 META-IDENTITY                                                             -->
+---
 
 [define|neutral] SKILL := {
   name: "when-optimizing-prompts-use-prompt-optimization-analyzer",
@@ -34,9 +25,9 @@ cognitive_frame:
   layer: L1
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S1 COGNITIVE FRAME                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S1 COGNITIVE FRAME                                                           -->
+---
 
 [define|neutral] COGNITIVE_FRAME := {
   frame: "Evidential",
@@ -47,18 +38,18 @@ cognitive_frame:
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
 
-/*----------------------------------------------------------------------------*/
-/* S2 TRIGGER CONDITIONS                                                       */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S2 TRIGGER CONDITIONS                                                        -->
+---
 
 [define|neutral] TRIGGER_POSITIVE := {
   keywords: ["when-optimizing-prompts-use-prompt-optimization-analyzer", "foundry", "workflow"],
   context: "user needs when-optimizing-prompts-use-prompt-optimization-analyzer capability"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S3 CORE CONTENT                                                             */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S3 CORE CONTENT                                                              -->
+---
 
 <!-- SKILL SOP IMPROVEMENT v1.0 -->
 ## Skill Execution Criteria
@@ -172,9 +163,9 @@ function analyzeTokenWaste(promptText) {
     redundancyScore: 0,
     verbosityScore: 
 
-/*----------------------------------------------------------------------------*/
-/* S4 SUCCESS CRITERIA                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S4 SUCCESS CRITERIA                                                          -->
+---
 
 [define|neutral] SUCCESS_CRITERIA := {
   primary: "Skill execution completes successfully",
@@ -182,18 +173,18 @@ function analyzeTokenWaste(promptText) {
   verification: "Results validated against requirements"
 } [ground:given] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S5 MCP INTEGRATION                                                          */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S5 MCP INTEGRATION                                                           -->
+---
 
 [define|neutral] MCP_INTEGRATION := {
   memory_mcp: "Store execution results and patterns",
   tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
 } [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S6 MEMORY NAMESPACE                                                         */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S6 MEMORY NAMESPACE                                                          -->
+---
 
 [define|neutral] MEMORY_NAMESPACE := {
   pattern: "skills/foundry/when-optimizing-prompts-use-prompt-optimization-analyzer/{project}/{timestamp}",
@@ -208,9 +199,9 @@ function analyzeTokenWaste(promptText) {
   WHY: "skill-execution"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S7 SKILL COMPLETION VERIFICATION                                            */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
+---
 
 [direct|emphatic] COMPLETION_CHECKLIST := {
   agent_spawning: "Spawn agents via Task()",
@@ -219,9 +210,9 @@ function analyzeTokenWaste(promptText) {
   work_delegation: "Delegate to specialized agents"
 } [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* S8 ABSOLUTE RULES                                                           */
-/*----------------------------------------------------------------------------*/
+---
+<!-- S8 ABSOLUTE RULES                                                            -->
+---
 
 [direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
 
@@ -229,8 +220,8 @@ function analyzeTokenWaste(promptText) {
 
 [direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
 
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
+---
+<!-- PROMISE                                                                      -->
+---
 
 [commit|confident] <promise>WHEN_OPTIMIZING_PROMPTS_USE_PROMPT_OPTIMIZATION_ANALYZER_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
