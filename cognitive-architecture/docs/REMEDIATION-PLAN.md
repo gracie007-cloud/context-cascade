@@ -1,8 +1,28 @@
 # COGNITIVE ARCHITECTURE REMEDIATION PLAN
 
 **Created**: 2025-12-28
+**Updated**: 2026-01-01
 **Branch**: feature/veralingua-moo-integration
 **Scope**: 1441 file changes, 6 phases
+
+---
+
+## OVERALL STATUS (2026-01-01)
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| Phase 1 | COMPLETE | Medium bugs fixed (case sensitivity, thread safety) |
+| Phase 2 | COMPLETE | Low bugs fixed (to_l2, httpx leak) |
+| Phase 3 | PARTIAL | 1 of 3 cascade files consolidated, 2 remain |
+| Phase 4 | PARTIAL | Holdout validation exists, needs real evaluator |
+| Phase 5 | PARTIAL | Tests pass, needs CI workflow + CALIBRATION.md |
+| Phase 6 | PENDING | Final audit not started |
+
+**Related Completions (VERILINGUA/VERIX P0-P3):**
+- P0: Feedback loops closed (runtime, hooks)
+- P1: Cognitive forcing enhanced (4 default frames, VCL validation)
+- P2: Hofstadter controls (depth limits, cycle detection)
+- P3: Agent/meta handling (strictness, MetaLevel enum)
 
 ---
 
@@ -72,11 +92,13 @@ class FrameRegistry:
 ```
 
 ### Verification Checklist
-- [ ] All 7 frame score_response methods fixed
-- [ ] FrameRegistry thread-safe
-- [ ] Unit tests pass
-- [ ] No theater code introduced
-- [ ] Connascence analysis clean
+- [x] All 7 frame score_response methods fixed (uses m.lower() in response.lower())
+- [x] FrameRegistry thread-safe (_ensure_initialized with double-checked locking)
+- [x] Unit tests pass (480/480)
+- [x] No theater code introduced
+- [x] Connascence analysis clean
+
+**STATUS: PHASE 1 COMPLETE** (Pre-existing fixes verified)
 
 ---
 
@@ -130,10 +152,12 @@ class GlobalMOOClient:
 ```
 
 ### Verification Checklist
-- [ ] to_l2() returns correct phrases for all ranges
-- [ ] GlobalMOOClient properly closes connections
-- [ ] Unit tests pass
-- [ ] No theater code introduced
+- [x] to_l2() returns correct phrases for all ranges (edge case >= 1.0 handled)
+- [x] GlobalMOOClient properly closes connections (__enter__/__exit__/close methods)
+- [x] Unit tests pass (480/480)
+- [x] No theater code introduced
+
+**STATUS: PHASE 2 COMPLETE** (Pre-existing fixes verified)
 
 ---
 
@@ -186,11 +210,13 @@ def save_cascade_result(result):
 ```
 
 ### Verification Checklist
-- [ ] Single cascade.py with all functionality
-- [ ] Agent template working
-- [ ] Storage uses delta compression
+- [ ] Single cascade.py with all functionality (PARTIAL: real_cascade_optimizer.py removed, 2 files remain)
+- [ ] Agent template working (NOT STARTED)
+- [ ] Storage uses delta compression (NOT STARTED - 16 cascade storage files exist)
 - [ ] All imports updated
-- [ ] Tests still pass
+- [ ] Tests still pass (480/480)
+
+**STATUS: PHASE 3 PARTIAL** (real_cascade_optimizer.py consolidated, 2 files remain)
 
 ---
 
@@ -272,10 +298,12 @@ def validate_named_modes():
 ```
 
 ### Verification Checklist
-- [ ] Real evaluator integrated
-- [ ] Error recovery working
-- [ ] Constants documented
-- [ ] Modes validated against holdout
+- [ ] Real evaluator integrated (NOT STARTED)
+- [ ] Error recovery working (PARTIAL: GlobalMOOClient has retry/fallback)
+- [ ] Constants documented (NOT STARTED - needs CALIBRATION.md)
+- [ ] Modes validated against holdout (PARTIAL: test_holdout_validation.py exists)
+
+**STATUS: PHASE 4 PARTIAL**
 
 ---
 
@@ -340,10 +368,12 @@ jobs:
 **Fix**: Add tests for error recovery paths
 
 ### Verification Checklist
-- [ ] Integration tests pass
-- [ ] CI workflow runs
-- [ ] Documentation complete
-- [ ] Error handling tested
+- [x] Integration tests pass (test_integration.py exists, 480/480 tests pass)
+- [ ] CI workflow runs (NOT STARTED - no .github/workflows/ directory)
+- [ ] Documentation complete (PARTIAL - needs CALIBRATION.md)
+- [ ] Error handling tested (PARTIAL - basic tests exist)
+
+**STATUS: PHASE 5 PARTIAL**
 
 ---
 
