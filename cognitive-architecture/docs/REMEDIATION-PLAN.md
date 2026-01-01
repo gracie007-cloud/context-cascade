@@ -26,6 +26,9 @@
 | `460fe0d` | ci: Add GitHub Actions workflow for cognitive architecture tests |
 | `d808e48` | docs: Add UNFINISHED ITEMS quick reference to REMEDIATION-PLAN |
 | `95ad023` | docs: Add CALIBRATION.md hyperparameter documentation |
+| `ae44512` | docs: Integrate REMEDIATION-PLAN + HOFSTADTER-SPEC into VVV plan |
+
+**MASTER PLAN**: See `VVV-RECURSIVE-IMPROVEMENT-PLAN.md` for unified execution plan.
 
 **Related Completions (VERILINGUA/VERIX P0-P3):**
 - P0: Feedback loops closed (runtime, hooks)
@@ -71,6 +74,9 @@
 9. **P3: Self-ref signatures** - MetaVerilinguaSignature for DSPy
 10. **P3: Homoiconic sigs** - signature_to_dict()/dict_to_signature()
 11. **P3: Hofstadter optimizer** - HofstadterOptimizer with base case detection
+
+**NOTE**: All items above are now integrated into `VVV-RECURSIVE-IMPROVEMENT-PLAN.md`
+which provides the master execution plan for completing all remaining work.
 
 ---
 
