@@ -1,0 +1,186 @@
+{
+  "findings": [
+    {
+      "id": "F1",
+      "area": "DesignIntentVsReality",
+      "severity": "medium",
+      "summary": "VeriLingua advertises 11 weighted frames and a 7-frame forcing protocol, but only the evidential/aspectual frames are ever active by default and the extra weights (illocutionary, modal, specificity, comparative) have no CognitiveFrame implementations.",
+      "evidence": [
+        {
+          "path": "core/verilingua.py:47",
+          "description": "FRAME_WEIGHTS includes illocutionary/modal/specificity/comparative entries even though FrameRegistry only registers seven frames."
+        },
+        {
+          "path": "core/config.py:71",
+          "description": "FrameworkConfig defaults leave morphological/compositional/honorific/classifier/spatial disabled, so PromptBuilder emits only evidential/aspectual instructions."
+        },
+        {
+          "path": "modes/library.py:132",
+          "description": "The balanced mode (used by default runtime/config) also disables five frames, so the advertised seven-frame forcing never appears without manual intervention."
+        }
+      ],
+      "recommendations": [
+        "Either implement CognitiveFrame classes for the missing weighted entries or remove them from FRAME_WEIGHTS to keep documentation and behavior in sync.",
+        "Ship a default/primary mode that actually enables all seven documented frames (or state clearly that only two are enforced) so prompts match the stated design intent.",
+        "Update FrameValidationBridge to build correlations only for frames that exist in FrameRegistry to avoid adjusting phantom weights."
+      ]
+    },
+    {
+      "id": "F2",
+      "area": "CognitiveForcing",
+      "severity": "high",
+      "summary": "The VCL validator that enforces the 7-slot protocol, evidential minimums, and confidence ceilings is never invoked by the runtime, hooks, or telemetry, so confidence ceilings do not constrain any output.",
+      "evidence": [
+        {
+          "path": "core/vcl_validator.py:261",
+          "description": "VCLValidator.validate() implements slot order, evidential presence, and confidence ceiling checks."
+        },
+        {
+          "path": "core/runtime.py:152",
+          "description": "ClaudeRuntime.execute() only runs VerixValidator and never calls VCLValidator or validate_vcl(), so VCL rules are not enforced."
+        }
+      ],
+      "recommendations": [
+        "Call VCLValidator.validate() (or validate_vcl()) after every generation (runtime.execute, hooks.on_response_complete) and fail/telemetry-log when confidence ceilings are exceeded.",
+        "Expose the VCL compliance score beside VERIX scores so downstream selectors can act on violations."
+      ]
+    },
+    {
+      "id": "F3",
+      "area": "MetaLoopIntegration",
+      "severity": "high",
+      "summary": "PromptBuilder.validate_response() and FrameValidationBridge exist to feed VERIX compliance back into frame weights, but runtime never calls them, so the advertised bidirectional loop is never closed.",
+      "evidence": [
+        {
+          "path": "core/prompt_builder.py:304",
+          "description": "validate_response() wraps FrameValidationBridge.validate_and_feedback() and refreshes frame weights when called."
+        },
+        {
+          "path": "core/runtime.py:152",
+          "description": "Runtime execute() simply builds prompts and parses claims with VerixValidator; it never calls PromptBuilder.validate_response(), so no feedback is recorded."
+        }
+      ],
+      "recommendations": [
+        "After execute() obtains a response, invoke PromptBuilder.validate_response() (or the bridge directly) so compliance data adjusts frame weights before the next build().",
+        "Persist the resulting ValidationFeedback and surface it through telemetry so Meta-Loop controllers can act on it."
+      ]
+    },
+    {
+      "id": "F4",
+      "area": "TelemetrySteering",
+      "severity": "medium-high",
+      "summary": "TelemetrySteeringEngine expects per-mode accuracy/efficiency/consistency inputs, but record_mode_outcome() is never called anywhere in the repo, so the steering engine never receives VERIX compliance metrics and can only fall back to heuristics.",
+      "evidence": [
+        {
+          "path": "optimization/telemetry_steering.py:182",
+          "description": "record_outcome() updates Pareto data using provided accuracy/efficiency/consistency."
+        },
+        {
+          "path": "modes/selector.py:506",
+          "description": "record_mode_outcome() is defined but has no callers, so the steering engine is never fed."
+        }
+      ],
+      "recommendations": [
+        "Call modes.selector.record_mode_outcome() after each ExecutionResult, using VerixValidator.compliance_score for the consistency field.",
+        "Persist telemetry via TelemetryAggregator.record_outcome() so TelemetrySteeringEngine.ingest_telemetry() has historical compliance data to steer modes."
+      ]
+    },
+    {
+      "id": "F5",
+      "area": "HofstadterLoops",
+      "severity": "medium",
+      "summary": "FR2.3 recursion and FR2.1 agent disambiguation are declared but unenforced: VerixValidator ignores agent/meta markers, detect_ground_cycles() is never called, and the configured max_claim_depth/require_confidence_decrease flags are unused.",
+      "evidence": [
+        {
+          "path": "core/config.py:205",
+          "description": "PromptConfig exposes max_claim_depth and require_confidence_decrease but no other module reads these values."
+        },
+        {
+          "path": "core/verix.py:451",
+          "description": "_validate_single() only checks ground/confidence/state; it never enforces agent markers or meta-level constraints."
+        },
+        {
+          "path": "core/verix.py:550",
+          "description": "detect_ground_cycles() implements recursion detection yet is never invoked (repository search shows only this definition)."
+        }
+      ],
+      "recommendations": [
+        "Invoke detect_ground_cycles() inside VerixValidator.validate() and reject circular grounds to avoid paradoxical self-reference.",
+        "Enforce max_claim_depth/require_confidence_decrease and require [agent:] markers when FR2.1 is enabled so claims are properly attributed."
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G1",
+      "type": "SpecifiedButNotImplemented",
+      "severity": "medium",
+      "summary": "Documented controls such as max_claim_depth/require_confidence_decrease (FR2.2) and FrameRegistry.get_active_fast() (FR1.3 thrash prevention) are never used, so the safeguards they promise do not exist in runtime.",
+      "evidence": [
+        {
+          "path": "core/config.py:205",
+          "description": "Recursion-related settings exist only in the dataclass."
+        },
+        {
+          "path": "core/verilingua.py:750",
+          "description": "get_active_fast() is implemented but no caller uses it."
+        }
+      ],
+      "recommendations": [
+        "Implement recursion-depth enforcement inside VerixValidator and update PromptBuilder to use get_active_fast() (or remove the unused API) so the documented mitigations are real."
+      ]
+    },
+    {
+      "id": "G2",
+      "type": "ImplementedButDisconnected",
+      "severity": "high",
+      "summary": "Key components (VCLValidator, Memory-MCP-enabled TelemetryAggregator, FrameValidationBridge) are implemented but never wired into runtime execution, meaning they have zero effect on outputs.",
+      "evidence": [
+        {
+          "path": "core/vcl_validator.py:261",
+          "description": "Validator exists but runtime never imports or calls it."
+        },
+        {
+          "path": "core/prompt_builder.py:304",
+          "description": "FrameValidationBridge is only reachable via validate_response(), which nothing invokes."
+        },
+        {
+          "path": "optimization/dspy_level1.py:115",
+          "description": "TelemetryAggregator.record_outcome() exists but is not called from any runtime code."
+        }
+      ],
+      "recommendations": [
+        "Integrate these modules into the main execution path or reduce scope to avoid a false sense of compliance."
+      ]
+    },
+    {
+      "id": "G3",
+      "type": "BrokenFeedbackLoops",
+      "severity": "high",
+      "summary": "The intended feedback loop (VERIX compliance -> FrameValidationBridge -> telemetry -> TelemetrySteeringEngine -> ModeSelector) is broken at multiple points: builder never feeds the bridge, telemetry never records, and steering never receives compliance data.",
+      "evidence": [
+        {
+          "path": "core/runtime.py:152",
+          "description": "No call to PromptBuilder.validate_response(), so VERIX compliance is never fed back."
+        },
+        {
+          "path": "modes/selector.py:506",
+          "description": "Record-mode outcome hook is orphaned, so steering has no data."
+        },
+        {
+          "path": "optimization/telemetry_steering.py:218",
+          "description": "ingest_telemetry() depends on TelemetryAggregator entries that are never produced."
+        }
+      ],
+      "recommendations": [
+        "Invoke the bridge after each generation, persist the resulting compliance metrics to telemetry, and call record_mode_outcome() so mode selection can actually react to VERIX performance."
+      ]
+    }
+  ],
+  "audit_metadata": {
+    "model": "gpt-5-codex",
+    "tokens_used": 831021,
+    "timestamp": "2026-01-01",
+    "session_id": "019b7b17-2ea0-70d2-8eac-f9cf7a397282"
+  }
+}

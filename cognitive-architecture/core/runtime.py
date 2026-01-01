@@ -26,6 +26,11 @@ except ImportError:
 from .config import FullConfig
 from .prompt_builder import PromptBuilder
 from .verix import VerixParser, VerixClaim, VerixValidator
+from .frame_validation_bridge import ValidationFeedback
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -85,6 +90,10 @@ class ExecutionResult:
     is_valid: bool = True
     violations: List[str] = field(default_factory=list)
 
+    # P0-1 FIX: Feedback loop data
+    compliance_score: float = 0.0
+    validation_feedback: Optional[ValidationFeedback] = None
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for logging."""
         return {
@@ -95,6 +104,8 @@ class ExecutionResult:
             "error": self.error,
             "is_valid": self.is_valid,
             "violations": self.violations,
+            "compliance_score": self.compliance_score,
+            "has_feedback": self.validation_feedback is not None,
         }
 
 
@@ -155,12 +166,15 @@ class ClaudeRuntime:
 
         This is the main entry point for running prompts.
 
+        P0-1 FIX: Now invokes validate_response() for feedback loop.
+        P0-2 FIX: Now records mode outcome for telemetry steering.
+
         Args:
             task: Task description
             task_type: Category of task
 
         Returns:
-            ExecutionResult with response, claims, metrics, and validation
+            ExecutionResult with response, claims, metrics, validation, and feedback
         """
         # Build prompts
         system_prompt, user_prompt = self.prompt_builder.build(task, task_type)
@@ -174,9 +188,41 @@ class ClaudeRuntime:
         # Parse VERIX claims
         result.claims = self.verix_parser.parse(result.response)
 
-        # Validate claims
+        # Validate claims (basic VERIX validation)
         if result.claims:
             result.is_valid, result.violations = self.verix_validator.validate(result.claims)
+
+        # P0-1 FIX: Invoke feedback loop via PromptBuilder
+        # Closes VERIX->VERILINGUA feedback loop (REMEDIATION-PLAN FIX-5)
+        try:
+            compliance_score, violations, feedback = self.prompt_builder.validate_response(
+                result.response,
+                task_type=task_type,
+            )
+            result.compliance_score = compliance_score
+            result.validation_feedback = feedback
+
+            # Merge violations from feedback validation
+            if violations:
+                result.violations = list(set(result.violations + violations))
+
+        except Exception as e:
+            logger.warning(f"Feedback loop error (non-fatal): {e}")
+            result.compliance_score = 0.5  # Default on error
+
+        # P0-2 FIX: Record mode outcome for telemetry steering
+        # Closes Telemetry->ModeSelector feedback loop (REMEDIATION-PLAN FIX-7)
+        try:
+            from modes.selector import record_mode_outcome
+
+            accuracy = 1.0 if result.is_valid else 0.5
+            efficiency = self._calculate_efficiency(result.metrics)
+            consistency = result.compliance_score
+
+            record_mode_outcome(accuracy, efficiency, consistency)
+
+        except Exception as e:
+            logger.warning(f"Telemetry recording error (non-fatal): {e}")
 
         return result
 
@@ -290,6 +336,32 @@ class ClaudeRuntime:
             return True, []
 
         return self.verix_validator.validate(claims)
+
+    def _calculate_efficiency(self, metrics: ExecutionMetrics) -> float:
+        """
+        Calculate token efficiency score for telemetry.
+
+        P0-2 FIX: Helper for record_mode_outcome() integration.
+
+        Higher efficiency = fewer tokens for same result.
+        Normalized to 0.0-1.0 scale.
+
+        Args:
+            metrics: Execution metrics with token counts
+
+        Returns:
+            Efficiency score (0.0-1.0)
+        """
+        if metrics.total_tokens == 0:
+            return 1.0  # No tokens = maximally efficient
+
+        # Baseline: 500 tokens is "normal", 2000 is "expensive"
+        # Scale: 200 tokens -> 1.0, 500 -> 0.8, 1000 -> 0.5, 2000 -> 0.0
+        baseline_min = 200
+        baseline_max = 2000
+
+        efficiency = 1.0 - (metrics.total_tokens - baseline_min) / (baseline_max - baseline_min)
+        return max(0.0, min(1.0, efficiency))
 
     def get_prompt_preview(self, task: str, task_type: str = "default") -> Dict[str, str]:
         """

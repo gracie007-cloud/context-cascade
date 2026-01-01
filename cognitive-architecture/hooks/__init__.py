@@ -5,18 +5,23 @@ Provides hooks that integrate with Claude Code's hook system for:
 - Automatic mode selection on task start
 - VERIX validation on response completion
 - Frame compliance checking
+
+P0-2 FIX: Now records mode outcomes for telemetry steering.
 """
 
 import os
 import sys
+import logging
 from typing import Dict, Any, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from modes.selector import select_mode, TaskContext
+from modes.selector import select_mode, TaskContext, record_mode_outcome
 from modes.library import get_mode, BUILTIN_MODES
 from core.verilingua import FrameRegistry, aggregate_frame_score
 from core.config import FullConfig, FrameworkConfig
+
+logger = logging.getLogger(__name__)
 
 
 def on_task_start(task_description: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -68,18 +73,23 @@ def on_task_start(task_description: str, metadata: Optional[Dict[str, Any]] = No
 def on_response_complete(
     response: str,
     mode_name: str = "balanced",
+    task_type: str = "default",
 ) -> Dict[str, Any]:
     """
     Hook called when response generation completes.
 
-    Validates VERIX compliance and frame adherence.
+    Validates VERIX compliance, frame adherence, and records outcome
+    for telemetry steering.
+
+    P0-2 FIX: Now calls record_mode_outcome() to close feedback loop.
 
     Args:
         response: The generated response
         mode_name: Name of the mode used
+        task_type: Type of task (for telemetry)
 
     Returns:
-        Dict with validation results
+        Dict with validation results and telemetry status
     """
     mode = get_mode(mode_name)
     if not mode:
@@ -98,12 +108,29 @@ def on_response_complete(
     # Calculate compliance score
     verix_score = sum(verix_markers.values()) / len(verix_markers)
 
+    # P0-2 FIX: Record outcome for telemetry steering
+    # Closes Telemetry->ModeSelector feedback loop (REMEDIATION-PLAN FIX-7)
+    telemetry_recorded = False
+    try:
+        # Map scores to telemetry dimensions
+        accuracy = (frame_score + verix_score) / 2  # Combined accuracy
+        efficiency = 0.7  # Default efficiency (hooks don't have token data)
+        consistency = verix_score  # Epistemic consistency from VERIX
+
+        record_mode_outcome(accuracy, efficiency, consistency)
+        telemetry_recorded = True
+
+    except Exception as e:
+        # Non-fatal - hooks should not fail on telemetry errors
+        logger.warning(f"Telemetry recording failed in hook: {e}")
+
     return {
         "hook": "on_response_complete",
         "frame_score": frame_score,
         "verix_score": verix_score,
         "verix_markers": verix_markers,
         "compliant": frame_score >= 0.5 and verix_score >= 0.3,
+        "telemetry_recorded": telemetry_recorded,
     }
 
 
