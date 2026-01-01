@@ -379,8 +379,9 @@ All items from REMEDIATION-PLAN + HOFSTADTER-SPEC + VVV-PLAN:
 - [x] CALIBRATION.md (commit 95ad023)
 - [x] CI workflow (commit 460fe0d)
 - [x] CI fix: Add PyYAML dependency (commit bcc770a) - VERIFIED PASSING
-- [ ] Task corpus (150 tasks)
-- [ ] DeepEval setup
+- [x] Task corpus (150 tasks) - PA-001 to PA-050, AC-001 to AC-050, SF-001 to SF-050
+- [x] DeepEval setup (evals/conftest.py, test files)
+- [x] VVV eval GitHub Action (vvv-eval.yml)
 - [ ] Error handling tests
 
 ### VVV Optimization

@@ -1,0 +1,464 @@
+{
+  "skill": "prompt-architect",
+  "version": "3.1.1",
+  "total_tasks": 50,
+  "eval_dimensions": [
+    "intent_extraction_accuracy",
+    "constraint_identification",
+    "optimization_quality",
+    "verix_grounding_ratio",
+    "l2_output_purity"
+  ],
+  "tasks": [
+    {
+      "id": "PA-001",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Write a function to calculate factorial",
+      "expected_intent": "code_generation",
+      "expected_constraints": ["single_function", "mathematical", "recursive_or_iterative"],
+      "success_criteria": "Correctly identifies code generation intent with mathematical domain"
+    },
+    {
+      "id": "PA-002",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Explain how async/await works in JavaScript",
+      "expected_intent": "explanation",
+      "expected_constraints": ["technical_concept", "javascript", "async_programming"],
+      "success_criteria": "Identifies explanation intent in async programming domain"
+    },
+    {
+      "id": "PA-003",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Fix the bug in my login function",
+      "expected_intent": "debugging",
+      "expected_constraints": ["bug_fix", "authentication", "existing_code"],
+      "success_criteria": "Identifies debugging intent with auth context"
+    },
+    {
+      "id": "PA-004",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Add input validation to the user form",
+      "expected_intent": "feature_addition",
+      "expected_constraints": ["validation", "user_input", "forms"],
+      "success_criteria": "Identifies feature addition with validation focus"
+    },
+    {
+      "id": "PA-005",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Review this pull request for security issues",
+      "expected_intent": "code_review",
+      "expected_constraints": ["security_focus", "pr_review", "vulnerability_check"],
+      "success_criteria": "Identifies review intent with security dimension"
+    },
+    {
+      "id": "PA-006",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "What does this regex pattern match?",
+      "expected_intent": "analysis",
+      "expected_constraints": ["regex", "pattern_matching", "explanation_needed"],
+      "success_criteria": "Identifies analysis intent for regex"
+    },
+    {
+      "id": "PA-007",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Convert this callback code to use promises",
+      "expected_intent": "refactoring",
+      "expected_constraints": ["async_pattern", "modernization", "code_transformation"],
+      "success_criteria": "Identifies refactoring intent for async patterns"
+    },
+    {
+      "id": "PA-008",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Create unit tests for the payment module",
+      "expected_intent": "test_creation",
+      "expected_constraints": ["unit_tests", "payment", "coverage"],
+      "success_criteria": "Identifies test creation intent for payment domain"
+    },
+    {
+      "id": "PA-009",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Optimize this database query for performance",
+      "expected_intent": "optimization",
+      "expected_constraints": ["performance", "database", "query_tuning"],
+      "success_criteria": "Identifies optimization intent for DB performance"
+    },
+    {
+      "id": "PA-010",
+      "difficulty": "easy",
+      "category": "intent_extraction",
+      "input": "Document the API endpoints in this file",
+      "expected_intent": "documentation",
+      "expected_constraints": ["api_docs", "endpoint_documentation", "technical_writing"],
+      "success_criteria": "Identifies documentation intent for API"
+    },
+    {
+      "id": "PA-011",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "make it work faster",
+      "original_context": "User has a slow React component",
+      "expected_optimization": "Identify performance bottleneck in React component. Check for: unnecessary re-renders, missing useMemo/useCallback, expensive computations in render. Profile and optimize.",
+      "success_criteria": "Transforms vague request into actionable optimization prompt"
+    },
+    {
+      "id": "PA-012",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "fix the thing",
+      "original_context": "TypeScript error in auth middleware",
+      "expected_optimization": "Diagnose and fix TypeScript type error in authentication middleware. Identify: type mismatch, missing types, incorrect inference. Provide type-safe solution.",
+      "success_criteria": "Adds specificity to vague fix request with TS context"
+    },
+    {
+      "id": "PA-013",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "help me with the API",
+      "original_context": "Building REST API with Express",
+      "expected_optimization": "Clarify API task: Need endpoint design, implementation, error handling, or documentation? Specify: HTTP methods, routes, request/response schemas, middleware requirements.",
+      "success_criteria": "Expands ambiguous API request into structured requirements"
+    },
+    {
+      "id": "PA-014",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "write better code",
+      "original_context": "Legacy Python codebase",
+      "expected_optimization": "Refactor Python code following PEP-8, SOLID principles. Target: readability, maintainability, testability. Identify: code smells, complexity, duplication. Provide incremental improvements.",
+      "success_criteria": "Converts quality request into measurable refactoring steps"
+    },
+    {
+      "id": "PA-015",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "add security",
+      "original_context": "Node.js web application",
+      "expected_optimization": "Implement security measures: input validation, SQL injection prevention, XSS protection, CSRF tokens, rate limiting, secure headers. Follow OWASP guidelines.",
+      "success_criteria": "Expands generic security into specific OWASP-aligned tasks"
+    },
+    {
+      "id": "PA-016",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "I need a form",
+      "original_context": "React application with validation requirements",
+      "expected_optimization": "Create React form component with: controlled inputs, validation schema (Zod/Yup), error display, submission handling, loading states, accessibility (ARIA). Specify fields and rules.",
+      "success_criteria": "Transforms form request into complete implementation spec"
+    },
+    {
+      "id": "PA-017",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "make the tests pass",
+      "original_context": "Jest test suite with 5 failing tests",
+      "expected_optimization": "Analyze 5 failing Jest tests: identify assertion mismatches, async issues, mock problems. Fix root causes, not just symptoms. Ensure tests remain meaningful.",
+      "success_criteria": "Creates diagnostic prompt for test failures"
+    },
+    {
+      "id": "PA-018",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "deploy it",
+      "original_context": "Docker-based microservice",
+      "expected_optimization": "Deploy Docker microservice: build image, push to registry, configure orchestration (K8s/Docker Compose), set environment variables, health checks, rollback strategy.",
+      "success_criteria": "Expands deploy into DevOps pipeline steps"
+    },
+    {
+      "id": "PA-019",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "add logging",
+      "original_context": "Python FastAPI service",
+      "expected_optimization": "Implement structured logging in FastAPI: configure logger, add request/response logging, error tracking, performance metrics. Use JSON format for log aggregation compatibility.",
+      "success_criteria": "Converts logging request into observability implementation"
+    },
+    {
+      "id": "PA-020",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "handle errors better",
+      "original_context": "Go web service",
+      "expected_optimization": "Implement Go error handling: custom error types, error wrapping, centralized handler, appropriate HTTP status codes, user-friendly messages, internal logging.",
+      "success_criteria": "Transforms error handling into idiomatic Go patterns"
+    },
+    {
+      "id": "PA-021",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "write docs",
+      "original_context": "Public npm package",
+      "expected_optimization": "Create npm package documentation: README with installation, quick start, API reference, examples, contributing guide. Add JSDoc comments, TypeScript declarations.",
+      "success_criteria": "Expands docs into comprehensive package documentation"
+    },
+    {
+      "id": "PA-022",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "clean up the code",
+      "original_context": "Merged feature branch with tech debt",
+      "expected_optimization": "Code cleanup checklist: remove dead code, extract functions, rename for clarity, add comments where needed, enforce consistent formatting, update imports.",
+      "success_criteria": "Creates actionable cleanup checklist"
+    },
+    {
+      "id": "PA-023",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "add caching",
+      "original_context": "Django REST API",
+      "expected_optimization": "Implement Django caching: choose strategy (Redis/Memcached), cache expensive queries, add cache headers, implement invalidation, measure hit rates.",
+      "success_criteria": "Converts caching into specific Django implementation"
+    },
+    {
+      "id": "PA-024",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "make it accessible",
+      "original_context": "Vue.js dashboard application",
+      "expected_optimization": "Implement WCAG 2.1 AA accessibility: semantic HTML, ARIA labels, keyboard navigation, focus management, color contrast, screen reader testing.",
+      "success_criteria": "Transforms accessibility into WCAG compliance checklist"
+    },
+    {
+      "id": "PA-025",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "add types",
+      "original_context": "JavaScript library migration to TypeScript",
+      "expected_optimization": "TypeScript migration: add tsconfig, convert files incrementally, define interfaces/types, fix type errors, add strict mode gradually, update build process.",
+      "success_criteria": "Creates incremental TypeScript migration plan"
+    },
+    {
+      "id": "PA-026",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "internationalize the app",
+      "original_context": "Next.js e-commerce site",
+      "expected_optimization": "Implement i18n in Next.js: configure next-i18next, extract strings, create translation files, handle pluralization, date/number formatting, RTL support.",
+      "success_criteria": "Expands i18n into complete implementation plan"
+    },
+    {
+      "id": "PA-027",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "add authentication",
+      "original_context": "Express.js API",
+      "expected_optimization": "Implement JWT authentication in Express: user model, register/login endpoints, token generation, middleware, refresh tokens, secure storage, logout.",
+      "success_criteria": "Converts auth into complete JWT implementation"
+    },
+    {
+      "id": "PA-028",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "monitor the app",
+      "original_context": "Production Kubernetes deployment",
+      "expected_optimization": "Set up K8s monitoring: Prometheus metrics, Grafana dashboards, alerting rules, log aggregation, distributed tracing, SLO/SLA tracking.",
+      "success_criteria": "Transforms monitoring into observability stack"
+    },
+    {
+      "id": "PA-029",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "improve UX",
+      "original_context": "Mobile-first React Native app",
+      "expected_optimization": "UX improvements: loading states, error feedback, touch targets, haptic feedback, offline support, performance optimization, gesture navigation.",
+      "success_criteria": "Expands UX into specific mobile improvements"
+    },
+    {
+      "id": "PA-030",
+      "difficulty": "medium",
+      "category": "prompt_optimization",
+      "input": "scale the database",
+      "original_context": "PostgreSQL with growing dataset",
+      "expected_optimization": "PostgreSQL scaling strategy: analyze query patterns, add indexes, partition tables, connection pooling, read replicas, query optimization, consider sharding.",
+      "success_criteria": "Creates database scaling roadmap"
+    },
+    {
+      "id": "PA-031",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Write me a function that does everything for the user management system including authentication, authorization, profile management, settings, notifications, and audit logging all in one file",
+      "anti_patterns": ["god_function", "single_responsibility_violation", "monolith_tendency"],
+      "expected_response": "Detect monolithic design anti-pattern. Recommend: separate concerns into modules (auth, profiles, settings, notifications, audit). Each with single responsibility.",
+      "success_criteria": "Identifies and rejects god-function anti-pattern"
+    },
+    {
+      "id": "PA-032",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Just copy the code from StackOverflow and make it work",
+      "anti_patterns": ["copy_paste_programming", "lack_of_understanding", "technical_debt"],
+      "expected_response": "Detect copy-paste anti-pattern. Recommend: understand the problem first, adapt solution to context, review for security/compatibility.",
+      "success_criteria": "Flags copy-paste without understanding"
+    },
+    {
+      "id": "PA-033",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Add a try-catch around everything so we don't get any errors",
+      "anti_patterns": ["error_swallowing", "pokemon_exception_handling", "debugging_nightmare"],
+      "expected_response": "Detect error swallowing anti-pattern. Recommend: handle specific errors, log appropriately, fail fast for unrecoverable errors.",
+      "success_criteria": "Identifies blanket error handling as anti-pattern"
+    },
+    {
+      "id": "PA-034",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Make it work now, we'll refactor later (we never do)",
+      "anti_patterns": ["technical_debt_accumulation", "lava_flow", "broken_windows"],
+      "expected_response": "Detect tech debt deferral anti-pattern. Recommend: allocate refactoring time, define 'good enough' criteria, implement incrementally.",
+      "success_criteria": "Identifies deferred refactoring pattern"
+    },
+    {
+      "id": "PA-035",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Use global state for everything so all components can access the data easily",
+      "anti_patterns": ["global_state_abuse", "tight_coupling", "hidden_dependencies"],
+      "expected_response": "Detect global state abuse. Recommend: use appropriate state management, scope state minimally, explicit dependency injection.",
+      "success_criteria": "Flags global state as architectural anti-pattern"
+    },
+    {
+      "id": "PA-036",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Hardcode all the configuration values directly in the code for simplicity",
+      "anti_patterns": ["hardcoding", "environment_coupling", "deployment_inflexibility"],
+      "expected_response": "Detect hardcoding anti-pattern. Recommend: externalize config, use environment variables, implement config management.",
+      "success_criteria": "Identifies hardcoding as maintainability issue"
+    },
+    {
+      "id": "PA-037",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Don't bother with tests, the code is simple enough",
+      "anti_patterns": ["testing_omission", "false_confidence", "regression_risk"],
+      "expected_response": "Detect testing omission anti-pattern. Recommend: test critical paths, automate regression tests, maintain confidence in changes.",
+      "success_criteria": "Flags test skipping as quality risk"
+    },
+    {
+      "id": "PA-038",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Store the passwords in plain text, we can encrypt them later",
+      "anti_patterns": ["security_negligence", "plain_text_secrets", "compliance_violation"],
+      "expected_response": "CRITICAL: Detect security anti-pattern. Passwords MUST be hashed (bcrypt/argon2) from day one. Never plain text.",
+      "success_criteria": "Immediately flags as critical security issue"
+    },
+    {
+      "id": "PA-039",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Create a new database connection for every request",
+      "anti_patterns": ["connection_leak", "resource_exhaustion", "performance_killer"],
+      "expected_response": "Detect connection anti-pattern. Recommend: use connection pooling, manage lifecycle, implement proper cleanup.",
+      "success_criteria": "Identifies resource management issue"
+    },
+    {
+      "id": "PA-040",
+      "difficulty": "hard",
+      "category": "anti_pattern_detection",
+      "input": "Add comments explaining what each line of code does",
+      "anti_patterns": ["over_commenting", "code_smell_indicator", "maintenance_burden"],
+      "expected_response": "Detect over-commenting tendency. Recommend: write self-documenting code, comment 'why' not 'what', use meaningful names.",
+      "success_criteria": "Suggests better approach to documentation"
+    },
+    {
+      "id": "PA-041",
+      "difficulty": "hard",
+      "category": "complex_optimization",
+      "input": "Optimize this ML pipeline that processes 10TB of data daily with 50ms latency requirements",
+      "constraints": ["latency_sla", "throughput", "cost", "reliability"],
+      "expected_optimization": "Multi-dimensional optimization: batch vs stream processing, hardware acceleration, caching layers, parallelization, data locality, incremental processing.",
+      "success_criteria": "Balances multiple competing constraints"
+    },
+    {
+      "id": "PA-042",
+      "difficulty": "hard",
+      "category": "complex_optimization",
+      "input": "Migrate this legacy COBOL system to modern cloud-native architecture while maintaining 99.99% uptime",
+      "constraints": ["zero_downtime", "data_integrity", "compatibility", "team_skills"],
+      "expected_optimization": "Strangler fig pattern: identify bounded contexts, build parallel services, gradual traffic migration, comprehensive testing, rollback capabilities.",
+      "success_criteria": "Produces safe migration strategy"
+    },
+    {
+      "id": "PA-043",
+      "difficulty": "hard",
+      "category": "complex_optimization",
+      "input": "Design a prompt that works consistently across Claude, GPT-4, and Gemini with similar outputs",
+      "constraints": ["model_agnostic", "consistency", "quality", "cost"],
+      "expected_optimization": "Cross-model prompt design: clear instructions, examples, avoid model-specific features, test on all targets, handle differences gracefully.",
+      "success_criteria": "Creates portable prompt strategy"
+    },
+    {
+      "id": "PA-044",
+      "difficulty": "hard",
+      "category": "complex_optimization",
+      "input": "Build a real-time collaborative editor like Google Docs with conflict resolution",
+      "constraints": ["consistency", "latency", "offline_support", "scalability"],
+      "expected_optimization": "CRDT/OT architecture: choose algorithm, handle network partitions, merge strategies, presence indicators, operational transform optimization.",
+      "success_criteria": "Addresses distributed systems challenges"
+    },
+    {
+      "id": "PA-045",
+      "difficulty": "hard",
+      "category": "complex_optimization",
+      "input": "Create a recommendation system that is both accurate and explainable for compliance reasons",
+      "constraints": ["accuracy", "explainability", "compliance", "performance"],
+      "expected_optimization": "Explainable ML: interpretable models, SHAP/LIME integration, audit trails, feature importance, decision documentation.",
+      "success_criteria": "Balances ML performance with explainability"
+    },
+    {
+      "id": "PA-046",
+      "difficulty": "hard",
+      "category": "epistemic_calibration",
+      "input": "Tell me definitively whether this algorithm is O(n) or O(n log n)",
+      "test_type": "overconfidence_detection",
+      "expected_behavior": "Request to see the algorithm. Cannot make definitive claim without evidence. Confidence ceiling applies.",
+      "success_criteria": "Refuses definitive claim without code"
+    },
+    {
+      "id": "PA-047",
+      "difficulty": "hard",
+      "category": "epistemic_calibration",
+      "input": "I read online that React is always faster than Vue, confirm this",
+      "test_type": "report_validation",
+      "expected_behavior": "Performance depends on context. [reported:online] claims need verification. Provide nuanced comparison with evidence ceiling.",
+      "success_criteria": "Applies report confidence ceiling (0.70)"
+    },
+    {
+      "id": "PA-048",
+      "difficulty": "hard",
+      "category": "epistemic_calibration",
+      "input": "Based on my description, what's causing the production bug?",
+      "test_type": "inference_limitation",
+      "expected_behavior": "Inference from description has ceiling. Need logs, reproduction steps, or direct observation for higher confidence.",
+      "success_criteria": "Applies inference ceiling (0.70)"
+    },
+    {
+      "id": "PA-049",
+      "difficulty": "hard",
+      "category": "epistemic_calibration",
+      "input": "Is microservices architecture better than monolith?",
+      "test_type": "false_dichotomy",
+      "expected_behavior": "Reject false dichotomy. Answer depends on: team size, system complexity, deployment needs, operational capacity.",
+      "success_criteria": "Refuses binary answer, provides context"
+    },
+    {
+      "id": "PA-050",
+      "difficulty": "hard",
+      "category": "epistemic_calibration",
+      "input": "You said X earlier but now you're saying Y, which is correct?",
+      "test_type": "contradiction_handling",
+      "expected_behavior": "Acknowledge potential inconsistency. Review both statements. Provide clarification with updated confidence and evidence.",
+      "success_criteria": "Handles contradiction with epistemic humility"
+    }
+  ]
+}

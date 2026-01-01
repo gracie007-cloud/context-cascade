@@ -1,0 +1,514 @@
+{
+  "skill": "agent-creator",
+  "version": "3.2.0",
+  "total_tasks": 50,
+  "eval_dimensions": [
+    "registry_compliance",
+    "yaml_validity",
+    "vcl_7slot_coverage",
+    "agent_specialization_quality",
+    "system_prompt_effectiveness"
+  ],
+  "tasks": [
+    {
+      "id": "AC-001",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for code review",
+      "expected_output": {
+        "name": "code-review-agent",
+        "category": "quality",
+        "has_yaml_frontmatter": true,
+        "required_sections": ["trigger_conditions", "capabilities", "output_format"]
+      },
+      "success_criteria": "Produces valid agent definition with proper frontmatter"
+    },
+    {
+      "id": "AC-002",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for documentation generation",
+      "expected_output": {
+        "name": "docs-generator-agent",
+        "category": "delivery",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates documentation agent with delivery category"
+    },
+    {
+      "id": "AC-003",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for test writing",
+      "expected_output": {
+        "name": "test-writer-agent",
+        "category": "quality",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates test agent in quality category"
+    },
+    {
+      "id": "AC-004",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for security scanning",
+      "expected_output": {
+        "name": "security-scanner-agent",
+        "category": "security",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates security agent with appropriate category"
+    },
+    {
+      "id": "AC-005",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for API design",
+      "expected_output": {
+        "name": "api-designer-agent",
+        "category": "specialists",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates API specialist agent"
+    },
+    {
+      "id": "AC-006",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for database optimization",
+      "expected_output": {
+        "name": "db-optimizer-agent",
+        "category": "specialists",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates DB specialist agent"
+    },
+    {
+      "id": "AC-007",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for CI/CD pipeline management",
+      "expected_output": {
+        "name": "cicd-manager-agent",
+        "category": "operations",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates operations agent for CI/CD"
+    },
+    {
+      "id": "AC-008",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for performance profiling",
+      "expected_output": {
+        "name": "performance-profiler-agent",
+        "category": "quality",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates performance agent in quality"
+    },
+    {
+      "id": "AC-009",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for dependency management",
+      "expected_output": {
+        "name": "dependency-manager-agent",
+        "category": "tooling",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates tooling agent for dependencies"
+    },
+    {
+      "id": "AC-010",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for log analysis",
+      "expected_output": {
+        "name": "log-analyzer-agent",
+        "category": "operations",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates operations agent for logs"
+    },
+    {
+      "id": "AC-011",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for GitHub integration",
+      "expected_output": {
+        "name": "github-integration-agent",
+        "category": "platforms",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates platform agent for GitHub"
+    },
+    {
+      "id": "AC-012",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for AWS deployment",
+      "expected_output": {
+        "name": "aws-deployment-agent",
+        "category": "platforms",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates platform agent for AWS"
+    },
+    {
+      "id": "AC-013",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for task orchestration",
+      "expected_output": {
+        "name": "task-orchestrator-agent",
+        "category": "orchestration",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates orchestration agent"
+    },
+    {
+      "id": "AC-014",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for research synthesis",
+      "expected_output": {
+        "name": "research-synthesizer-agent",
+        "category": "research",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates research agent"
+    },
+    {
+      "id": "AC-015",
+      "difficulty": "easy",
+      "category": "agent_definition",
+      "input": "Create an agent for skill creation",
+      "expected_output": {
+        "name": "skill-creator-agent",
+        "category": "foundry",
+        "has_yaml_frontmatter": true
+      },
+      "success_criteria": "Creates foundry agent"
+    },
+    {
+      "id": "AC-016",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Validate that code-review-agent exists in AGENT_REGISTRY and has correct metadata",
+      "expected_checks": [
+        "exists_in_registry",
+        "category_matches",
+        "version_present",
+        "description_not_empty"
+      ],
+      "success_criteria": "Performs all registry validation checks"
+    },
+    {
+      "id": "AC-017",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check if agent 'nonexistent-agent' is in the registry",
+      "expected_behavior": "return_not_found_with_suggestions",
+      "success_criteria": "Correctly identifies missing agent and suggests alternatives"
+    },
+    {
+      "id": "AC-018",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "List all agents in the 'quality' category",
+      "expected_behavior": "enumerate_category_members",
+      "expected_count_range": [15, 25],
+      "success_criteria": "Returns complete list of quality category agents"
+    },
+    {
+      "id": "AC-019",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Find agents that can handle security vulnerability scanning",
+      "expected_behavior": "semantic_search_registry",
+      "expected_matches": ["security-scanner-agent", "vulnerability-assessor"],
+      "success_criteria": "Finds relevant agents by capability"
+    },
+    {
+      "id": "AC-020",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Verify YAML frontmatter for all foundry agents",
+      "expected_checks": [
+        "yaml_parse_success",
+        "required_fields_present",
+        "no_syntax_errors"
+      ],
+      "success_criteria": "Validates YAML across category"
+    },
+    {
+      "id": "AC-021",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check for duplicate agent names in registry",
+      "expected_behavior": "uniqueness_check",
+      "success_criteria": "Identifies any naming conflicts"
+    },
+    {
+      "id": "AC-022",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Verify all agents have allowed-tools specified",
+      "expected_behavior": "field_presence_check",
+      "success_criteria": "Reports agents with missing tools"
+    },
+    {
+      "id": "AC-023",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check agent version consistency across the registry",
+      "expected_behavior": "version_format_validation",
+      "success_criteria": "Ensures semantic versioning compliance"
+    },
+    {
+      "id": "AC-024",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Find orphan agents not referenced by any skill",
+      "expected_behavior": "reference_analysis",
+      "success_criteria": "Identifies unreferenced agents"
+    },
+    {
+      "id": "AC-025",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Validate agent descriptions are under 200 characters",
+      "expected_behavior": "length_validation",
+      "success_criteria": "Enforces description length limits"
+    },
+    {
+      "id": "AC-026",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check for circular dependencies between agents",
+      "expected_behavior": "dependency_graph_analysis",
+      "success_criteria": "Detects circular references"
+    },
+    {
+      "id": "AC-027",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Verify all agent categories are valid",
+      "expected_categories": ["delivery", "quality", "research", "orchestration", "security", "platforms", "specialists", "tooling", "foundry", "operations"],
+      "success_criteria": "Validates against allowed categories"
+    },
+    {
+      "id": "AC-028",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Find agents with missing model specification",
+      "expected_behavior": "field_check",
+      "success_criteria": "Reports agents without model field"
+    },
+    {
+      "id": "AC-029",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check agent trigger conditions for overlaps",
+      "expected_behavior": "trigger_analysis",
+      "success_criteria": "Identifies trigger conflicts"
+    },
+    {
+      "id": "AC-030",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Generate registry health report",
+      "expected_output": {
+        "total_agents": "number",
+        "by_category": "object",
+        "validation_errors": "array",
+        "warnings": "array"
+      },
+      "success_criteria": "Produces comprehensive health report"
+    },
+    {
+      "id": "AC-031",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Validate agent file naming conventions",
+      "expected_pattern": "kebab-case.md",
+      "success_criteria": "Enforces naming conventions"
+    },
+    {
+      "id": "AC-032",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check for deprecated agents still in use",
+      "expected_behavior": "deprecation_analysis",
+      "success_criteria": "Identifies deprecated agent usage"
+    },
+    {
+      "id": "AC-033",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Verify agent output format specifications",
+      "expected_behavior": "output_schema_validation",
+      "success_criteria": "Validates output format definitions"
+    },
+    {
+      "id": "AC-034",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Check agent capability claims against allowed tools",
+      "expected_behavior": "capability_tool_alignment",
+      "success_criteria": "Ensures capabilities match tools"
+    },
+    {
+      "id": "AC-035",
+      "difficulty": "medium",
+      "category": "registry_validation",
+      "input": "Find agents that should be consolidated",
+      "expected_behavior": "similarity_analysis",
+      "success_criteria": "Identifies redundant agents"
+    },
+    {
+      "id": "AC-036",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Create a VCL v3.1.1 compliant agent with all 7 slots documented",
+      "required_slots": ["HON", "MOR", "COM", "CLS", "EVD", "ASP", "SPC"],
+      "expected_output": {
+        "has_all_slots": true,
+        "slot_order_correct": true,
+        "evd_present": true,
+        "asp_present": true
+      },
+      "success_criteria": "All 7 slots present in correct order"
+    },
+    {
+      "id": "AC-037",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Verify agent uses correct evidential markers",
+      "required_markers": ["-DI", "-mis", "-dir"],
+      "expected_behavior": "marker_presence_check",
+      "success_criteria": "Turkish evidential markers correctly used"
+    },
+    {
+      "id": "AC-038",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check agent aspectual frame completeness",
+      "required_aspects": ["sov.", "nesov."],
+      "expected_behavior": "aspect_validation",
+      "success_criteria": "Russian aspect markers present"
+    },
+    {
+      "id": "AC-039",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Validate agent honorific register selection",
+      "valid_registers": ["teineigo", "sonkeigo", "kenjougo"],
+      "expected_behavior": "register_validation",
+      "success_criteria": "Japanese keigo properly specified"
+    },
+    {
+      "id": "AC-040",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check morphological decomposition in agent definition",
+      "expected_format": "root:X-Y-Z",
+      "expected_behavior": "mor_format_check",
+      "success_criteria": "Arabic-style roots correctly formed"
+    },
+    {
+      "id": "AC-041",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Verify compositional frame uses German-style compounds",
+      "expected_format": "Concept+From+Parts",
+      "expected_behavior": "com_format_check",
+      "success_criteria": "German compounds correctly formed"
+    },
+    {
+      "id": "AC-042",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check classifier frame uses Chinese-style specifiers",
+      "expected_format": "type_specifier",
+      "expected_behavior": "cls_format_check",
+      "success_criteria": "Chinese classifiers correctly used"
+    },
+    {
+      "id": "AC-043",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Verify spatial frame uses absolute references",
+      "expected_format": "path:/location",
+      "expected_behavior": "spc_format_check",
+      "success_criteria": "Guugu Yimithirr-style absolute positions"
+    },
+    {
+      "id": "AC-044",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check confidence ceilings are respected",
+      "ceilings": {
+        "definition": 0.95,
+        "observation": 0.95,
+        "policy": 0.90,
+        "research": 0.85,
+        "report": 0.70,
+        "inference": 0.70
+      },
+      "success_criteria": "No confidence exceeds EVD ceiling"
+    },
+    {
+      "id": "AC-045",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Verify L2 output purity in agent responses",
+      "expected_behavior": "no_vcl_markers_in_output",
+      "success_criteria": "User-facing output is pure English"
+    },
+    {
+      "id": "AC-046",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check VERIX notation format compliance",
+      "expected_format": "[illocution|affect] content [ground:source] [conf:X.XX] [state:status]",
+      "success_criteria": "All VERIX statements properly formatted"
+    },
+    {
+      "id": "AC-047",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Validate immutable bounds (EVD >= 1, ASP >= 1)",
+      "expected_behavior": "immutable_check",
+      "success_criteria": "Immutable slots cannot be disabled"
+    },
+    {
+      "id": "AC-048",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check state transitions are valid",
+      "valid_states": ["provisional", "confirmed", "retracted"],
+      "expected_behavior": "state_validation",
+      "success_criteria": "Only valid states used"
+    },
+    {
+      "id": "AC-049",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Verify illocution types are correct",
+      "valid_types": ["assert", "direct", "query", "commit", "express"],
+      "expected_behavior": "illocution_validation",
+      "success_criteria": "Only valid illocutions used"
+    },
+    {
+      "id": "AC-050",
+      "difficulty": "hard",
+      "category": "vcl_7slot_compliance",
+      "input": "Check epistemic cosplay detection",
+      "test_type": "overconfidence_detection",
+      "expected_behavior": "detect_ungrounded_high_confidence",
+      "success_criteria": "Flags claims exceeding evidence ceiling"
+    }
+  ]
+}
