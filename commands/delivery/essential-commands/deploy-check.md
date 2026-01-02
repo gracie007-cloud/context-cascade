@@ -1,221 +1,67 @@
 ---
 name: deploy-check
 description: Directory to validate
-version: 1.0.0
+allowed-tools:
+- Read
+- Write
+- Edit
+- Bash
+- Glob
+- Grep
+- Task
+- TodoWrite
+model: claude-3-5-sonnet
+x-version: 1.0.0
+x-category: delivery
+x-vcl-compliance: v3.1.1
 binding: skill:deploy-check
 category: delivery
 ---
-/*============================================================================*/
 
+## STANDARD OPERATING PROCEDURE
 
-/*----------------------------------------------------------------------------*/
-/* S0 COMMAND IDENTITY                                                         */
-/*----------------------------------------------------------------------------*/
+### Purpose
+- Primary action: Directory to validate
 
-[define|neutral] COMMAND := {
-  name: "deploy-check",
-  binding: "skill:deploy-check",
-  category: "delivery",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- Command syntax: /deploy-check [args]
+- Ensure prerequisites are met before execution.
 
-/*----------------------------------------------------------------------------*/
-/* S1 PURPOSE                                                                  */
-/*----------------------------------------------------------------------------*/
+### Inputs and Options
+- Inputs: No structured parameters defined; capture user intent explicitly.
 
-[assert|neutral] PURPOSE := {
-  action: "[Define what this command does - the specific action it triggers]",
-  outcome: "Workflow completion with quality metrics",
-  use_when: "User invokes /deploy-check"
-} [ground:given] [conf:1.0] [state:confirmed]
+### Execution Phases
+1. Review the request and confirm scope.
+2. Execute the command flow.
+3. Summarize outcomes and next actions.
 
-/*----------------------------------------------------------------------------*/
-/* S2 USAGE SYNTAX                                                             */
-/*----------------------------------------------------------------------------*/
+### Success Criteria and Outputs
+- Document artifacts, decisions, and follow-up actions clearly.
 
-[define|neutral] SYNTAX := "/deploy-check [args]" [ground:given] [conf:1.0] [state:confirmed]
+### Error Handling and Recovery
+- If execution fails, capture the failure mode, retry with verbose context, and surface actionable remediation steps.
 
-[define|neutral] PARAMETERS := {
-  required: {
-    path: { type: "string", description: "Directory to validate" }
-  },
-  optional: {
-    environment: { type: "string", description: "staging|production (default: production)" }
-  },
-  flags: {
-    "--skip-performance": { description: "Skip performance tests (default: false)", default: "false" },
-    "--strict-mode": { description: "Enforce strict quality gates (default: true)", default: "false" }
-  }
-} [ground:given] [conf:1.0] [state:confirmed]
+### Chaining and Coordination
 
-/*----------------------------------------------------------------------------*/
-/* S3 EXECUTION FLOW                                                           */
-/*----------------------------------------------------------------------------*/
+### Memory and Tagging
+- Tag session outputs with who/when/why for traceability.
 
-[define|neutral] EXECUTION_STAGES := [
-  { stage: 1, action: "✅ **Tests Passing** - 100% test pass rate", model: "Claude" },
-  { stage: 2, action: "✅ **Code Quality** - Score ≥ 85/100", model: "Claude" },
-  { stage: 3, action: "✅ **Test Coverage** - Coverage ≥ 80%", model: "Claude" },
-  { stage: 4, action: "✅ **Security** - Zero critical/high vulnerabilities", model: "Claude" },
-  { stage: 5, action: "✅ **Performance** - Within SLA (avg < 200ms, p95 < 500ms)", model: "Claude" },
-  { stage: 6, action: "✅ **Documentation** - README, deployment docs, rollback plan", model: "Claude" }
-] [ground:witnessed:workflow-design] [conf:0.95] [state:confirmed]
+### Example Invocation
+- /deploy-check example
 
-[define|neutral] MULTI_MODEL_STRATEGY := {
-  gemini_search: "Research and web search tasks",
-  gemini_megacontext: "Large codebase analysis",
-  codex: "Code generation and prototyping",
-  claude: "Architecture and testing"
-} [ground:given] [conf:0.95] [state:confirmed]
+### Output Format
+- Provide a concise summary, actions taken, artifacts generated, and recommended next steps.
+- Always include an explicit confidence line: "Confidence: X.XX (ceiling: TYPE Y.YY)".
+- Use ceilings — inference/report: 0.70, research: 0.85, observation: 0.95, definition: 0.95.
+- Keep user-facing output in plain English; reserve VCL markers for the appendix only.
 
-/*----------------------------------------------------------------------------*/
-/* S4 INPUT CONTRACT                                                           */
-/*----------------------------------------------------------------------------*/
+Confidence: 0.86 (ceiling: observation 0.95) - SOP rewritten to Prompt-Architect pattern based on legacy command content.
 
-[define|neutral] INPUT_CONTRACT := {
-  required: {
-    command_args: "string - Command arguments"
-  },
-  optional: {
-    flags: "object - Command flags",
-    context: "string - Additional context"
-  },
-  prerequisites: [
-    "Valid project directory",
-    "Required tools installed"
-  ]
-} [ground:given] [conf:1.0] [state:confirmed]
+---
 
-/*----------------------------------------------------------------------------*/
-/* S5 OUTPUT CONTRACT                                                          */
-/*----------------------------------------------------------------------------*/
+## VCL COMPLIANCE APPENDIX (Internal Reference)
 
-[define|neutral] OUTPUT_CONTRACT := {
-  artifacts: [
-    "Execution log",
-    "Quality metrics report"
-  ],
-  metrics: {
-    success_rate: "Percentage of successful executions",
-    quality_score: "Overall quality assessment"
-  },
-  state_changes: [
-    "Workflow state updated"
-  ]
-} [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S6 SUCCESS INDICATORS                                                       */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] SUCCESS_CRITERIA := {
-  pass_conditions: [
-    "Command executes without errors",
-    "Output meets quality thresholds"
-  ],
-  quality_thresholds: {
-    execution_success: ">= 0.95",
-    quality_score: ">= 0.80"
-  }
-} [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S7 ERROR HANDLING                                                           */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] ERROR_HANDLERS := {
-  missing_input: {
-    symptom: "Required input not provided",
-    cause: "User omitted required argument",
-    recovery: "Prompt user for missing input"
-  },
-  execution_failure: {
-    symptom: "Command fails to complete",
-    cause: "Underlying tool or service error",
-    recovery: "Retry with verbose logging"
-  }
-} [ground:witnessed:failure-analysis] [conf:0.92] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S8 EXAMPLES                                                                 */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] EXAMPLES := [
-  { command: "/deploy-check . production", description: "Example usage" },
-  { command: "/deploy-check ./dist staging", description: "Example usage" },
-  { command: "/deploy-check . production --skip-performance", description: "Example usage" }
-] [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S9 CHAIN PATTERNS                                                           */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] CHAINS_WITH := {
-  sequential: [
-    "/deploy-check -> /review -> /deploy"
-  ],
-  parallel: [
-    "parallel ::: '/deploy-check arg1' '/deploy-check arg2'"
-  ]
-} [ground:given] [conf:0.95] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S10 RELATED COMMANDS                                                        */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] RELATED := {
-  complementary: ["/security-scan", "/audit-pipeline", "/quick-check"],
-  alternatives: [],
-  prerequisites: []
-} [ground:given] [conf:0.95] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S11 META-LOOP INTEGRATION                                                   */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] META_LOOP := {
-  expertise_check: {
-    domain: "delivery",
-    file: ".claude/expertise/delivery.yaml",
-    fallback: "discovery_mode"
-  },
-  benchmark: "deploy-check-benchmark-v1",
-  tests: [
-    "command_execution_success",
-    "workflow_validation"
-  ],
-  success_threshold: 0.90,
-  namespace: "commands/delivery/deploy-check/{project}/{timestamp}",
-  uncertainty_threshold: 0.85,
-  coordination: {
-    related_skills: ["deploy-check"],
-    related_agents: ["coder", "tester"]
-  }
-} [ground:system-policy] [conf:0.98] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S12 MEMORY TAGGING                                                          */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "deploy-check-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project-name}",
-  WHY: "command-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S13 ABSOLUTE RULES                                                          */
-/*----------------------------------------------------------------------------*/
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
-
-[commit|confident] <promise>DEPLOY_CHECK_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+[[HON:teineigo]] [[MOR:root:PA]] [[COM:PromptArchitect]] [[CLS:ge_command]] [[EVD:-DI<gozlem>]] [[ASP:nesov.]] [[SPC:path:/commands]]
+[define|neutral] CONFIDENCE_CEILINGS := {inference:0.70, report:0.70, research:0.85, observation:0.95, definition:0.95} [conf:0.9] [state:confirmed]
+[direct|emphatic] L2_LANGUAGE := English; user-facing outputs exclude VCL markers. [conf:0.99] [state:confirmed]
+[commit|confident] <promise>DEPLOY_CHECK_VERILINGUA_VERIX_COMPLIANT</promise> [conf:0.88] [state:confirmed]

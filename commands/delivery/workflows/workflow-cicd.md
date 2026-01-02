@@ -1,222 +1,67 @@
 ---
 name: workflow-cicd
 description: Primary input
-version: 1.0.0
+allowed-tools:
+- Read
+- Write
+- Edit
+- Bash
+- Glob
+- Grep
+- Task
+- TodoWrite
+model: claude-3-5-sonnet
+x-version: 1.0.0
+x-category: delivery
+x-vcl-compliance: v3.1.1
 binding: skill:workflow-cicd
 category: delivery
 ---
-/*============================================================================*/
 
+## STANDARD OPERATING PROCEDURE
 
-/*----------------------------------------------------------------------------*/
-/* S0 COMMAND IDENTITY                                                         */
-/*----------------------------------------------------------------------------*/
+### Purpose
+- Primary action: Primary input
 
-[define|neutral] COMMAND := {
-  name: "workflow-cicd",
-  binding: "skill:workflow-cicd",
-  category: "delivery",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- Command syntax: /workflow-cicd [args]
+- Ensure prerequisites are met before execution.
 
-/*----------------------------------------------------------------------------*/
-/* S1 PURPOSE                                                                  */
-/*----------------------------------------------------------------------------*/
+### Inputs and Options
+- Inputs: No structured parameters defined; capture user intent explicitly.
 
-[assert|neutral] PURPOSE := {
-  action: "[Define what this command does - the specific action it triggers]",
-  outcome: "Workflow completion with quality metrics",
-  use_when: "User invokes /workflow-cicd"
-} [ground:given] [conf:1.0] [state:confirmed]
+### Execution Phases
+1. Review the request and confirm scope.
+2. Execute the command flow.
+3. Summarize outcomes and next actions.
 
-/*----------------------------------------------------------------------------*/
-/* S2 USAGE SYNTAX                                                             */
-/*----------------------------------------------------------------------------*/
+### Success Criteria and Outputs
+- Document artifacts, decisions, and follow-up actions clearly.
 
-[define|neutral] SYNTAX := "/workflow-cicd [args]" [ground:given] [conf:1.0] [state:confirmed]
+### Error Handling and Recovery
+- If execution fails, capture the failure mode, retry with verbose context, and surface actionable remediation steps.
 
-[define|neutral] PARAMETERS := {
-  required: {
-    input: { type: "string", description: "Primary input" }
-  },
-  optional: {
-    options: { type: "object", description: "Additional options" }
-  },
-  flags: {
-    "--stage": { description: "Run specific stage: all|build|test|deploy|release ", default: "false" },
-    "--environment": { description: "Target environment: dev|staging|production (defaul", default: "false" },
-    "--strategy": { description: "Deployment strategy: rolling|blue-green|canary (de", default: "false" }
-  }
-} [ground:given] [conf:1.0] [state:confirmed]
+### Chaining and Coordination
 
-/*----------------------------------------------------------------------------*/
-/* S3 EXECUTION FLOW                                                           */
-/*----------------------------------------------------------------------------*/
+### Memory and Tagging
+- Tag session outputs with who/when/why for traceability.
 
-[define|neutral] EXECUTION_STAGES := [
-  { stage: 1, action: "🔍 **Pre-flight**: Validate environment and dependencies", model: "Claude" },
-  { stage: 2, action: "🏗️ **Build**: Compile and bundle application", model: "Claude" },
-  { stage: 3, action: "🧪 **Test**: Run all test suites in parallel", model: "Claude" },
-  { stage: 4, action: "🔒 **Security**: Security and dependency audits", model: "Claude" },
-  { stage: 5, action: "📊 **Quality**: Code quality and coverage checks", model: "Claude" },
-  { stage: 6, action: "🐳 **Package**: Build Docker images", model: "Claude" }
-] [ground:witnessed:workflow-design] [conf:0.95] [state:confirmed]
+### Example Invocation
+- /workflow-cicd example
 
-[define|neutral] MULTI_MODEL_STRATEGY := {
-  gemini_search: "Research and web search tasks",
-  gemini_megacontext: "Large codebase analysis",
-  codex: "Code generation and prototyping",
-  claude: "Architecture and testing"
-} [ground:given] [conf:0.95] [state:confirmed]
+### Output Format
+- Provide a concise summary, actions taken, artifacts generated, and recommended next steps.
+- Always include an explicit confidence line: "Confidence: X.XX (ceiling: TYPE Y.YY)".
+- Use ceilings — inference/report: 0.70, research: 0.85, observation: 0.95, definition: 0.95.
+- Keep user-facing output in plain English; reserve VCL markers for the appendix only.
 
-/*----------------------------------------------------------------------------*/
-/* S4 INPUT CONTRACT                                                           */
-/*----------------------------------------------------------------------------*/
+Confidence: 0.86 (ceiling: observation 0.95) - SOP rewritten to Prompt-Architect pattern based on legacy command content.
 
-[define|neutral] INPUT_CONTRACT := {
-  required: {
-    command_args: "string - Command arguments"
-  },
-  optional: {
-    flags: "object - Command flags",
-    context: "string - Additional context"
-  },
-  prerequisites: [
-    "Valid project directory",
-    "Required tools installed"
-  ]
-} [ground:given] [conf:1.0] [state:confirmed]
+---
 
-/*----------------------------------------------------------------------------*/
-/* S5 OUTPUT CONTRACT                                                          */
-/*----------------------------------------------------------------------------*/
+## VCL COMPLIANCE APPENDIX (Internal Reference)
 
-[define|neutral] OUTPUT_CONTRACT := {
-  artifacts: [
-    "Execution log",
-    "Quality metrics report"
-  ],
-  metrics: {
-    success_rate: "Percentage of successful executions",
-    quality_score: "Overall quality assessment"
-  },
-  state_changes: [
-    "Workflow state updated"
-  ]
-} [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S6 SUCCESS INDICATORS                                                       */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] SUCCESS_CRITERIA := {
-  pass_conditions: [
-    "Command executes without errors",
-    "Output meets quality thresholds"
-  ],
-  quality_thresholds: {
-    execution_success: ">= 0.95",
-    quality_score: ">= 0.80"
-  }
-} [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S7 ERROR HANDLING                                                           */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] ERROR_HANDLERS := {
-  missing_input: {
-    symptom: "Required input not provided",
-    cause: "User omitted required argument",
-    recovery: "Prompt user for missing input"
-  },
-  execution_failure: {
-    symptom: "Command fails to complete",
-    cause: "Underlying tool or service error",
-    recovery: "Retry with verbose logging"
-  }
-} [ground:witnessed:failure-analysis] [conf:0.92] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S8 EXAMPLES                                                                 */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] EXAMPLES := [
-  { command: "/workflow:cicd", description: "Example usage" },
-  { command: "/workflow:cicd --stage test", description: "Example usage" },
-  { command: "/workflow:cicd --environment production --strategy blue-gree", description: "Example usage" }
-] [ground:given] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S9 CHAIN PATTERNS                                                           */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] CHAINS_WITH := {
-  sequential: [
-    "/workflow-cicd -> /review -> /deploy"
-  ],
-  parallel: [
-    "parallel ::: '/workflow-cicd arg1' '/workflow-cicd arg2'"
-  ]
-} [ground:given] [conf:0.95] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S10 RELATED COMMANDS                                                        */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] RELATED := {
-  complementary: ["/security-audit", "/docker-build", "/regression-test", "/github-release"],
-  alternatives: [],
-  prerequisites: []
-} [ground:given] [conf:0.95] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S11 META-LOOP INTEGRATION                                                   */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] META_LOOP := {
-  expertise_check: {
-    domain: "delivery",
-    file: ".claude/expertise/delivery.yaml",
-    fallback: "discovery_mode"
-  },
-  benchmark: "workflow-cicd-benchmark-v1",
-  tests: [
-    "command_execution_success",
-    "workflow_validation"
-  ],
-  success_threshold: 0.90,
-  namespace: "commands/delivery/workflow-cicd/{project}/{timestamp}",
-  uncertainty_threshold: 0.85,
-  coordination: {
-    related_skills: ["workflow-cicd"],
-    related_agents: ["coder", "tester"]
-  }
-} [ground:system-policy] [conf:0.98] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S12 MEMORY TAGGING                                                          */
-/*----------------------------------------------------------------------------*/
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "workflow-cicd-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project-name}",
-  WHY: "command-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* S13 ABSOLUTE RULES                                                          */
-/*----------------------------------------------------------------------------*/
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
-/*----------------------------------------------------------------------------*/
-/* PROMISE                                                                     */
-/*----------------------------------------------------------------------------*/
-
-[commit|confident] <promise>WORKFLOW_CICD_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+[[HON:teineigo]] [[MOR:root:PA]] [[COM:PromptArchitect]] [[CLS:ge_command]] [[EVD:-DI<gozlem>]] [[ASP:nesov.]] [[SPC:path:/commands]]
+[define|neutral] CONFIDENCE_CEILINGS := {inference:0.70, report:0.70, research:0.85, observation:0.95, definition:0.95} [conf:0.9] [state:confirmed]
+[direct|emphatic] L2_LANGUAGE := English; user-facing outputs exclude VCL markers. [conf:0.99] [state:confirmed]
+[commit|confident] <promise>WORKFLOW_CICD_VERILINGUA_VERIX_COMPLIANT</promise> [conf:0.88] [state:confirmed]
