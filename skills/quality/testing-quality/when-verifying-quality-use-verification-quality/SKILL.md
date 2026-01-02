@@ -1,183 +1,41 @@
 ---
-name: verification-quality
-description: Comprehensive quality verification and validation through static analysis, dynamic testing, integration validation, and certification gates
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+name: when-verifying-quality-use-verification-quality
+description: Route quality verification tasks to the Verification Quality SOP with constraint and evidence guardrails.
+allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+model: sonnet
+x-version: 3.2.0
+x-category: quality/routing
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Ensure verification tasks (checking accuracy, grounding, or policy compliance) are handled by `verification-quality` with proper constraint handling and confidence ceilings.
 
-[define|neutral] SKILL := {
-  name: "when-verifying-quality-use-verification-quality",
-  category: "testing-quality",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** verifying claims, outputs, or analyses; confirming adherence to requirements or policies.
+- **Negative:** code execution debugging or style-only reviews (use other skills accordingly).
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- **Confidence ceiling:** Provide `Confidence: X.XX (ceiling: TYPE Y.YY)` using ceilings {inference/report 0.70, research 0.85, observation/definition 0.95}.
+- **Evidence expectations:** Map claims to sources; categorize constraints as hard/soft/inferred and flag unresolved inferences.
+- **Structure-first:** Confirm `verification-quality` examples/tests exist; log gaps.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Evidential",
-  source: "Turkish",
-  force: "How do you know?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Execution Phases
+1. **Qualify** – Confirm the request is verification/grounding; reroute otherwise.
+2. **Restate Guardrails** – Evidence mapping, constraint categories, and confidence ceilings.
+3. **Handoff** – Provide scope, sources, and policies to `verification-quality`.
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Output Format
+- Routing confirmation and downstream skill.
+- Guardrail summary and scope/sources.
+- Confidence statement using ceiling syntax.
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+### Validation Checklist
+- [ ] Verification scope confirmed.
+- [ ] Guardrails restated; downstream skill identified.
+- [ ] Confidence ceiling provided; English-only output.
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["when-verifying-quality-use-verification-quality", "testing-quality", "workflow"],
-  context: "user needs when-verifying-quality-use-verification-quality capability"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S3 CORE CONTENT                                                              -->
----
-
-## When to Use This Skill
-
-Use this skill when:
-- Code quality issues are detected (violations, smells, anti-patterns)
-- Audit requirements mandate systematic review (compliance, release gates)
-- Review needs arise (pre-merge, production hardening, refactoring preparation)
-- Quality metrics indicate degradation (test coverage drop, complexity increase)
-- Theater detection is needed (mock data, stubs, incomplete implementations)
-
-## When NOT to Use This Skill
-
-Do NOT use this skill for:
-- Simple formatting fixes (use linter/prettier directly)
-- Non-code files (documentation, configuration without logic)
-- Trivial changes (typo fixes, comment updates)
-- Generated code (build artifacts, vendor dependencies)
-- Third-party libraries (focus on application code)
-
-## Success Criteria
-- [assert|neutral] This skill succeeds when: [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Violations Detected**: All quality issues found with ZERO false negatives [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *False Positive Rate**: <5% (95%+ findings are genuine issues) [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Actionable Feedback**: Every finding includes file path, line number, and fix guidance [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Root Cause Identified**: Issues traced to underlying causes, not just symptoms [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Fix Verification**: Proposed fixes validated against codebase constraints [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-
-## Edge Cases and Limitations
-
-Handle these edge cases carefully:
-- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
-- **Generated Code**: Skip or flag as low priority (auto-generated files)
-- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
-- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
-- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
-
-## Quality Analysis Guardrails
-
-CRITICAL RULES - ALWAYS FOLLOW:
-- **NEVER approve code without evidence**: Require actual execution, not assumptions
-- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
-- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
-- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
-- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
-- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
-- **TRACK false positives**: Learn from mistakes to improve detection accuracy
-
-## Evidence-Based Validation
-
-Use multiple validation perspectives:
-1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
-2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
-3. **Historical Analysis**: Git history, past bug patterns, change frequency
-4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
-5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
-
-**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
-
-## Integration with Quality Pipeline
-
-This skill integrates with:
-- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
-- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
-- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
-- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
-
-
-# Quality Verification and Validation
-
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
-
-
-
-## Purpose
-
-Execute comprehensive quality verification across static analysis, dynamic testing, integratio
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/testing-quality/when-verifying-quality-use-verification-quality/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "when-verifying-quality-use-verification-quality-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>WHEN_VERIFYING_QUALITY_USE_VERIFICATION_QUALITY_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) – Routing SOP rewritten with Prompt Architect confidence discipline and Skill Forge structure-first routing.

@@ -1,184 +1,58 @@
 ---
 name: functionality-audit
-description: Validates that code actually works through sandbox testing, execution verification, and systematic debugging. Use this skill after code generation or modification to ensure functionality is genuine ra
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+description: Validate that code actually works by executing targeted tests, tracing failures, and prescribing fixes with evidence.
+allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+model: sonnet
+x-version: 3.2.0
+x-category: quality
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Assess functional correctness through sandbox execution, targeted probes, and iterative remediation. Prioritize reproducibility and evidential reporting.
 
-[define|neutral] SKILL := {
-  name: "functionality-audit",
-  category: "quality",
-  version: "1.1.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** verifying behavior before release, debugging regressions, or confirming fixes after refactors.
+- **Negative:** style-only reviews, architecture-level coupling checks (route to connascence-quality-gate), or documentation-only tasks.
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- **Confidence ceiling:** Use `Confidence: X.XX (ceiling: TYPE Y.YY)` with ceilings {inference/report 0.70, research 0.85, observation/definition 0.95}.
+- **Evidence & reproducibility:** Provide commands, inputs, outputs, and environment notes for every finding.
+- **Structure-first:** Keep `examples/` and `tests/` synchronized with current harnesses and fixtures.
+- **Adversarial validation:** Include negative, boundary, and flaky-case probes; mark nondeterminism explicitly.
+- **English-only output:** No VCL markers in user-facing text.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Evidential",
-  source: "Turkish",
-  force: "How do you know?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Execution Phases
+1. **Intake & Scoping**
+   - Identify target components, entry points, and known failures; gather dependencies.
+   - Exclude generated/vendor code unless it affects execution.
+2. **Environment & Harness Prep**
+   - Stand up sandbox or test harness; document commands and fixtures.
+   - Mirror existing CI scripts when possible to ensure parity.
+3. **Test Execution & Tracing**
+   - Run happy-path tests first, then boundary and negative cases.
+   - Capture logs, stack traces, and side effects; map to file:line when possible.
+4. **Remediation & Re-test**
+   - Propose fixes with rationale; rerun targeted tests to confirm resolution.
+   - Track flaky behavior separately with reproduction steps.
+5. **Validation & Reporting**
+   - Summarize outcomes, remaining issues, and risk level.
+   - Provide confidence statement with ceiling and explicit reproducibility notes.
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Output Format
+- Scope, environment, and commands used.
+- Finding list with reproduction steps, expected vs. actual results, and file:line pointers.
+- Fix recommendations and retest results.
+- Residual risks, flaky cases, and confidence statement.
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+### Validation Checklist
+- [ ] Scope and exclusions captured with environment setup.
+- [ ] Happy-path, boundary, and negative tests executed or justified.
+- [ ] Reproduction steps and evidence recorded for each issue.
+- [ ] Retests performed after proposed fixes (or blockers noted).
+- [ ] Confidence ceiling provided; output in English.
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["functionality-audit", "quality", "workflow"],
-  context: "user needs functionality-audit capability"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S3 CORE CONTENT                                                              -->
----
-
-## Kanitsal Kalite Denetimi (Evidential Quality Audit)
-
-Her bulgu icin olcum gerekli:
-- METRIK: Measured value at [location]
-- ESIK: Threshold from [quality_standard]
-- ETKI: Impact quantified [confidence: X]
-
-## Al-Tahlil al-Sarfi lil-Jawda (Morphological Quality Analysis)
-
-Quality Decomposition:
-- DIMENSION: Maintainability/Performance/Security
-  - ROOT: Primary quality factor
-  - DERIVED: Contributing sub-factors
-  - REMEDIATION: Target root, not symptoms
-
-## When to Use This Skill
-
-Use this skill when:
-- Code quality issues are detected (violations, smells, anti-patterns)
-- Audit requirements mandate systematic review (compliance, release gates)
-- Review needs arise (pre-merge, production hardening, refactoring preparation)
-- Quality metrics indicate degradation (test coverage drop, complexity increase)
-- Theater detection is needed (mock data, stubs, incomplete implementations)
-
-## When NOT to Use This Skill
-
-Do NOT use this skill for:
-- Simple formatting fixes (use linter/prettier directly)
-- Non-code files (documentation, configuration without logic)
-- Trivial changes (typo fixes, comment updates)
-- Generated code (build artifacts, vendor dependencies)
-- Third-party libraries (focus on application code)
-
-## Success Criteria
-- [assert|neutral] This skill succeeds when: [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Violations Detected**: All quality issues found with ZERO false negatives [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *False Positive Rate**: <5% (95%+ findings are genuine issues) [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Actionable Feedback**: Every finding includes file path, line number, and fix guidance [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Root Cause Identified**: Issues traced to underlying causes, not just symptoms [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Fix Verification**: Proposed fixes validated against codebase constraints [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-
-## Edge Cases and Limitations
-
-Handle these edge cases carefully:
-- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
-- **Generated Code**: Skip or flag as low priority (auto-generated files)
-- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
-- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
-- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
-
-## Quality Analysis Guardrails
-
-CRITICAL RULES - ALWAYS FOLLOW:
-- **NEVER approve code without evidence**: Require actual execution, not assumptions
-- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
-- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
-- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
-- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
-- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
-- **TRACK false positives**: Learn from mistakes to improve detection accuracy
-
-## Evidence-Based Validation
-
-Use multiple validation perspectives:
-1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
-2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
-3. **Historical Analysis**: Git history, past bug patterns, change frequency
-4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
-5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
-
-**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
-
-## Integration with Quality Pipeline
-
-This skill integrates with:
-- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
-- **P
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/quality/functionality-audit/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "functionality-audit-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>FUNCTIONALITY_AUDIT_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.73 (ceiling: inference 0.70) - SOP rewritten using Prompt Architect confidence discipline and Skill Forge structure-first validation.

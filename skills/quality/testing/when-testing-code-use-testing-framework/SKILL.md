@@ -1,184 +1,52 @@
 ---
-name: testing-framework
-description: - **Skill ID**: when-testing-code-use-testing-framework
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+name: when-testing-code-use-testing-framework
+description: SOP for running the testing framework to validate code changes with reproducible commands and evidence.
+allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+model: sonnet
+x-version: 3.2.0
+x-category: quality/testing
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Guide reviewers and developers to execute the testing framework for code validation, ensuring evidence capture, reproducibility, and confidence ceilings.
 
-[define|neutral] SKILL := {
-  name: "when-testing-code-use-testing-framework",
-  category: "quality",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** validating changes before merge, reproducing reported bugs, or establishing baselines for new features.
+- **Negative:** style-only polish (use style-audit) or verification of claims without execution (use verification-quality).
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- **Confidence ceiling:** Include `Confidence: X.XX (ceiling: TYPE Y.YY)` using ceilings {inference/report 0.70, research 0.85, observation/definition 0.95}.
+- **Reproducibility:** Document commands, environment, fixtures, and seeds; attach logs.
+- **Structure-first:** Maintain `readme.md`, `process.md`, and scripts to run/generate tests; keep examples/tests synced with the current framework.
+- **Adversarial validation:** Run boundary/negative cases in addition to happy paths.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Evidential",
-  source: "Turkish",
-  force: "How do you know?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Execution Phases
+1. **Setup**
+   - Review `readme.md` and scripts (`slash-command-test-run.sh`, `slash-command-test-generate.sh`).
+   - Prepare environment per `subagent-testing-framework.md` and ensure dependencies are installed.
+2. **Test Selection & Generation**
+   - Identify suites relevant to the change; generate missing cases using provided scripts if needed.
+3. **Execution**
+   - Run tests with reproducible commands; capture outputs and failures with file:line references.
+   - Re-run flaky tests to confirm stability; note nondeterminism.
+4. **Reporting & Confidence**
+   - Summarize pass/fail counts, failing cases, and reproduction steps.
+   - Recommend fixes or reruns; provide confidence with ceiling.
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Output Format
+- Environment and commands used.
+- Test results (pass/fail, logs, failing file:line).
+- Flaky cases and follow-up actions.
+- Confidence statement using ceiling syntax.
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+### Validation Checklist
+- [ ] Environment and dependencies prepared.
+- [ ] Relevant suites selected and/or generated.
+- [ ] Tests executed with logs captured; flakiness noted.
+- [ ] Confidence ceiling provided; English-only output.
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["when-testing-code-use-testing-framework", "quality", "workflow"],
-  context: "user needs when-testing-code-use-testing-framework capability"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S3 CORE CONTENT                                                              -->
----
-
-## When to Use This Skill
-
-Use this skill when:
-- Code quality issues are detected (violations, smells, anti-patterns)
-- Audit requirements mandate systematic review (compliance, release gates)
-- Review needs arise (pre-merge, production hardening, refactoring preparation)
-- Quality metrics indicate degradation (test coverage drop, complexity increase)
-- Theater detection is needed (mock data, stubs, incomplete implementations)
-
-## When NOT to Use This Skill
-
-Do NOT use this skill for:
-- Simple formatting fixes (use linter/prettier directly)
-- Non-code files (documentation, configuration without logic)
-- Trivial changes (typo fixes, comment updates)
-- Generated code (build artifacts, vendor dependencies)
-- Third-party libraries (focus on application code)
-
-## Success Criteria
-- [assert|neutral] This skill succeeds when: [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Violations Detected**: All quality issues found with ZERO false negatives [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *False Positive Rate**: <5% (95%+ findings are genuine issues) [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Actionable Feedback**: Every finding includes file path, line number, and fix guidance [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Root Cause Identified**: Issues traced to underlying causes, not just symptoms [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-- [assert|neutral] *Fix Verification**: Proposed fixes validated against codebase constraints [ground:acceptance-criteria] [conf:0.90] [state:provisional]
-
-## Edge Cases and Limitations
-
-Handle these edge cases carefully:
-- **Empty Files**: May trigger false positives - verify intent (stub vs intentional)
-- **Generated Code**: Skip or flag as low priority (auto-generated files)
-- **Third-Party Libraries**: Exclude from analysis (vendor/, node_modules/)
-- **Domain-Specific Patterns**: What looks like violation may be intentional (DSLs)
-- **Legacy Code**: Balance ideal standards with pragmatic technical debt management
-
-## Quality Analysis Guardrails
-
-CRITICAL RULES - ALWAYS FOLLOW:
-- **NEVER approve code without evidence**: Require actual execution, not assumptions
-- **ALWAYS provide line numbers**: Every finding MUST include file:line reference
-- **VALIDATE findings against multiple perspectives**: Cross-check with complementary tools
-- **DISTINGUISH symptoms from root causes**: Report underlying issues, not just manifestations
-- **AVOID false confidence**: Flag uncertain findings as "needs manual review"
-- **PRESERVE context**: Show surrounding code (5 lines before/after minimum)
-- **TRACK false positives**: Learn from mistakes to improve detection accuracy
-
-## Evidence-Based Validation
-
-Use multiple validation perspectives:
-1. **Static Analysis**: Code structure, patterns, metrics (connascence, complexity)
-2. **Dynamic Analysis**: Execution behavior, test results, runtime characteristics
-3. **Historical Analysis**: Git history, past bug patterns, change frequency
-4. **Peer Review**: Cross-validation with other quality skills (functionality-audit, theater-detection)
-5. **Domain Expertise**: Leverage .claude/expertise/{domain}.yaml if available
-
-**Validation Threshold**: Findings require 2+ confirming signals before flagging as violations.
-
-## Integration with Quality Pipeline
-
-This skill integrates with:
-- **Pre-Phase**: Load domain expertise (.claude/expertise/{domain}.yaml)
-- **Parallel Skills**: functionality-audit, theater-detection-audit, style-audit
-- **Post-Phase**: Store findings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
-- **Feedback Loop**: Learnings feed dogfooding-system for continuous improvement
-
-
-# Testing Framework Skill - Complete SOP
-
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
-
-
-
-## Metadata
-- **Skill ID**: when-testing-code-use-testing-framework
-- **Version**: 1.0.0
-- **Category**
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/quality/when-testing-code-use-testing-framework/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "when-testing-code-use-testing-framework-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>WHEN_TESTING_CODE_USE_TESTING_FRAMEWORK_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.72 (ceiling: inference 0.70) – SOP rewritten using Prompt Architect confidence discipline and Skill Forge structure-first testing workflow.
