@@ -1,249 +1,70 @@
 ---
 name: opentelemetry-observability
-description: OpenTelemetry specialist for distributed tracing, metrics collection, log correlation, auto-instrumentation, custom spans, trace context propagation, and sampling strategies. Use when implementing obs
+description: Instrument services with OpenTelemetry and reliable signal pipelines
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Design and implement OpenTelemetry collection, instrumentation, and validation so traces, metrics, and logs are actionable.
 
-[define|neutral] SKILL := {
-  name: "opentelemetry-observability",
-  category: "Observability",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** Add or improve OpenTelemetry instrumentation; Standardize telemetry schema across services; Harden collectors/pipelines with SLOs
+- **Negative:** Performance debugging without instrumentation changes (route to performance-analysis); Pure infrastructure build (route to infrastructure); Vendor-specific dashboard asks without pipeline changes (route to production-readiness)
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Required Artifacts
+- SKILL.md (this SOP)
+- examples/ for instrumentation
+- tests/ for telemetry validation
+- resources/ for collectors
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Execution Phases
+1. **Baseline signals**
+   - Inventory services, runtimes, and existing telemetry
+   - Identify critical user journeys and SLOs
+   - Capture schema and attribute standards
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+2. **Design OTEL pipeline**
+   - Plan exporters, collectors, sampling, and resource attributes
+   - Define security, retention, and cost controls
+   - Prepare rollout stages and fallback options
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["opentelemetry-observability", "Observability", "workflow"],
-  context: "user needs opentelemetry-observability capability"
-} [ground:given] [conf:1.0] [state:confirmed]
+3. **Instrument and deploy**
+   - Add or refine instrumentation with context propagation
+   - Deploy collectors/agents with configs per environment
+   - Enable logging/metrics/traces validation and alerts
 
----
-<!-- S3 CORE CONTENT                                                              -->
----
+4. **Validate and tune**
+   - Run data-quality checks (cardinality, loss, latency)
+   - Validate SLOs/SLIs and alert thresholds
+   - Document runbooks and continuous improvement loops
 
-# OpenTelemetry Observability Specialist
+### Output Format
+- Instrumentation plan mapped to key journeys
+- Collector topology and configuration references
+- Schema/attribute standards and governance notes
+- Validation report on data quality and SLOs
+- Runbook for operations, tuning, and fallbacks
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Validation Checklist
+- Sampling/resource impact reviewed and acceptable
+- Data quality verified for completeness and latency
+- SLOs/SLIs defined with alert thresholds
+- Security and retention controls documented
+- Confidence ceiling stated for telemetry readiness
 
-
-
-Expert distributed tracing, metrics, and logging with OpenTelemetry for production observability.
-
-## Purpose
-
-Comprehensive OpenTelemetry expertise including auto-instrumentation, custom spans, metrics collection, log correlation, trace context propagation, and sampling. Ensures applications are fully observable with actionable telemetry data.
-
-## When to Use
-
-- Implementing distributed tracing in microservices
-- Monitoring application performance (APM)
-- Debugging production issues across services
-- Setting up metrics collection and dashboards
-- Correlating logs with traces
-- Optimizing sampling strategies for cost/performance
-- Migrating from proprietary APM to OpenTelemetry
-
-## Prerequisites
-
-**Required**: Understanding of distributed systems, HTTP, basic observability concepts
-
-**Agents**: `cicd-engineer`, `perf-analyzer`, `backend-dev`, `system-architect`
-
-## Core Workflows
-
-### Workflow 1: Node.js Auto-Instrumentation
-
-**Step 1: Install OpenTelemetry Packages**
-
-```bash
-npm install @opentelemetry/sdk-node \
-  @opentelemetry/auto-instrumentations-node \
-  @opentelemetry/exporter-trace-otlp-http \
-  @opentelemetry/exporter-metrics-otlp-http
-```
-
-**Step 2: Initialize OpenTelemetry**
-
-```javascript
-// instrumentation.js
-const { NodeSDK } = require('@opentelemetry/sdk-node');
-const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');
-const { OTLPMetricExporter } = require('@opentelemetry/exporter-metrics-otlp-http');
-const { Resource } = require('@opentelemetry/resources');
-const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
-
-const sdk = new NodeSDK({
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'my-service',
-    [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
-    [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: 'production',
-  }),
-  traceExporter: new OTLPTraceExporter({
-    url: 'http://localhost:4318/v1/traces',
-  }),
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-      url: 'http://localhost:4318/v1/metrics',
-    }),
-    exportIntervalMillis: 60000,
-  }),
-  instrumentations: [
-    getNodeAutoInstrumentations({
-      '@opentelemetry/instrumentation-http': { enabled: true },
-      '@opentelemetry/instrumentation-express': { enabled: true },
-      '@opentelemetry/instrumentation-pg': { enabled: true },
-      '@opentelemetry/instrumentation-redis': { enabled: true },
-    }),
-  ],
-});
-
-sdk.start();
-
-process.on('SIGTERM', () => {
-  sdk.shutdown().then(
-    () => console.log('Tracing terminated'),
-    (err) => console.log('Error terminating tracing', err)
-  );
-});
-```
-
-**Step 3: Start Application with Instrumentation**
-
-```bash
-node --require ./instrumentation.js app.js
-```
-
-### Workflow 2: Custom Spans and Attributes
-
-```javascript
-const { trace } = require('@opentelemetry/api');
-
-const tracer = trace.getTracer('my-service', '1.0.0');
-
-async function processOrder(orderId) {
-  const span = tracer.startSpan('processOrder', {
-    attributes: {
-      'order.id': orderId,
-      'order.priority': 'high',
-    },
-  });
-
-  try {
-    // Set span status
-    span.setStatus({ code: SpanStatusCode.OK });
-
-    // Add event to span
-    span.addEvent('order_validated', {
-      'validation.result': 'success',
-    });
-
-    // Child span
-    const childSpan = tracer.startSpan('calculateTotal', {
-      parent: span,
-    });
-    const total = await calculateTotal(orderId);
-    childSpan.setAttribute('order.total', total);
-    childSpan.end();
-
-    return total;
-  } catch (error) {
-    // Record exception
-    span.recordException(error);
-    span.setStatus({
-      code: SpanStatusCode.ERROR,
-      message: error.message,
-    });
-    throw error;
-  } finally {
-    span.end();
-  }
-}
-```
-
-### Workfl
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/Observability/opentelemetry-observability/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "opentelemetry-observability-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>OPENTELEMETRY_OBSERVABILITY_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) - OpenTelemetry SOP applies structured rollout and verification

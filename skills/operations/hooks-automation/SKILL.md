@@ -1,230 +1,70 @@
 ---
 name: hooks-automation
-description: Automate Claude Code operations through hooks for pre/post-operation validation, session management, and RBAC security. Integrates with all 10 hook event types (PreToolUse, PostToolUse, UserPromptSubmit, etc.) for validation, logging, and workflow automation.
+description: Manage event hooks and connectors with secure routing and backoff
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
 model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Design and operate automation hooks across systems with validated routing, retries, and observability.
 
-[define|neutral] SKILL := {
-  name: "SKILL",
-  category: "operations",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** Need event/webhook automation; Bridge between services with callbacks; Establish retries/backoff for event processing
+- **Negative:** GitHub-only automation (route to github-workflow-automation or github-integration); Simple cron job without hooks (route to platform-integration); Performance debugging (route to performance-analysis)
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Required Artifacts
+- SKILL.md (this SOP)
+- readme.md
+- examples/ and tests/ for connectors
+- resources/ for scripts
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Execution Phases
+1. **Discover events and constraints**
+   - Inventory event sources, payloads, and SLAs
+   - Define security requirements (signing, auth, data minimization)
+   - Identify throughput, ordering, and retry needs
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+2. **Design routing and processing**
+   - Specify routing rules, transformations, and deduplication
+   - Plan retry/backoff, DLQs, and idempotency keys
+   - Establish observability (metrics, traces, alerts)
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["SKILL", "operations", "workflow"],
-  context: "user needs SKILL capability"
-} [ground:given] [conf:1.0] [state:confirmed]
+3. **Implement connectors**
+   - Build handlers or use managed connectors with least privilege
+   - Add structured logging and correlation IDs
+   - Test failure modes (timeouts, malformed payloads, spikes)
 
----
-<!-- S3 CORE CONTENT                                                              -->
----
+4. **Operate and improve**
+   - Deploy with staged rollout and feature flags
+   - Monitor error budgets and tune policies
+   - Document runbooks and fallback/disable procedures
 
-# Hooks Automation
+### Output Format
+- Event catalog with schemas, auth, and SLAs
+- Routing/processing spec including retries and DLQ handling
+- Implemented connectors/handlers with tests
+- Observability plan with dashboards and alerts
+- Runbook with fallback and disablement steps
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Validation Checklist
+- Signature/auth validation and data minimization in place
+- Idempotency and retry/backoff tested
+- DLQ or failure handling path configured
+- Monitoring/alerts active with owners
+- Confidence ceiling stated for production rollout
 
-
-
-Intelligent automation system that coordinates, validates, and learns from Claude Code operations through hooks integrated with MCP tools and neural pattern training.
-
-## What This Skill Does
-
-This skill provides a comprehensive hook system that automatically manages development operations, coordinates swarm agents, maintains session state, and continuously learns from coding patterns. It enables automated agent assignment, code formatting, performance tracking, and cross-session memory persistence.
-
-**Key Capabilities:**
-- **Pre-Operation Hooks**: Validate, prepare, and auto-assign agents before operations
-- **Post-Operation Hooks**: Format, analyze, and train patterns after operations
-- **Session Management**: Persist state, restore context, generate summaries
-- **Memory Coordination**: Synchronize knowledge across swarm agents
-- **Git Integration**: Automated commit hooks with quality verification
-- **Neural Training**: Continuous learning from successful patterns
-- **MCP Integration**: Seamless coordination with swarm tools
-
-## Prerequisites
-
-**Required:**
-- Claude Flow CLI installed (`npm install -g claude-flow@alpha`)
-- Claude Code with hooks enabled
-- `.claude/settings.json` with hook configurations
-
-**Optional:**
-- MCP servers configured (claude-flow, ruv-swarm, flow-nexus)
-- Git repository for version control
-- Testing framework for quality verification
-
-## Quick Start
-
-### Initialize Hooks System
-
-```bash
-# Initialize with default hooks configuration
-npx claude-flow init --hooks
-```
-
-This creates:
-- `.claude/settings.json` with pre-configured hooks
-- Hook command documentation in `.claude/commands/hooks/`
-- Default hook handlers for common operations
-
-### Basic Hook Usage
-
-```bash
-# Pre-task hook (auto-spawns agents)
-npx claude-flow hook pre-task --description "Implement authentication"
-
-# Post-edit hook (auto-formats and stores in memory)
-npx claude-flow hook post-edit --file "src/auth.js" --memory-key "auth/login"
-
-# Session end hook (saves state and metrics)
-npx claude-flow hook session-end --session-id "dev-session" --export-metrics
-```
-
----
-
-## Complete Guide
-
-### Available Hooks
-
-#### Pre-Operation Hooks
-
-Hooks that execute BEFORE operations to prepare and validate:
-
-**pre-edit** - Validate and assign agents before file modifications
-```bash
-npx claude-flow hook pre-edit [options]
-
-Options:
-  --file, -f <path>         File path to be edited
-  --auto-assign-agent       Automatically assign best agent (default: true)
-  --validate-syntax         Pre-validate syntax before edit
-  --check-conflicts         Check for merge conflicts
-  --backup-file             Create backup before editing
-
-Examples:
-  npx claude-flow hook pre-edit --file "src/auth/login.js"
-  npx claude-flow hook pre-edit -f "config/db.js" --validate-syntax
-  npx claude-flow hook pre-edit -f "production.env" --backup-file --check-conflicts
-```
-
-**Features:**
-- Auto agent assignment based on file type
-- Syntax validation to prevent broken code
-- Conflict detection for concurrent edits
-- Automatic file backups for safety
-
-**pre-bash** - Check command safety and resource requirements
-```bash
-npx claude-flow hook pre-bash --command <cmd>
-
-Options:
-  --command, -c <cmd>       Command to validate
-  --check-safety            Verify command safety (default: true)
-  --estimate-resources      Estimate resource usage
-  --require-confirmation    Request user confirmation for risky commands
-
-Examples:
-  npx claude-flow hook pre-bash -c "rm -rf /tmp/cache"
-  npx claude-flow hook pre-bash --command "docker build ." --estimate-resources
-```
-
-**Features:**
-- Command safety validation
-- Resource requirement estimation
-- Destructive command confirmation
-- Permission checks
-
-**pre-task** - Auto-spawn agents and prepare for complex tasks
-```bash
-npx claude-flow hook pre-task [options]
-
-Options:
-  --description, -d <text>  Task description for context
-  --auto-spawn-agent
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/operations/SKILL/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "SKILL-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) - Hook design follows adversarial validation and rollback guardrails

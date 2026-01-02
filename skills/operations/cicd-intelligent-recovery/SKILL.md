@@ -1,244 +1,71 @@
 ---
 name: cicd-intelligent-recovery
-description: SKILL skill for operations workflows
+description: Recover CI/CD pipelines safely with structured rollback and validation
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Stabilize failing CI/CD pipelines, contain blast radius, and restore healthy deploy paths with validated fixes and runbook updates.
 
-[define|neutral] SKILL := {
-  name: "SKILL",
-  category: "operations",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** CI/CD pipeline failures or stuck runs; flaky stage blocking release; rollback or hotfix required after deployment
+- **Negative:** greenfield pipeline design (route to github-workflow-automation); post-release incident already mitigated (route to production-readiness follow-up); org-wide release planning (route to github-release-management)
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Required Artifacts
+- SKILL.md (this SOP)
+- examples/ that show common recovery drills
+- tests/ covering rollback and smoke validation
+- resources/ with runbooks and scripts
+- references/ linking telemetry and dashboards
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Execution Phases
+1. **Triage and isolate**
+   - Freeze risky deploy paths and capture failing pipeline context
+   - Collect logs, artifacts, and test failure patterns to isolate the failing stage
+   - Record blast radius, impacted repos, and owners
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+2. **Stabilize the delivery path**
+   - Select rollback vs. hotfix vs. feature-flag disablement and align on owner
+   - Apply minimal-change stabilizers (retries, retriable steps, temporary skips) with approvals
+   - Document interim guardrails and time limits for temporary mitigations
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["SKILL", "operations", "workflow"],
-  context: "user needs SKILL capability"
-} [ground:given] [conf:1.0] [state:confirmed]
+3. **Remediate root cause**
+   - Patch configuration/tests/infrastructure with smallest safe diff
+   - Re-run targeted checks and rerun the failing pipeline segment before full pipeline
+   - Coordinate with service owners for cross-repo impacts
 
----
-<!-- S3 CORE CONTENT                                                              -->
----
+4. **Validate and close out**
+   - Run full pipeline and capture evidence links
+   - Update runbooks, post-incident notes, and alerts
+   - Communicate readiness, rollback posture, and remaining risks
 
-# CI/CD Quality & Debugging Loop (Loop 3)
+### Output Format
+- Recovery snapshot: what failed, when, and blast radius
+- Stabilization plan with chosen rollback/flag path and owners
+- Fix list with PRs/patch references and test coverage notes
+- Verification results with links to rerun pipelines/logs
+- Runbook and alert updates plus residual-risk callouts
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Validation Checklist
+- Trigger confirmed and not better served by release-management or production-readiness
+- Rollback or mitigation path is executable and time-bounded
+- Critical tests re-run and passing; failures are explained with owners
+- Documentation and communication posted with evidence links
+- Confidence ceiling stated for overall readiness
 
-
-
-**Purpose**: Continuous integration with automated failure recovery and authentic quality validation.
-
-**SOP Workflow**: Specification → Research → Planning → Execution → Knowledge
-
-**Output**: 100% test success rate with authentic quality improvements and failure pattern analysis
-
-**Integration**: This is Loop 3 of 3. Receives from `parallel-swarm-implementation` (Loop 2), feeds failure data back to `research-driven-planning` (Loop 1).
-
-**Version**: 2.0.0
-**Optimization**: Evidence-based prompting with explicit agent SOPs
-
----
-
-## When to Use This Skill
-
-Activate this skill when:
-- Have complete implementation from Loop 2 (parallel-swarm-implementation)
-- Need CI/CD pipeline automation with intelligent recovery
-- Require root cause analysis for test failures
-- Want automated repair with connascence-aware fixes
-- Need validation of authentic quality (no theater)
-- Generating failure patterns for Loop 1 feedback
-
-**DO NOT** use this skill for:
-- Initial development (use Loop 2 first)
-- Manual debugging without CI/CD integration
-- Quality checks during development (use Loop 2 theater detection)
-
----
-
-## Input/Output Contracts
-
-### Input Requirements
-
-```yaml
-input:
-  loop2_delivery_package:
-    location: .claude/.artifacts/loop2-delivery-package.json
-    schema:
-      implementation: object (complete codebase)
-      tests: object (test suite)
-      theater_baseline: object (theater metrics from Loop 2)
-      integration_points: array[string]
-    validation:
-      - Must exist and be valid JSON
-      - Must include theater_baseline for differential analysis
-
-  ci_cd_failures:
-    source: GitHub Actions workflow runs
-    format: JSON array of failure objects
-    required_fields: [file, line, column, testName, errorMessage, runId]
-
-  github_credentials:
-    required: gh CLI authenticated
-    check: gh auth status
-```
-
-### Output Guarantees
-
-```yaml
-output:
-  test_success_rate: 100% (guaranteed)
-
-  quality_validation:
-    theater_audit: PASSED (no false improvements)
-    sandbox_validation: 100% test pass
-    differential_analysis: improvement metrics
-
-  failure_patterns:
-    location: .claude/.artifacts/loop3-failure-patterns.json
-    feeds_to: Loop 1 (next iteration)
-    schema:
-      patterns: array[failure_pattern]
-      recommendations: object (planning/architecture/testing)
-
-  delivery_package:
-    location: .claude/.artifacts/loop3-delivery-package.json
-    contains:
-      - quality metrics (test success, failures fixed)
-      - analysis data (root causes, connascence context)
-      - validation results (theater, sandbox, differential)
-      - feedback for Loop 1
-```
-
----
-
-## Prerequisites
-
-Before starting Loop 3, ensure Loop 2 completion:
-
-```bash
-# Verify Loop 2 delivery package exists
-test -f .claude/.artifacts/loop2-delivery-package.json && echo "✅ Ready" || echo "❌ Run parallel-swarm-implementation first"
-
-# Load implementation data
-npx claude-flow@alpha memory query "loop2_complete" --namespace "integration/loop2-to-loop3"
-
-# Verify GitHub CLI authenticated
-gh auth status || gh auth login
-```
-
----
-
-## 8-Step CI/CD Process Overview
-
-```
-Step 1: GitHub Hook Integration (Download CI/CD failure reports)
-        ↓
-Step 2: AI-Powered Analysis (Gemini + 7-agent synthesis with Byzantine consensus)
-        ↓
-Step 3: Root Cause Detection (Graph analysis + Raft consensus)
-        ↓
-Step 4: Intelligent Fixes (Program-of-thought: Plan → Execute → Validate → Approve)
-        ↓
-Step 5: Theater Detection Audit (6-agent Byzantine consensus validation)
-        ↓
-Step 6: Sandbox Validation (Isolated production-like testing)
-        ↓
-Step 7: Differential Analysis (Compare to baseline with metrics)
-        ↓
-Step 8: GitHub Feedback (Automated reporting and loop closure)
-```
-
----
-
-## Step 1: GitHub Hook Integration
-
-**Objective**: Download and process CI/CD pipeline failure reports from GitHub Actions.
-
-**Agent Coordi
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/operations/SKILL/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "SKILL-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) - recovery plan grounded in observable pipeline evidence

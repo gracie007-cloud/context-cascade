@@ -1,267 +1,69 @@
 ---
 name: github-project-management
-description: SKILL skill for operations workflows
+description: Run GitHub Projects with clear governance, automation, and reporting
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
-
----
-<!-- S0 META-IDENTITY                                                             -->
----
-
-[define|neutral] SKILL := {
-  name: "SKILL",
-  category: "operations",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
-
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
-
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
-
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
-
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["SKILL", "operations", "workflow"],
-  context: "user needs SKILL capability"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S3 CORE CONTENT                                                              -->
----
-
-# GitHub Project Management
-
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
-
-
-
-## Overview
-
-A comprehensive skill for managing GitHub projects using AI swarm coordination. This skill combines intelligent issue management, automated project board synchronization, and swarm-based coordination for efficient project delivery.
-
-## Quick Start
-
-### Basic Issue Creation with Swarm Coordination
-
-```bash
-# Create a coordinated issue
-gh issue create \
-  --title "Feature: Advanced Authentication" \
-  --body "Implement OAuth2 with social login..." \
-  --label "enhancement,swarm-ready"
-
-# Initialize swarm for issue
-npx claude-flow@alpha hooks pre-task --description "Feature implementation"
-```
-
-### Project Board Quick Setup
-
-```bash
-# Get project ID
-PROJECT_ID=$(gh project list --owner @me --format json | \
-  jq -r '.projects[0].id')
-
-# Initialize board sync
-npx ruv-swarm github board-init \
-  --project-id "$PROJECT_ID" \
-  --sync-mode "bidirectional"
-```
-
----
-
-## Core Capabilities
-
-### 1. Issue Management & Triage
-
-<details>
-<summary><strong>Automated Issue Creation</strong></summary>
-
-#### Single Issue with Swarm Coordination
-
-```javascript
-// Initialize issue management swarm
-mcp__claude-flow__swarm_init { topology: "star", maxAgents: 3 }
-mcp__claude-flow__agent_spawn { type: "coordinator", name: "Issue Coordinator" }
-mcp__claude-flow__agent_spawn { type: "researcher", name: "Requirements Analyst" }
-mcp__claude-flow__agent_spawn { type: "coder", name: "Implementation Planner" }
-
-// Create comprehensive issue
-mcp__github__create_issue {
-  owner: "org",
-  repo: "repository",
-  title: "Integration Review: Complete system integration",
-  body: `## 🔄 Integration Review
-
-  ### Overview
-  Comprehensive review and integration between components.
-
-  ### Objectives
-  - [ ] Verify dependencies and imports
-  - [ ] Ensure API integration
-  - [ ] Check hook system integration
-  - [ ] Validate data systems alignment
-
-  ### Swarm Coordination
-  This issue will be managed by coordinated swarm agents for optimal progress tracking.`,
-  labels: ["integration", "review", "enhancement"],
-  assignees: ["username"]
-}
-
-// Set up automated tracking
-mcp__claude-flow__task_orchestrate {
-  task: "Monitor and coordinate issue progress with automated updates",
-  strategy: "adaptive",
-  priority: "medium"
-}
-```
-
-#### Batch Issue Creation
-
-```bash
-# Create multiple related issues using gh CLI
-gh issue create \
-  --title "Feature: Advanced GitHub Integration" \
-  --body "Implement comprehensive GitHub workflow automation..." \
-  --label "feature,github,high-priority"
-
-gh issue create \
-  --title "Bug: Merge conflicts in integration branch" \
-  --body "Resolve merge conflicts..." \
-  --label "bug,integration,urgent"
-
-gh issue create \
-  --title "Documentation: Update integration guides" \
-  --body "Update all documentation..." \
-  --label "documentation,integration"
-```
-
-</details>
-
-<details>
-<summary><strong>Issue-to-Swarm Conversion</strong></summary>
-
-#### Transform Issues into Swarm Tasks
-
-```bash
-# Get issue details
-ISSUE_DATA=$(gh issue view 456 --json title,body,labels,assignees,comments)
-
-# Create swarm from issue
-npx ruv-swarm github issue-to-swarm 456 \
-  --issue-data "$ISSUE_DATA" \
-  --auto-decompose \
-  --assign-agents
-
-# Batch process multiple issues
-ISSUES=$(gh issue list --label "swarm-ready" --json number,title,body,labels)
-npx ruv-swarm github issues-batch \
-  --issues "$ISSUES" \
-  --parallel
-
-# Update issues with swarm status
-echo "$ISSUES" | jq -r '.[].number' | while read -r num; do
-  gh issue edit $num --add-label "swarm-processing"
-done
-```
-
-#### Issue Comment Commands
-
-Execute swarm operations via issue comments:
-
-```markdown
-<!-- In issue comment -->
-/swarm analyze
-/swarm decompose 5
-/swarm assign @agent-coder
-/swarm estimate
-/swarm start
-```
-
-</details>
-
-<details>
-<summary><strong>Automated Issue Triage</strong></summary>
-
-#### Auto-Label Based on Content
-
-```javascript
-// .github/swarm-labels.json
-{
-  "rules": [
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/operations/SKILL/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "SKILL-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+## STANDARD OPERATING PROCEDURE
+
+### Purpose
+Design and operate GitHub Projects that align roadmap goals, workflows, and metrics with auditable automation.
+
+### Trigger Conditions
+- **Positive:** Need structured project/workflow in GitHub Projects; Portfolio/roadmap tracking in GitHub; Automated status reporting from issues/PRs
+- **Negative:** Release-only work (route to github-release-management); Multi-repo code changes (route to github-multi-repo); Simple workflow edits (route to github-workflow-automation)
+
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
+
+### Required Artifacts
+- SKILL.md (this SOP)
+- readme.md usage guide
+- examples/ and tests/ for automation
+
+### Execution Phases
+1. **Intake goals and constraints**
+   - Clarify objectives, timelines, and reporting needs
+   - Identify teams, permissions, and data sources (issues/PRs)
+   - Separate hard vs. soft constraints for workflows
+
+2. **Design the project system**
+   - Structure views, fields, and workflows
+   - Define automation (workflows, bots, rules) with approvals
+   - Set governance for labels, templates, and SLAs
+
+3. **Run cadences**
+   - Establish triage, sprint/iteration rhythms, and ownership
+   - Automate status roll-ups and alerts
+   - Continuously refine workflows based on metrics
+
+4. **Measure and improve**
+   - Publish dashboards and reports
+   - Inspect cycle/lead time and flow efficiency
+   - Document changes and lessons learned
+
+### Output Format
+- Project design doc with fields, views, and permissions
+- Workflow/automation specs with approval paths
+- Cadence plan (triage, planning, review) with owners
+- Reporting/dashboard outline with metrics and links
+- Governance notes and change log
+
+### Validation Checklist
+- Governance and permissions validated
+- Automation tested in staging or limited scope
+- Reporting fields mapped to metrics and SLAs
+- Communication plan established
+- Confidence ceiling stated for project readiness
+
+Confidence: 0.70 (ceiling: inference 0.70) - Project workflow framed with prompt-architect constraint clarity

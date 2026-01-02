@@ -1,232 +1,70 @@
 ---
 name: platform-integration
-description: SKILL skill for operations workflows
+description: Integrate platforms and services with clear contracts and resilient connectors
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Connect systems through well-defined interfaces, mapping, and resilient middleware with observability and fallback paths.
 
-[define|neutral] SKILL := {
-  name: "SKILL",
-  category: "operations",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** Connect two or more platforms/services; Define data contracts and mappings; Need middleware with retries/backoff and monitoring
+- **Negative:** Simple webhook routing (route to hooks-automation); GitHub-specific automation (route to github-integration); Single-API test harness (route to infrastructure/tooling)
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Required Artifacts
+- SKILL.md (this SOP)
+- examples/ for integrations
+- tests/ for contract validation
+- resources/ for templates
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Execution Phases
+1. **Map systems and constraints**
+   - Identify APIs, auth models, and data domains
+   - Clarify SLAs, throughput, and ordering needs
+   - Flag compliance/security requirements
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+2. **Define contracts and flows**
+   - Design payload schemas and transformations
+   - Specify retries, backoff, idempotency, and error handling
+   - Plan observability, alerts, and dashboards
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["SKILL", "operations", "workflow"],
-  context: "user needs SKILL capability"
-} [ground:given] [conf:1.0] [state:confirmed]
+3. **Implement connectors**
+   - Build or configure middleware with least privilege
+   - Add structured logging and correlation IDs
+   - Test happy-path and failure scenarios
 
----
-<!-- S3 CORE CONTENT                                                              -->
----
+4. **Validate and operate**
+   - Run integration tests and performance checks
+   - Document runbooks and fallback paths
+   - Schedule periodic reviews for drift and SLA health
 
-# Platform Integration
+### Output Format
+- Integration specification with auth, endpoints, and contracts
+- Data mapping and transformation rules
+- Test matrix with happy-path and failure cases
+- Deployment and runbook notes with monitoring
+- Risk and rollback plan for connector changes
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Validation Checklist
+- Auth and permissions validated across systems
+- Idempotency/backoff and retries tested
+- Monitoring and alerting configured
+- Fallback/disablement procedures documented
+- Confidence ceiling stated for integration readiness
 
-
-
-## Purpose
-
-Execute enterprise-grade platform integration with comprehensive API connectivity, webhook automation, data synchronization, and event-driven coordination across multiple platforms and services.
-
-## Specialist Agent
-
-I am a platform integration architect specializing in multi-platform connectivity.
-
-**Methodology** (Integration Lifecycle Pattern):
-1. Discovery & mapping (API/webhook analysis)
-2. Authentication strategy (OAuth, API keys, JWT)
-3. Integration architecture design
-4. Connector implementation (API clients, SDKs)
-5. Webhook handler development
-6. Data transformation pipelines
-7. Synchronization engine setup
-8. Error handling & retry logic
-9. Monitoring & observability
-10. Testing & validation
-11. Documentation generation
-12. Production deployment
-
-**Supported Platforms**:
-- **Cloud**: AWS, Azure, GCP, Salesforce, HubSpot
-- **DevOps**: GitHub, GitLab, Jira, CircleCI, Jenkins
-- **Commerce**: Stripe, Shopify, WooCommerce, PayPal
-- **Communication**: Slack, Discord, Twilio, SendGrid
-- **Databases**: PostgreSQL, MongoDB, Redis, Elasticsearch
-- **Message Queues**: RabbitMQ, Kafka, AWS SQS, Azure Service Bus
-
-**Integration Patterns**:
-- **API-First**: RESTful, GraphQL, gRPC
-- **Event-Driven**: Webhooks, WebSockets, SSE
-- **Message Queues**: Pub/Sub, AMQP, MQTT
-- **Data Sync**: ETL, CDC, batch/real-time
-- **Orchestration**: Workflow engines, state machines
-
-## Input Contract
-
-```yaml
-input:
-  platforms: array[object] # Platform configurations
-    - name: string (e.g., "salesforce", "stripe")
-      type: string (api|webhook|sync)
-      auth: object (credentials, tokens)
-      endpoints: array[string]
-  integration_type: string # "api_integration" | "webhook_automation" | "data_sync" | "full"
-  sync_direction: string # "bidirectional" | "source_to_target" | "target_to_source"
-  sync_frequency: string # "real_time" | "hourly" | "daily" | "on_demand"
-  error_strategy: string # "retry" | "dead_letter" | "alert" | "fallback"
-  monitoring: boolean # Enable observability (default: true)
-```
-
-## Output Contract
-
-```yaml
-output:
-  artifacts:
-    connectors: directory # API client implementations
-    handlers: directory # Webhook handlers
-    sync_engine: directory # Data synchronization
-    tests: directory # Integration test suite
-    configs: array[file] # Configuration files
-    docs: markdown # Integration documentation
-  metrics:
-    api_latency_p95: number # ms
-    webhook_success_rate: number # percentage
-    sync_throughput: number # records/sec
-    error_rate: number # percentage
-  endpoints:
-    api_base_url: string
-    webhook_url: string
-    health_check: string
-  monitoring:
-    dashboard_url: string
-    alerts: array[object]
-```
-
-## Execution Flow
-
-```bash
-#!/bin/bash
-set -e
-
-INTEGRATION_TYPE="${1:-full}"
-PLATFORMS_CONFIG="$2"
-OUTPUT_DIR="platform-integration-$(date +%s)"
-
-mkdir -p "$OUTPUT_DIR"/{connectors,handlers,sync,tests,configs,docs,monitoring}
-
-echo "================================================================"
-echo "Platform Integration Orchestration"
-echo "Type: $INTEGRATION_TYPE | Platforms: $PLATFORMS_CONFIG"
-echo "================================================================"
-
-# STAGE 1: Discovery & Mapping
-echo "[1/12] Discovering platform capabilities..."
-python3 resources/scripts/api-connector.py \
-  --mode discovery \
-  --config "$PLATFORMS_CONFIG" \
-  --output "$OUTPUT_DIR/discovery-report.json"
-
-# STAGE 2: Authentication Strategy
-echo "[2/12] Configuring authentication..."
-cat > "$OUTPUT_DIR/configs/auth-config.yaml" <<EOF
-authentication:
-  strategy: oauth2 # or api_key, jwt, basic
-  providers:
-    - name: primary_platform
-      type: oauth2
-      client_id: \${CLIENT_ID}
-      client_secret: \${CLIENT_SECRET}
-      token_url: https://oauth.example.com/token
-      scopes: [read, write]
-
-  token_management:
-    refresh_strategy: automatic
-    expiry_buffer: 300 # seconds before ex
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/operations/SKILL/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "SKILL-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) - Platform integration SOP keeps contracts, retries, and observability explicit

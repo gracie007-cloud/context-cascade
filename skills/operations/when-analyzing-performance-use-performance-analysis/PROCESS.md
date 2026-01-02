@@ -1,49 +1,25 @@
-# Performance Analysis - Workflow
+# Performance Analysis Routing Process
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+Purpose: route performance analysis requests into the performance-analysis skill with the same structure-first, adversarial validation, and confidence-ceiling guardrails used by skill-forge and prompt-architect.
 
+## Fast Path Checklist
+1. **Qualify the request**: confirm it is analysis/diagnosis (not profiling-only, infra build, or observability setup).
+2. **Select the right skill**: point to `skills/operations/performance-analysis` and confirm the requestor accepts its SOP.
+3. **Surface constraints**: capture hard/soft/inferred requirements (SLOs, deadlines, risk tolerance) and restate them for confirmation.
+4. **Assemble evidence**: baseline metrics, traces/logs, repro steps, environment details, and recent changes.
+5. **Set cadence**: agree on checkpoints, owners, and expected outputs (findings, options, experiments, recommendations).
 
+## Evidence Packet Template
+- **Context**: service/endpoint, environments, recent deploys, suspected areas.
+- **Signals**: metrics (latency/throughput/errors), traces/profiles if available, logs for the affected window.
+- **Reproduction**: steps, datasets/fixtures, load patterns.
+- **Constraints**: success criteria, deadlines, budget for experiments, change windows.
+- **Risks**: customer impact, compliance considerations, data sensitivity.
 
-## Complete Script
+## Validation Gates
+- Routing confirmed to performance-analysis; mismatches rerouted (profiling-only → performance-profiler; observability setup → opentelemetry-observability).
+- Evidence packet attached or explicit gap noted with owner to fill it.
+- Checkpoints defined with owners and communication channels.
+- Confidence ceiling agreed and restated in all summaries.
 
-```bash
-#!/bin/bash
-
-# Phase 1: Establish Baseline
-npx claude-flow@alpha performance baseline --duration 300 --output baseline.json
-npx claude-flow@alpha benchmark run --type swarm --iterations 10 --output benchmark.json
-
-# Phase 2: Profile System
-npx claude-flow@alpha performance profile-swarm --duration 300 --output profile.json
-npx claude-flow@alpha memory profile --show-hotspots --output memory-profile.json
-npx claude-flow@alpha performance flamegraph --input profile.json --output flamegraph.svg
-
-# Phase 3: Analyze Issues
-npx claude-flow@alpha performance analyze --detect-bottlenecks --output analysis.json
-npx claude-flow@alpha performance bottlenecks --categorize --output bottlenecks.json
-npx claude-flow@alpha performance root-cause --issue "high-latency" --output root-cause.json
-
-# Phase 4: Optimize Performance
-npx claude-flow@alpha performance recommend --based-on analysis.json --output recommendations.json
-npx claude-flow@alpha performance optimize --recommendations recommendations.json --auto-apply
-npx claude-flow@alpha swarm optimize-topology --based-on analysis.json
-npx claude-flow@alpha agent rebalance --strategy performance-optimized
-
-# Phase 5: Validate Results
-npx claude-flow@alpha performance baseline --duration 300 --output optimized.json
-npx claude-flow@alpha performance compare --baseline baseline.json --current optimized.json --output improvements.json
-npx claude-flow@alpha performance report --type comprehensive --output final-report.md
-
-# Display results
-cat improvements.json | jq '.improvements'
-```
-
-## Success Criteria
-- [ ] Baseline established
-- [ ] System profiled
-- [ ] Bottlenecks identified
-- [ ] Optimizations applied
-- [ ] ≥15% throughput improvement
-- [ ] ≥20% latency reduction
-- [assert|neutral] Promise: `<promise>PROCESS_VERIX_COMPLIANT</promise>`* [ground:acceptance-criteria] [conf:0.90] [state:provisional]
+Confidence: 0.70 (ceiling: inference 0.70) - routing process mirrors performance-analysis SOP with prompt-architect clarity.

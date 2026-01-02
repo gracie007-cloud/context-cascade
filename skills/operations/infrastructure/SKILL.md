@@ -1,223 +1,71 @@
 ---
 name: infrastructure
-description: SKILL skill for operations workflows
+description: Design and deliver core infrastructure with resilient operations
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
+model: sonnet
+x-version: 3.2.0
+x-category: operations
+x-vcl-compliance: v3.1.1
+x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
 ---
 
+## STANDARD OPERATING PROCEDURE
 
----
-<!-- S0 META-IDENTITY                                                             -->
----
+### Purpose
+Create secure, scalable infrastructure foundations covering network, compute, storage, identity, and observability with validated IaC.
 
-[define|neutral] SKILL := {
-  name: "SKILL",
-  category: "operations",
-  version: "1.0.0",
-  layer: L1
-} [ground:given] [conf:1.0] [state:confirmed]
+### Trigger Conditions
+- **Positive:** New environment or platform build; Infrastructure modernization or consolidation; Baseline security/operations review
+- **Negative:** Container packaging only (route to docker-containerization); Kubernetes-specific asks (route to kubernetes-specialist); Performance triage (route to performance-analysis)
 
----
-<!-- S1 COGNITIVE FRAME                                                           -->
----
+### Guardrails
+- Structure-first: keep SKILL.md aligned with examples/, tests/, and any resources/references so downstream agents always have scaffolding.
+- Adversarial validation is mandatory: cover boundary cases, failure paths, and rollback drills before declaring the SOP complete.
+- Prompt hygiene: separate hard vs. soft vs. inferred constraints and confirm inferred constraints before acting.
+- Explicit confidence ceilings: format as 'Confidence: X.XX (ceiling: TYPE Y.YY)' and never exceed the ceiling for the claim type.
+- MCP traceability: tag sessions WHO=operations-{name}-{session_id}, WHY=skill-execution, and capture evidence links in outputs.
+- Avoid anti-patterns: undocumented changes, missing rollback paths, skipped tests, or unbounded automation without approvals.
 
-[define|neutral] COGNITIVE_FRAME := {
-  frame: "Aspectual",
-  source: "Russian",
-  force: "Complete or ongoing?"
-} [ground:cognitive-science] [conf:0.92] [state:confirmed]
+### Required Artifacts
+- SKILL.md (this SOP)
+- readme.md
+- examples/ for architectures
+- tests/ for infrastructure checks
+- resources/ scripts/templates
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Execution Phases
+1. **Capture requirements**
+   - Document workloads, data needs, compliance, and SLOs
+   - Separate hard vs. soft constraints and confirm owners
+   - Assess current state and gaps
 
----
-<!-- S2 TRIGGER CONDITIONS                                                        -->
----
+2. **Design architecture**
+   - Plan network, identity, compute, storage, and security controls
+   - Select delivery patterns (IaC, pipelines, artifact strategy)
+   - Define observability, backup, and DR baselines
 
-[define|neutral] TRIGGER_POSITIVE := {
-  keywords: ["SKILL", "operations", "workflow"],
-  context: "user needs SKILL capability"
-} [ground:given] [conf:1.0] [state:confirmed]
+3. **Implement and stage**
+   - Codify infrastructure via IaC with peer review
+   - Deploy to non-prod with smoke tests and drift detection
+   - Harden access, secrets, and audit trails
 
----
-<!-- S3 CORE CONTENT                                                              -->
----
+4. **Validate and hand off**
+   - Run security/performance/availability checks
+   - Record capacity plans and cost expectations
+   - Document runbooks, escalation, and change control
 
-# Infrastructure Orchestration Skill
+### Output Format
+- Reference architecture and decision log
+- IaC plan with modules, pipelines, and review points
+- Capacity/performance profile with assumptions
+- Operational runbook with monitoring and backups
+- Risk register with mitigations and owners
 
-## Kanitsal Cerceve (Evidential Frame Activation)
-Kaynak dogrulama modu etkin.
+### Validation Checklist
+- Security and compliance controls mapped and tested
+- Performance and capacity checks executed or planned
+- Backup/DR and observability paths in place
+- Change control and ownership documented
+- Confidence ceiling stated for environment readiness
 
-
-
-## Metadata
-- **Skill ID**: infrastructure-orchestration
-- **Category**: Infrastructure & DevOps
-- **Tier**: Gold
-- **Version**: 2.0.0
-- **Last Updated**: 2025-11-02
-
-## Overview
-
-Comprehensive infrastructure orchestration skill that manages cloud resources, containerization, infrastructure as code (IaC), deployment automation, and monitoring setup. This parent skill coordinates specialized sub-skills for Docker containerization and Terraform IaC management.
-
-## Capabilities
-
-### Core Infrastructure Management
-- **Cloud Provisioning**: Multi-cloud resource provisioning (AWS, Azure, GCP)
-- **Container Orchestration**: Docker, Kubernetes, Docker Swarm
-- **Infrastructure as Code**: Terraform, CloudFormation, Pulumi
-- **Configuration Management**: Ansible, Chef, Puppet
-- **Deployment Automation**: CI/CD pipelines, blue-green deployments
-- **Monitoring & Observability**: Prometheus, Grafana, ELK stack, OpenTelemetry
-
-### Specialized Sub-Skills
-1. **Docker Containerization** (`docker-containerization/`)
-   - Multi-stage builds, optimization, security scanning
-   - Docker Compose orchestration
-   - Registry management and image distribution
-
-2. **Terraform IaC** (`terraform-iac/`)
-   - Multi-cloud infrastructure provisioning
-   - State management and GitOps workflows
-   - Module development and reusability
-
-## Trigger Conditions
-
-Auto-invoke this skill when user mentions:
-- "infrastructure", "cloud setup", "provision resources"
-- "deploy to AWS/Azure/GCP", "multi-cloud"
-- "container orchestration", "Kubernetes", "K8s"
-- "infrastructure as code", "IaC", "Terraform", "CloudFormation"
-- "monitoring setup", "observability", "logging"
-- "configuration management", "Ansible"
-- "CI/CD pipeline", "deployment automation"
-
-## Agent Assignments
-
-**Primary Agents**:
-- `cicd-engineer` - CI/CD pipeline setup and deployment automation
-- `backend-dev` - Infrastructure architecture and design
-- `system-architect` - High-level infrastructure planning
-
-**Supporting Agents**:
-- `code-analyzer` - Infrastructure code review and optimization
-- `reviewer` - Security and compliance validation
-- `tester` - Infrastructure testing and validation
-
-## Workflow
-
-### 1. Assessment Phase
-```yaml
-Input: Infrastructure requirements, scale, compliance needs
-Actions:
-  - Analyze current infrastructure state
-  - Identify gaps and requirements
-  - Select appropriate tools and platforms
-  - Design architecture with redundancy and scalability
-Output: Infrastructure design document, technology stack selection
-```
-
-### 2. Provisioning Phase
-```yaml
-Input: Architecture design, resource specifications
-Actions:
-  - Write IaC templates (Terraform/CloudFormation)
-  - Configure networking, security groups, IAM roles
-  - Set up container orchestration (if needed)
-  - Implement multi-region/AZ deployment
-Output: IaC codebase, provisioned cloud resources
-```
-
-### 3. Deployment Automation Phase
-```yaml
-Input: Application artifacts, deployment strategy
-Actions:
-  - Configure CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins)
-  - Set up container registries and artifact storage
-  - Implement blue-green or canary deployment strategies
-  - Configure auto-scaling and load balancing
-Output: Automated deployment pipeline, deployment scripts
-```
-
-### 4. Monitoring & Observability Phase
-```yaml
-Input: SLOs, SLIs, alerting requirements
-Actions:
-  - Deploy monitoring stack (Prometheus, Grafana, ELK)
-  - Configure metrics collection and log aggregation
-  - Set up distributed tracing (Jaeger, Zipkin)
-  - Create dashboards and alerting rules
-Output: Monitoring infrastructure, dashboards, alert configurations
-```
-
-### 5. Configuration Management Phase
-```yaml
-Input: Server configurations, application configs
-Actions:
-  - Write Ansible playbooks or Chef recipes
-  - Implement configuration drift detection
-  - Set up secrets management (Vault, AWS Secrets Manager)
-  - Configure envir
-
----
-<!-- S4 SUCCESS CRITERIA                                                          -->
----
-
-[define|neutral] SUCCESS_CRITERIA := {
-  primary: "Skill execution completes successfully",
-  quality: "Output meets quality thresholds",
-  verification: "Results validated against requirements"
-} [ground:given] [conf:1.0] [state:confirmed]
-
----
-<!-- S5 MCP INTEGRATION                                                           -->
----
-
-[define|neutral] MCP_INTEGRATION := {
-  memory_mcp: "Store execution results and patterns",
-  tools: ["mcp__memory-mcp__memory_store", "mcp__memory-mcp__vector_search"]
-} [ground:witnessed:mcp-config] [conf:0.95] [state:confirmed]
-
----
-<!-- S6 MEMORY NAMESPACE                                                          -->
----
-
-[define|neutral] MEMORY_NAMESPACE := {
-  pattern: "skills/operations/SKILL/{project}/{timestamp}",
-  store: ["executions", "decisions", "patterns"],
-  retrieve: ["similar_tasks", "proven_patterns"]
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
-[define|neutral] MEMORY_TAGGING := {
-  WHO: "SKILL-{session_id}",
-  WHEN: "ISO8601_timestamp",
-  PROJECT: "{project_name}",
-  WHY: "skill-execution"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S7 SKILL COMPLETION VERIFICATION                                             -->
----
-
-[direct|emphatic] COMPLETION_CHECKLIST := {
-  agent_spawning: "Spawn agents via Task()",
-  registry_validation: "Use registry agents only",
-  todowrite_called: "Track progress with TodoWrite",
-  work_delegation: "Delegate to specialized agents"
-} [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- S8 ABSOLUTE RULES                                                            -->
----
-
-[direct|emphatic] RULE_NO_UNICODE := forall(output): NOT(unicode_outside_ascii) [ground:windows-compatibility] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_EVIDENCE := forall(claim): has(ground) AND has(confidence) [ground:verix-spec] [conf:1.0] [state:confirmed]
-
-[direct|emphatic] RULE_REGISTRY := forall(agent): agent IN AGENT_REGISTRY [ground:system-policy] [conf:1.0] [state:confirmed]
-
----
-<!-- PROMISE                                                                      -->
----
-
-[commit|confident] <promise>SKILL_VERILINGUA_VERIX_COMPLIANT</promise> [ground:self-validation] [conf:0.99] [state:confirmed]
+Confidence: 0.70 (ceiling: inference 0.70) - Infrastructure SOP mirrors skill-forge structure with IaC validation
