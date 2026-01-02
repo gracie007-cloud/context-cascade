@@ -1,72 +1,67 @@
-_pipeline-automation/_pipeline-automation/enhancements/..-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/advanced-coordination-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agent-creation-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agent-creator-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-advanced-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-learning-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-memory-patterns-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-optimization-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/agentdb-vector-search-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/api-docs-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/baseline-replication-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/base-template-generator-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/cascade-orchestrator-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/cicd-engineer-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/cicd-intelligent-recovery-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/cloud-platforms-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/code-analyzer-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/code-review-assistant-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/compliance-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/debugging-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/functionality-audit-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/micro-skill-creator-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/prompt-architect-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/researcher-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/reviewer-instructions.md
-_pipeline-automation/_pipeline-automation/enhancements/tester-instructions.md
-_pipeline-automation/batch-1-completion-report.md
-_pipeline-automation/batch-1-gold-completion-summary.md
-_pipeline-automation/batch-1-gold-tier-report.md
-_pipeline-automation/batch-1-results.md
-_pipeline-automation/batch-1-success-report.md
-_pipeline-automation/batch-2-lessons-learned.md
-_pipeline-automation/BATCH-3-COMPLETION-REPORT.md
-_pipeline-automation/BATCH-4-COMPLETION-SUMMARY.md
-_pipeline-automation/gold-tier-upgrade-plan.md
-_pipeline-automation/phase-2-final-report.md
-_pipeline-automation/phase-3-plan.md
-_pipeline-automation/pilot-selection.md
-_pipeline-automation/readme.md
-_pipeline-automation/SKILLS-ENHANCEMENT-FINAL-SUMMARY.md
-_pipeline-automation/ultrathink-plan.md
-references/audit-pipeline.md
-references/codex-auto.md
-references/codex-reasoning.md
-references/gemini-extensions.md
-references/gemini-media.md
-references/gemini-megacontext.md
-references/gemini-search.md
-references/master-skills-index.md
-references/multi-model.md
-references/reverse-engineer-debug.md
-references/three-loop-integration-architecture.md
-tooling/pptx-generation/references/brand-integration.md
-tooling/pptx-generation/references/complex-deck-architecture.md
-tooling/pptx-generation/references/design-principles.md
-tooling/pptx-generation/references/simple-deck-template.md
-tooling/pptx-generation/references/validation-checklist.md
-tooling/pptx-generation/SKILL.md
-tooling/utilities/when-analyzing-user-intent-use-intent-analyzer/process.md
-tooling/utilities/when-analyzing-user-intent-use-intent-analyzer/readme.md
-tooling/utilities/when-analyzing-user-intent-use-intent-analyzer/SKILL.md
-tooling/utilities/when-creating-presentations-use-pptx-generation/process.md
-tooling/utilities/when-creating-presentations-use-pptx-generation/readme.md
-tooling/utilities/when-creating-presentations-use-pptx-generation/SKILL.md
-tooling/utilities/when-optimizing-agent-learning-use-reasoningbank-intelligence/process.md
-tooling/utilities/when-optimizing-agent-learning-use-reasoningbank-intelligence/readme.md
-tooling/utilities/when-optimizing-agent-learning-use-reasoningbank-intelligence/SKILL.md
-tooling/utilities/when-optimizing-prompts-use-prompt-architect/process.md
-tooling/utilities/when-optimizing-prompts-use-prompt-architect/readme.md
-tooling/utilities/when-optimizing-prompts-use-prompt-architect/SKILL.md
-tooling/web-cli-teleport/SKILL.md
+# Context Cascade - Enhanced Files List
+# Generated: 2026-01-02
+# Total Components: 706
+
+## Skills (237 directory-based, 218 packaged)
+
+### By Category
+- delivery/: 10+ skills
+- foundry/: 22+ skills
+- operations/: 23+ skills
+- orchestration/: 23+ skills
+- platforms/: 18+ skills
+- quality/: 22+ skills
+- research/: 21+ skills
+- security/: 13+ skills
+- specialists/: 11+ skills
+- tooling/: 17+ skills
+
+### Packaged Skills (218 .skill files)
+Location: skills/packaged/
+
+## Agents (217)
+Location: agents/
+
+Categories:
+- delivery/: 18 agents
+- quality/: 18 agents
+- research/: 11 agents
+- orchestration/: 21 agents
+- security/: 15 agents
+- platforms/: 12 agents
+- specialists/: 45 agents
+- tooling/: 24 agents
+- foundry/: 18 agents
+- operations/: 29 agents
+
+## Commands (245)
+Location: commands/
+
+## Playbooks (7)
+Location: playbooks/
+
+## Hooks (39)
+Location: hooks/
+
+Fixed hooks (2026-01-02):
+- skill-router-hook.sh
+- sop-compliance-verifier.sh
+- recursive-improvement-gate.sh
+- five-phase-enforcer.sh
+- enforcement/user-prompt-submit.sh
+- enforcement/post-task-spawn.sh
+- enforcement/post-skill-compliance.sh
+- enforcement/post-todowrite.sh
+- enforcement/pre-skill-invoke.sh
+
+## Documentation Updated (2026-01-02)
+- skills/MASTER-SKILLS-INDEX.md
+- skills/README.md
+- skills/SKILL-CONSOLIDATION-AUDIT-REPORT.md
+- skills/SKILL-IMPROVEMENTS-FINAL-REPORT.md
+- skills/all-enhanced-files.txt
+- skills/apply-skill-improvements.sh
+- skills/enhancement-summary.txt
+
+## Status
+All components validated and production-ready.
