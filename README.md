@@ -1,22 +1,22 @@
 # Context Cascade - Nested Plugin Architecture for Claude Code
 
-**Official Claude Code Plugin** | Version 3.0.0 | November 2025
+**Official Claude Code Plugin** | Version 3.0.0 | Last updated: 2026-01-03 (see `docs/COMPONENT-COUNTS.json` for source counts)
 
 **Context-saving nested architecture**: Playbooks -> Skills -> Agents -> Commands. Load only what you need, saving **90%+ context space**.
 
 ## The Context Cascade Architecture
 
 ```
-PLAYBOOKS (7)     <-- Only these are loaded initially (~2k tokens)
+PLAYBOOKS (30)     <-- Only these are loaded initially (~2k tokens)
     |
     v
 SKILLS (171)       <-- Loaded when playbook invokes them
     |
     v
-AGENTS (217)       <-- Loaded when skill needs them
+AGENTS (219)       <-- Loaded when skill needs them
     |
     v
-COMMANDS (245)    <-- Embedded in agents, loaded last
+COMMANDS (231)    <-- Embedded in agents, loaded last
 ```
 
 **Why Context Cascade?**
@@ -105,7 +105,7 @@ flowchart TD
 - **Specialist Stack** → Language/platform specialists (Python, TypeScript, React, etc.)
 
 **Key Principles**:
-1. **Zero Decision Paralysis**: Router auto-selects optimal skill from 115+ options
+1. **Zero Decision Paralysis**: Router auto-selects optimal skill from 171 options
 2. **Context-Aware**: Detects intent from keywords, agent count, complexity signals
 3. **Transparent**: Provides selection rationale and alternatives
 4. **Adaptive**: Learns from corrections and adjusts future routing
@@ -116,17 +116,11 @@ flowchart TD
 
 ## 🎉 What's New in v3.0.0
 
-- ✅ **Intelligent Auto-Routing** - orchestration-router + intent-analyzer eliminate decision paralysis
-- ✅ **Playbook Decision Tree** - Systematic Phase 0-6 workflow with quality gates
-- ✅ **Official Claude Code Plugin Support** (October 2025)
-- ✅ **Modular Marketplace** - 5 installable plugins
-- ✅ **Built on Claude Flow** - Enterprise orchestration with memory & hooks
-- ✅ **100% 12-Factor Compliance** - Perfect score achieved
-- ✅ **271 Graphviz Diagrams** - Complete visual documentation (101% coverage)
-- ✅ **Security Hardening** - 6 enterprise components (100% score, 0 vulnerabilities)
-- ✅ **8.3x Swarm Speedup** - Enhanced mesh topology (vs 2.8-4.4x Claude Flow baseline)
-- ✅ **Production Certified** - Ready for enterprise deployment
-- ✅ **NEW: Production MCP Integrations** - Connascence Analyzer + Memory MCP Triple System
+- ✅ **Current component counts**: 30 playbooks, 171 skills, 219 agents, and 231 commands (see `docs/COMPONENT-COUNTS.json`).
+- ✅ **Discovery indexes**: `discovery/SKILL-INDEX.md`, `discovery/AGENT-REGISTRY.md`, and `discovery/COMMAND-INDEX.md` map routing across the hierarchy.
+- ✅ **Modular marketplace**: Five installable plugin packages defined in `.claude-plugin/marketplace.json`.
+- ✅ **Graphviz library**: 41 workflow diagrams live in `docs/workflows/graphviz/` with an index and README.
+- ✅ **MCP templates**: `.mcp.json` documents sample servers (e.g., memory-mcp, connascence-analyzer, fetch, sequential-thinking, filesystem, playwright, ruv-swarm).
 
 ---
 
@@ -273,58 +267,27 @@ Multi-objective optimization for cognitive architecture tuning:
 
 ## Complete Command Taxonomy
 
-**Total Commands**: 223 (149 original + 75 new)
-**MECE Coverage**: 100% across 10 domains
-**GraphViz Diagrams**: 25 workflow visualizations
+**Total Commands**: 231 (tracked in `docs/COMPONENT-COUNTS.json`)
+**Organization**: Commands live under `commands/` and are indexed in `discovery/COMMAND-INDEX.md`.
+**GraphViz Diagrams**: 41 workflow visualizations in `docs/workflows/graphviz/`
 
 ### Command Distribution
 
 | Category | Commands | Documentation |
 |----------|----------|---------------|
-| Core Infrastructure | 3 | System help, memory, swarm |
-| Agent Lifecycle | 18 | Agent spawning, coordination, health |
-| Development Workflow | 67 | SPARC methodology, workflows |
-| Quality & Validation | 29 | Audits, testing, benchmarking |
-| Performance & Optimization | 18 | Profiling, resource optimization |
-| Memory & State | 18 | Memory management, checkpointing |
-| Monitoring & Telemetry | 18 | Observability, metrics, tracing |
-| Integration & External | 21 | GitHub, deployment, CI/CD |
-| Research & Analysis | 20 | Reverse engineering, research |
-| Automation & Hooks | 22 | Lifecycle hooks, automation |
+| delivery | 67 | `commands/delivery/` |
+| foundry | 13 | `commands/foundry/` |
+| operations | 74 | `commands/operations/` |
+| orchestration | 32 | `commands/orchestration/` |
+| platforms | 4 | `commands/platforms/` |
+| quality | 16 | `commands/quality/` |
+| research | 9 | `commands/research/` |
+| security | 11 | `commands/security/` |
+| tooling | 3 | `commands/tooling/` |
+| root (quality loop + templates) | 2 | `commands/quality-loop.md`, `commands/VERIX-COMMAND-TEMPLATE.md` |
 
 **Complete Reference**: [MASTER-COMMAND-INDEX.md](docs/MASTER-COMMAND-INDEX.md)
-**MECE Analysis**: [MECE-COMMAND-TAXONOMY.md](docs/command-taxonomy/MECE-COMMAND-TAXONOMY.md)
-**Visual Workflows**: [GraphViz Diagrams](docs/workflows/graphviz/) (25 diagrams)
-
-### New Commands (Phases 1-4)
-
-**Phase 1 - Critical Infrastructure** (21 commands):
-- Security: `/security-audit`, `/dependency-audit`, `/license-audit`, `/accessibility-audit`
-- Testing: `/regression-test`, `/integration-test`, `/e2e-test`, `/load-test`, `/smoke-test`
-- Deployment: `/docker-build`, `/docker-deploy`, `/k8s-deploy`, `/github-release`
-- Workflows: `/workflow:cicd`, `/workflow:deployment`, `/workflow:rollback`
-- Monitoring: `/agent-health-check`, `/monitoring-configure`, `/alert-configure`, `/log-stream`, `/trace-request`
-- Profiling: `/profiler-start`, `/profiler-stop`
-
-**Phase 2 - Memory & State** (14 commands):
-- Memory: `/memory-clear`, `/memory-export`, `/memory-import`, `/memory-merge`, `/memory-stats`, `/memory-gc`
-- State: `/state-checkpoint`, `/state-restore`, `/state-diff`
-- Agents: `/agent-retire`, `/agent-clone`, `/agent-benchmark`
-- Visualization: `/coordination-visualize`, `/metrics-export`
-
-**Phase 3 - Development Enhancement** (20 commands):
-- SPARC Specialists: `/sparc:api-designer`, `/sparc:database-architect`, `/sparc:frontend-specialist`, `/sparc:backend-specialist`, `/sparc:mobile-specialist`
-- Workflows: `/workflow:testing`, `/workflow:hotfix`
-- Optimization: `/resource-optimize`, `/memory-optimize`, `/cpu-optimize`, `/network-optimize`, `/bundle-optimize`, `/query-optimize`, `/render-optimize`
-- Deployment: `/cloudflare-deploy`, `/vercel-deploy`
-- Audits: `/performance-benchmark`
-
-**Phase 4 - Integration & Research** (26 commands):
-- External Integration: `/aws-deploy`, `/github-actions`, `/github-pages`, `/jira-sync`, `/slack-notify`, `/docker-compose`, `/terraform-apply`, `/ansible-deploy`
-- Reverse Engineering: `/re:malware-sandbox`, `/re:network-traffic`, `/re:memory-dump`, `/re:decompile`
-- Research: `/research:literature-review`, `/research:experiment-design`, `/research:data-analysis`, `/research:paper-write`, `/research:citation-manager`
-- Hooks: `/hook:on-error`, `/hook:on-success`, `/hook:on-commit`, `/hook:on-push`, `/hook:on-pr`, `/hook:on-deploy`
-- Automation: `/automation:retry-failed`, `/automation:schedule-task`, `/automation:cron-job`
+**Visual Workflows**: [GraphViz Diagrams](docs/workflows/graphviz/) (41 diagrams)
 
 ---
 
@@ -514,19 +477,17 @@ Multi-objective optimization for cognitive architecture tuning:
 ---
 
 ### 4. 12fa-visual-docs - Visual Documentation
-**271 AI-comprehensible Graphviz workflow diagrams**
+**Graphviz workflow diagrams**
 
 **What you get**:
-- ✅ **271 Graphviz Diagrams** - 101% coverage (73 skills, 211 agents, 94 commands)
+- ✅ **41 Graphviz diagrams** in `docs/workflows/graphviz/` plus an `index.html` browser viewer
 - ✅ **Validation Tools** - Cross-platform validation scripts (Bash + PowerShell)
-- ✅ **Interactive HTML Viewer** - Search, filter, and browse all diagrams
-- ✅ **Master Catalog** - Complete metadata and integration guidelines
-- ✅ **Templates** - Skill, agent, and command process templates
-- ✅ **Comprehensive README** - 450-line guide with all usage instructions
+- ✅ **Templates** - Skill, agent, and command process DOT templates
+- ✅ **Directory README** - Describes structure and usage for the diagram set
 
 **Install**: `/plugin install 12fa-visual-docs` (requires `12fa-core`, Graphviz)
 
-**Metrics**: 271 diagrams | 26,286 lines DOT code | 100% validation success | 101% coverage
+**Metrics**: 41 DOT sources tracked by `docs/workflows/graphviz/validate-all-diagrams.*`
 
 **Use when**: You want visual documentation, AI-comprehensible workflows, or training materials
 
@@ -638,19 +599,15 @@ Multi-objective optimization for cognitive architecture tuning:
 
 ---
 
-## 📊 Metrics & Performance
+## 📊 Repository Snapshot
 
-| Metric | Achievement |
-|--------|-------------|
-| **12-FA Compliance** | 100% ✅ |
-| **Security Score** | 100% (0 vulnerabilities) ✅ |
-| **Speed Improvement** | 2.5-4x average (core) |
-| **Parallel Speedup** | 6.75-8.3x (swarm) |
-| **Failure Rate** | <3% |
-| **Test Coverage** | >85% |
-| **Visual Documentation** | 271 diagrams (101% coverage) |
-| **Planning Accuracy** | >97% (Three-Loop) |
-| **Recovery Rate** | 100% (Three-Loop Loop 3) |
+| Item | Current State (repository data) |
+|------|---------------------------------|
+| **Component counts** | 30 playbooks, 171 skills, 219 agents, 231 commands (`docs/COMPONENT-COUNTS.json`) |
+| **Plugin bundles** | 5 marketplace packages in `.claude-plugin/marketplace.json` |
+| **Graphviz library** | 41 DOT diagrams in `docs/workflows/graphviz/` |
+| **Discovery indexes** | Skill/agent/command indexes under `discovery/` |
+| **MCP template** | Sample servers listed in `.mcp.json` |
 
 ---
 
@@ -769,7 +726,7 @@ Hierarchical (6.3x)     Mesh (8.3x)        Adaptive (7.2x)     Ring (4.5x)
 ### Built On
 - **[Claude Flow](https://github.com/ruvnet/claude-flow)** by [@ruvnet](https://github.com/ruvnet) - Enterprise-grade agent orchestration platform
   - Provides: Memory system, hooks, swarm intelligence, MCP protocol, AgentDB, ReasoningBank
-  - We enhance with: 271 Graphviz diagrams, evidence-based prompting, SPARC methodology, Three-Loop Architecture, security hardening, 12-Factor compliance
+  - We enhance with: Graphviz diagrams (`docs/workflows/graphviz/`), evidence-based prompting, SPARC methodology, Three-Loop Architecture, security hardening, 12-Factor compliance
   - See [CLAUDE-FLOW-INTEGRATION.md](CLAUDE-FLOW-INTEGRATION.md) for full integration details
 
 ---
@@ -846,8 +803,8 @@ MIT - See [LICENSE](LICENSE)
 
 ---
 
-**Version**: 3.1.0 | **Author**: DNYoussef | **Last Updated**: December 3, 2025
+**Version**: 3.0.0 | **Author**: DNYoussef | **Last Updated**: 2026-01-03
 
 **⭐ If this helped you, please star the repository!**
 
-[⬆ Back to Top](#12-factor-agents---production-ai-development-system)
+[⬆ Back to Top](#context-cascade---nested-plugin-architecture-for-claude-code)
