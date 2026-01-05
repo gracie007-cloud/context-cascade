@@ -1,25 +1,25 @@
 ---
-name: rapid-manuscript-drafter
-description: Generate structured research manuscript drafts in 10-15 minutes with
-  proper academic sections (Abstract, Introduction, Methods, Results, Discussion).
-  Creates scaffolded drafts with placeholders for data, not fabricated content. Use
-  for quickly producing first drafts from research ideas, speeding up the writing
-  process while maintaining academic integrity.
-version: 1.0.0
-category: research
-tags:
-- research
-- writing
-- manuscript
-- academic
-- drafting
-- rapid
-author: ruv
-mcp_servers:
-  required: [memory-mcp]
-  optional: [sequential-thinking]
+name: .backup-complete-20251215-220149
+description: Generate structured research manuscript drafts in 10-15 minutes with proper academic sections (Abstract, Introduction, Methods, Results, Discussion). Creates scaffolded drafts with placeholders for data, not fabricated content. Use for quickly producing first drafts from research ideas, speeding up the writing process while maintaining academic integrity.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - writing
+  - manuscript
+  - academic
+  - drafting
+  - rapid
+x-author: ruv
+x-mcp_servers:
+  required:
+    - memory-mcp
+  optional:
+    - sequential-thinking
   auto_enable: true
 ---
+
+
 
 # Rapid Manuscript Drafter
 

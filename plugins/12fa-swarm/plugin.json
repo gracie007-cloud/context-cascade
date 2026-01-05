@@ -1,412 +1,438 @@
 {
-  "id": "12fa-swarm",
-  "name": "12-Factor Agents - Advanced Swarm Coordination",
+  "name": "12fa-swarm",
   "version": "3.0.0",
   "description": "Multi-agent swarm systems with 4 topologies (Hierarchical, Mesh, Adaptive, Ring), 3 consensus protocols (Byzantine, Raft, Gossip), Hive Mind coordination, and Queen Seraphina meta-orchestrator",
   "author": {
-    "name": "DNYoussef",
-    "email": "youssef@example.com",
-    "url": "https://github.com/DNYoussef"
+    "name": "DNYoussef"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "keywords": [
-    "swarm",
-    "coordination",
-    "consensus",
-    "hive-mind",
-    "distributed",
-    "byzantine"
+  "commands": [
+    "../../commands/tooling/claude-flow/claude-flow-swarm.md",
+    "../../commands/orchestration/coordination/swarm-init.md",
+    "../../commands/orchestration/coordination/agent-spawn.md",
+    "../../commands/orchestration/coordination/task-orchestrate.md",
+    "../../commands/orchestration/coordination/orchestrate.md",
+    "../../commands/operations/github/github-swarm.md",
+    "../../commands/operations/monitoring/swarm-monitor.md",
+    "../../commands/operations/optimization/auto-topology.md"
   ],
-  "skills": {
-    "swarm-advanced": {
-      "path": "../../skills/orchestration/swarm-advanced",
-      "description": "Advanced swarm patterns with dynamic topology switching",
-      "category": "coordination"
-    },
-    "swarm-orchestration": {
-      "path": "../../skills/orchestration/swarm-orchestration",
-      "description": "Multi-agent swarm orchestration and task distribution",
-      "category": "coordination"
-    },
-    "hive-mind-advanced": {
-      "path": "../../skills/orchestration/hive-mind-advanced",
-      "description": "Collective intelligence with queen-led hierarchical coordination",
-      "category": "coordination"
-    },
-    "github-multi-repo": {
-      "path": "../../skills/operations/github-multi-repo",
-      "description": "Cross-repository swarm orchestration for organization-wide automation",
-      "category": "github"
-    },
-    "github-project-management": {
-      "path": "../../skills/operations/github-project-management",
-      "description": "Swarm-coordinated issue tracking and project board automation",
-      "category": "github"
-    },
-    "github-release-management": {
-      "path": "../../skills/operations/github-release-management",
-      "description": "Automated release orchestration with swarm coordination",
-      "category": "github"
-    },
-    "github-workflow-automation": {
-      "path": "../../skills/operations/github-workflow-automation",
-      "description": "GitHub Actions workflow automation with adaptive multi-agent coordination",
-      "category": "github"
-    }
-  },
-  "agents": [
-    "hierarchical-coordinator",
-    "mesh-coordinator",
-    "adaptive-coordinator",
-    "collective-intelligence-coordinator",
-    "byzantine-coordinator",
-    "raft-manager",
-    "gossip-coordinator",
-    "crdt-synchronizer",
-    "quorum-manager",
-    "queen-coordinator",
-    "swarm-memory-manager",
-    "scout-explorer",
-    "worker-specialist",
-    "code-review-swarm",
-    "multi-repo-swarm"
+  "skills": [
+    "../../skills/orchestration/swarm-advanced",
+    "../../skills/orchestration/swarm-orchestration",
+    "../../skills/orchestration/hive-mind-advanced",
+    "../../skills/operations/github-multi-repo",
+    "../../skills/operations/github-project-management",
+    "../../skills/operations/github-release-management",
+    "../../skills/operations/github-workflow-automation"
   ],
-  "commands": {
-    "/claude-flow-swarm": {
-      "path": "../../commands/tooling/claude-flow/claude-flow-swarm.md",
-      "description": "Coordinate multi-agent swarms for complex tasks"
-    },
-    "/swarm-init": {
-      "path": "../../commands/orchestration/coordination/swarm-init.md",
-      "description": "Initialize swarm with specified topology"
-    },
-    "/agent-spawn": {
-      "path": "../../commands/orchestration/coordination/agent-spawn.md",
-      "description": "Spawn specialized agent in swarm"
-    },
-    "/task-orchestrate": {
-      "path": "../../commands/orchestration/coordination/task-orchestrate.md",
-      "description": "Orchestrate task across swarm agents"
-    },
-    "/orchestrate": {
-      "path": "../../commands/orchestration/coordination/orchestrate.md",
-      "description": "High-level swarm task orchestration"
-    },
-    "/github-swarm": {
-      "path": "../../commands/operations/github/github-swarm.md",
-      "description": "GitHub-specific swarm coordination"
-    },
-    "/swarm-monitor": {
-      "path": "../../commands/operations/monitoring/swarm-monitor.md",
-      "description": "Real-time swarm activity monitoring"
-    },
-    "/auto-topology": {
-      "path": "../../commands/operations/optimization/auto-topology.md",
-      "description": "Automatic topology selection based on task complexity"
-    }
-  },
-  "dependencies": {
-    "plugins": [
-      "12fa-core"
+  "agents": "../../agents",
+  "hooks": "../../hooks/hooks.json",
+  "x-metadata": {
+    "license": "MIT",
+    "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+    "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+    "keywords": [
+      "swarm",
+      "coordination",
+      "consensus",
+      "hive-mind",
+      "distributed",
+      "byzantine"
     ],
-    "mcp_servers": {
-      "claude-flow": {
-        "version": ">=1.0.0-alpha",
-        "required": true,
-        "install": "npm install -g claude-flow@alpha",
-        "add": "claude mcp add claude-flow npx claude-flow@alpha mcp start"
+    "dependencies": {
+      "plugins": [
+        "12fa-core"
+      ],
+      "mcp_servers": {
+        "claude-flow": {
+          "version": ">=1.0.0-alpha",
+          "required": true,
+          "install": "npm install -g claude-flow@alpha",
+          "add": "claude mcp add claude-flow npx claude-flow@alpha mcp start"
+        },
+        "ruv-swarm": {
+          "version": ">=1.0.0",
+          "required": true,
+          "install": "npm install -g ruv-swarm",
+          "add": "claude mcp add ruv-swarm npx ruv-swarm mcp start",
+          "description": "Enhanced swarm coordination with WASM optimization"
+        }
       },
-      "ruv-swarm": {
-        "version": ">=1.0.0",
-        "required": true,
-        "install": "npm install -g ruv-swarm",
-        "add": "claude mcp add ruv-swarm npx ruv-swarm mcp start",
-        "description": "Enhanced swarm coordination with WASM optimization"
+      "optional_mcp": {
+        "flow-nexus": {
+          "version": ">=1.0.0",
+          "required": false,
+          "install": "npm install -g flow-nexus@latest",
+          "add": "claude mcp add flow-nexus npx flow-nexus@latest mcp start",
+          "description": "Cloud-based swarm deployment and neural features"
+        }
+      },
+      "tools": {
+        "git": {
+          "required": true
+        },
+        "npm": {
+          "required": true
+        },
+        "node": {
+          "version": ">=18.0.0",
+          "required": true
+        }
       }
     },
-    "optional_mcp": {
-      "flow-nexus": {
-        "version": ">=1.0.0",
-        "required": false,
-        "install": "npm install -g flow-nexus@latest",
-        "add": "claude mcp add flow-nexus npx flow-nexus@latest mcp start",
-        "description": "Cloud-based swarm deployment and neural features"
+    "topologies": {
+      "hierarchical": {
+        "description": "Queen-led tree structure with specialized worker delegation",
+        "use_case": "Complex tasks requiring central coordination and delegation",
+        "agent": "hierarchical-coordinator",
+        "speedup": "6.3x",
+        "overhead": "Low",
+        "fault_tolerance": "Medium",
+        "best_for": [
+          "Large projects",
+          "Multi-phase workflows",
+          "Clear task hierarchy"
+        ]
+      },
+      "mesh": {
+        "description": "Peer-to-peer network with distributed decision making",
+        "use_case": "High fault tolerance and no single point of failure",
+        "agent": "mesh-coordinator",
+        "speedup": "8.3x",
+        "overhead": "Medium",
+        "fault_tolerance": "High",
+        "best_for": [
+          "Distributed systems",
+          "Redundancy requirements",
+          "Byzantine environments"
+        ]
+      },
+      "adaptive": {
+        "description": "Dynamic topology switching based on task complexity and constraints",
+        "use_case": "Unknown or variable workload characteristics",
+        "agent": "adaptive-coordinator",
+        "speedup": "7.2x (average)",
+        "overhead": "Medium-High",
+        "fault_tolerance": "Medium-High",
+        "best_for": [
+          "Variable workloads",
+          "Mixed task types",
+          "Exploratory projects"
+        ]
+      },
+      "ring": {
+        "description": "Circular topology with sequential message passing",
+        "use_case": "Token-based coordination and ordered processing",
+        "agent": "gossip-coordinator",
+        "speedup": "4.5x",
+        "overhead": "Low",
+        "fault_tolerance": "Low-Medium",
+        "best_for": [
+          "Sequential tasks",
+          "Round-robin scheduling",
+          "Simple coordination"
+        ]
       }
     },
-    "tools": {
-      "git": {
-        "required": true
+    "consensus_protocols": {
+      "byzantine": {
+        "description": "Byzantine Fault Tolerant consensus with malicious actor detection",
+        "agent": "byzantine-coordinator",
+        "fault_tolerance": "Tolerates up to (n-1)/3 malicious agents",
+        "latency": "High (3+ rounds)",
+        "best_for": [
+          "Untrusted environments",
+          "Critical decisions",
+          "Security-first scenarios"
+        ],
+        "use_cases": [
+          "Theater detection",
+          "Code review consensus",
+          "Security audits"
+        ]
       },
-      "npm": {
-        "required": true
+      "raft": {
+        "description": "Leader election and log replication for strong consistency",
+        "agent": "raft-manager",
+        "fault_tolerance": "Tolerates (n-1)/2 crash failures",
+        "latency": "Medium (1-2 rounds)",
+        "best_for": [
+          "State machine replication",
+          "Distributed databases",
+          "Configuration management"
+        ],
+        "use_cases": [
+          "Swarm state management",
+          "Distributed task queues",
+          "Coordination logs"
+        ]
       },
-      "node": {
-        "version": ">=18.0.0",
-        "required": true
+      "gossip": {
+        "description": "Eventually consistent gossip protocol for scalable systems",
+        "agent": "gossip-coordinator",
+        "fault_tolerance": "High (epidemic protocols)",
+        "latency": "Low (probabilistic)",
+        "best_for": [
+          "Large swarms",
+          "Eventual consistency acceptable",
+          "High throughput"
+        ],
+        "use_cases": [
+          "Metric aggregation",
+          "Service discovery",
+          "Event propagation"
+        ]
       }
-    }
-  },
-  "topologies": {
-    "hierarchical": {
-      "description": "Queen-led tree structure with specialized worker delegation",
-      "use_case": "Complex tasks requiring central coordination and delegation",
-      "agent": "hierarchical-coordinator",
-      "speedup": "6.3x",
-      "overhead": "Low",
-      "fault_tolerance": "Medium",
-      "best_for": [
-        "Large projects",
-        "Multi-phase workflows",
-        "Clear task hierarchy"
-      ]
     },
-    "mesh": {
-      "description": "Peer-to-peer network with distributed decision making",
-      "use_case": "High fault tolerance and no single point of failure",
-      "agent": "mesh-coordinator",
-      "speedup": "8.3x",
-      "overhead": "Medium",
-      "fault_tolerance": "High",
-      "best_for": [
-        "Distributed systems",
-        "Redundancy requirements",
-        "Byzantine environments"
-      ]
+    "hive_mind": {
+      "description": "Collective intelligence system with queen-led coordination",
+      "components": {
+        "queen": {
+          "agent": "queen-coordinator",
+          "role": "Strategic decision-making and swarm-wide coordination",
+          "capabilities": [
+            "Task decomposition",
+            "Resource allocation",
+            "Priority management",
+            "Consensus orchestration"
+          ]
+        },
+        "workers": {
+          "agent": "worker-specialist",
+          "role": "Specialized task execution with continuous progress reporting",
+          "capabilities": [
+            "Task execution",
+            "Progress tracking",
+            "Result reporting",
+            "Failure handling"
+          ]
+        },
+        "scouts": {
+          "agent": "scout-explorer",
+          "role": "Information reconnaissance and intelligence gathering",
+          "capabilities": [
+            "Exploration",
+            "Pattern discovery",
+            "Risk assessment",
+            "Opportunity identification"
+          ]
+        },
+        "memory": {
+          "agent": "swarm-memory-manager",
+          "role": "Distributed memory synchronization and persistence",
+          "capabilities": [
+            "Data consistency",
+            "Caching",
+            "Cross-agent memory sharing",
+            "Session persistence"
+          ]
+        }
+      },
+      "coordination_patterns": {
+        "centralized_decentralized_hybrid": {
+          "description": "Queen handles strategy, workers execute autonomously",
+          "benefits": [
+            "Clear authority",
+            "Autonomous execution",
+            "Scalable coordination"
+          ]
+        },
+        "collective_decision_making": {
+          "description": "Multi-agent consensus for critical decisions",
+          "benefits": [
+            "Reduced bias",
+            "Higher quality decisions",
+            "Byzantine fault tolerance"
+          ]
+        },
+        "memory_synchronization": {
+          "description": "Distributed memory with eventual consistency",
+          "benefits": [
+            "Cross-agent context",
+            "Session persistence",
+            "Knowledge sharing"
+          ]
+        }
+      }
     },
-    "adaptive": {
-      "description": "Dynamic topology switching based on task complexity and constraints",
-      "use_case": "Unknown or variable workload characteristics",
-      "agent": "adaptive-coordinator",
-      "speedup": "7.2x (average)",
-      "overhead": "Medium-High",
-      "fault_tolerance": "Medium-High",
-      "best_for": [
-        "Variable workloads",
-        "Mixed task types",
-        "Exploratory projects"
-      ]
-    },
-    "ring": {
-      "description": "Circular topology with sequential message passing",
-      "use_case": "Token-based coordination and ordered processing",
-      "agent": "gossip-coordinator",
-      "speedup": "4.5x",
-      "overhead": "Low",
-      "fault_tolerance": "Low-Medium",
-      "best_for": [
-        "Sequential tasks",
-        "Round-robin scheduling",
-        "Simple coordination"
-      ]
-    }
-  },
-  "consensus_protocols": {
-    "byzantine": {
-      "description": "Byzantine Fault Tolerant consensus with malicious actor detection",
-      "agent": "byzantine-coordinator",
-      "fault_tolerance": "Tolerates up to (n-1)/3 malicious agents",
-      "latency": "High (3+ rounds)",
-      "best_for": [
-        "Untrusted environments",
-        "Critical decisions",
-        "Security-first scenarios"
-      ],
-      "use_cases": [
-        "Theater detection",
-        "Code review consensus",
-        "Security audits"
-      ]
-    },
-    "raft": {
-      "description": "Leader election and log replication for strong consistency",
-      "agent": "raft-manager",
-      "fault_tolerance": "Tolerates (n-1)/2 crash failures",
-      "latency": "Medium (1-2 rounds)",
-      "best_for": [
-        "State machine replication",
-        "Distributed databases",
-        "Configuration management"
-      ],
-      "use_cases": [
-        "Swarm state management",
-        "Distributed task queues",
-        "Coordination logs"
-      ]
-    },
-    "gossip": {
-      "description": "Eventually consistent gossip protocol for scalable systems",
-      "agent": "gossip-coordinator",
-      "fault_tolerance": "High (epidemic protocols)",
-      "latency": "Low (probabilistic)",
-      "best_for": [
-        "Large swarms",
-        "Eventual consistency acceptable",
-        "High throughput"
-      ],
-      "use_cases": [
-        "Metric aggregation",
-        "Service discovery",
-        "Event propagation"
-      ]
-    }
-  },
-  "hive_mind": {
-    "description": "Collective intelligence system with queen-led coordination",
-    "components": {
-      "queen": {
-        "agent": "queen-coordinator",
-        "role": "Strategic decision-making and swarm-wide coordination",
+    "github_integration": {
+      "multi_repo_coordination": {
+        "skill": "github-multi-repo",
+        "agent": "multi-repo-swarm",
         "capabilities": [
-          "Task decomposition",
-          "Resource allocation",
-          "Priority management",
-          "Consensus orchestration"
+          "Cross-repository synchronization",
+          "Version alignment",
+          "Dependency management",
+          "Organization-wide automation"
+        ],
+        "use_cases": [
+          "Monorepo alternatives",
+          "Multi-package projects",
+          "Enterprise-wide standards"
         ]
       },
-      "workers": {
-        "agent": "worker-specialist",
-        "role": "Specialized task execution with continuous progress reporting",
-        "capabilities": [
-          "Task execution",
-          "Progress tracking",
-          "Result reporting",
-          "Failure handling"
-        ]
+      "code_review_swarm": {
+        "agent": "code-review-swarm",
+        "reviewers": [
+          "security",
+          "performance",
+          "style",
+          "tests",
+          "documentation"
+        ],
+        "speedup": "5x vs sequential reviews",
+        "consensus": "Byzantine (requires 4/5 approval)"
       },
-      "scouts": {
-        "agent": "scout-explorer",
-        "role": "Information reconnaissance and intelligence gathering",
-        "capabilities": [
-          "Exploration",
-          "Pattern discovery",
-          "Risk assessment",
-          "Opportunity identification"
-        ]
+      "release_orchestration": {
+        "skill": "github-release-management",
+        "phases": [
+          "Version bump",
+          "Changelog generation",
+          "Testing",
+          "Deployment",
+          "Monitoring"
+        ],
+        "automation": "100% (zero-touch releases)"
       },
-      "memory": {
-        "agent": "swarm-memory-manager",
-        "role": "Distributed memory synchronization and persistence",
+      "workflow_automation": {
+        "skill": "github-workflow-automation",
         "capabilities": [
-          "Data consistency",
-          "Caching",
-          "Cross-agent memory sharing",
-          "Session persistence"
+          "Intelligent CI/CD pipelines",
+          "Adaptive multi-agent coordination",
+          "Self-healing workflows",
+          "Performance optimization"
         ]
       }
     },
-    "coordination_patterns": {
-      "centralized_decentralized_hybrid": {
-        "description": "Queen handles strategy, workers execute autonomously",
-        "benefits": [
-          "Clear authority",
-          "Autonomous execution",
-          "Scalable coordination"
-        ]
+    "configuration": {
+      "max_agents_per_swarm": 100,
+      "default_topology": "adaptive",
+      "default_consensus": "raft",
+      "queen_enabled": true,
+      "memory_persistence": true,
+      "telemetry_enabled": true
+    },
+    "metrics": {
+      "topologies_supported": 4,
+      "consensus_protocols": 3,
+      "parallel_speedup": "8.3x (mesh topology)",
+      "fault_tolerance": "Byzantine",
+      "agents_count": 15,
+      "skills_count": 7,
+      "commands_count": 8
+    },
+    "performance": {
+      "mesh_topology": {
+        "speedup": "8.3x",
+        "overhead": "Medium",
+        "scalability": "Excellent (100+ agents)",
+        "fault_tolerance": "High"
       },
-      "collective_decision_making": {
-        "description": "Multi-agent consensus for critical decisions",
-        "benefits": [
-          "Reduced bias",
-          "Higher quality decisions",
-          "Byzantine fault tolerance"
-        ]
+      "hierarchical_topology": {
+        "speedup": "6.3x",
+        "overhead": "Low",
+        "scalability": "Good (50+ agents)",
+        "fault_tolerance": "Medium"
       },
-      "memory_synchronization": {
-        "description": "Distributed memory with eventual consistency",
-        "benefits": [
-          "Cross-agent context",
-          "Session persistence",
-          "Knowledge sharing"
-        ]
+      "adaptive_topology": {
+        "speedup": "7.2x (average)",
+        "overhead": "Medium-High",
+        "scalability": "Good (auto-switches)",
+        "fault_tolerance": "Medium-High"
       }
-    }
-  },
-  "github_integration": {
-    "multi_repo_coordination": {
-      "skill": "github-multi-repo",
-      "agent": "multi-repo-swarm",
-      "capabilities": [
-        "Cross-repository synchronization",
-        "Version alignment",
-        "Dependency management",
-        "Organization-wide automation"
-      ],
-      "use_cases": [
-        "Monorepo alternatives",
-        "Multi-package projects",
-        "Enterprise-wide standards"
-      ]
     },
-    "code_review_swarm": {
-      "agent": "code-review-swarm",
-      "reviewers": [
-        "security",
-        "performance",
-        "style",
-        "tests",
-        "documentation"
-      ],
-      "speedup": "5x vs sequential reviews",
-      "consensus": "Byzantine (requires 4/5 approval)"
+    "displayName": "12-Factor Agents - Advanced Swarm Coordination",
+    "authorDetails": {
+      "name": "DNYoussef",
+      "email": "youssef@example.com",
+      "url": "https://github.com/DNYoussef"
     },
-    "release_orchestration": {
-      "skill": "github-release-management",
-      "phases": [
-        "Version bump",
-        "Changelog generation",
-        "Testing",
-        "Deployment",
-        "Monitoring"
-      ],
-      "automation": "100% (zero-touch releases)"
+    "originalCommands": {
+      "/claude-flow-swarm": {
+        "path": "../../commands/tooling/claude-flow/claude-flow-swarm.md",
+        "description": "Coordinate multi-agent swarms for complex tasks"
+      },
+      "/swarm-init": {
+        "path": "../../commands/orchestration/coordination/swarm-init.md",
+        "description": "Initialize swarm with specified topology"
+      },
+      "/agent-spawn": {
+        "path": "../../commands/orchestration/coordination/agent-spawn.md",
+        "description": "Spawn specialized agent in swarm"
+      },
+      "/task-orchestrate": {
+        "path": "../../commands/orchestration/coordination/task-orchestrate.md",
+        "description": "Orchestrate task across swarm agents"
+      },
+      "/orchestrate": {
+        "path": "../../commands/orchestration/coordination/orchestrate.md",
+        "description": "High-level swarm task orchestration"
+      },
+      "/github-swarm": {
+        "path": "../../commands/operations/github/github-swarm.md",
+        "description": "GitHub-specific swarm coordination"
+      },
+      "/swarm-monitor": {
+        "path": "../../commands/operations/monitoring/swarm-monitor.md",
+        "description": "Real-time swarm activity monitoring"
+      },
+      "/auto-topology": {
+        "path": "../../commands/operations/optimization/auto-topology.md",
+        "description": "Automatic topology selection based on task complexity"
+      }
     },
-    "workflow_automation": {
-      "skill": "github-workflow-automation",
-      "capabilities": [
-        "Intelligent CI/CD pipelines",
-        "Adaptive multi-agent coordination",
-        "Self-healing workflows",
-        "Performance optimization"
-      ]
-    }
-  },
-  "configuration": {
-    "max_agents_per_swarm": 100,
-    "default_topology": "adaptive",
-    "default_consensus": "raft",
-    "queen_enabled": true,
-    "memory_persistence": true,
-    "telemetry_enabled": true
-  },
-  "metrics": {
-    "topologies_supported": 4,
-    "consensus_protocols": 3,
-    "parallel_speedup": "8.3x (mesh topology)",
-    "fault_tolerance": "Byzantine",
-    "agents_count": 15,
-    "skills_count": 7,
-    "commands_count": 8
-  },
-  "performance": {
-    "mesh_topology": {
-      "speedup": "8.3x",
-      "overhead": "Medium",
-      "scalability": "Excellent (100+ agents)",
-      "fault_tolerance": "High"
+    "originalSkills": {
+      "swarm-advanced": {
+        "path": "../../skills/orchestration/swarm-advanced",
+        "description": "Advanced swarm patterns with dynamic topology switching",
+        "category": "coordination"
+      },
+      "swarm-orchestration": {
+        "path": "../../skills/orchestration/swarm-orchestration",
+        "description": "Multi-agent swarm orchestration and task distribution",
+        "category": "coordination"
+      },
+      "hive-mind-advanced": {
+        "path": "../../skills/orchestration/hive-mind-advanced",
+        "description": "Collective intelligence with queen-led hierarchical coordination",
+        "category": "coordination"
+      },
+      "github-multi-repo": {
+        "path": "../../skills/operations/github-multi-repo",
+        "description": "Cross-repository swarm orchestration for organization-wide automation",
+        "category": "github"
+      },
+      "github-project-management": {
+        "path": "../../skills/operations/github-project-management",
+        "description": "Swarm-coordinated issue tracking and project board automation",
+        "category": "github"
+      },
+      "github-release-management": {
+        "path": "../../skills/operations/github-release-management",
+        "description": "Automated release orchestration with swarm coordination",
+        "category": "github"
+      },
+      "github-workflow-automation": {
+        "path": "../../skills/operations/github-workflow-automation",
+        "description": "GitHub Actions workflow automation with adaptive multi-agent coordination",
+        "category": "github"
+      }
     },
-    "hierarchical_topology": {
-      "speedup": "6.3x",
-      "overhead": "Low",
-      "scalability": "Good (50+ agents)",
-      "fault_tolerance": "Medium"
-    },
-    "adaptive_topology": {
-      "speedup": "7.2x (average)",
-      "overhead": "Medium-High",
-      "scalability": "Good (auto-switches)",
-      "fault_tolerance": "Medium-High"
-    }
+    "originalAgents": [
+      "hierarchical-coordinator",
+      "mesh-coordinator",
+      "adaptive-coordinator",
+      "collective-intelligence-coordinator",
+      "byzantine-coordinator",
+      "raft-manager",
+      "gossip-coordinator",
+      "crdt-synchronizer",
+      "quorum-manager",
+      "queen-coordinator",
+      "swarm-memory-manager",
+      "scout-explorer",
+      "worker-specialist",
+      "code-review-swarm",
+      "multi-repo-swarm"
+    ]
   }
 }

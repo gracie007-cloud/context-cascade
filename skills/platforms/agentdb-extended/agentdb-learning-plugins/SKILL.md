@@ -4,6 +4,9 @@ description: Create AI learning plugins using AgentDBs 9 reinforcement learning 
 allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
+
+
+
 ## When NOT to Use This Skill
 
 - Local-only operations with no vector search needs

@@ -1,0 +1,22 @@
+{
+  "name": "context-cascade-opencode",
+  "version": "0.1.0",
+  "description": "OpenCode adapter plugin that registers Context Cascade markdown commands and optional skill injection.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "npm run build && node scripts/dev-simulate.mjs"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.2",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

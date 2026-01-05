@@ -4,6 +4,9 @@ description: ---
 allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
 ---
 
+
+
+
 # AgentDB Semantic Vector Search
 
 ## Overview

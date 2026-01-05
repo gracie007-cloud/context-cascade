@@ -1,25 +1,24 @@
 ---
-name: visual-asset-generator
-description: Automatically generate research diagrams, charts, tables, and visualizations
-  from data or descriptions. Creates publication-ready visual assets including PRISMA
-  flow diagrams, methodology flowcharts, results charts, comparison tables, and architecture
-  diagrams. Use when preparing manuscripts, presentations, or documentation that requires
-  professional visual elements.
-version: 1.0.0
-category: research
-tags:
-- research
-- visualization
-- diagrams
-- charts
-- tables
-- publication
-author: ruv
-mcp_servers:
-  required: [memory-mcp]
+name: .backup-complete-20251215-220149
+description: Automatically generate research diagrams, charts, tables, and visualizations from data or descriptions. Creates publication-ready visual assets including PRISMA flow diagrams, methodology flowcharts, results charts, comparison tables, and architecture diagrams. Use when preparing manuscripts, presentations, or documentation that requires professional visual elements.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - visualization
+  - diagrams
+  - charts
+  - tables
+  - publication
+x-author: ruv
+x-mcp_servers:
+  required:
+    - memory-mcp
   optional: []
   auto_enable: true
 ---
+
+
 
 # Visual Asset Generator
 

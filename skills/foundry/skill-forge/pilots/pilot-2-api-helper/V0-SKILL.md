@@ -1,10 +1,12 @@
 ---
-name: api-integration-helper
+name: pilot-2-api-helper
 description: Generate boilerplate code for REST API integrations with authentication, error handling, and retry logic
-author: pilot-test
-<!-- V0 PILOT PROJESI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot_v0]] -->
-<!-- [[MOR:w-s-l<connect>]] [[MOR:b-n-y<build>]] [[MOR:s-l-m<validate>]] -->
+x-author: pilot-test
+x-<!-- V0 PILOT PROJESI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot_v0]] --> <!-- [[MOR:w-s-l<connect>]] [[MOR:b-n-y<build>]] [[MOR:s-l-m<validate>]] -->: null
 ---
+
+
+
 
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.

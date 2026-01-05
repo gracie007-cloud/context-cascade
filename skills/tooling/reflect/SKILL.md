@@ -1,16 +1,33 @@
 ---
 name: reflect
 description: Extract learnings from session corrections and patterns, update skill files with persistent memory. Implements Loop 1.5 - per-session micro-learning between execution and meta-optimization.
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+  - Task
+  - TodoWrite
 model: sonnet
 x-version: 1.0.1
 x-category: tooling
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 x-loop: 1.5
 x-last-reflection: 2026-01-05T00:00:00Z
 x-reflection-count: 1
 ---
+
+
 
 ### L1 Improvement
 - Created as new skill following Skill Forge v3.2 required sections

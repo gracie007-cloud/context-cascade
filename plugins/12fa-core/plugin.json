@@ -1,172 +1,204 @@
 {
-  "id": "12fa-core",
-  "name": "12-Factor Agents - Core",
+  "name": "12fa-core",
   "version": "3.0.0",
   "description": "Essential 12-Factor Agent tools with SPARC methodology, core agents, audit pipeline, and quality gates",
   "author": {
-    "name": "DNYoussef",
-    "email": "youssef@example.com",
-    "url": "https://github.com/DNYoussef"
+    "name": "DNYoussef"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
-  "keywords": [
-    "12-factor",
-    "sparc",
-    "tdd",
-    "quality",
-    "core"
+  "commands": [
+    "../../commands/delivery/sparc/sparc.md",
+    "../../commands/delivery/sparc/code.md",
+    "../../commands/delivery/sparc/spec-pseudocode.md",
+    "../../commands/delivery/sparc/debug.md",
+    "../../commands/quality/audit-commands/audit-pipeline.md",
+    "../../commands/quality/audit-commands/theater-detect.md",
+    "../../commands/quality/audit-commands/functionality-audit.md",
+    "../../commands/delivery/essential-commands/quick-check.md",
+    "../../commands/delivery/essential-commands/fix-bug.md",
+    "../../commands/delivery/essential-commands/review-pr.md",
+    "../../commands/delivery/essential-commands/deploy-check.md"
   ],
-  "skills": {
-    "agent-creator": {
-      "path": "../../skills/foundry/agent-creator",
-      "description": "4-phase SOP methodology for creating specialized AI agents",
-      "category": "core"
+  "skills": [
+    "../../skills/foundry/agent-creator",
+    "../../skills/delivery/sparc-methodology",
+    "../../skills/quality/functionality-audit",
+    "../../skills/quality/theater-detection-audit",
+    "../../skills/operations/production-readiness",
+    "../../skills/references/audit-pipeline.md",
+    "../../skills/quality/code-review-assistant",
+    "../../skills/quality/quick-quality-check",
+    "../../skills/delivery/smart-bug-fix",
+    "../../skills/foundry/prompt-architect"
+  ],
+  "agents": "../../agents",
+  "hooks": "../../hooks/hooks.json",
+  "x-metadata": {
+    "license": "MIT",
+    "homepage": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+    "repository": "https://github.com/DNYoussef/ruv-sparc-three-loop-system",
+    "keywords": [
+      "12-factor",
+      "sparc",
+      "tdd",
+      "quality",
+      "core"
+    ],
+    "dependencies": {
+      "mcp_servers": {
+        "claude-flow": {
+          "version": ">=1.0.0-alpha",
+          "required": true,
+          "install": "npm install -g claude-flow@alpha",
+          "add": "claude mcp add claude-flow npx claude-flow@alpha mcp start"
+        }
+      },
+      "tools": {
+        "git": {
+          "required": true
+        },
+        "npm": {
+          "required": true
+        },
+        "node": {
+          "version": ">=18.0.0",
+          "required": true
+        }
+      }
     },
-    "sparc-methodology": {
-      "path": "../../skills/delivery/sparc-methodology",
-      "description": "Complete 5-phase SPARC development methodology",
-      "category": "methodology"
-    },
-    "functionality-audit": {
-      "path": "../../skills/quality/functionality-audit",
-      "description": "Sandbox-based reality validation with systematic debugging",
-      "category": "quality"
-    },
-    "theater-detection-audit": {
-      "path": "../../skills/quality/theater-detection-audit",
-      "description": "6-agent Byzantine consensus for fake implementation detection",
-      "category": "quality"
-    },
-    "production-readiness": {
-      "path": "../../skills/operations/production-readiness",
-      "description": "Complete audit pipeline with deployment checklist",
-      "category": "quality"
-    },
-    "audit-pipeline": {
-      "path": "../../skills/references/audit-pipeline.md",
-      "description": "3-stage quality gates (theater + functionality + style)",
-      "category": "quality"
-    },
-    "code-review-assistant": {
-      "path": "../../skills/quality/code-review-assistant",
-      "description": "5-agent review swarm (security, performance, style, tests, docs)",
-      "category": "quality"
-    },
-    "quick-quality-check": {
-      "path": "../../skills/quality/quick-quality-check",
-      "description": "Lightning-fast parallel validation checks",
-      "category": "quality"
-    },
-    "smart-bug-fix": {
-      "path": "../../skills/delivery/smart-bug-fix",
-      "description": "Systematic debugging with root cause analysis",
-      "category": "development"
-    },
-    "prompt-architect": {
-      "path": "../../skills/foundry/prompt-architect",
-      "description": "Evidence-based prompting with self-consistency patterns",
-      "category": "core"
-    }
-  },
-  "commands": {
-    "/sparc": {
-      "path": "../../commands/delivery/sparc/sparc.md",
-      "description": "Execute complete 5-phase SPARC methodology"
-    },
-    "/sparc:code": {
-      "path": "../../commands/delivery/sparc/code.md",
-      "description": "Auto-coder with TDD integration"
-    },
-    "/sparc:spec-pseudocode": {
-      "path": "../../commands/delivery/sparc/spec-pseudocode.md",
-      "description": "Specification and pseudocode generation"
-    },
-    "/sparc:debug": {
-      "path": "../../commands/delivery/sparc/debug.md",
-      "description": "Systematic debugging workflow"
-    },
-    "/audit-pipeline": {
-      "path": "../../commands/quality/audit-commands/audit-pipeline.md",
-      "description": "Complete audit pipeline orchestration"
-    },
-    "/theater-detect": {
-      "path": "../../commands/quality/audit-commands/theater-detect.md",
-      "description": "Theater detection with 6-agent consensus"
-    },
-    "/functionality-audit": {
-      "path": "../../commands/quality/audit-commands/functionality-audit.md",
-      "description": "Functionality audit with sandbox testing"
-    },
-    "/quick-check": {
-      "path": "../../commands/delivery/essential-commands/quick-check.md",
-      "description": "Lightning-fast quality check"
-    },
-    "/fix-bug": {
-      "path": "../../commands/delivery/essential-commands/fix-bug.md",
-      "description": "Smart bug fix with systematic debugging"
-    },
-    "/review-pr": {
-      "path": "../../commands/delivery/essential-commands/review-pr.md",
-      "description": "Comprehensive PR review with 5-agent swarm"
-    },
-    "/deploy-check": {
-      "path": "../../commands/delivery/essential-commands/deploy-check.md",
-      "description": "Production readiness validation"
-    }
-  },
-  "hooks": {
     "configuration": {
-      "path": "../../hooks/hooks.json",
-      "description": "Unified hook lifecycle configuration for claude-flow automation"
-    }
-  },
-  "agents": [
-    "coder",
-    "reviewer",
-    "tester",
-    "planner",
-    "researcher",
-    "sparc-coord",
-    "sparc-coder",
-    "specification",
-    "pseudocode",
-    "architecture",
-    "refinement",
-    "production-validator"
-  ],
-  "dependencies": {
-    "mcp_servers": {
-      "claude-flow": {
-        "version": ">=1.0.0-alpha",
-        "required": true,
-        "install": "npm install -g claude-flow@alpha",
-        "add": "claude mcp add claude-flow npx claude-flow@alpha mcp start"
+      "12fa_compliance": "100%",
+      "test_coverage_target": ">85%",
+      "security_score_target": "100%"
+    },
+    "metrics": {
+      "speed_improvement": "2.5-4x",
+      "failure_rate": "<3%",
+      "compliance": "100%",
+      "test_coverage": ">85%"
+    },
+    "displayName": "12-Factor Agents - Core",
+    "authorDetails": {
+      "name": "DNYoussef",
+      "email": "youssef@example.com",
+      "url": "https://github.com/DNYoussef"
+    },
+    "originalCommands": {
+      "/sparc": {
+        "path": "../../commands/delivery/sparc/sparc.md",
+        "description": "Execute complete 5-phase SPARC methodology"
+      },
+      "/sparc:code": {
+        "path": "../../commands/delivery/sparc/code.md",
+        "description": "Auto-coder with TDD integration"
+      },
+      "/sparc:spec-pseudocode": {
+        "path": "../../commands/delivery/sparc/spec-pseudocode.md",
+        "description": "Specification and pseudocode generation"
+      },
+      "/sparc:debug": {
+        "path": "../../commands/delivery/sparc/debug.md",
+        "description": "Systematic debugging workflow"
+      },
+      "/audit-pipeline": {
+        "path": "../../commands/quality/audit-commands/audit-pipeline.md",
+        "description": "Complete audit pipeline orchestration"
+      },
+      "/theater-detect": {
+        "path": "../../commands/quality/audit-commands/theater-detect.md",
+        "description": "Theater detection with 6-agent consensus"
+      },
+      "/functionality-audit": {
+        "path": "../../commands/quality/audit-commands/functionality-audit.md",
+        "description": "Functionality audit with sandbox testing"
+      },
+      "/quick-check": {
+        "path": "../../commands/delivery/essential-commands/quick-check.md",
+        "description": "Lightning-fast quality check"
+      },
+      "/fix-bug": {
+        "path": "../../commands/delivery/essential-commands/fix-bug.md",
+        "description": "Smart bug fix with systematic debugging"
+      },
+      "/review-pr": {
+        "path": "../../commands/delivery/essential-commands/review-pr.md",
+        "description": "Comprehensive PR review with 5-agent swarm"
+      },
+      "/deploy-check": {
+        "path": "../../commands/delivery/essential-commands/deploy-check.md",
+        "description": "Production readiness validation"
       }
     },
-    "tools": {
-      "git": {
-        "required": true
+    "originalSkills": {
+      "agent-creator": {
+        "path": "../../skills/foundry/agent-creator",
+        "description": "4-phase SOP methodology for creating specialized AI agents",
+        "category": "core"
       },
-      "npm": {
-        "required": true
+      "sparc-methodology": {
+        "path": "../../skills/delivery/sparc-methodology",
+        "description": "Complete 5-phase SPARC development methodology",
+        "category": "methodology"
       },
-      "node": {
-        "version": ">=18.0.0",
-        "required": true
+      "functionality-audit": {
+        "path": "../../skills/quality/functionality-audit",
+        "description": "Sandbox-based reality validation with systematic debugging",
+        "category": "quality"
+      },
+      "theater-detection-audit": {
+        "path": "../../skills/quality/theater-detection-audit",
+        "description": "6-agent Byzantine consensus for fake implementation detection",
+        "category": "quality"
+      },
+      "production-readiness": {
+        "path": "../../skills/operations/production-readiness",
+        "description": "Complete audit pipeline with deployment checklist",
+        "category": "quality"
+      },
+      "audit-pipeline": {
+        "path": "../../skills/references/audit-pipeline.md",
+        "description": "3-stage quality gates (theater + functionality + style)",
+        "category": "quality"
+      },
+      "code-review-assistant": {
+        "path": "../../skills/quality/code-review-assistant",
+        "description": "5-agent review swarm (security, performance, style, tests, docs)",
+        "category": "quality"
+      },
+      "quick-quality-check": {
+        "path": "../../skills/quality/quick-quality-check",
+        "description": "Lightning-fast parallel validation checks",
+        "category": "quality"
+      },
+      "smart-bug-fix": {
+        "path": "../../skills/delivery/smart-bug-fix",
+        "description": "Systematic debugging with root cause analysis",
+        "category": "development"
+      },
+      "prompt-architect": {
+        "path": "../../skills/foundry/prompt-architect",
+        "description": "Evidence-based prompting with self-consistency patterns",
+        "category": "core"
+      }
+    },
+    "originalAgents": [
+      "coder",
+      "reviewer",
+      "tester",
+      "planner",
+      "researcher",
+      "sparc-coord",
+      "sparc-coder",
+      "specification",
+      "pseudocode",
+      "architecture",
+      "refinement",
+      "production-validator"
+    ],
+    "originalHooks": {
+      "configuration": {
+        "path": "../../hooks/hooks.json",
+        "description": "Unified hook lifecycle configuration for claude-flow automation"
       }
     }
-  },
-  "configuration": {
-    "12fa_compliance": "100%",
-    "test_coverage_target": ">85%",
-    "security_score_target": "100%"
-  },
-  "metrics": {
-    "speed_improvement": "2.5-4x",
-    "failure_rate": "<3%",
-    "compliance": "100%",
-    "test_coverage": ">85%"
   }
 }

@@ -1,13 +1,29 @@
 ---
 name: image-gen
 description: Generate images via local SDXL Lightning, OpenAI DALL·E, Replicate, or custom providers with structured prompts and safety checks.
-allowed-tools: [Bash, Read, Write, Task, TodoWrite, Glob, Grep]
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Task
+  - TodoWrite
+  - Glob
+  - Grep
 model: claude-3-5-sonnet
 x-version: 3.2.0
 x-category: tooling
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ### L1 Improvement
 - Recast the image generation SOP using Prompt Architect clarity and Skill Forge structure-first guardrails.

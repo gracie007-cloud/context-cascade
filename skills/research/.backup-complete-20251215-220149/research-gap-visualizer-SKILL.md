@@ -1,23 +1,24 @@
 ---
-name: research-gap-visualizer
-description: Create visual maps of research gaps from literature analysis, showing
-  what has been studied, what is missing, and where opportunities exist. Generates
-  gap matrices, research landscape diagrams, and opportunity maps. Use after literature
-  synthesis to visualize the state of research and identify promising directions.
-version: 1.0.0
-category: research
-tags:
-- research
-- gaps
-- visualization
-- literature
-- analysis
-author: ruv
-mcp_servers:
-  required: [memory-mcp]
-  optional: [sequential-thinking]
+name: .backup-complete-20251215-220149
+description: Create visual maps of research gaps from literature analysis, showing what has been studied, what is missing, and where opportunities exist. Generates gap matrices, research landscape diagrams, and opportunity maps. Use after literature synthesis to visualize the state of research and identify promising directions.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - gaps
+  - visualization
+  - literature
+  - analysis
+x-author: ruv
+x-mcp_servers:
+  required:
+    - memory-mcp
+  optional:
+    - sequential-thinking
   auto_enable: true
 ---
+
+
 
 # Research Gap Visualizer
 

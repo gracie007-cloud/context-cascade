@@ -1,8 +1,10 @@
 ---
 name: agentdb-persistent-memory-patterns
-description: AgentDB Persistent Memory Patterns operates on 3 fundamental principles:
-allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
+description: Skill guidance for agentdb persistent memory patterns.
 ---
+
+
+
 
 # AgentDB Persistent Memory Patterns
 

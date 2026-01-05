@@ -1,8 +1,10 @@
 ---
 name: advanced-agentdb-vector-search-implementation
-description: Advanced AgentDB Vector Search Implementation operates on 3 fundamental principles:
-allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
+description: Skill guidance for advanced agentdb vector search implementation.
 ---
+
+
+
 
 # Advanced AgentDB Vector Search Implementation
 

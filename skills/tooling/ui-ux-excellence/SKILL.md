@@ -1,13 +1,30 @@
 ---
 name: ui-ux-excellence
 description: Drive UI/UX audits and improvements with structured heuristics, user journeys, and validation gates.
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+  - Task
+  - TodoWrite
 model: claude-3-5-sonnet
 x-version: 3.2.0
 x-category: tooling
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ### L1 Improvement
 - Recast the UX skill in Prompt Architect style with clear triggers, heuristics, and confidence ceilings.

@@ -6,8 +6,18 @@ model: sonnet
 x-version: 3.2.0
 x-category: platforms
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
+
 
 ## Purpose
 Wire ReasoningBank workflows into AgentDB-backed retrieval with verification and safety notes.

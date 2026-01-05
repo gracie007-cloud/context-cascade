@@ -6,8 +6,17 @@ model: sonnet
 x-version: 3.2.0
 x-category: security
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ## Purpose
 Extract IOCs and risk signals within tight timeboxes to enable allow/deny/contain decisions. Leverages **skill-forge** structure-first expectations and **prompt-architect** explicit constraints and confidence ceilings.

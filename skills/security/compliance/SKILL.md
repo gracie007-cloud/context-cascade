@@ -6,8 +6,17 @@ model: sonnet
 x-version: 3.2.0
 x-category: security
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ## Purpose & Positioning
 Deliver certification-ready compliance assessments and documentation across GDPR, HIPAA, SOC 2, PCI-DSS, and ISO 27001. The skill mirrors **skill-forge** structure-first rules (SKILL + examples/tests/resources) and **prompt-architect** clarity (explicit constraints, confidence ceilings).

@@ -1,8 +1,10 @@
 ---
 name: agentdb-vector-search-optimization
-description: AgentDB Vector Search Optimization operates on 3 fundamental principles:
-allowed-tools: Read, Write, Edit, Task, TodoWrite, Glob, Grep
+description: Skill guidance for agentdb vector search optimization.
 ---
+
+
+
 
 # AgentDB Vector Search Optimization
 
