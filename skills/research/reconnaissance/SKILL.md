@@ -166,21 +166,83 @@ Technology landscapes change rapidly. All reconnaissance has an expiration date.
 - COMPREHENSIVE-ANALYSIS.md
 - COMPARISON-CHART.md
 - RECOMMENDATIONS.md with action items
+- **GAP-INVENTORY.md** with specific missing capabilities
 
-#### Phase 5: Delivery and Storage
+#### Phase 5: Gap-Filling Extraction (CRITICAL)
+**Agent:** code-extractor + research-agent
+**Purpose:** Find external repos/research to fill discovered gaps, extract ONLY applicable parts, delete everything else
+
+**Process:**
+1. **Gap Identification:** Take gaps from Phase 4 GAP-INVENTORY.md
+2. **Source Discovery:** Search GitHub/arXiv/papers for solutions to each gap
+3. **Pre-Mortem Analysis:** Before cloning, assess applicability:
+   - Does target project already have this capability?
+   - Is the architecture compatible?
+   - What's the integration effort?
+4. **Selective Clone:** Clone promising repos to temp directory
+5. **Extraction Criteria:** For each cloned repo, evaluate:
+   ```
+   KEEP if:
+   - Directly fills identified gap
+   - Architecture compatible with target
+   - Integration effort < gap severity
+
+   DELETE if:
+   - Target already has equivalent functionality
+   - Architecture incompatible
+   - Duplicates existing capabilities
+   - Integration effort exceeds value
+   ```
+6. **Focused Extraction:** Extract ONLY applicable patterns:
+   - Copy relevant source files to extraction folder
+   - Create integration notes per extracted component
+   - Map extracted code to target project structure
+7. **Cleanup:** Delete cloned repos after extraction complete
+8. **Extraction Report:** Document what was kept, what was deleted, and why
+
+**Outputs:**
+- `{target}-gap-extractions/` folder with:
+  - Extracted source files (only applicable ones)
+  - `EXTRACTION-MANIFEST.md` - what was extracted and why
+  - `INTEGRATION-GUIDE.md` - how to integrate each component
+  - `DELETED-SUMMARY.md` - what was NOT applicable (with reasons)
+- Updated GAP-INVENTORY.md with extraction status
+
+**Critical Rules:**
+1. NEVER extract without pre-mortem applicability analysis
+2. ALWAYS delete more than you keep (80%+ deletion rate is healthy)
+3. Document every deletion decision for future reference
+4. Map extractions to specific gaps they fill
+
+#### Phase 6: Delivery and Storage
 **Agent:** delivery-agent
 **Purpose:** Package and preserve intelligence
 
 **Process:**
-1. Organize outputs in dated folder structure
+1. Organize outputs in dated folder structure:
+   ```
+   {target}-recon-{date}/
+     EXECUTIVE-SUMMARY.md
+     MANIFEST.md
+     COMPREHENSIVE-ANALYSIS.md
+     COMPARISON-CHART.md
+     RECOMMENDATIONS.md
+     GAP-INVENTORY.md
+     gap-extractions/
+       EXTRACTION-MANIFEST.md
+       INTEGRATION-GUIDE.md
+       DELETED-SUMMARY.md
+       extracted-files/
+   ```
 2. Update memory-mcp with key findings
 3. Generate executive summary
 4. Archive raw extractions for audit trail
 
 **Outputs:**
-- Complete reconnaissance package
+- Complete reconnaissance package with gap extractions
 - Memory-mcp entries for future retrieval
 - Executive brief for stakeholders
+- Actionable extraction folder ready for integration
 
 ---
 
