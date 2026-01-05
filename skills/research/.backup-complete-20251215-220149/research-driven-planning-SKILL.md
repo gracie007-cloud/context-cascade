@@ -1,18 +1,16 @@
 ---
-name: research-driven-planning
-description: Loop 1 of the Three-Loop Integrated Development System. Research-driven
-  requirements analysis with iterative risk mitigation through 5x pre-mortem cycles
-  using multi-agent consensus. Feeds validated, risk-mitigated plans to parallel-swarm-implementation.
-  Use when starting new features or projects requiring comprehensive planning with
-  <3% failure confidence and evidence-based technology selection.
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Loop 1 of the Three-Loop Integrated Development System. Research-driven requirements analysis with iterative risk mitigation through 5x pre-mortem cycles using multi-agent consensus. Feeds validated, risk-mitigated plans to parallel-swarm-implementation. Use when starting new features or projects requiring comprehensive planning with <3% failure confidence and evidence-based technology selection.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Research-Driven Planning (Loop 1)
 

@@ -1,19 +1,16 @@
 ---
-name: method-development
-description: Develop novel machine learning methods with rigorous ablation studies
-  for Deep Research SOP Pipeline D. Use after baseline replication passes Quality
-  Gate 1, when creating new algorithms, proposing modifications to existing methods,
-  or conducting systematic experimental validation. Includes architectural innovation,
-  hyperparameter optimization, and component-wise ablation analysis leading to Quality
-  Gate 2.
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Develop novel machine learning methods with rigorous ablation studies for Deep Research SOP Pipeline D. Use after baseline replication passes Quality Gate 1, when creating new algorithms, proposing modifications to existing methods, or conducting systematic experimental validation. Includes architectural innovation, hyperparameter optimization, and component-wise ablation analysis leading to Quality Gate 2.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Method Development
 

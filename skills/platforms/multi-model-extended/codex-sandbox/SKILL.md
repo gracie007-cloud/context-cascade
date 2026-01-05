@@ -4,6 +4,9 @@ description: Run code in Codex fully isolated sandbox - network disabled, CWD on
 allowed-tools: Bash, Read, Write, TodoWrite, Glob, Grep
 ---
 
+
+
+
 # Codex Sandbox Skill
 
 ## Purpose

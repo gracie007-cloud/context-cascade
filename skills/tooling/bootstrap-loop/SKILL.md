@@ -1,13 +1,30 @@
 ---
 name: bootstrap-loop
 description: Coordinate the recursive improvement loop between Prompt Forge and Skill Forge with a frozen evaluation harness and auditable checkpoints.
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+  - Task
+  - TodoWrite
 model: claude-3-5-sonnet
 x-version: 3.2.0
 x-category: tooling
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ### L1 Improvement
 - Converted the bootstrap loop into an English-first SOP that mirrors the Prompt Architect + Skill Forge cadence.

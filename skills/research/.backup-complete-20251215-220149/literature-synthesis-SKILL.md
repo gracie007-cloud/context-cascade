@@ -1,18 +1,16 @@
 ---
-name: literature-synthesis
-description: Systematic literature review and synthesis for Deep Research SOP Pipeline
-  A. Use when starting research projects, conducting SOTA analysis, identifying research
-  gaps, or preparing academic papers. Implements PRISMA-compliant systematic review
-  methodology with automated search, screening, and synthesis across ArXiv, Semantic
-  Scholar, and Papers with Code.
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Systematic literature review and synthesis for Deep Research SOP Pipeline A. Use when starting research projects, conducting SOTA analysis, identifying research gaps, or preparing academic papers. Implements PRISMA-compliant systematic review methodology with automated search, screening, and synthesis across ArXiv, Semantic Scholar, and Papers with Code.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Literature Synthesis
 

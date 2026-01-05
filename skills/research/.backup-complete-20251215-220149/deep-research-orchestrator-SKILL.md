@@ -1,18 +1,16 @@
 ---
-name: deep-research-orchestrator
-description: Meta-orchestrator for complete Deep Research SOP lifecycle managing 3
-  phases, 9 pipelines (A-I), and 3 quality gates. Use when starting new research projects,
-  conducting systematic ML research, or ensuring rigorous scientific methodology from
-  literature review through production deployment. Coordinates all SOP skills and
-  agents for end-to-end research execution.
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Meta-orchestrator for complete Deep Research SOP lifecycle managing 3 phases, 9 pipelines (A-I), and 3 quality gates. Use when starting new research projects, conducting systematic ML research, or ensuring rigorous scientific methodology from literature review through production deployment. Coordinates all SOP skills and agents for end-to-end research execution.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Deep Research Orchestrator
 

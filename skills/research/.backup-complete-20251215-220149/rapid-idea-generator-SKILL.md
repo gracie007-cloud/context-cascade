@@ -1,24 +1,24 @@
 ---
-name: rapid-idea-generator
-description: Generate research ideas from any topic in under 5 minutes using 5-Whys
-  causal analysis, component decomposition, and root cause identification. Features
-  transparent reasoning and evidence-based methodology. Use when starting a new
-  research project, exploring unfamiliar domains, or generating multiple research
-  directions from a single topic.
-version: 1.0.0
-category: research
-tags:
-- research
-- ideation
-- analysis
-- planning
-- rapid
-author: ruv
-mcp_servers:
-  required: [memory-mcp]
-  optional: [sequential-thinking]
+name: .backup-complete-20251215-220149
+description: Generate research ideas from any topic in under 5 minutes using 5-Whys causal analysis, component decomposition, and root cause identification. Features transparent reasoning and evidence-based methodology. Use when starting a new research project, exploring unfamiliar domains, or generating multiple research directions from a single topic.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - ideation
+  - analysis
+  - planning
+  - rapid
+x-author: ruv
+x-mcp_servers:
+  required:
+    - memory-mcp
+  optional:
+    - sequential-thinking
   auto_enable: true
 ---
+
+
 
 # Rapid Idea Generator
 

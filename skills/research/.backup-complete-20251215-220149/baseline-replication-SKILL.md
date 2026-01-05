@@ -1,17 +1,16 @@
 ---
-name: baseline-replication
-description: "Replicate published ML baseline experiments with exact reproducibility\
-  \ (\xB11% tolerance) for Deep Research SOP Pipeline D. Use when validating baselines,\
-  \ reproducing experiments, verifying published results, or preparing for novel method\
-  \ development."
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Replicate published ML baseline experiments with exact reproducibility (±1% tolerance) for Deep Research SOP Pipeline D. Use when validating baselines, reproducing experiments, verifying published results, or preparing for novel method development.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Baseline Replication
 

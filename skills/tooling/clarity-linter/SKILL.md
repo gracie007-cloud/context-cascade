@@ -1,13 +1,30 @@
 ---
 name: clarity-linter
 description: Evaluate and improve code clarity and cognitive load with rubric-driven scoring and targeted fixes.
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite]
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Glob
+  - Grep
+  - Task
+  - TodoWrite
 model: claude-3-5-sonnet
 x-version: 3.2.0
 x-category: tooling
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ### L1 Improvement
 - Rewrote the clarity linter as an English-first SOP with Prompt Architect-style constraint surfacing.

@@ -6,8 +6,17 @@ model: sonnet
 x-version: 3.2.0
 x-category: security
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ## Purpose
 Configure sandbox environments with least-privilege controls across filesystem, network, processes, and secrets. Built on **skill-forge** structure-first delivery and **prompt-architect** constraint/confidence practices.

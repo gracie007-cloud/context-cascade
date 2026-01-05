@@ -6,8 +6,18 @@ model: sonnet
 x-version: 3.2.0
 x-category: foundry
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
+
 
 ### L1 Improvement
 - Recast the lensing guide into the Skill Forge section flow with explicit guardrails, patterns, and completion checks.

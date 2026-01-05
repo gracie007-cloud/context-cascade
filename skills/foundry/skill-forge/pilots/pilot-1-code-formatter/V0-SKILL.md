@@ -1,10 +1,12 @@
 ---
-name: code-formatter
+name: pilot-1-code-formatter
 description: Automatically format code files using the appropriate formatter based on file type, providing clear feedback on changes made
-author: pilot-test
-<!-- V0 PILOT PROJESI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot_v0]] -->
-<!-- [[MOR:f-r-m<format>]] [[MOR:b-s-t<simple>]] -->
+x-author: pilot-test
+x-<!-- V0 PILOT PROJESI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot_v0]] --> <!-- [[MOR:f-r-m<format>]] [[MOR:b-s-t<simple>]] -->: null
 ---
+
+
+
 
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.

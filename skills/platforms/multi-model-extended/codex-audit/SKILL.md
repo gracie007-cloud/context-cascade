@@ -4,6 +4,9 @@ description: Use Codex CLI for sandboxed auditing, debugging, and autonomous pro
 allowed-tools: Bash, Read, Write, TodoWrite, Glob, Grep
 ---
 
+
+
+
 # Codex Audit Skill
 
 ## Purpose

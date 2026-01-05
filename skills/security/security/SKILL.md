@@ -6,8 +6,17 @@ model: sonnet
 x-version: 3.2.0
 x-category: security
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
 
 ## Purpose & Role
 Serve as the entry point for security work, orchestrating assessments, secure coding guidance, and routing to specialized skills (reverse engineering, sandbox configuration, network lockdown, compliance). Mirrors **skill-forge** structure-first discipline and **prompt-architect** clarity/constraint extraction.

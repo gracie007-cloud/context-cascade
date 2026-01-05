@@ -1,18 +1,16 @@
 ---
-name: research-publication
-description: Academic publication preparation for Deep Research SOP Pipeline I including
-  paper writing, reproducibility artifacts, and venue submission. Use when preparing
-  research for publication after Gate 3 APPROVED, submitting to conferences (NeurIPS,
-  ICML, CVPR), or creating ACM artifact submissions. Ensures reproducibility checklists
-  complete, supplementary materials prepared, and all artifacts publicly accessible.
-version: 1.0.0
-category: research
-tags:
-- research
-- analysis
-- planning
-author: ruv
+name: .backup-complete-20251215-220149
+description: Academic publication preparation for Deep Research SOP Pipeline I including paper writing, reproducibility artifacts, and venue submission. Use when preparing research for publication after Gate 3 APPROVED, submitting to conferences (NeurIPS, ICML, CVPR), or creating ACM artifact submissions. Ensures reproducibility checklists complete, supplementary materials prepared, and all artifacts publicly accessible.
+x-version: 1.0.0
+x-category: research
+x-tags:
+  - research
+  - analysis
+  - planning
+x-author: ruv
 ---
+
+
 
 # Research Publication
 

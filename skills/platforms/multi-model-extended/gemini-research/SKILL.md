@@ -4,6 +4,9 @@ description: Use Gemini CLI for research with Google Search grounding and 1M tok
 allowed-tools: Bash, Read, Write, TodoWrite, WebFetch, Glob, Grep
 ---
 
+
+
+
 # Gemini Research Skill
 
 ## Purpose

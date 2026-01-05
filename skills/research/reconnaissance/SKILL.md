@@ -6,8 +6,15 @@ model: sonnet
 x-version: 1.0.0
 x-category: research
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
-triggers:
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
+x-triggers:
   - reconnaissance
   - competitive analysis
   - technology scan
@@ -16,6 +23,8 @@ triggers:
   - paper extraction
   - repo analysis
 ---
+
+
 
 ## TIER 1: CRITICAL SECTIONS
 

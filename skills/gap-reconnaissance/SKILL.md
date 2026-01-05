@@ -1,3 +1,21 @@
+---
+name: gap-reconnaissance
+description: Systematically identify capability gaps, research solutions, and outline integration guidance.
+allowed-tools: Read, Write, Edit, Bash
+model: sonnet
+x-version: 1.0.0
+x-category: research
+x-triggers:
+  - gap analysis
+  - find solution
+  - reconnaissance
+  - research github
+  - what framework
+  - what library
+x-priority: HIGH
+---
+
+
 # Gap Reconnaissance Skill
 
 ## Metadata

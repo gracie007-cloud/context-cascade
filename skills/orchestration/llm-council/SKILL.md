@@ -6,8 +6,18 @@ model: sonnet
 x-version: 3.2.0
 x-category: orchestration
 x-vcl-compliance: v3.2.0
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
+
 
 ## STANDARD OPERATING PROCEDURE
 

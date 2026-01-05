@@ -15,6 +15,9 @@ x-verix-description: |
   [assert|neutral] gemini-codebase-onboard skill for megacontext analysis [ground:given] [conf:0.95] [state:confirmed]
 ---
 
+
+
+
 <!-- S0 META-IDENTITY -->
 
 # Gemini Codebase Onboard Skill

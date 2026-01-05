@@ -6,8 +6,18 @@ model: sonnet
 x-version: 3.2.0
 x-category: foundry
 x-vcl-compliance: v3.1.1
-x-cognitive-frames: [HON, MOR, COM, CLS, EVD, ASP, SPC]
+x-cognitive-frames:
+  - HON
+  - MOR
+  - COM
+  - CLS
+  - EVD
+  - ASP
+  - SPC
 ---
+
+
+
 
 ### L1 Improvement
 - Rewrote the builder SOP using the Skill Forge required sections and structure-first guardrails.

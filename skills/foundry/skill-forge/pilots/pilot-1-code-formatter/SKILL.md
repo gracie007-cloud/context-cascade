@@ -2,9 +2,11 @@
 name: pilot-1-code-formatter
 description: Automatically format code files using the appropriate formatter based on file type, providing clear feedback on changes made
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
-<!-- PILOT PROJESI BECERI DOKUMANI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot]] -->
-<!-- [[MOR:k-t-b<format>]] [[MOR:s-l-m<validate>]] [[MOR:h-s-n<quality>]] -->
+x-<!-- PILOT PROJESI BECERI DOKUMANI [[HON:teineigo]] [[EVD:-DI<gozlem>]] [[CLS:ge_pilot]] --> <!-- [[MOR:k-t-b<format>]] [[MOR:s-l-m<validate>]] [[MOR:h-s-n<quality>]] -->: null
 ---
+
+
+
 
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.

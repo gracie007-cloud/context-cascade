@@ -4,6 +4,9 @@ description: Apply quantization to reduce memory by 4-32x. Enable HNSW indexing 
 allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite, Glob, Grep, WebFetch
 ---
 
+
+
+
 ## When NOT to Use This Skill
 
 - Local-only operations with no vector search needs

@@ -1,17 +1,18 @@
 ---
-name: interactive-planner
-description: Use Claude Code's interactive question tool to gather comprehensive requirements
-  through structured multi-select questions
-tags:
-- planning
-- requirements
-- questions
-- scoping
-- interactive
-version: 1.0.0
-category: research
-author: ruv
+name: .backup-complete-20251215-220149
+description: Use Claude Code's interactive question tool to gather comprehensive requirements through structured multi-select questions
+x-tags:
+  - planning
+  - requirements
+  - questions
+  - scoping
+  - interactive
+x-version: 1.0.0
+x-category: research
+x-author: ruv
 ---
+
+
 
 # Interactive Planner
 
