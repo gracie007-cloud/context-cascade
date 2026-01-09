@@ -11,7 +11,7 @@ allowed-tools:
   - Task
   - TodoWrite
 model: sonnet
-x-version: 1.0.4
+x-version: 1.0.5
 x-category: tooling
 x-vcl-compliance: v3.1.1
 x-cognitive-frames:
@@ -23,8 +23,8 @@ x-cognitive-frames:
   - ASP
   - SPC
 x-loop: 1.5
-x-last-reflection: 2026-01-08T20:55:00Z
-x-reflection-count: 5
+x-last-reflection: 2026-01-09T14:30:00Z
+x-reflection-count: 6
 ---
 
 
@@ -635,6 +635,7 @@ Confidence: 0.85 (ceiling: observation 0.95) - New skill created following Skill
 
 ---
 
+
 ## LEARNED PATTERNS
 
 ### High Confidence [conf:0.90] - CRITICAL
@@ -672,14 +673,21 @@ cp /tmp/skill-update/skill-name.zip skills/packaged/skill-name.skill
 ```
 [ground:user-correction:2026-01-08]
 
+#### Hook Path Configuration
+- ALWAYS use $HOME for global .claude hooks, NOT $CLAUDE_PROJECT_DIR
+- $CLAUDE_PROJECT_DIR is only valid within project contexts
+- Global hooks at ~/.claude/hooks/ should use $HOME/.claude/hooks/
+- [ground:user-correction:2026-01-09]
+
 ### Medium Confidence [conf:0.75]
 
 - Windows interop: PowerShell commands require Windows paths (C:\...). Use `cygpath -w /unix/path` to convert Git Bash paths before invoking PowerShell Compress-Archive [ground:error-correction:2026-01-08]
 - File tool fallback: When Edit tool fails repeatedly with "unexpectedly modified" errors, use Bash heredoc (`cat > file << 'EOF'`) as reliable alternative for file writes [ground:observation:pattern:2026-01-08]
 - MCP integration pattern: When integrating new components, expose in __init__.py __all__ list, document config in .env, provide standalone test script, update README with usage examples [ground:approval:successful-pattern:2026-01-08]
+- Settings file atomic writes: For JSON config files that may be modified concurrently, prefer Bash cat heredoc over Edit tool [ground:observation:pattern:2026-01-09]
 
 ### Low Confidence [conf:0.55]
 
 - Self-test on creation session validates the workflow and demonstrates dogfooding [ground:observation:2026-01-05]
 - Python standalone scripts: Use Path(__file__).parent.parent to get project root, add to sys.path, and os.chdir() to project root before imports to avoid relative import issues [ground:observation:fix:2026-01-08]
-
+- Users reporting hook errors prefer quick diagnosis over verbose explanations [ground:observation:1-session:2026-01-09]
