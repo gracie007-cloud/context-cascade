@@ -2,8 +2,10 @@
   "skills": 175,
   "agents": 260,
   "commands": 249,
+  "hooks": 53,
+  "scripts": 58,
   "playbooks": 30,
-  "timestamp": "2026-01-10T00:10:00.000Z",
-  "total": 714,
+  "timestamp": "2026-01-10T00:20:00.000Z",
+  "total": 825,
   "note": "All skills consolidated - duplicates removed, supplementary merged, structures fixed"
 }
