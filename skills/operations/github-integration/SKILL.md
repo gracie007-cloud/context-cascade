@@ -111,3 +111,50 @@ Design and implement GitHub-centric integrations (API, Apps, webhooks) with secu
 - Confidence ceiling stated for go-live
 
 Confidence: 0.70 (ceiling: inference 0.70) - GitHub integration steps follow validated automation guardrails
+
+---
+
+## LEARNED PATTERNS
+
+### High Confidence [conf:0.90]
+
+#### Hook Consolidation Workflow
+When consolidating hooks from multiple locations to a single source of truth:
+
+1. **Inventory all hooks** from both locations
+   ```powershell
+   Get-ChildItem $userHooks -Recurse -Filter "*.ps1"
+   Get-ChildItem $pluginHooks -Recurse -Filter "*.ps1"
+   ```
+
+2. **Copy user hooks to plugin** (preserving folder structure)
+   ```powershell
+   foreach ($file in $files) {
+       $relativePath = $file.FullName.Substring($src.Length + 1)
+       $destPath = Join-Path $dst $relativePath
+       Copy-Item $file.FullName $destPath -Force
+   }
+   ```
+
+3. **Update hooks.json to 2026 format** - Use simple string matchers:
+   ```json
+   // DEPRECATED (2025 format)
+   "matcher": { "tool_name_regex": "^(Write|Edit)$" }
+
+   // CORRECT (2026 format)
+   "matcher": "Write|Edit"
+   ```
+
+4. **Update settings.local.json** to point to consolidated location
+
+5. **Update plugin.json** with correct hook counts
+
+6. **Git commit and push** with descriptive message
+
+[ground:user-workflow:2026-01-09]
+
+### Medium Confidence [conf:0.75]
+
+- Windows requires PowerShell (.ps1) hooks alongside Unix shell (.sh) hooks for cross-platform support [ground:platform-requirement:2026-01-09]
+- Plugin directory should be canonical source of truth for hooks to enable version control and distribution [ground:architecture-pattern:2026-01-09]
+- Always verify plugin structure before pushing to GitHub (count components, check JSON validity) [ground:validation-pattern:2026-01-09]
