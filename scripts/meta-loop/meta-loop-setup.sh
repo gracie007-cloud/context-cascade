@@ -11,6 +11,16 @@
 #        bash meta-loop-setup.sh status
 #        bash meta-loop-setup.sh cancel
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -euo pipefail
 
 # Directories

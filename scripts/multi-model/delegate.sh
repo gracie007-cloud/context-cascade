@@ -23,6 +23,16 @@
 #  12 command failed (non-zero)
 #  13 install attempt blocked
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -euo pipefail
 
 SELF="$(basename "$0")"

@@ -33,6 +33,18 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 # Try to import DSPy
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+#
+# Decision: REUSE (>90%) | ADAPT (70-90%) | FOLLOW pattern | BUILD new
+# ============================================================
+
 try:
     import dspy
     from dspy import Signature, InputField, OutputField, Module, ChainOfThought

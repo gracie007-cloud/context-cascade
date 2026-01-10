@@ -1,7 +1,7 @@
 {
   "name": "context-cascade",
-  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks contain skills, skills contain agents, agents contain commands. Only load what you need - context cascades down through layers on demand, saving 90%+ context space. Includes 223 agents, 225 skills, 229 commands, SPARC methodology, Three-Loop system, and Byzantine consensus.",
-  "version": "3.0.0",
+  "description": "Context-saving nested plugin architecture for Claude Code. Playbooks contain skills, skills contain agents, agents contain commands. Only load what you need - context cascades down through layers on demand, saving 90%+ context space. Includes 224 agents, 173 skills, 249 commands, 79 hooks, SPARC methodology, Three-Loop system, and Byzantine consensus.",
+  "version": "3.0.1",
   "author": {
     "name": "DNYoussef",
     "email": "youssef@example.com",
@@ -32,7 +32,7 @@
   ],
   "x-claudeCode": {
     "minVersion": "1.0.0",
-    "compatibility": "2024.01+"
+    "compatibility": "2026.01+"
   },
   "x-contents": {
     "playbooks": {
@@ -50,39 +50,39 @@
       ]
     },
     "skills": {
-      "count": 225,
-      "note": "Loaded by playbooks on demand",
+      "count": 173,
+      "note": "Loaded by playbooks on demand (SKILL.md files)",
       "categories": [
-        "delivery",
-        "foundry",
-        "operations",
-        "orchestration",
-        "platforms",
-        "quality",
-        "research",
-        "security",
-        "specialists",
-        "tooling"
+        "platforms (37)",
+        "research (20)",
+        "quality (19)",
+        "operations (19)",
+        "orchestration (16)",
+        "foundry (15)",
+        "tooling (13)",
+        "security (12)",
+        "delivery (11)",
+        "specialists (11)"
       ]
     },
     "agents": {
-      "count": 229,
+      "count": 224,
       "note": "Loaded by skills on demand",
       "categories": [
-        "delivery",
-        "foundry",
-        "operations",
-        "orchestration",
-        "platforms",
-        "quality",
-        "research",
-        "security",
-        "specialists",
-        "tooling"
+        "platforms (46)",
+        "operations (29)",
+        "foundry (25)",
+        "specialists (24)",
+        "tooling (24)",
+        "orchestration (23)",
+        "delivery (18)",
+        "quality (18)",
+        "research (12)",
+        "security (5)"
       ]
     },
     "commands": {
-      "count": 229,
+      "count": 249,
       "note": "Embedded in agents, loaded last",
       "prefixes": [
         "/sparc",
@@ -91,6 +91,20 @@
         "/workflows",
         "/github",
         "/agents"
+      ]
+    },
+    "hooks": {
+      "count": 79,
+      "note": "Event handlers for Claude Code lifecycle (40 .sh + 39 .ps1 for Windows)",
+      "categories": [
+        "enforcement",
+        "memory-mcp",
+        "ralph-wiggum",
+        "multi-model",
+        "guards",
+        "connascence-audit",
+        "reflect",
+        "Stop"
       ]
     },
     "mcpServers": {
@@ -111,8 +125,10 @@
   "x-features": [
     "Context Cascade Architecture - Load only what you need (90%+ context savings)",
     "Nested Hierarchy: Playbooks -> Skills -> Agents -> Commands",
-    "223 AI Agents organized in 10 categories",
-    "225 Skills with SKILL.md format",
+    "224 AI Agents organized in 10 categories",
+    "173 Skills with SKILL.md format",
+    "249 Commands for slash-command invocation",
+    "79 Hooks for lifecycle automation (39 PowerShell for Windows)",
     "1 Playbook for common workflows",
     "MCP Auto-Initialization - Agents declare their MCP requirements",
     "Three-Loop Integrated Development System",

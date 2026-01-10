@@ -7,6 +7,11 @@
 # for non-trivial tasks, ensuring Claude follows the SOP.
 
 # Read the user's message from stdin
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 USER_MESSAGE=$(timeout 5 cat 2>/dev/null || echo '{}')
 
 # Extract the actual message text

@@ -7,6 +7,11 @@
 # agent-creator, eval-harness) go through proper evaluation.
 
 # Read tool input from stdin
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 TOOL_INPUT=$(timeout 5 cat 2>/dev/null || echo '{}')
 
 # Extract file path

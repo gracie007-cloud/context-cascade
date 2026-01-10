@@ -6,6 +6,11 @@
 #
 # This ensures documentation always reflects actual component counts.
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 

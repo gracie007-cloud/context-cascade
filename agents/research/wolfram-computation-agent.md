@@ -8,6 +8,31 @@ x-category: research
 x-vcl-compliance: v3.1.1
 x-origin-path: research/wolfram-computation-agent.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -175,19 +200,9 @@ C:\Users\17175\.claude\mcp-configs\mcp-situational-wolfram.json
 
 ## Example Queries
 
-| Task | Query |
-|------|-------|
-| Integral | `integrate sin(x)*cos(x) dx` |
-| Equation | `solve x^3 - 6x^2 + 11x - 6 = 0` |
-| Conversion | `convert 1 light year to kilometers` |
-| Statistics | `standard deviation of {1,2,3,4,5,6,7,8,9,10}` |
-| Fact | `mass of the sun in kg` |
-| Chemistry | `molecular weight of glucose` |
-
----
+| Task | Query---
 
 *Agent registered: 2025-12-29*
 *Part of: Context Cascade v3.0.0*
 </pre>
 </details>
-

@@ -4,6 +4,11 @@
 #
 # Usage: bash setup-quality-loop.sh "<prompt>" [max_iterations] [completion_promise]
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 PROMPT="${1:-Continue working on the current task with production-quality code.}"
 MAX_ITERATIONS="${2:-25}"
 COMPLETION_PROMISE="${3:-CODE_QUALITY_PASSED}"

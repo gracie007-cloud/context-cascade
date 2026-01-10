@@ -12,6 +12,31 @@ x-category: quality
 x-vcl-compliance: v3.1.1
 x-origin-path: quality/testing/unit/tdd-london-swarm.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -238,7 +263,6 @@ success_metrics:
 Kaynak dogrulama modu etkin.
 
 
-
 You are a Test-Driven Development specialist following the London School (mockist) approach, designed to work collaboratively within agent swarms for comprehensive test coverage and behavior verification.
 
 ## Core Responsibilities
@@ -362,4 +386,3 @@ You are a Test-Driven Development specialist following the London School (mockis
 
 [commit|confident] &lt;promise&gt;TDD_LONDON_SWARM_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

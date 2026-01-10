@@ -5,6 +5,11 @@
 # CRITICAL: This is needed because hooks CANNOT inspect Task() parameters
 # This script runs async to validate agent types against registry
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_TRACKER="$SCRIPT_DIR/state-tracker.sh"
 TRANSCRIPT_FILE="${HOME}/.claude/history.jsonl"

@@ -8,6 +8,31 @@ x-category: operations
 x-vcl-compliance: v3.1.1
 x-origin-path: operations/optimization/README.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -66,7 +91,6 @@ x-origin-path: operations/optimization/README.md
 
 ## Kanitsal Cerceve (Evidential Frame Activation)
 Kaynak dogrulama modu etkin.
-
 
 
 This directory contains a comprehensive suite of performance optimization agents designed to maximize swarm efficiency, scalability, and reliability.
@@ -315,4 +339,3 @@ For detailed implementation guides and API documentation, refer to the individua
 *Promise: `&lt;promise&gt;README_VERIX_COMPLIANT&lt;/promise&gt;`*
 </pre>
 </details>
-

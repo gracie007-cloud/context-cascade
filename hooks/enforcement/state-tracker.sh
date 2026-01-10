@@ -4,6 +4,11 @@
 # Called by all enforcement hooks
 
 # Add $HOME/bin to PATH for jq
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 export PATH="$HOME/bin:$PATH"
 
 STATE_FILE="${HOME}/.claude/runtime/enforcement-state.json"

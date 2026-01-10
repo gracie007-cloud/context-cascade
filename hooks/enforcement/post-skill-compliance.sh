@@ -3,6 +3,11 @@
 # Hook: PostToolUse on Skill
 # Purpose: Verify SOP compliance after skill invocation
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_TRACKER="$SCRIPT_DIR/state-tracker.sh"
 

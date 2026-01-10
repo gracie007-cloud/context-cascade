@@ -195,26 +195,43 @@ Skill("reflect")                                     // Session reflection & lea
 
 ### Task() Tool Syntax (for Agents)
 
+[direct|emphatic] CRITICAL: The 217 agents are CONCEPTUAL PERSONAS, not Task tool subagent_types [ground:api-spec] [conf:0.99] [state:confirmed]
+
+**Valid subagent_types (ONLY these 6 work)**:
+| subagent_type | Use For |
+|---------------|---------|
+| `general-purpose` | Multi-step tasks, research, coding, analysis (DEFAULT) |
+| `Explore` | Fast codebase search, file patterns |
+| `Plan` | Implementation planning, architecture |
+| `Bash` | Command execution (git, npm, docker) |
+| `claude-code-guide` | Claude Code feature questions |
+| `statusline-setup` | Status line configuration |
+
 ```javascript
-// Spawn an agent using the Task tool
+// Task() Syntax
 Task("description", "prompt", "subagent_type")
 
-// Parameters:
-// - description: Short 3-5 word summary of what agent does
-// - prompt: Detailed instructions for the agent
-// - subagent_type: Agent type from registry (see AGENT INDEX below)
+// WRONG - conceptual agent names are NOT valid subagent_types:
+// Task("Fix bug", "...", "bug-fixer")        // FAILS
+// Task("Research", "...", "researcher")      // FAILS
 
-// Examples:
-Task("Fix auth bug", "Analyze and fix the authentication issue in auth.js", "bug-fixer")
-Task("Review security", "Check for vulnerabilities in the API endpoints", "security-auditor")
-Task("Write tests", "Create comprehensive unit tests for the UserService", "tester")
-Task("Research API", "Find best practices for REST API pagination", "researcher")
+// CORRECT - embed agent persona into prompt, use valid subagent_type:
+Task("Fix auth bug", "Acting as a bug-fixer agent with debugging expertise: Analyze and fix the authentication issue in auth.js. Follow systematic debugging: reproduce, isolate, fix, verify.", "general-purpose")
+
+Task("Review security", "Acting as a security-auditor agent: Check for OWASP Top 10 vulnerabilities in the API endpoints. Report findings with severity levels.", "general-purpose")
+
+Task("Write tests", "Acting as a tester agent: Create comprehensive unit tests for the UserService covering happy paths, edge cases, and error handling.", "general-purpose")
+
+Task("Research API", "Acting as a researcher agent: Find best practices for REST API pagination. Cite sources and compare approaches.", "general-purpose")
 
 // Parallel execution (single message, multiple Task calls):
-Task("Review security", "Check vulnerabilities", "security-auditor")
-Task("Review quality", "Check code patterns", "code-reviewer")
-Task("Run tests", "Execute test suite", "test-runner")
+Task("Security review", "Acting as security-auditor: Check vulnerabilities...", "general-purpose")
+Task("Quality review", "Acting as code-reviewer: Check patterns...", "general-purpose")
+Task("Find tests", "Search for test files and coverage", "Explore")
 ```
+
+**Key Pattern**: Agent persona goes in PROMPT, not subagent_type.
+**Full Guide**: `docs/AGENT-SUBAGENT-MAPPING.md`
 
 ### Pattern Flow
 
@@ -506,119 +523,127 @@ TodoWrite({ todos })          // Track progress
 
 ---
 
-## AGENT INDEX (217 Agents)
+## AGENT INDEX (217 Conceptual Personas)
 
-[assert|neutral] Complete agent catalog by category [ground:witnessed:agent-registry] [conf:0.95] [state:confirmed]
+[assert|neutral] Complete agent persona catalog by category [ground:witnessed:agent-registry] [conf:0.95] [state:confirmed]
+
+[direct|emphatic] WARNING: These are CONCEPTUAL PERSONAS for prompt injection, NOT valid subagent_types [ground:api-spec] [conf:0.99]
+
+**Correct Usage Pattern**:
+```javascript
+// Embed persona in prompt, use valid subagent_type
+Task("desc", "Acting as {persona}: {instructions}", "general-purpose")
+```
 
 ### Delivery Agents (18)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 1 | `feature-builder` | End-to-end feature building | `Task("Build feature", "...", "feature-builder")` |
-| 2 | `bug-fixer` | Debug and fix issues | `Task("Fix bug", "...", "bug-fixer")` |
-| 3 | `coder` | Write production code | `Task("Write code", "...", "coder")` |
-| 4 | `planner` | Create implementation plans | `Task("Plan impl", "...", "planner")` |
-| 5 | `tester` | Write and run tests | `Task("Write tests", "...", "tester")` |
-| 6 | `reviewer` | Review code quality | `Task("Review code", "...", "reviewer")` |
-| 7 | `deployer` | Handle deployment | `Task("Deploy app", "...", "deployer")` |
-| 8 | `debugger` | Advanced debugging | `Task("Debug issue", "...", "debugger")` |
-| 9 | `refactorer` | Code refactoring | `Task("Refactor", "...", "refactorer")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 1 | `feature-builder` | End-to-end feature building | `Task("Build feature", "Acting as feature-builder: ...", "general-purpose")` |
+| 2 | `bug-fixer` | Debug and fix issues | `Task("Fix bug", "Acting as bug-fixer: ...", "general-purpose")` |
+| 3 | `coder` | Write production code | `Task("Write code", "Acting as coder: ...", "general-purpose")` |
+| 4 | `planner` | Create implementation plans | `Task("Plan impl", "...", "Plan")` |
+| 5 | `tester` | Write and run tests | `Task("Write tests", "Acting as tester: ...", "general-purpose")` |
+| 6 | `reviewer` | Review code quality | `Task("Review code", "Acting as reviewer: ...", "general-purpose")` |
+| 7 | `deployer` | Handle deployment | `Task("Deploy app", "Acting as deployer: ...", "general-purpose")` |
+| 8 | `debugger` | Advanced debugging | `Task("Debug issue", "Acting as debugger: ...", "general-purpose")` |
+| 9 | `refactorer` | Code refactoring | `Task("Refactor", "Acting as refactorer: ...", "general-purpose")` |
 
 ### Quality Agents (18)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 10 | `code-reviewer` | Deep code review | `Task("Review", "...", "code-reviewer")` |
-| 11 | `security-auditor` | Security analysis | `Task("Audit security", "...", "security-auditor")` |
-| 12 | `functionality-auditor` | Verify code works | `Task("Audit func", "...", "functionality-auditor")` |
-| 13 | `theater-detector` | Detect fake code | `Task("Detect theater", "...", "theater-detector")` |
-| 14 | `linter` | Code style checks | `Task("Lint code", "...", "linter")` |
-| 15 | `test-runner` | Execute tests | `Task("Run tests", "...", "test-runner")` |
-| 16 | `e2e-tester` | E2E testing | `Task("E2E test", "...", "e2e-tester")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 10 | `code-reviewer` | Deep code review | `Task("Review", "Acting as code-reviewer: ...", "general-purpose")` |
+| 11 | `security-auditor` | Security analysis | `Task("Audit security", "Acting as security-auditor: ...", "general-purpose")` |
+| 12 | `functionality-auditor` | Verify code works | `Task("Audit func", "Acting as functionality-auditor: ...", "general-purpose")` |
+| 13 | `theater-detector` | Detect fake code | `Task("Detect theater", "Acting as theater-detector: ...", "general-purpose")` |
+| 14 | `linter` | Code style checks | `Task("Lint code", "Acting as linter: ...", "general-purpose")` |
+| 15 | `test-runner` | Execute tests | `Task("Run tests", "Acting as test-runner: ...", "Bash")` |
+| 16 | `e2e-tester` | E2E testing | `Task("E2E test", "Acting as e2e-tester: ...", "general-purpose")` |
 
 ### Research Agents (11)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 17 | `researcher` | Deep research | `Task("Research", "...", "researcher")` |
-| 18 | `literature-reviewer` | Academic review | `Task("Review lit", "...", "literature-reviewer")` |
-| 19 | `synthesizer` | Synthesize findings | `Task("Synthesize", "...", "synthesizer")` |
-| 20 | `statistician` | Statistical analysis | `Task("Analyze stats", "...", "statistician")` |
-| 21 | `innovator` | Novel solutions | `Task("Innovate", "...", "innovator")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 17 | `researcher` | Deep research | `Task("Research", "Acting as researcher: ...", "general-purpose")` |
+| 18 | `literature-reviewer` | Academic review | `Task("Review lit", "Acting as literature-reviewer: ...", "general-purpose")` |
+| 19 | `synthesizer` | Synthesize findings | `Task("Synthesize", "Acting as synthesizer: ...", "general-purpose")` |
+| 20 | `statistician` | Statistical analysis | `Task("Analyze stats", "Acting as statistician: ...", "general-purpose")` |
+| 21 | `innovator` | Novel solutions | `Task("Innovate", "Acting as innovator: ...", "general-purpose")` |
 
 ### Orchestration Agents (21)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 22 | `coordinator` | Multi-agent coordination | `Task("Coordinate", "...", "coordinator")` |
-| 23 | `swarm-master` | Swarm orchestration | `Task("Orchestrate swarm", "...", "swarm-master")` |
-| 24 | `queue-manager` | Task queue management | `Task("Manage queue", "...", "queue-manager")` |
-| 25 | `parallel-executor` | Parallel execution | `Task("Execute parallel", "...", "parallel-executor")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 22 | `coordinator` | Multi-agent coordination | `Task("Coordinate", "Acting as coordinator: ...", "general-purpose")` |
+| 23 | `swarm-master` | Swarm orchestration | `Task("Orchestrate swarm", "Acting as swarm-master: ...", "general-purpose")` |
+| 24 | `queue-manager` | Task queue management | `Task("Manage queue", "Acting as queue-manager: ...", "general-purpose")` |
+| 25 | `parallel-executor` | Parallel execution | `Task("Execute parallel", "Acting as parallel-executor: ...", "general-purpose")` |
 
 ### Security Agents (15)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 26 | `security-engineer` | Security implementation | `Task("Secure", "...", "security-engineer")` |
-| 27 | `penetration-tester` | Security testing | `Task("Pentest", "...", "penetration-tester")` |
-| 28 | `compliance-auditor` | Compliance checks | `Task("Audit compliance", "...", "compliance-auditor")` |
-| 29 | `reverse-engineer` | Binary analysis | `Task("Reverse engineer", "...", "reverse-engineer")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 26 | `security-engineer` | Security implementation | `Task("Secure", "Acting as security-engineer: ...", "general-purpose")` |
+| 27 | `penetration-tester` | Security testing | `Task("Pentest", "Acting as penetration-tester: ...", "general-purpose")` |
+| 28 | `compliance-auditor` | Compliance checks | `Task("Audit compliance", "Acting as compliance-auditor: ...", "general-purpose")` |
+| 29 | `reverse-engineer` | Binary analysis | `Task("Reverse engineer", "Acting as reverse-engineer: ...", "general-purpose")` |
 
 ### Platform Agents (12)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 30 | `db-architect` | Database design | `Task("Design DB", "...", "db-architect")` |
-| 31 | `ml-engineer` | ML implementation | `Task("Build ML", "...", "ml-engineer")` |
-| 32 | `flow-manager` | Flow orchestration | `Task("Manage flow", "...", "flow-manager")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 30 | `db-architect` | Database design | `Task("Design DB", "Acting as db-architect: ...", "general-purpose")` |
+| 31 | `ml-engineer` | ML implementation | `Task("Build ML", "Acting as ml-engineer: ...", "general-purpose")` |
+| 32 | `flow-manager` | Flow orchestration | `Task("Manage flow", "Acting as flow-manager: ...", "general-purpose")` |
 
 ### Specialist Agents (45)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 33 | `python-expert` | Python code | `Task("Python task", "...", "python-expert")` |
-| 34 | `typescript-expert` | TypeScript code | `Task("TS task", "...", "typescript-expert")` |
-| 35 | `rust-expert` | Rust code | `Task("Rust task", "...", "rust-expert")` |
-| 36 | `go-expert` | Go code | `Task("Go task", "...", "go-expert")` |
-| 37 | `ml-specialist` | ML/AI expertise | `Task("ML task", "...", "ml-specialist")` |
-| 38 | `frontend-specialist` | Frontend dev | `Task("Frontend task", "...", "frontend-specialist")` |
-| 39 | `backend-specialist` | Backend dev | `Task("Backend task", "...", "backend-specialist")` |
-| 40 | `devops-specialist` | DevOps | `Task("DevOps task", "...", "devops-specialist")` |
-| 41 | `api-specialist` | API development | `Task("API task", "...", "api-specialist")` |
-| 42 | `mobile-specialist` | Mobile dev | `Task("Mobile task", "...", "mobile-specialist")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 33 | `python-expert` | Python code | `Task("Python task", "Acting as python-expert: ...", "general-purpose")` |
+| 34 | `typescript-expert` | TypeScript code | `Task("TS task", "Acting as typescript-expert: ...", "general-purpose")` |
+| 35 | `rust-expert` | Rust code | `Task("Rust task", "Acting as rust-expert: ...", "general-purpose")` |
+| 36 | `go-expert` | Go code | `Task("Go task", "Acting as go-expert: ...", "general-purpose")` |
+| 37 | `ml-specialist` | ML/AI expertise | `Task("ML task", "Acting as ml-specialist: ...", "general-purpose")` |
+| 38 | `frontend-specialist` | Frontend dev | `Task("Frontend task", "Acting as frontend-specialist: ...", "general-purpose")` |
+| 39 | `backend-specialist` | Backend dev | `Task("Backend task", "Acting as backend-specialist: ...", "general-purpose")` |
+| 40 | `devops-specialist` | DevOps | `Task("DevOps task", "Acting as devops-specialist: ...", "general-purpose")` |
+| 41 | `api-specialist` | API development | `Task("API task", "Acting as api-specialist: ...", "general-purpose")` |
+| 42 | `mobile-specialist` | Mobile dev | `Task("Mobile task", "Acting as mobile-specialist: ...", "general-purpose")` |
 
 ### Tooling Agents (24)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 43 | `documentation-writer` | Write docs | `Task("Write docs", "...", "documentation-writer")` |
-| 44 | `api-documenter` | API docs | `Task("Doc API", "...", "api-documenter")` |
-| 45 | `pptx-generator` | Presentations | `Task("Create pptx", "...", "pptx-generator")` |
-| 46 | `diagram-generator` | Architecture diagrams | `Task("Create diagram", "...", "diagram-generator")` |
-| 47 | `github-specialist` | GitHub operations | `Task("GitHub op", "...", "github-specialist")` |
-| 48 | `intent-parser` | Parse user intent | `Task("Parse intent", "...", "intent-parser")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 43 | `documentation-writer` | Write docs | `Task("Write docs", "Acting as documentation-writer: ...", "general-purpose")` |
+| 44 | `api-documenter` | API docs | `Task("Doc API", "Acting as api-documenter: ...", "general-purpose")` |
+| 45 | `pptx-generator` | Presentations | `Task("Create pptx", "Acting as pptx-generator: ...", "general-purpose")` |
+| 46 | `diagram-generator` | Architecture diagrams | `Task("Create diagram", "Acting as diagram-generator: ...", "general-purpose")` |
+| 47 | `github-specialist` | GitHub operations | `Task("GitHub op", "Acting as github-specialist: ...", "Bash")` |
+| 48 | `intent-parser` | Parse user intent | `Task("Parse intent", "Acting as intent-parser: ...", "general-purpose")` |
 
 ### Foundry Agents (18)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 49 | `skill-creator` | Create skills | `Task("Create skill", "...", "skill-creator")` |
-| 50 | `agent-architect` | Design agents | `Task("Design agent", "...", "agent-architect")` |
-| 51 | `prompt-engineer` | Optimize prompts | `Task("Optimize prompt", "...", "prompt-engineer")` |
-| 52 | `hook-developer` | Create hooks | `Task("Create hook", "...", "hook-developer")` |
-| 53 | `validator` | Validate artifacts | `Task("Validate", "...", "validator")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 49 | `skill-creator` | Create skills | `Task("Create skill", "Acting as skill-creator: ...", "general-purpose")` |
+| 50 | `agent-architect` | Design agents | `Task("Design agent", "Acting as agent-architect: ...", "general-purpose")` |
+| 51 | `prompt-engineer` | Optimize prompts | `Task("Optimize prompt", "Acting as prompt-engineer: ...", "general-purpose")` |
+| 52 | `hook-developer` | Create hooks | `Task("Create hook", "Acting as hook-developer: ...", "general-purpose")` |
+| 53 | `validator` | Validate artifacts | `Task("Validate", "Acting as validator: ...", "general-purpose")` |
 
 ### Operations Agents (29)
 
-| # | Agent Type | Purpose | Task Invocation |
-|---|------------|---------|-----------------|
-| 54 | `cicd-engineer` | CI/CD pipelines | `Task("Setup CI", "...", "cicd-engineer")` |
-| 55 | `aws-specialist` | AWS operations | `Task("AWS op", "...", "aws-specialist")` |
-| 56 | `gcp-specialist` | GCP operations | `Task("GCP op", "...", "gcp-specialist")` |
-| 57 | `azure-specialist` | Azure operations | `Task("Azure op", "...", "azure-specialist")` |
-| 58 | `kubernetes-operator` | K8s management | `Task("K8s op", "...", "kubernetes-operator")` |
-| 59 | `monitoring-agent` | System monitoring | `Task("Monitor", "...", "monitoring-agent")` |
-| 60 | `docker-specialist` | Docker operations | `Task("Docker op", "...", "docker-specialist")` |
+| # | Persona | Purpose | Correct Invocation |
+|---|---------|---------|-------------------|
+| 54 | `cicd-engineer` | CI/CD pipelines | `Task("Setup CI", "Acting as cicd-engineer: ...", "Bash")` |
+| 55 | `aws-specialist` | AWS operations | `Task("AWS op", "Acting as aws-specialist: ...", "Bash")` |
+| 56 | `gcp-specialist` | GCP operations | `Task("GCP op", "Acting as gcp-specialist: ...", "Bash")` |
+| 57 | `azure-specialist` | Azure operations | `Task("Azure op", "Acting as azure-specialist: ...", "Bash")` |
+| 58 | `kubernetes-operator` | K8s management | `Task("K8s op", "Acting as kubernetes-operator: ...", "Bash")` |
+| 59 | `monitoring-agent` | System monitoring | `Task("Monitor", "Acting as monitoring-agent: ...", "general-purpose")` |
+| 60 | `docker-specialist` | Docker operations | `Task("Docker op", "Acting as docker-specialist: ...", "Bash")` |
 
 ---
 

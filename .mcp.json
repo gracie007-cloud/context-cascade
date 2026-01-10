@@ -1,16 +1,22 @@
 {
   "mcpServers": {
     "memory-mcp": {
-      "command": "C:\\Users\\17175\\Desktop\\memory-mcp-triple-system\\venv-memory\\Scripts\\python.exe",
+      "command": "C:\\Python312\\python.exe",
       "args": [
         "-u",
         "-m",
         "src.mcp.stdio_server"
       ],
-      "cwd": "C:\\Users\\17175\\Desktop\\memory-mcp-triple-system",
+      "cwd": "D:\\Projects\\memory-mcp-triple-system",
       "env": {
-        "PYTHONPATH": "C:\\Users\\17175\\Desktop\\memory-mcp-triple-system",
-        "PYTHONIOENCODING": "utf-8"
+        "PYTHONPATH": "D:\\Projects\\memory-mcp-triple-system",
+        "PYTHONIOENCODING": "utf-8",
+        "MEMORY_MCP_DATA_DIR": "C:\\Users\\17175\\.claude\\memory-mcp-data",
+        "MEMORY_MCP_LOG_LEVEL": "INFO",
+        "OBSIDIAN_VAULT_PATH": "C:\\Users\\17175\\Documents\\Obsidian Vault",
+        "HF_HUB_OFFLINE": "0",
+        "TRANSFORMERS_OFFLINE": "0",
+        "HF_HOME": "D:\\AIVillage\\hf_cache"
       },
       "category": "core",
       "description": "Triple-system memory with semantic search",
@@ -21,12 +27,12 @@
       "args": [
         "/c",
         "python",
-        "C:\\Users\\17175\\Desktop\\connascence\\mcp\\cli.py",
+        "D:\\Projects\\connascence\\mcp\\cli.py",
         "mcp-server"
       ],
-      "cwd": "C:\\Users\\17175\\Desktop\\connascence",
+      "cwd": "D:\\Projects\\connascence",
       "env": {
-        "PYTHONPATH": "C:\\Users\\17175\\Desktop\\connascence",
+        "PYTHONPATH": "D:\\Projects\\connascence",
         "PYTHONIOENCODING": "utf-8"
       },
       "category": "code-quality",

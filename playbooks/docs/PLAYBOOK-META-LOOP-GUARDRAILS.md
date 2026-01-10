@@ -34,6 +34,28 @@ This document provides comprehensive meta-loop improvements for ALL 38 playbooks
 
 ---
 
+
+
+---
+
+## LIBRARY-FIRST PROTOCOL (MANDATORY)
+
+Before any implementation phase:
+
+1. **Check Library**: `.claude/library/catalog.json`
+2. **Check Patterns**: `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md`
+3. **Scan Projects**: `D:\Projects\*`
+
+| Match Quality | Action | Time Saved |
+|---------------|--------|------------|
+| Library >90% | REUSE | 8+ hours |
+| Library 70-90% | ADAPT | 4-6 hours |
+| Pattern match | FOLLOW | 2-4 hours |
+| Project match | EXTRACT | 1-2 hours |
+| No matches | BUILD | Proceed, then add to library |
+
+---
+
 ## Table of Contents
 
 1. [Delivery Playbooks](#delivery-playbooks) (9)

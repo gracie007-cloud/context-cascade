@@ -5,6 +5,11 @@
 #
 # This creates the state file that the stop hook uses to maintain the loop.
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 set -e
 
 # Parse arguments

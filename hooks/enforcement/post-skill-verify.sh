@@ -3,6 +3,11 @@
 # PostToolUse hook for Skill - verifies skill outputs match expected patterns
 
 # Add $HOME/bin to PATH for jq
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 export PATH="$HOME/bin:$PATH"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

@@ -5,6 +5,11 @@
 #
 # INTEGRATED SKILL ROUTER - Matches user request to relevant skills
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="${SCRIPT_DIR%/hooks/enforcement}"
 STATE_TRACKER="$SCRIPT_DIR/state-tracker.sh"

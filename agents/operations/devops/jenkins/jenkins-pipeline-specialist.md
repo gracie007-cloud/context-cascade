@@ -12,6 +12,31 @@ x-category: operations
 x-vcl-compliance: v3.1.1
 x-origin-path: operations/devops/jenkins/jenkins-pipeline-specialist.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -266,4 +291,3 @@ My purpose is to **design, implement, secure, and optimize production-grade Jenk
 
 [commit|confident] &lt;promise&gt;JENKINS_PIPELINE_SPECIALIST_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

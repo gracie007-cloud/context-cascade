@@ -6,6 +6,11 @@
 # CRITICAL LIMITATION: This hook CANNOT inspect Task() parameters
 # due to Claude Code hook constraints. We can only display reminders.
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 cat << 'EOF'
 
 ============================================================

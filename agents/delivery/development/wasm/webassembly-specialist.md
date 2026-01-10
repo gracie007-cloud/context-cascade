@@ -12,6 +12,31 @@ x-category: delivery
 x-vcl-compliance: v3.1.1
 x-origin-path: delivery/development/wasm/webassembly-specialist.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -138,7 +163,6 @@ Kaynak dogrulama modu etkin.
   capabilities: [general],
   priority: &quot;medium&quot;
 } [ground:given] [conf:1.0] [state:confirmed]
-
 
 
 ---
@@ -271,4 +295,3 @@ Kaynak dogrulama modu etkin.
 
 [commit|confident] &lt;promise&gt;WEBASSEMBLY_SPECIALIST_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

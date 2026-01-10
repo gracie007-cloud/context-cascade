@@ -17,6 +17,54 @@ x-vcl-compliance: v3.1.1
 binding: skill:reflect
 ---
 
+
+
+---
+
+
+
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+
 ## STANDARD OPERATING PROCEDURE
 
 ### Purpose
@@ -41,8 +89,43 @@ inputs:
 4. **Change Proposal**: Generate diff preview showing proposed SKILL.md updates
 5. **User Approval**: Present changes and wait for Y/N/E response
 6. **Apply Updates**: If approved, update skill files and increment versions
-7. **Memory Storage**: Store learnings in Memory MCP with WHO/WHEN/PROJECT/WHY tags
+7. **Memory Storage**: Store learnings in Memory MCP with WHO/WHEN/PROJECT/WHY tags (see detailed implementation below)
 8. **Git Commit**: Optionally commit changes with descriptive message
+
+### Phase 7: Memory MCP Storage (CRITICAL)
+
+After learnings are approved, store them to Memory MCP for retrieval by Meta-Loop:
+
+**Step 7.1**: Prepare learning record as structured text:
+```
+REFLECTION: {skill_name} - {timestamp}
+CORRECTIONS: {list of corrections with confidence}
+PATTERNS: {learned patterns}
+PROJECT: {project_name}
+```
+
+**Step 7.2**: Store to Memory MCP using the memory_cli.py script:
+```bash
+# Windows - use the memory CLI directly
+python D:/Projects/memory-mcp-triple-system/scripts/memory_cli.py store "REFLECTION: {skill_name}
+CORRECTIONS: {corrections_list}
+PATTERNS: {patterns_dict}
+CONFIDENCE: {avg_confidence}" --project "{project_name}" --who "reflect-skill" --why "session-learning"
+```
+
+**Example**:
+```bash
+python D:/Projects/memory-mcp-triple-system/scripts/memory_cli.py store "REFLECTION: code-review - 2026-01-09
+CORRECTIONS: 1. Check imports before modifying code (HIGH 0.90)
+PATTERNS: Always verify file exists before editing
+CONFIDENCE: 0.88" --project "dnyoussef-portfolio" --who "reflect-skill" --why "session-learning"
+```
+
+**Step 7.3**: Also save to local JSON for backup:
+- Location: `~/.claude/memory-mcp-data/reflections/session-{date}-{project}.json`
+- Include full reflection structure with WHO/WHEN/PROJECT/WHY tags
+
+**Step 7.4**: Log storage confirmation in session output
 
 ### Success Criteria and Outputs
 - Signals detected and classified by confidence level

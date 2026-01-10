@@ -66,3 +66,6 @@ data/
 
 # Lock files that shouldn't be committed
 # Note: uv.lock IS committed for reproducibility
+
+# Private/personal skills (not for public repo)
+skills/projects/

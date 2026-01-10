@@ -5,6 +5,16 @@
 #
 # CRITICAL: Uses bash -lc to ensure login shell PATH is available
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -e
 
 # ============================================================================

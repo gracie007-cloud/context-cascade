@@ -5,6 +5,11 @@
 #
 # This is the MOST CRITICAL hook - it ensures patterns survive context loss
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 cat << 'EOF'
 
 ================================================================

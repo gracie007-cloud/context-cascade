@@ -34,6 +34,28 @@ Kaynak dogrulama modu etkin.
 
 ---
 
+
+
+---
+
+## LIBRARY-FIRST PROTOCOL (MANDATORY)
+
+Before any implementation phase:
+
+1. **Check Library**: `.claude/library/catalog.json`
+2. **Check Patterns**: `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md`
+3. **Scan Projects**: `D:\Projects\*`
+
+| Match Quality | Action | Time Saved |
+|---------------|--------|------------|
+| Library >90% | REUSE | 8+ hours |
+| Library 70-90% | ADAPT | 4-6 hours |
+| Pattern match | FOLLOW | 2-4 hours |
+| Project match | EXTRACT | 1-2 hours |
+| No matches | BUILD | Proceed, then add to library |
+
+---
+
 ## Overview
 
 This document maps all 29 playbooks to their MCP requirements. Since playbooks are **skill sequences**, their MCP needs are inherited from constituent skills. All skills now have integrated MCP documentation - this guide aggregates those requirements at the playbook level.

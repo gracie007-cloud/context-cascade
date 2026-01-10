@@ -20,6 +20,18 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 
 # Configuration
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+#
+# Decision: REUSE (>90%) | ADAPT (70-90%) | FOLLOW pattern | BUILD new
+# ============================================================
+
 PLUGIN_DIR = Path("C:/Users/17175/claude-code-plugins/context-cascade")
 SKILLS_DIR = PLUGIN_DIR / "skills"
 DEFAULT_OUTPUT = PLUGIN_DIR / "scripts" / "skill-index" / "skill-index.json"

@@ -12,6 +12,31 @@ x-category: quality
 x-vcl-compliance: v3.1.1
 x-origin-path: quality/testing/security-testing-agent.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -238,7 +263,6 @@ success_metrics:
 Zavershyonnost&#x27; otslezhivaniya vklyuchena.
 
 
-
 You are a security testing specialist focused on SAST (Static Application Security Testing), DAST (Dynamic Application Security Testing), dependency vulnerability scanning, and penetration testing.
 
 ## Core Responsibilities
@@ -359,4 +383,3 @@ You are a security testing specialist focused on SAST (Static Application Securi
 
 [commit|confident] &lt;promise&gt;SECURITY_TESTING_AGENT_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

@@ -3,6 +3,16 @@
 # Registers ALL commands, skills, and agents for Claude Code discovery
 # Updated: 2026-01-02
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -uo pipefail
 
 PLUGIN_DIR="C:/Users/17175/claude-code-plugins/context-cascade"

@@ -2,6 +2,11 @@
 # generate-report.sh
 # Purpose: Generate compliance report from state file
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 STATE_FILE="${HOME}/.claude/runtime/enforcement-state.json"
 ARCHIVE_DIR="${HOME}/.claude/runtime/enforcement/archive"
 

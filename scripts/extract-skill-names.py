@@ -7,6 +7,18 @@ import yaml
 from pathlib import Path
 from collections import defaultdict
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+#
+# Decision: REUSE (>90%) | ADAPT (70-90%) | FOLLOW pattern | BUILD new
+# ============================================================
+
 def extract_skill_info(skill_file):
     """Extract name and category from SKILL.md frontmatter"""
     try:

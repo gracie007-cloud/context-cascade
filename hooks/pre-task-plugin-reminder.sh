@@ -2,6 +2,11 @@
 # Pre-Task Hook: Remind about ruv-sparc plugin and agent registry
 # This hook fires BEFORE any Task tool invocation
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 echo "=================================================="
 echo "!! RUV-SPARC PLUGIN REMINDER !!"
 echo "=================================================="

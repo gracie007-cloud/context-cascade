@@ -3,6 +3,11 @@
 # Hook: PreToolUse on Skill
 # Purpose: Log skill invocation and display SOP reminder
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_TRACKER="$SCRIPT_DIR/state-tracker.sh"
 

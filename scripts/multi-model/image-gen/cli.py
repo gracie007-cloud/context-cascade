@@ -9,6 +9,18 @@ import sys
 from pathlib import Path
 
 # Add parent to path for imports
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+#
+# Decision: REUSE (>90%) | ADAPT (70-90%) | FOLLOW pattern | BUILD new
+# ============================================================
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 try:

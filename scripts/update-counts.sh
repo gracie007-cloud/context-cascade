@@ -1,6 +1,16 @@
 #!/bin/bash
 # update-counts.sh - Updates skill and agent counts in registry and CLAUDE.md
 # Updated: 2026-01-02 - Excludes temp merge dirs, counts packaged .skill files
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -euo pipefail
 
 PLUGIN_DIR="C:/Users/17175/claude-code-plugins/context-cascade"

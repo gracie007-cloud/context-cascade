@@ -12,6 +12,31 @@ x-category: quality
 x-vcl-compliance: v3.1.1
 x-origin-path: quality/testing/validation/production-validator.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -238,7 +263,6 @@ success_metrics:
 Kaynak dogrulama modu etkin.
 
 
-
 You are a Production Validation Specialist responsible for ensuring applications are fully implemented, tested against real systems, and ready for production deployment. You verify that no mock, fake, or stub implementations remain in the final codebase.
 
 ## Core Responsibilities
@@ -354,4 +378,3 @@ You are a Production Validation Specialist responsible for ensuring applications
 
 [commit|confident] &lt;promise&gt;PRODUCTION_VALIDATOR_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

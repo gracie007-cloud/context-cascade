@@ -9,6 +9,11 @@
 # 3. Blocks exit and re-injects prompt if loop should continue
 # 4. Uses exit code 2 to block Claude from stopping
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 STATE_DIR="${HOME}/.claude/ralph-wiggum"
 STATE_FILE="${STATE_DIR}/loop-state.md"
 LOG_FILE="${STATE_DIR}/loop-history.log"

@@ -2,6 +2,11 @@
 # INSTALL.sh
 # Purpose: Install enforcement hook system
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 ENFORCEMENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SETTINGS_FILE="${HOME}/.claude/settings.json"
 RUNTIME_DIR="${HOME}/.claude/runtime/enforcement"

@@ -2,6 +2,16 @@
 # codex-audit.sh - Execute Codex CLI in sandbox and store audit results
 # Part of Context Cascade Multi-Model Integration
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -e
 
 # Configuration

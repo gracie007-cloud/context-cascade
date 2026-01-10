@@ -6,6 +6,16 @@
 # CRITICAL: Uses bash -lc to ensure login shell PATH is available
 # This fixes the "command not found" issue in Claude Code tool context
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 set -e
 
 # ============================================================================

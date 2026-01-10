@@ -3,7 +3,9 @@ name: hooks-automation
 description: Manage event hooks and connectors with secure routing and backoff
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, TodoWrite
 model: sonnet
-x-version: 3.2.0
+x-version: 3.2.1
+x-last-reflection: 2026-01-09T12:00:00Z
+x-reflection-count: 1
 x-category: operations
 x-vcl-compliance: v3.1.1
 x-cognitive-frames:
@@ -18,6 +20,37 @@ x-cognitive-frames:
 
 
 
+
+
+
+---
+
+## LIBRARY-FIRST PROTOCOL (MANDATORY)
+
+**Before writing ANY code, you MUST check:**
+
+### Step 1: Library Catalog
+- Location: `.claude/library/catalog.json`
+- If match >70%: REUSE or ADAPT
+
+### Step 2: Patterns Guide
+- Location: `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md`
+- If pattern exists: FOLLOW documented approach
+
+### Step 3: Existing Projects
+- Location: `D:\Projects\*`
+- If found: EXTRACT and adapt
+
+### Decision Matrix
+| Match | Action |
+|-------|--------|
+| Library >90% | REUSE directly |
+| Library 70-90% | ADAPT minimally |
+| Pattern exists | FOLLOW pattern |
+| In project | EXTRACT |
+| No match | BUILD (add to library after) |
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -78,3 +111,40 @@ Design and operate automation hooks across systems with validated routing, retri
 - Confidence ceiling stated for production rollout
 
 Confidence: 0.70 (ceiling: inference 0.70) - Hook design follows adversarial validation and rollback guardrails
+
+---
+
+## LEARNED PATTERNS
+
+### High Confidence [conf:0.90]
+
+#### Plan Mode Enhancement Hook Pattern
+UserPromptSubmit hooks can detect plan mode via `permission_mode` field in JSON input or by matching planning keywords in the prompt text. This enables mode-specific behavior injection.
+
+**Detection Pattern:**
+```bash
+PERMISSION_MODE=$(echo "$INPUT" | jq -r '.permission_mode // empty')
+if [ "$PERMISSION_MODE" = "plan" ]; then
+    # Plan mode detected via API field
+fi
+# Fallback: keyword detection
+if echo "$PROMPT" | grep -iqE "(plan mode|architecture|strategy)"; then
+    # Plan mode detected via keywords
+fi
+```
+
+**Key Insight:** Injecting keywords like "ultrathink" in hook output triggers extended reasoning in Claude. Hook stdout acts as additional context prepended to Claude's reasoning.
+[ground:user-correction:2026-01-09]
+
+### Medium Confidence [conf:0.75]
+
+- **Dual Enhancement Synergy**: Combining multiple reasoning enhancements (e.g., ultrathink + sequential-thinking MCP) creates synergy but risks overthinking simple tasks. Recommend conditional application based on task complexity. [ground:approval-pattern:2026-01-09]
+
+- **Quantitative Estimation**: Users value quantitative estimates of improvement when creating enhancement hooks (e.g., "30-50% better edge case coverage at 200-400% token cost"). Provide these estimates even if approximate. [ground:approval-pattern:2026-01-09]
+
+- **A/B Validation Strategy**: When creating reasoning enhancement hooks, recommend A/B testing: run same prompt with/without hook and compare outputs on completeness, risk identification, actionability. [ground:approval-pattern:2026-01-09]
+
+### Low Confidence [conf:0.55]
+
+- Plan mode users likely prefer quality over speed - willing to accept 2-4x token cost for deeper analysis [ground:observation:2026-01-09]
+- Hook registration in settings.local.json works for project-specific customization without affecting global settings [ground:observation:2026-01-09]

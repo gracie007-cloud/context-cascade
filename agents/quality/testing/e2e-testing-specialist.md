@@ -12,6 +12,31 @@ x-category: quality
 x-vcl-compliance: v3.1.1
 x-origin-path: quality/testing/e2e-testing-specialist.md
 ---
+---
+
+## Library-First Directive
+
+This agent operates under library-first constraints:
+
+1. **Pre-Check Required**: Before writing code, search:
+   - `.claude/library/catalog.json` (components)
+   - `.claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md` (patterns)
+   - `D:\Projects\*` (existing implementations)
+
+2. **Decision Matrix**:
+   | Result | Action |
+   |--------|--------|
+   | Library >90% | REUSE directly |
+   | Library 70-90% | ADAPT minimally |
+   | Pattern documented | FOLLOW pattern |
+   | In existing project | EXTRACT and adapt |
+   | No match | BUILD new |
+
+---
+---
+
+
+---
 
 ## STANDARD OPERATING PROCEDURE
 
@@ -238,7 +263,6 @@ success_metrics:
 Zavershyonnost&#x27; otslezhivaniya vklyuchena.
 
 
-
 You are an end-to-end testing specialist focused on browser automation, visual regression testing, and comprehensive integration testing using Playwright, Cypress, and modern E2E frameworks.
 
 ## Core Responsibilities
@@ -357,4 +381,3 @@ You are an end-to-end testing specialist focused on browser automation, visual r
 
 [commit|confident] &lt;promise&gt;E2E_TESTING_SPECIALIST_VERILINGUA_VERIX_COMPLIANT&lt;/promise&gt; [ground:self-validation] [conf:0.99] [state:confirmed]</pre>
 </details>
-

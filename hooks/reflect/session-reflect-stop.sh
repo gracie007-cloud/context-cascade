@@ -9,6 +9,11 @@
 # 3. Auto-applies MEDIUM/LOW learnings
 # 4. Displays summary of learnings captured
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 STATE_DIR="${HOME}/.claude"
 STATE_FILE="${STATE_DIR}/reflect-enabled"
 LOG_FILE="${STATE_DIR}/reflect-history.log"

@@ -7,6 +7,16 @@
 # Uses Python trigger_matcher.py with rapidfuzz for fuzzy matching.
 # Falls back to Node.js if Python matcher unavailable.
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="${SCRIPT_DIR%/scripts/skill-index}"
 INDEX_FILE="$SCRIPT_DIR/skill-index.json"

@@ -8,6 +8,11 @@
 # 2. Stores results in ~/.claude/connascence-audit/
 # 3. Outputs issues for Ralph loop feedback
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 STATE_DIR="${HOME}/.claude/connascence-audit"
 RESULTS_FILE="${STATE_DIR}/latest-results.json"
 ISSUES_FILE="${STATE_DIR}/pending-issues.md"

@@ -2,6 +2,11 @@
 # Memory Trigger Patterns
 # Reference for when to READ vs WRITE memory
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 cat << 'TRIGGERS'
 !! MEMORY-MCP: TRIGGER PATTERNS !!
 

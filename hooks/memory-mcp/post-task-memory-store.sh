@@ -2,6 +2,11 @@
 # Post-Task Hook: Memory Store Reminder
 # Fires after Task() to remind agents to store results
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 cat << 'MEMORY_STORE'
 !! MEMORY-MCP: POST-TASK STORE !!
 

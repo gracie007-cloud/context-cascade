@@ -23,6 +23,18 @@ from dataclasses import dataclass
 from typing import Optional, List, Dict, Any
 
 # Configuration
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+#
+# Decision: REUSE (>90%) | ADAPT (70-90%) | FOLLOW pattern | BUILD new
+# ============================================================
+
 AGENTS_DIR = Path(r"C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\agents")
 BACKUP_DIR = Path(r"C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\agents\.backup")
 LOG_DIR = Path(r"C:\Users\17175\claude-code-plugins\ruv-sparc-three-loop-system\scripts\logs")

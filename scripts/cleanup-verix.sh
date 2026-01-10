@@ -2,6 +2,16 @@
 # Script to remove VERIX markers from SKILL.md files
 # Removes: VCL COMPLIANCE APPENDIX, ABSOLUTE RULES sections, [marker|type] patterns, <promise> tags
 
+
+# ============================================================
+# LIBRARY-FIRST PROTOCOL
+# ============================================================
+# Before generating code, check:
+#   1. .claude/library/catalog.json
+#   2. .claude/docs/inventories/LIBRARY-PATTERNS-GUIDE.md
+#   3. D:\Projects\* for existing implementations
+# ============================================================
+
 cleanup_file() {
     local file="$1"
     local temp_file="${file}.tmp"

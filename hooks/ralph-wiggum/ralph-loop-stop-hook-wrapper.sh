@@ -12,6 +12,11 @@
 # @version 3.0.0
 # @see docs/META-LOOP-ENHANCEMENT-PLAN-v4.md Phase E
 
+
+# ============================================================
+# LIBRARY-FIRST: Check library before coding tasks
+# ============================================================
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENHANCED_HOOK="${SCRIPT_DIR}/ralph-loop-stop-hook-enhanced.js"
 FALLBACK_HOOK="${SCRIPT_DIR}/ralph-loop-stop-hook.sh"
