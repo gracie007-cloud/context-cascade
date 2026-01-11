@@ -1,0 +1,106 @@
+name: Validate Skills Structure
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'skills/**'
+      - 'scripts/extract-all-skills.ps1'
+      - 'scripts/sync-stub-paths.ps1'
+      - 'scripts/validate-skills.ps1'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/**'
+  workflow_dispatch:
+
+jobs:
+  validate-skills:
+    runs-on: windows-latest
+    name: Validate Skill Structure Integrity
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run skill validation
+        shell: pwsh
+        run: |
+          Write-Host "Running skill structure validation..."
+
+          # Set plugin root for CI environment
+          $env:CLAUDE_PLUGIN_ROOT = $env:GITHUB_WORKSPACE
+
+          # Run validation in CI mode
+          & "$env:GITHUB_WORKSPACE/scripts/validate-skills.ps1" -CI -Verbose
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "::error::Skill validation failed!"
+            exit 1
+          }
+
+          Write-Host "::notice::Skill validation passed!"
+
+      - name: Check for orphaned skills
+        shell: pwsh
+        run: |
+          Write-Host "Checking for orphaned extracted skills..."
+
+          $PackagedDir = "$env:GITHUB_WORKSPACE/skills/packaged"
+          $Categories = @("delivery", "foundry", "operations", "orchestration", "platforms", "quality", "research", "security", "specialists", "tooling")
+
+          $PackagedNames = Get-ChildItem -Path $PackagedDir -Filter "*.skill" | ForEach-Object { $_.BaseName }
+          $Orphans = @()
+
+          foreach ($Cat in $Categories) {
+            $CatPath = "$env:GITHUB_WORKSPACE/skills/$Cat"
+            if (Test-Path $CatPath) {
+              Get-ChildItem -Path $CatPath -Directory | ForEach-Object {
+                if ($PackagedNames -notcontains $_.Name) {
+                  $Orphans += "$Cat/$($_.Name)"
+                }
+              }
+            }
+          }
+
+          if ($Orphans.Count -gt 0) {
+            Write-Host "::warning::Found $($Orphans.Count) extracted skills without matching .skill package:"
+            $Orphans | ForEach-Object { Write-Host "  - $_" }
+          } else {
+            Write-Host "No orphaned skills found."
+          }
+
+      - name: Generate validation report
+        if: always()
+        shell: pwsh
+        run: |
+          $Report = @{
+            timestamp = (Get-Date -Format "o")
+            repository = $env:GITHUB_REPOSITORY
+            commit = $env:GITHUB_SHA
+            ref = $env:GITHUB_REF
+            packaged_count = (Get-ChildItem -Path "$env:GITHUB_WORKSPACE/skills/packaged" -Filter "*.skill").Count
+            categories = @{}
+          }
+
+          $Categories = @("delivery", "foundry", "operations", "orchestration", "platforms", "quality", "research", "security", "specialists", "tooling")
+          foreach ($Cat in $Categories) {
+            $CatPath = "$env:GITHUB_WORKSPACE/skills/$Cat"
+            if (Test-Path $CatPath) {
+              $Report.categories[$Cat] = (Get-ChildItem -Path $CatPath -Directory).Count
+            } else {
+              $Report.categories[$Cat] = 0
+            }
+          }
+
+          $Report | ConvertTo-Json -Depth 3 | Out-File -FilePath "validation-report.json"
+          Write-Host "Validation report saved to validation-report.json"
+          Get-Content "validation-report.json"
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.json
+          retention-days: 30

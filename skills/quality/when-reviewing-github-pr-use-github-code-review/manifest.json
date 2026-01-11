@@ -1,0 +1,18 @@
+{
+  "name": "when-reviewing-github-pr-use-github-code-review",
+  "version": "1.0.0",
+  "category": "quality",
+  "description": "",
+  "files": [
+    "code-review-process.dot",
+    "SKILL.md"
+  ],
+  "dependencies": [
+    "memory_mcp",
+    "mcp__memory-mcp"
+  ],
+  "triggers": [],
+  "layer": "L1",
+  "packaged_at": "2025-12-29T09:21:38.732613",
+  "verix_compliant": true
+}

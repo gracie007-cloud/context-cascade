@@ -1,0 +1,30 @@
+{
+  "name": "when-validating-code-works-use-functionality-audit",
+  "version": "1.0.0",
+  "category": "research",
+  "description": "",
+  "files": [
+    "process-diagram.gv",
+    "PROCESS.md",
+    "README.md",
+    "SKILL.md"
+  ],
+  "dependencies": [
+    "memory_mcp",
+    "mcp__memory-mcp"
+  ],
+  "triggers": [
+    "Execute when-validating-code-works-use-functionality-audit workflow",
+    "Ensure quality and consistency",
+    "Enable systematic research processes",
+    "when-validating-code-works-use-functionality-audit",
+    "research",
+    "1.0.0",
+    "Evidential",
+    "Turkish",
+    "How do you know?"
+  ],
+  "layer": "L1",
+  "packaged_at": "2025-12-29T09:21:38.879757",
+  "verix_compliant": true
+}

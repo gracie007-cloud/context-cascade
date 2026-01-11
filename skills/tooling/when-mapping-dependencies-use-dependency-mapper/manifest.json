@@ -1,0 +1,23 @@
+{
+  "name": "when-mapping-dependencies-use-dependency-mapper",
+  "version": "1.0.0",
+  "category": "tooling",
+  "description": "",
+  "files": [
+    "mcp-dependency-mapper.json",
+    "process-diagram.gv",
+    "PROCESS.md",
+    "README.md",
+    "SKILL.md",
+    "slash-command-dep-map.sh",
+    "subagent-dependency-mapper.md"
+  ],
+  "dependencies": [
+    "memory_mcp",
+    "mcp__memory-mcp"
+  ],
+  "triggers": [],
+  "layer": "L1",
+  "packaged_at": "2025-12-29T09:21:39.195173",
+  "verix_compliant": true
+}

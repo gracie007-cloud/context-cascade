@@ -1,0 +1,24 @@
+{
+  "name": "when-documenting-code-use-doc-generator",
+  "version": "1.0.0",
+  "category": "tooling",
+  "description": "",
+  "files": [
+    "process-diagram.gv",
+    "PROCESS.md",
+    "README.md",
+    "SKILL.md",
+    "slash-command-doc-api.sh",
+    "slash-command-doc-inline.sh",
+    "slash-command-doc-readme.sh",
+    "subagent-doc-generator.md"
+  ],
+  "dependencies": [
+    "memory_mcp",
+    "mcp__memory-mcp"
+  ],
+  "triggers": [],
+  "layer": "L1",
+  "packaged_at": "2025-12-29T09:21:39.189189",
+  "verix_compliant": true
+}

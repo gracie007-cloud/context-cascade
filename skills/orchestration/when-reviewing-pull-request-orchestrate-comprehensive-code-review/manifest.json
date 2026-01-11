@@ -1,0 +1,28 @@
+{
+  "name": "when-reviewing-pull-request-orchestrate-comprehensive-code-review",
+  "version": "1.0.0",
+  "category": "orchestration",
+  "description": "",
+  "files": [
+    "SKILL.md",
+    "when-reviewing-pull-request-orchestrate-comprehensive-code-review-process.dot"
+  ],
+  "dependencies": [
+    "memory_mcp",
+    "mcp__memory-mcp"
+  ],
+  "triggers": [
+    "Execute when-reviewing-pull-request-orchestrate-comprehensive-code-review workflow",
+    "Ensure quality and consistency",
+    "Enable systematic orchestration processes",
+    "when-reviewing-pull-request-orchestrate-comprehensive-code-review",
+    "orchestration",
+    "1.0.0",
+    "Compositional",
+    "German",
+    "Build from primitives?"
+  ],
+  "layer": "L1",
+  "packaged_at": "2025-12-29T09:21:38.357395",
+  "verix_compliant": true
+}
